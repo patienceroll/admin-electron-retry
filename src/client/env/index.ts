@@ -1,0 +1,7 @@
+declare const FRAMEWORK_WEBPACK_ENTRY: string;
+declare const FRAMEWORK_PRELOAD_WEBPACK_ENTRY: string;
+
+export default {
+  FRAMEWORK_WEBPACK_ENTRY,
+  FRAMEWORK_PRELOAD_WEBPACK_ENTRY,
+};

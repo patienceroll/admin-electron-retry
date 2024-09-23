@@ -1,6 +1,12 @@
 import { app, BrowserWindow } from "electron";
 
-function createWindow() {}
+import Framework from "src/client/main/framework";
+
+let framework: Framework;
+
+function createWindow() {
+  framework = new Framework();
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
