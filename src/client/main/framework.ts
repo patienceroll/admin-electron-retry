@@ -27,10 +27,14 @@ export default class Framework {
       },
     });
 
+    const { width, height } = this.baseWindow.getBounds();
+    this.frameworkView.setBounds({ width, height, x: 0, y: 0 });
+
     this.frameworkView.webContents.loadURL(
       `${env.FRAMEWORK_WEBPACK_ENTRY}/#/layout`
     );
 
     this.baseWindow.contentView.addChildView(this.frameworkView);
+    this.frameworkView.webContents.openDevTools();
   }
 }
