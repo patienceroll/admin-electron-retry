@@ -1,3 +1,4 @@
+import React from "react";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -6,6 +7,10 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+
+${(props) => 123}
 `;
 
-export default GlobalStyle;
+export default function() {
+  return <GlobalStyle />
+};
