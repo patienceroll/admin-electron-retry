@@ -3,9 +3,18 @@ import fs from "fs";
 import path from "path";
 
 export default class Local<Store> {
+  private static localPath = path.join(app.getPath("userData"), "custom-local");
+
+  private static createLocalPath() {
+    if (!fs.existsSync(Local.localPath)) {
+      fs.mkdirSync(Local.localPath);
+    }
+  }
+
   constructor(localName: string, defaultValue: Store) {
     this.localName = localName;
-    this.fileUrl = path.join(app.getPath("userData"), `${localName}.txt`);
+    Local.createLocalPath();
+    this.fileUrl = path.join(Local.localPath, `${localName}.txt`);
     if (fs.existsSync(this.fileUrl)) {
       const buffer = fs.readFileSync(this.fileUrl, { encoding: "utf-8" });
       try {

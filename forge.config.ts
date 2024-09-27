@@ -37,6 +37,14 @@ const config: ForgeConfig = {
               js: "./src/client/preload/index.ts",
             },
           },
+          {
+            html: "./src/app/admin/index.html",
+            js: "./src/app/admin/index.tsx",
+            name: "admin",
+            preload: {
+              js: "./src/client/preload/index.ts",
+            },
+          }
         ],
       },
     }),

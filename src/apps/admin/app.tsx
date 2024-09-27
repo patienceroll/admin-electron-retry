@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
 import { ConfigProvider, theme } from "antd";
 
-import Layout from "src/framework/layout";
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
+
+import Home from "./pages/home";
+import UserInfo from "./pages/user-info";
+
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
@@ -27,7 +30,8 @@ export default function () {
       <ThemeProvider>
         <HashRouter>
           <Routes>
-            <Route path="/layout" element={<Layout />} />
+            <Route path="/home" Component={Home} />
+            <Route path="/user-info" Component={UserInfo} />
           </Routes>
         </HashRouter>
         <GlobalStyle />

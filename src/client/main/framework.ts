@@ -1,4 +1,9 @@
-import { BaseWindow, nativeImage, nativeTheme, WebContentsView } from "electron";
+import {
+  BaseWindow,
+  nativeImage,
+  nativeTheme,
+  WebContentsView,
+} from "electron";
 import path from "path";
 
 import Logo from "src/assets/logo/logo.png";
@@ -15,7 +20,7 @@ export default class Framework {
   theme: ThemeLocal;
 
   constructor() {
-    this.theme = new ThemeLocal()
+    this.theme = new ThemeLocal();
     this.createBaseWindow();
     this.createFramework();
     this.registerMain();
@@ -32,6 +37,7 @@ export default class Framework {
       titleBarStyle: "hidden",
       center: true,
     });
+    this.baseWindow.setBackgroundColor(this.theme.backgroundColor);
   }
 
   private createFramework() {
@@ -40,6 +46,7 @@ export default class Framework {
         preload: env.FRAMEWORK_PRELOAD_WEBPACK_ENTRY,
       },
     });
+    this.frameworkView.setBackgroundColor(this.theme.backgroundColor);
 
     const { width, height } = this.baseWindow.getBounds();
     this.frameworkView.setBounds({ width, height, x: 0, y: 0 });
@@ -52,11 +59,22 @@ export default class Framework {
     this.frameworkView.webContents.openDevTools();
   }
 
-
   private registerMain() {
-
-    themeMain({ onNativeThemeUpdate() {
-      
-    } });
+    const framework = this;
+    themeMain({
+      framework: this,
+      onNativeThemeUpdate() {
+        framework.baseWindow.setBackgroundColor(
+          framework.theme.backgroundColor
+        );
+        framework.frameworkView.setBackgroundColor(
+          framework.theme.backgroundColor
+        );
+        framework.frameworkView.webContents.send(
+          "onDarkModeChange",
+          nativeTheme.shouldUseDarkColors
+        );
+      },
+    });
   }
 }

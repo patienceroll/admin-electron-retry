@@ -5,15 +5,12 @@ class ThemeLocal {
   private static get defaultTheme(): Theme {
     return {
       colorPrimary: "#f40",
-      dark: nativeTheme.shouldUseDarkColors,
     };
   }
 
   constructor() {
     this._local = new Local(this.key, ThemeLocal.defaultTheme);
-    this._local.store.dark = nativeTheme.shouldUseDarkColors;
     this._local.syncToFile();
-    nativeTheme.themeSource = this._local.store.dark ? 'dark':'light';
   }
 
   private key = "theme";
@@ -28,6 +25,10 @@ class ThemeLocal {
     this._local.store = value;
     this._local.syncToFile();
   }
+
+  get backgroundColor() {
+    return nativeTheme.shouldUseDarkColors ? "#000" : "#fff";
+  }
 }
 
-export default  ThemeLocal;
+export default ThemeLocal;
