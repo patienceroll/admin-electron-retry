@@ -8,15 +8,21 @@ import path from "path";
 
 import Logo from "src/assets/logo/logo.png";
 import themeMain from "src/client/channel/theme/main";
+import routeMain from "src/client/channel/route/main";
 import ThemeLocal from "src/client/local/theme-local";
 
 import env from "src/client/env";
+import Views from "src/client/main/views";
 
 export default class Framework {
   /** 基础窗口 */
   baseWindow!: BaseWindow;
   /** framework view */
   frameworkView!: WebContentsView;
+  /** 当前应用打开的页面 */
+  views: Views;
+  /** 当前激活的path */
+  path;
   theme: ThemeLocal;
 
   constructor() {
@@ -24,6 +30,9 @@ export default class Framework {
     this.createBaseWindow();
     this.createFramework();
     this.registerMain();
+    this.views = new Views();
+    this.path = "/home";
+    this.views.open(this.path);
   }
 
   private createBaseWindow() {
@@ -56,25 +65,18 @@ export default class Framework {
     );
 
     this.baseWindow.contentView.addChildView(this.frameworkView);
-    this.frameworkView.webContents.openDevTools();
   }
 
   private registerMain() {
-    const framework = this;
-    themeMain({
-      framework: this,
-      onNativeThemeUpdate() {
-        framework.baseWindow.setBackgroundColor(
-          framework.theme.backgroundColor
-        );
-        framework.frameworkView.setBackgroundColor(
-          framework.theme.backgroundColor
-        );
-        framework.frameworkView.webContents.send(
-          "onDarkModeChange",
-          nativeTheme.shouldUseDarkColors
-        );
-      },
-    });
+    themeMain({ framework: this });
+    routeMain({ framework: this });
+  }
+
+  open(...arg: Parameters<RoutePreload["open"]>) {
+    const view = this.views.open(...arg);
+    this.views.hideAllView();
+    view.view.setVisible(true);
+    const { width, height } = this.baseWindow.getBounds();
+    view.view.setBounds({ width, height, x: 0, y: 0 });
   }
 }

@@ -3,11 +3,21 @@ import { ipcMain, nativeTheme } from "electron";
 import Framework from "src/client/main/framework";
 
 export default function themeMain(params: {
-  onNativeThemeUpdate: VoidFunction;
   framework: Framework;
 }) {
-  const { onNativeThemeUpdate, framework } = params;
-  nativeTheme.on("updated", onNativeThemeUpdate);
+  const {  framework } = params;
+  nativeTheme.on("updated", function() {
+    framework.baseWindow.setBackgroundColor(
+      framework.theme.backgroundColor
+    );
+    framework.frameworkView.setBackgroundColor(
+      framework.theme.backgroundColor
+    );
+    framework.frameworkView.webContents.send(
+      "onDarkModeChange",
+      nativeTheme.shouldUseDarkColors
+    );
+  });
 
   ipcMain.on("getTheme", function (event) {
     event.returnValue = framework.theme.value;

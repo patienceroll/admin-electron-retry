@@ -4,10 +4,10 @@ declare module "*.png" {
 }
 
 interface Window {
-  preload: ThemePreload;
+  preload: ThemePreload & RoutePreload;
 }
 
 type DisposeFunction = VoidFunction;
 type StyledWrapComponents<T = unknown> = {
-  className: string;
+  className?: string;
 } & T;

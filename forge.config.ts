@@ -38,8 +38,8 @@ const config: ForgeConfig = {
             },
           },
           {
-            html: "./src/app/admin/index.html",
-            js: "./src/app/admin/index.tsx",
+            html: "./src/apps/admin/index.html",
+            js: "./src/apps/admin/index.tsx",
             name: "admin",
             preload: {
               js: "./src/client/preload/index.ts",
