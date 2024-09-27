@@ -6,12 +6,14 @@ export default class Views {
 
   open(...arg: Parameters<RoutePreload["open"]>) {
     const [path, options] = arg;
-    const host = env.app[options?.app!];
-    const app = options?.app!;
+    const mergeOptions = Object.assign({ app: "admin" }, options);
+
+    const host = env.app[mergeOptions?.app!];
+    const app = mergeOptions?.app!;
 
     let fullPath = `${host.entry}/#${path}`;
-    if (options?.query) {
-      const params = new URLSearchParams(options.query);
+    if (mergeOptions?.query) {
+      const params = new URLSearchParams(mergeOptions.query);
       fullPath += params.toString();
     }
 
@@ -20,7 +22,7 @@ export default class Views {
       const newView = {
         path,
         app,
-        query: options?.query,
+        query: mergeOptions?.query,
         view: new WebContentsView({
           webPreferences: { preload: host.preload },
         }),
@@ -29,7 +31,7 @@ export default class Views {
     }
 
     const returnView = this.value.get(path)!;
-    returnView.query = options?.query;
+    returnView.query = mergeOptions?.query;
     returnView.app = app;
     returnView.view.webContents.loadURL(fullPath);
     return returnView;

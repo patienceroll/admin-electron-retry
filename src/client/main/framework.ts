@@ -1,12 +1,11 @@
 import {
   BaseWindow,
   nativeImage,
-  nativeTheme,
   WebContentsView,
 } from "electron";
 import path from "path";
 
-import Logo from "src/assets/logo/logo.png";
+import Logo from "src/assets/logo/logo@512x512.png";
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
 import ThemeLocal from "src/client/local/theme-local";
@@ -32,7 +31,7 @@ export default class Framework {
     this.registerMain();
     this.views = new Views();
     this.path = "/home";
-    this.views.open(this.path);
+    // this.open(this.path);
   }
 
   private createBaseWindow() {
@@ -65,6 +64,7 @@ export default class Framework {
     );
 
     this.baseWindow.contentView.addChildView(this.frameworkView);
+    this.frameworkView.webContents.openDevTools()
   }
 
   private registerMain() {
@@ -78,5 +78,8 @@ export default class Framework {
     view.view.setVisible(true);
     const { width, height } = this.baseWindow.getBounds();
     view.view.setBounds({ width, height, x: 0, y: 0 });
+    this.baseWindow.contentView.addChildView(view.view);
+    view.view.setBackgroundColor(this.theme.backgroundColor)
+    view.view.webContents.openDevTools();
   }
 }
