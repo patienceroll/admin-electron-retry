@@ -20,5 +20,14 @@ export default function themePreload(): ThemePreload {
         ipcRenderer.removeListener("onDarkModeChange", listener);
       };
     },
+    onThemeChange(callback) {
+      function listener(_: Electron.IpcRendererEvent, theme: Theme) {
+        callback(theme);
+      }
+      ipcRenderer.on("onThemeChange", listener);
+      return function () {
+        ipcRenderer.removeListener("onThemeChange", listener);
+      };
+    },
   };
 }

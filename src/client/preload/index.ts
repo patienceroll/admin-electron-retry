@@ -4,8 +4,9 @@ import { contextBridge } from "electron";
 
 import themePreload from "src/client/channel/theme/preload";
 import routePreload from "src/client/channel/route/preload";
+import windowPredload from "src/client/channel/window/preload";
 
 contextBridge.exposeInMainWorld(
   "preload",
-  Object.assign(themePreload(), routePreload())
+  Object.assign(themePreload(), routePreload(), windowPredload())
 );

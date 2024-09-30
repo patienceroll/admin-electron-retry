@@ -1,10 +1,12 @@
-import { nativeTheme } from "electron";
+import { nativeTheme, systemPreferences } from "electron";
+import Chroma from "chroma-js";
+
 import Local from ".";
 
 class ThemeLocal {
   private static get defaultTheme(): Theme {
     return {
-      colorPrimary: "#f40",
+      colorPrimary: systemPreferences.getAccentColor(),
     };
   }
 

@@ -3,8 +3,9 @@ declare module "*.png" {
   export default value;
 }
 
+
 interface Window {
-  preload: ThemePreload & RoutePreload;
+  preload: ThemePreload & RoutePreload & WindowPreload;
 }
 
 type DisposeFunction = VoidFunction;

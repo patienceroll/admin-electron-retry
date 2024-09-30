@@ -3,4 +3,5 @@ type ViewsValue = {
   query?: Record<string, string | number>;
   view: Electron.WebContentsView;
   app: Apps;
+  name: string
 };

@@ -1,21 +1,26 @@
-import { ipcMain, nativeTheme } from "electron";
+import { ipcMain, nativeTheme, systemPreferences } from "electron";
+
+import Chroma from "chroma-js";
 
 import Framework from "src/client/main/framework";
 
-export default function themeMain(params: {
-  framework: Framework;
-}) {
-  const {  framework } = params;
-  nativeTheme.on("updated", function() {
-    framework.baseWindow.setBackgroundColor(
-      framework.theme.backgroundColor
-    );
-    framework.frameworkView.setBackgroundColor(
-      framework.theme.backgroundColor
-    );
+export default function themeMain(params: { framework: Framework }) {
+  const { framework } = params;
+  nativeTheme.on("updated", function () {
+    framework.baseWindow.setBackgroundColor(framework.theme.backgroundColor);
+    framework.frameworkView.setBackgroundColor(framework.theme.backgroundColor);
     framework.frameworkView.webContents.send(
       "onDarkModeChange",
       nativeTheme.shouldUseDarkColors
+    );
+  });
+
+  systemPreferences.on("accent-color-changed", function () {
+    framework.frameworkView.webContents.send(
+      "onThemeChange",
+      Object.assign(framework.theme.value, {
+        colorPrimary: systemPreferences.getAccentColor(),
+      })
     );
   });
 
@@ -31,6 +36,4 @@ export default function themeMain(params: {
   ipcMain.on("darkMode", function (event) {
     event.returnValue = nativeTheme.shouldUseDarkColors;
   });
-
-  
 }

@@ -1,14 +1,11 @@
-import {
-  BaseWindow,
-  nativeImage,
-  WebContentsView,
-} from "electron";
+import { BaseWindow, nativeImage, WebContentsView } from "electron";
 import path from "path";
 
 import Logo from "src/assets/logo/logo@512x512.png";
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
 import ThemeLocal from "src/client/local/theme-local";
+import windowMain from "src/client/channel/window/main";
 
 import env from "src/client/env";
 import Views from "src/client/main/views";
@@ -31,7 +28,7 @@ export default class Framework {
     this.registerMain();
     this.views = new Views();
     this.path = "/home";
-    // this.open(this.path);
+    this.open(this.path, "首页");
   }
 
   private createBaseWindow() {
@@ -64,12 +61,13 @@ export default class Framework {
     );
 
     this.baseWindow.contentView.addChildView(this.frameworkView);
-    this.frameworkView.webContents.openDevTools()
+    this.frameworkView.webContents.openDevTools();
   }
 
   private registerMain() {
     themeMain({ framework: this });
     routeMain({ framework: this });
+    windowMain({ framework: this });
   }
 
   open(...arg: Parameters<RoutePreload["open"]>) {
@@ -77,9 +75,9 @@ export default class Framework {
     this.views.hideAllView();
     view.view.setVisible(true);
     const { width, height } = this.baseWindow.getBounds();
-    view.view.setBounds({ width, height, x: 0, y: 0 });
+    view.view.setBounds({ width, height, x: width, y: height });
     this.baseWindow.contentView.addChildView(view.view);
-    view.view.setBackgroundColor(this.theme.backgroundColor)
+    view.view.setBackgroundColor(this.theme.backgroundColor);
     view.view.webContents.openDevTools();
   }
 }

@@ -5,7 +5,7 @@ export default class Views {
   value: Map<ViewsValue["path"], ViewsValue> = new Map();
 
   open(...arg: Parameters<RoutePreload["open"]>) {
-    const [path, options] = arg;
+    const [path, name, options] = arg;
     const mergeOptions = Object.assign({ app: "admin" }, options);
 
     const host = env.app[mergeOptions?.app!];
@@ -20,6 +20,7 @@ export default class Views {
     const view = this.value.get(path);
     if (!view) {
       const newView = {
+        name,
         path,
         app,
         query: mergeOptions?.query,

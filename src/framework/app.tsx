@@ -14,6 +14,10 @@ export default function () {
     return window.preload.onDarkModeChange(setDarkMode);
   }, []);
 
+  useEffect(() => {
+    return window.preload.onThemeChange(setThemeBase);
+  }, []);
+
   return (
     <ConfigProvider
       theme={{
