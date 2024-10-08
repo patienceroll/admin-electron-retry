@@ -20,6 +20,14 @@ function Component(props: StyledWrapComponents) {
     return window.preload.onUnmaximize(() => setIsMaximize(false));
   }, []);
 
+  useEffect(() => {
+    return window.preload.onRoutesChange(setRoutes);
+  }, []);
+
+  useEffect(() => {
+    window.preload.open("/user-info", "用户信息");
+  }, []);
+
   return (
     <div className={props.className}>
       <div className="bar">
@@ -32,6 +40,12 @@ function Component(props: StyledWrapComponents) {
         <div className="content">
           <div className="tabs">
             <Segmented
+              onChange={(path) => {
+                const item = routes.routes.find((tab) => tab.path === path);
+                if (item) {
+                  window.preload.open(item.path, item.name);
+                }
+              }}
               value={routes.current}
               options={routes.routes.map((item) => ({
                 value: item.path,
@@ -39,7 +53,10 @@ function Component(props: StyledWrapComponents) {
                   <div style={{ display: "flex" }}>
                     <span>{item.name}</span>
                     {routes.routes.length !== 1 && (
-                      <div className="close-tab">
+                      <div
+                        className="close-tab"
+                        onClick={() => window.preload.close(item.path)}
+                      >
                         <svg
                           viewBox="0 0 1024 1024"
                           xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +100,7 @@ function Component(props: StyledWrapComponents) {
             </div>
           )}
 
-          <div className="option" onClick={window.preload.close}>
+          <div className="option" onClick={window.preload.quit}>
             <svg
               className="close"
               viewBox="0 0 1024 1024"

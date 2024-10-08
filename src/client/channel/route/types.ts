@@ -2,6 +2,11 @@ type Apps = "admin" | "framework";
 
 type GetRouteItem = Pick<ViewsValue, "app" | "path" | "query" | "name">;
 
+type GetRoutes = {
+  current: ViewsValue["path"];
+  routes: GetRouteItem[];
+};
+
 type RoutePreload = {
   open: (
     path: string,
@@ -11,8 +16,7 @@ type RoutePreload = {
       query?: Record<string, string>;
     }
   ) => void;
-  getRoutes: () => {
-    current: ViewsValue["path"];
-    routes: GetRouteItem[];
-  };
+  close: (path: string) => void;
+  getRoutes: () => GetRoutes;
+  onRoutesChange: (callback: (routes: GetRoutes) => void) => DisposeFunction;
 };

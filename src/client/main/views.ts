@@ -38,6 +38,11 @@ export default class Views {
     return returnView;
   }
 
+  /** 删除一个页面 */
+  close(path:string) {
+    this.value.delete(path);
+  }
+
   hideAllView() {
     this.value.forEach((view) => {
       view.view.setVisible(false);

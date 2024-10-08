@@ -38,7 +38,7 @@ export default function windowMain(options: { framework: Framework }) {
     framework.baseWindow.minimize();
   });
 
-  ipcMain.on("close", function () {
+  ipcMain.on("quit", function () {
     framework.baseWindow.close();
   });
 }

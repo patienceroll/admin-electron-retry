@@ -6,5 +6,5 @@ type WindowPreload = {
   minimize: VoidFunction;
   maximize: VoidFunction;
   unmaximize: VoidFunction;
-  close: VoidFunction
+  quit: VoidFunction
 };

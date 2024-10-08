@@ -71,6 +71,8 @@ export default class Framework {
   }
 
   open(...arg: Parameters<RoutePreload["open"]>) {
+    const [path] = arg;
+    this.path = path;
     const view = this.views.open(...arg);
     this.views.hideAllView();
     view.view.setVisible(true);
