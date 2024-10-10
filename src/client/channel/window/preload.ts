@@ -33,7 +33,7 @@ export default function windowPreload(): WindowPreload {
       ipcRenderer.send("unmaximize");
     },
     quit() {
-      ipcRenderer.send('quit')
-    }
+      ipcRenderer.send("quit");
+    },
   };
 }

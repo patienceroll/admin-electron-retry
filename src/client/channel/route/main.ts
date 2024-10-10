@@ -18,10 +18,8 @@ export default function routeMain(options: { framework: Framework }) {
   }
 
   function onRoutesChange() {
-    framework.frameworkView.webContents.send(
-      "onRoutesChange",
-      getCurrentRoutes()
-    );
+    const current = getCurrentRoutes();
+    framework.frameworkView.webContents.send("onRoutesChange", current);
   }
 
   ipcMain.on(
@@ -37,13 +35,13 @@ export default function routeMain(options: { framework: Framework }) {
   });
 
   ipcMain.on("close", function (event, path: string) {
-    framework.views.close(path);
+    framework.close(path);
     if (path === framework.path) {
       framework.views.hideAllView();
       const showView = framework.views.value.values().next().value!;
       framework.path = showView.path;
       showView.view.setVisible(true);
     }
-    onRoutesChange()
+    onRoutesChange();
   });
 }

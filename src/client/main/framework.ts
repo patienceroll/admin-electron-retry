@@ -53,7 +53,7 @@ export default class Framework {
     });
     this.frameworkView.setBackgroundColor(this.theme.backgroundColor);
 
-    const { width, height } = this.baseWindow.getBounds();
+    const { width, height } = this.baseWindow.getContentBounds();
     this.frameworkView.setBounds({ width, height, x: 0, y: 0 });
 
     this.frameworkView.webContents.loadURL(
@@ -76,10 +76,15 @@ export default class Framework {
     const view = this.views.open(...arg);
     this.views.hideAllView();
     view.view.setVisible(true);
-    const { width, height } = this.baseWindow.getBounds();
-    view.view.setBounds({ width, height, x: width, y: height });
+    const { width, height } = this.baseWindow.getContentBounds();
+    view.view.setBounds({ width: 100, height: height  - 30, x: 0, y: 30 });
     this.baseWindow.contentView.addChildView(view.view);
     view.view.setBackgroundColor(this.theme.backgroundColor);
-    view.view.webContents.openDevTools();
+  }
+
+  close(path: string) {
+    const view = this.views.value.get(path)!;
+    this.baseWindow.contentView.removeChildView(view.view);
+    this.views.close(path);
   }
 }

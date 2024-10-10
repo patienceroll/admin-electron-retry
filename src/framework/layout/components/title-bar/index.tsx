@@ -55,7 +55,10 @@ function Component(props: StyledWrapComponents) {
                     {routes.routes.length !== 1 && (
                       <div
                         className="close-tab"
-                        onClick={() => window.preload.close(item.path)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.preload.close(item.path);
+                        }}
                       >
                         <svg
                           viewBox="0 0 1024 1024"

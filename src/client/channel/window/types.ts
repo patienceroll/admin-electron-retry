@@ -1,3 +1,5 @@
+
+
 type WindowPreload = {
   onMaximize: (callback: VoidFunction) => DisposeFunction;
   onMinimize: (callback: VoidFunction) => DisposeFunction;
@@ -6,5 +8,5 @@ type WindowPreload = {
   minimize: VoidFunction;
   maximize: VoidFunction;
   unmaximize: VoidFunction;
-  quit: VoidFunction
+  quit: VoidFunction;
 };

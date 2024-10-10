@@ -3,8 +3,8 @@ import { ipcRenderer } from "electron";
 export default function routePreload(): RoutePreload {
   return {
     // 默认 apps admin
-    open(path, options) {
-      ipcRenderer.send("open", path, options);
+    open(path, name, options) {
+      ipcRenderer.send("open", path, name, options);
     },
     close(path) {
       ipcRenderer.send("close", path);
