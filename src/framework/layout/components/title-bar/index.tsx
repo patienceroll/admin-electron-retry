@@ -24,10 +24,6 @@ function Component(props: StyledWrapComponents) {
     return window.preload.onRoutesChange(setRoutes);
   }, []);
 
-  useEffect(() => {
-    window.preload.open("/user-info", "用户信息");
-  }, []);
-
   return (
     <div className={props.className}>
       <div className="bar">

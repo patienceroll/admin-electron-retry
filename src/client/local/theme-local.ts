@@ -1,5 +1,4 @@
 import { nativeTheme, systemPreferences } from "electron";
-import Chroma from "chroma-js";
 
 import Local from ".";
 

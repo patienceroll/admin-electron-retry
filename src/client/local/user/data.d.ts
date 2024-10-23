@@ -1,0 +1,5 @@
+
+
+type LocalUserData = {
+    token?: string
+}
