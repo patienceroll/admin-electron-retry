@@ -5,5 +5,8 @@ export default function loginPreload(): LoginPreload {
     loginSuccess(info) {
       ipcRenderer.send("loginSuccess", info);
     },
+    login() {
+      ipcRenderer.send('login')
+    }
   };
 }

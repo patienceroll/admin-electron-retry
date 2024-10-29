@@ -48,4 +48,9 @@ export default class Views {
       view.view.setVisible(false);
     });
   }
+
+  /** 删除所有页面 */
+  closeAll() {
+    this.value.clear()
+  }
 }

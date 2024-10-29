@@ -4,4 +4,5 @@ type LoginSuccessInfo = {
 
 type LoginPreload = {
   loginSuccess: (data: LoginSuccessInfo) => void;
+  login: () => void
 };

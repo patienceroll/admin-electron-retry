@@ -38,7 +38,7 @@ export default class Framework {
     this.createBaseWindow();
     this.createFramework();
     this.registerMain();
-    this.login();
+    this.createLogin();
   }
 
   private createBaseWindow() {
@@ -56,7 +56,7 @@ export default class Framework {
     this.baseWindow.setBackgroundColor(this.theme.backgroundColor);
   }
 
-  private login() {
+  createLogin() {
     this.loginWindow = new BrowserWindow({
       height: 600,
       width: 800,
@@ -121,8 +121,7 @@ export default class Framework {
     );
     this.baseWindow.contentView.addChildView(this.frameworkView);
     this.baseWindow.show();
-    this.path = "/home";
-    this.open(this.path, "首页");
+    this.open("/home", "首页");
     this.open("/user-info", "用户信息");
   }
 }
