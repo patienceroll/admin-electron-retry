@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { app, ipcMain } from "electron";
 
 import Framework from "src/client/main/framework";
 
@@ -47,6 +47,6 @@ export default function windowMain(options: { framework: Framework }) {
   });
 
   ipcMain.on("quit", function () {
-    framework.baseWindow.close();
+    app.quit()
   });
 }
