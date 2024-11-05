@@ -4,8 +4,7 @@ import Framework from "src/client/main/framework";
 
 export default function loginMain(options: { framework: Framework }) {
   const { framework } = options;
-  ipcMain.on("loginSuccess", function (event, info: LoginSuccessInfo) {
-    framework.userLocal.token = info.token;
+  ipcMain.on("loginSuccess", function (event) {
     framework.loginSuccess();
   });
   ipcMain.on("login", function (event) {
@@ -13,7 +12,7 @@ export default function loginMain(options: { framework: Framework }) {
       framework.baseWindow.contentView.removeChildView(item.view);
     });
     framework.views.closeAll();
-    framework.createLogin()
-    framework.baseWindow.hide()
+    framework.createLogin();
+    framework.baseWindow.hide();
   });
 }

@@ -8,7 +8,11 @@ declare module "*.jpg" {
 }
 
 interface Window {
-  preload: ThemePreload & LoginPreload & RoutePreload & WindowPreload;
+  preload: LocalPreload &
+    ThemePreload &
+    LoginPreload &
+    RoutePreload &
+    WindowPreload;
 }
 
 type DisposeFunction = VoidFunction;

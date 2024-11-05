@@ -33,7 +33,7 @@ function request(url: string, params?: FetchParams, init: FetchInit = {}) {
 function getDefaultHeader() {
   return {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + localStorage.getItem("token"),
+    Authorization: "Bearer " + window.preload.getLocalToken(),
     Platform: "windows",
     "Company-Id": localStorage.getItem("company_id") || "",
   };
@@ -44,7 +44,11 @@ function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
 
   const mergeInit: FetchInit = {
     ...init,
-    headers: Object.assign({}, getDefaultHeader(), { "Menu-Slug": "" }),
+    headers: Object.assign(
+      getDefaultHeader(),
+      { "Menu-Slug": "" },
+      init.headers || {}
+    ),
   };
 
   /** 当请求传递的是 FormData 的时候,删除 Content-Type  */
@@ -152,5 +156,5 @@ export default {
   DELETE,
   PATCH,
   requestProgramResponse,
-  base
+  base,
 };

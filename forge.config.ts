@@ -26,6 +26,15 @@ const config: ForgeConfig = {
     new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       mainConfig,
+      devServer: {
+        client: {
+          overlay: {
+            errors: true,
+            runtimeErrors: false,
+            warnings: true,
+          },
+        },
+      },
       renderer: {
         config: rendererConfig,
         entryPoints: [
@@ -44,7 +53,7 @@ const config: ForgeConfig = {
             preload: {
               js: "./src/client/preload/index.ts",
             },
-          }
+          },
         ],
       },
     }),

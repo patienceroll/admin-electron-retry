@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Button, Checkbox, Flex, Form, Input } from "antd";
 
-import { login as loginApi } from "src/apps/admin/api/login";
+import { login as loginApi, getUser } from "src/apps/admin/api/login";
 
 import images from "src/assets/images";
 import useWather from "src/hooks/use-wather";
@@ -21,6 +21,10 @@ function Login(props: StyledWrapComponents) {
       .then((store) => {
         return loginApi(store);
       })
+      .then((res) => {
+        window.preload.setLocalToken(res.data.token);
+        return getUser();
+      })
       .finally(loading.setFalse);
   }
 
@@ -32,7 +36,7 @@ function Login(props: StyledWrapComponents) {
           <Button onClick={window.preload.quit}>退出应用</Button>
           <Button
             onClick={() => {
-              window.preload.loginSuccess({ token: "123" });
+              window.preload.loginSuccess();
             }}
           >
             登录成功
