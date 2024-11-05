@@ -1,6 +1,6 @@
 import { nativeTheme, systemPreferences } from "electron";
 
-import Local from ".";
+import Local from "..";
 
 class ThemeLocal {
   private static get defaultTheme(): Theme {

@@ -1,10 +1,20 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, session } from "electron";
 
 import Framework from "src/client/main/framework";
 
 let framework: Framework;
 
 function createWindow() {
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        "Content-Security-Policy": [
+          "default-src 'self' 'unsafe-eval' 'unsafe-inline'; connect-src 'self' http://118.89.67.217:9638",
+        ],
+      },
+    });
+  });
   framework = new Framework();
 }
 

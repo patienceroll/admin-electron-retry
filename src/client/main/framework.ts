@@ -10,13 +10,13 @@ import path from "path";
 import Logo from "src/assets/logo/logo@512x512.png";
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
-import ThemeLocal from "src/client/local/theme-local";
+import ThemeLocal from "src/client/local/theme-local/theme-local";
 import windowMain from "src/client/channel/window/main";
 import loginMain from "src/client/channel/login/main";
 
 import env from "src/client/env";
 import Views from "src/client/main/views";
-import UserLocal from "../local/user";
+import UserLocal from "../local/user-local";
 
 export default class Framework {
   /** 基础窗口 */
@@ -73,7 +73,7 @@ export default class Framework {
     this.loginWindow.webContents.loadURL(
       `${env.FRAMEWORK_WEBPACK_ENTRY}/#/login`
     );
-
+    this.loginWindow.webContents.openDevTools({mode:'undocked'})
   }
 
   private createFramework() {
