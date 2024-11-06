@@ -1,5 +1,5 @@
-
-
 type LocalUserData = {
-    token?: string
-}
+  token?: string;
+  company?: Company;
+  menu?: UserMenu[]
+};

@@ -1,0 +1,22 @@
+type Company = {
+  address: string;
+  city: string;
+  county: string;
+  created_at: string;
+  created_id: number;
+  deleted_at: string;
+  description: null;
+  english_name: string;
+  id: number;
+  is_main: number;
+  logo: string;
+  name: string;
+  phone: string;
+  pid: number;
+  province: string;
+  remark: null;
+  short_name: string;
+  staff_id: number;
+  status: number;
+  updated_at: string;
+};

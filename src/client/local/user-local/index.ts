@@ -18,4 +18,22 @@ export default class UserLocal {
     this._local.store.token = token;
     this._local.syncToFile();
   }
+
+  get company() {
+    return this._local.store.company;
+  }
+
+  set company(company) {
+    this._local.store.company = company;
+    this._local.syncToFile();
+  }
+
+  get menu() {
+    return this._local.store.menu
+  }
+
+  set menu(menu) {
+    this._local.store.menu = menu;
+    this._local.syncToFile()
+  }
 }

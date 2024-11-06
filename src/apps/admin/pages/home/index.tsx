@@ -1,3 +1,4 @@
+import { List } from "antd";
 import React from "react";
 import styled from "styled-components";
 
@@ -6,5 +7,13 @@ const DIV = styled.div`
 `;
 
 export default function () {
-  return <DIV>home</DIV>;
+ 
+  return (
+    <DIV>
+      <List
+        dataSource={window.preload.getLocalUserMenu()}
+        renderItem={(item) => <List.Item  >{item.name}</List.Item>}
+      />
+    </DIV>
+  );
 }

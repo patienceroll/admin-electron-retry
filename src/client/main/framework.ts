@@ -74,7 +74,7 @@ export default class Framework {
     this.loginWindow.webContents.loadURL(
       `${env.FRAMEWORK_WEBPACK_ENTRY}/#/login`
     );
-    this.loginWindow.webContents.openDevTools({mode:'undocked'})
+    // this.loginWindow.webContents.openDevTools({mode:'undocked'})
   }
 
   private createFramework() {

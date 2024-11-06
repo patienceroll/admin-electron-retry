@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { notification } from "antd";
 import buildQuery from "./build-query";
 
 function isIntanceofBodyInit(data: unknown) {
@@ -35,7 +35,7 @@ function getDefaultHeader() {
     "Content-Type": "application/json",
     Authorization: "Bearer " + window.preload.getLocalToken(),
     Platform: "windows",
-    "Company-Id": localStorage.getItem("company_id") || "",
+    "Company-Id": window.preload.getLocalCompany()?.id,
   };
 }
 
@@ -73,30 +73,30 @@ function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
       });
     })
     .catch((err) => {
-      const { headers } = mergeInit;
-      const showMessage =
-        (headers as Record<string, string>).hideMessage !== "true";
-
       if (typeof err === "object" && err.type === "service-error") {
         const { data } = err as { data: BaseResponse };
-        if (showMessage) message.error(data.message);
-
-        if (data.status === 40001 && location.pathname !== "/login") {
+        notification.error({
+          description: data.message,
+          message: "温馨提示",
+        });
+        if (data.status === 40001) {
           window.preload.login();
         }
       } else if (err instanceof DOMException && err.name === "AbortError") {
         // 排除掉 abort 错误
         console.log("用户取消请求");
-      } else {
-        const { status, statusText } = err as Response;
-        // 接口请求错误
-        if (err instanceof Error) {
-          message.error(`服务器发生错误:${err.message}`);
-        } else {
-          message.error(`服务器发生错误:${status || ""}-${statusText || ""}`);
-        }
+      } else if (err instanceof Response) {
+        const { status, statusText } = err;
+        notification.error({
+          description: `${status || ""}-${statusText || ""}`,
+          message: "服务器错误",
+        });
+      } else if (err instanceof Error) {
+        notification.error({
+          description: `${err.message}`,
+          message: "请检查网络环境",
+        });
       }
-
       return Promise.reject(err);
     });
 }

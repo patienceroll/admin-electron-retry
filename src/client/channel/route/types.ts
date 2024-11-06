@@ -8,6 +8,7 @@ type GetRoutes = {
 };
 
 type RoutePreload = {
+  /** 打开一个新页面 */
   open: (
     path: string,
     name: string,
@@ -16,6 +17,7 @@ type RoutePreload = {
       query?: Record<string, string>;
     }
   ) => void;
+  /** 关闭一个tab菜单(路由) */
   close: (path: string) => void;
   getRoutes: () => GetRoutes;
   onRoutesChange: (callback: (routes: GetRoutes) => void) => DisposeFunction;

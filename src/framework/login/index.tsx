@@ -1,32 +1,92 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Button, Checkbox, Flex, Form, Input } from "antd";
+import {
+  Button,
+  Checkbox,
+  Flex,
+  Form,
+  Input,
+  List,
+  Modal,
+  notification,
+} from "antd";
 
-import { login as loginApi, getUser } from "src/apps/admin/api/login";
+import {
+  login as loginApi,
+  getUser,
+  getUsersMenu,
+} from "src/apps/admin/api/login";
 
 import images from "src/assets/images";
 import useWather from "src/hooks/use-wather";
 
 function Login(props: StyledWrapComponents) {
   const { className } = props;
+  const chooseCompanyPromise = useRef({
+    resolve: () => {},
+    reject: (reason?: any) => {},
+  });
 
   const [form] = Form.useForm();
 
   const [loading] = useWather();
+  const [open] = useWather();
+
+  const [companyList, setCompanyList] = useState<Company[]>([]);
 
   function login() {
     loading.setTrue();
+    let tempStore: any;
     form
       .validateFields()
       .then((store) => {
+        tempStore = store;
         return loginApi(store);
       })
       .then((res) => {
         window.preload.setLocalToken(res.data.token);
         return getUser();
       })
+      .then((res) => {
+        if (res.data.company_list.length === 0) {
+          notification.error({
+            message: "温馨提示",
+            description: "您暂无入职的公司",
+          });
+        } else if (res.data.company_list.length > 1) {
+          return new Promise<void>((resolve, reject) => {
+            chooseCompanyPromise.current = { reject, resolve };
+            setCompanyList(res.data.company_list);
+            open.setTrue();
+          });
+        } else {
+          window.preload.setLocalCompany(res.data.company_list[0]);
+        }
+      })
+      .then(() => getUsersMenu())
+      .then((res) => {
+        localStorage.setItem("rememberData", JSON.stringify(tempStore));
+        window.preload.setLocalUserMenu(res.data);
+        window.preload.loginSuccess();
+      })
       .finally(loading.setFalse);
   }
+
+  function onPressEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      login();
+    }
+  }
+
+  useEffect(() => {
+    const rememberData = localStorage.getItem("rememberData");
+    if (rememberData) {
+      const data = JSON.parse(rememberData);
+      if (data.remember) {
+        form.setFieldsValue(data);
+      }
+    }
+  }, []);
 
   return (
     <div className={className}>
@@ -34,33 +94,25 @@ function Login(props: StyledWrapComponents) {
         <img src={images.login} />
         <div className="action">
           <Button onClick={window.preload.quit}>退出应用</Button>
-          <Button
-            onClick={() => {
-              window.preload.loginSuccess();
-            }}
-          >
-            登录成功
-          </Button>
         </div>
       </div>
       <div className="right">
-        <Form
-          form={form}
-          name="login"
-          initialValues={{ remember: true }}
-          style={{ width: 300 }}
-        >
+        <Form form={form} name="login" style={{ width: 300 }}>
           <Form.Item
             name="account"
             rules={[{ required: true, message: "请输入用户名" }]}
           >
-            <Input placeholder="用户名" />
+            <Input placeholder="用户名" onKeyDown={onPressEnter} />
           </Form.Item>
           <Form.Item
             name="password"
             rules={[{ required: true, message: "请输入密码" }]}
           >
-            <Input type="password" placeholder="请输入密码" />
+            <Input
+              type="password"
+              placeholder="请输入密码"
+              onKeyDown={onPressEnter}
+            />
           </Form.Item>
           <Form.Item>
             <Flex justify="space-between" align="center">
@@ -82,6 +134,38 @@ function Login(props: StyledWrapComponents) {
           </Form.Item>
         </Form>
       </div>
+
+      <Modal
+        open={open.whether}
+        title="请选择入职公司"
+        closable={false}
+        footer={null}
+      >
+        <List
+          itemLayout="horizontal"
+          dataSource={companyList}
+          renderItem={(item) => {
+            return (
+              <List.Item
+                actions={[
+                  <Button
+                    type="text"
+                    onClick={() => {
+                      window.preload.setLocalCompany(item);
+                      open.setFalse();
+                      chooseCompanyPromise.current.resolve();
+                    }}
+                  >
+                    进入
+                  </Button>,
+                ]}
+              >
+                <List.Item.Meta title={item.name} description={item.address} />
+              </List.Item>
+            );
+          }}
+        />
+      </Modal>
     </div>
   );
 }
