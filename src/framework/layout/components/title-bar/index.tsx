@@ -34,6 +34,8 @@ function Component(props: StyledWrapComponents) {
           <Icon
             className="menu"
             icon={menuSvg}
+            width={20}
+            height={20}
             onClick={() => {
               if (window.preload.isMenuShowed()) {
                 window.preload.hideMenu();
@@ -149,11 +151,15 @@ export default styled(Component)`
     &:hover {
       background-color: ${(props) => props.theme.colorBgTextHover};
       cursor: pointer;
+
+      .menu {
+        fill: ${props => props.theme.colorPrimaryActive};
+      }
     }
   }
 
   .menu {
-    fill: ${(props) => props.theme.colorText};
+    fill: ${(props) => props.theme.colorPrimary};
   }
 
   .title {
@@ -188,11 +194,11 @@ export default styled(Component)`
     align-items: center;
   }
 
+
+
   .reduce {
     flex: 1;
-    &:hover {
-      -webkit-app-region: drag;
-    }
+    -webkit-app-region: drag;
   }
 
   .close-tab {

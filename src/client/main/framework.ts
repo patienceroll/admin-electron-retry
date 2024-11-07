@@ -139,8 +139,7 @@ export default class Framework {
     this.baseWindow.contentView.addChildView(this.frameworkView);
     this.baseWindow.show();
     this.open("/home", "首页");
-    this.open("/user-info", "用户信息");
-    this.frameworkView.webContents.openDevTools({ mode: "undocked" });
+    // this.frameworkView.webContents.openDevTools({ mode: "undocked" });
   }
 
   /** 获取content区域的大小和位置 */
@@ -155,6 +154,7 @@ export default class Framework {
       this.createMenuView();
     }
     this.baseWindow.contentView.addChildView(this.menuView!);
+    this.menuView!.webContents.openDevTools({ mode: "undocked" });
   }
 
   /** 隐藏菜单窗口 */
