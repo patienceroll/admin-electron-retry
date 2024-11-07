@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { Segmented } from "antd";
 
+import Icon from "src/framework/component/icon";
+
 import logo from "src/assets/logo/logo@512x512.png";
+import menuSvg from "src/assets/svg/menu.svg";
 
 function Component(props: StyledWrapComponents) {
   const { colorTextBase } = useTheme();
@@ -27,6 +30,19 @@ function Component(props: StyledWrapComponents) {
   return (
     <div className={props.className}>
       <div className="bar">
+        <div className="menu-wrapper">
+          <Icon
+            className="menu"
+            icon={menuSvg}
+            onClick={() => {
+              if (window.preload.isMenuShowed()) {
+                window.preload.hideMenu();
+              } else {
+                window.preload.showMenu();
+              }
+            }}
+          />
+        </div>
         <div className="title">
           <img src={logo} />
           &nbsp;
@@ -122,6 +138,22 @@ export default styled(Component)`
     height: 30px;
     display: flex;
     user-select: none;
+  }
+
+  .menu-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0 8px;
+    &:hover {
+      background-color: ${(props) => props.theme.colorBgTextHover};
+      cursor: pointer;
+    }
+  }
+
+  .menu {
+    fill: ${(props) => props.theme.colorText};
   }
 
   .title {

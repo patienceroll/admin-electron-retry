@@ -19,14 +19,11 @@ export default function windowMain(options: { framework: Framework }) {
 
   framework.baseWindow.on("resize", function () {
     const { width, height } = framework.baseWindow.getContentBounds();
+    const contentSize = framework.getContentSize();
     framework.frameworkView.setBounds({ width, height, x: 0, y: 0 });
+    framework.menuView?.setBounds(contentSize);
     Array.from(framework.views.value.values()).forEach((item) => {
-      item.view.setBounds({
-        width,
-        height: height - 30,
-        x: 0,
-        y: 30,
-      });
+      item.view.setBounds(contentSize);
     });
   });
 
@@ -47,6 +44,6 @@ export default function windowMain(options: { framework: Framework }) {
   });
 
   ipcMain.on("quit", function () {
-    app.quit()
+    app.quit();
   });
 }

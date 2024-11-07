@@ -21,4 +21,10 @@ type RoutePreload = {
   close: (path: string) => void;
   getRoutes: () => GetRoutes;
   onRoutesChange: (callback: (routes: GetRoutes) => void) => DisposeFunction;
+  /** 显示菜单 */
+  showMenu: () => void;
+  /** 隐藏菜单 */
+  hideMenu: () => void;
+  /** 当前菜单是否展示 */
+  isMenuShowed: () => boolean 
 };

@@ -44,4 +44,20 @@ export default function routeMain(options: { framework: Framework }) {
     }
     onRoutesChange();
   });
+
+  ipcMain.on("showMenu", function (event) {
+    framework.showMenu();
+    event.returnValue = void 0;
+  });
+
+  ipcMain.on("hideMenu", function (event) {
+    framework.hideMenu();
+    event.returnValue = void 0;
+  });
+
+  ipcMain.on("isMenuShowed", function (event) {
+    event.returnValue = framework.menuView
+      ? framework.baseWindow.contentView.children.includes(framework.menuView)
+      : false;
+  });
 }

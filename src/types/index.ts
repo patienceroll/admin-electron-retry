@@ -6,6 +6,12 @@ declare module "*.jpg" {
   const value: string;
   export default value;
 }
+declare module "*.svg" {
+  import { ComponentType, SVGProps } from "react";
+
+  const content: ComponentType<SVGProps<SVGSVGElement>>;
+  export default content;
+}
 
 interface Window {
   preload: LocalPreload &

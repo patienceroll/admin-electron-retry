@@ -24,7 +24,10 @@ export default class Framework {
   baseWindow!: BaseWindow;
   /** framework view */
   frameworkView!: WebContentsView;
+  /** 登录窗口 */
   loginWindow!: BrowserWindow;
+  /** 菜单view */
+  menuView?: WebContentsView;
   /** 当前应用打开的页面 */
   views: Views;
   /** 当前激活的path */
@@ -90,6 +93,17 @@ export default class Framework {
     // this.frameworkView.webContents.openDevTools();
   }
 
+  private createMenuView() {
+    this.menuView = new WebContentsView({
+      webPreferences: {
+        preload: env.FRAMEWORK_PRELOAD_WEBPACK_ENTRY,
+      },
+    });
+    this.menuView.setBackgroundColor(this.theme.backgroundColor);
+    this.menuView.setBounds(this.getContentSize());
+    this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}/#/menu`);
+  }
+
   /** 注册channel事件 */
   private registerMain() {
     themeMain({ framework: this });
@@ -105,8 +119,7 @@ export default class Framework {
     const view = this.views.open(...arg);
     this.views.hideAllView();
     view.view.setVisible(true);
-    const { width, height } = this.baseWindow.getContentBounds();
-    view.view.setBounds({ width, height: height - 30, x: 0, y: 30 });
+    view.view.setBounds(this.getContentSize());
     this.baseWindow.contentView.addChildView(view.view);
     view.view.setBackgroundColor(this.theme.backgroundColor);
   }
@@ -117,6 +130,7 @@ export default class Framework {
     this.views.close(path);
   }
 
+  /** 登录成功之后, */
   loginSuccess() {
     this.loginWindow.close();
     this.frameworkView.webContents.loadURL(
@@ -126,5 +140,27 @@ export default class Framework {
     this.baseWindow.show();
     this.open("/home", "首页");
     this.open("/user-info", "用户信息");
+    this.frameworkView.webContents.openDevTools({ mode: "undocked" });
+  }
+
+  /** 获取content区域的大小和位置 */
+  getContentSize() {
+    const { width, height } = this.baseWindow.getContentBounds();
+    return { width, height: height - 30, x: 0, y: 30 };
+  }
+
+  /** 显示菜单窗口 */
+  showMenu() {
+    if (!this.menuView) {
+      this.createMenuView();
+    }
+    this.baseWindow.contentView.addChildView(this.menuView!);
+  }
+
+  /** 隐藏菜单窗口 */
+  hideMenu() {
+    if (this.menuView) {
+      this.baseWindow.contentView.removeChildView(this.menuView);
+    }
   }
 }

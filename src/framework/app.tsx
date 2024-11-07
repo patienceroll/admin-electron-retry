@@ -4,6 +4,7 @@ import { ConfigProvider, theme } from "antd";
 
 import Layout from "src/framework/layout";
 import Login from "./login";
+import Menu from "./menu";
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
 
@@ -34,6 +35,7 @@ export default function () {
           <Routes>
             <Route path="/layout" element={<Layout />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/menu" element={<Menu />} />
           </Routes>
         </HashRouter>
         <GlobalStyle />

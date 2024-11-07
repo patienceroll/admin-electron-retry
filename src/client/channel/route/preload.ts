@@ -21,5 +21,14 @@ export default function routePreload(): RoutePreload {
         ipcRenderer.removeListener("onRoutesChange", listener);
       };
     },
+    showMenu() {
+      return ipcRenderer.sendSync("showMenu");
+    },
+    hideMenu() {
+      return ipcRenderer.sendSync("hideMenu");
+    },
+    isMenuShowed() {
+      return ipcRenderer.sendSync('isMenuShowed')
+    }
   };
 }
