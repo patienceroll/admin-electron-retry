@@ -1,10 +1,23 @@
-import { Divider } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar, Mousewheel } from "swiper/modules";
+
+import Icon from "src/framework/component/icon";
+import HomeSvg from "src/assets/svg/home.svg";
+
+import "swiper/css";
+import "swiper/css/scrollbar";
 
 function Menu(props: StyledWrapComponents) {
   const { className } = props;
+  const [div, setDiv] = useState<HTMLDivElement | null>(null);
+  // 当前用户的菜单
   const [menus, setMenus] = useState(() => window.preload.getLocalUserMenu()!);
+  // 当前选中的一级菜单
+  const [] = useState<UserMenu>()
+
+  //
   const [childMenu, setChildMenu] = useState<UserMenu[]>([]);
   const [commonlyUsed, setConmonlyUsed] = useState<UserMenu[]>(
     () => (localStorage.getItem("commonlyUsed") as unknown as UserMenu[]) || []
@@ -19,30 +32,28 @@ function Menu(props: StyledWrapComponents) {
           e.preventDefault();
         }}
       >
-        <div className="commonly">
-          <Divider orientation="left">常用</Divider>
-        </div>
-        <div className="menu-wrapper">
-          <Divider orientation="left">菜单</Divider>
+        <div className="commonly"></div>
+        <div className="scrollbar" ref={setDiv} />
+        <Swiper
+          slidesPerView={"auto"}
+          scrollbar={{ draggable: true, el: div }}
+          mousewheel={{ thresholdDelta: 4, sensitivity: 300 }}
+          direction="horizontal"
+          modules={[Scrollbar, Mousewheel]}
+        >
           {menus.map((item) => (
-            <div
-              className="menu-item"
-              key={item.id}
-              onMouseEnter={() => {
-                setChildMenu(item.child || []);
-              }}
-              onClick={() => {
-                if (item.child instanceof Array && item.child.length !== 0) {
-                } else {
-                  window.preload.hideMenu();
-                  window.preload.open(item.path, item.name);
-                }
-              }}
-            >
-              {item.name}
-            </div>
+            <SwiperSlide className="swiper-slide" key={item.id}>
+              <div className="nav-item">
+                <div>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Icon icon={HomeSvg} />
+                  </div>
+                  <div>{item.name}</div>
+                </div>
+              </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
 
         <div className="child-wrapper">
           {childMenu.map((item) => item.name)}
@@ -57,30 +68,39 @@ export default styled(Menu)`
   width: 100vw;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   background-color: ${(props) => props.theme.colorBgMask};
 
   .nav {
-    width: 80vw;
-    height: 80vh;
+    max-width: 100%;
     border-radius: ${(props) => props.theme.borderRadius}px;
     box-shadow: ${(props) => props.theme.boxShadow};
     background-color: ${(props) => props.theme.colorBgLayout};
   }
 
-  .menu-wrapper {
-    display: flex;
-    flex-wrap: wrap;
+  .swiper-slide {
+    width: fit-content;
+    border-top: 1px solid ${(props) => props.theme.colorBorder};
+    border-bottom: 1px solid ${(props) => props.theme.colorBorder};
+    border-right: 1px solid ${(props) => props.theme.colorBorder};
+    &:nth-child(1) {
+      border-left: 1px solid ${(props) => props.theme.colorBorder};
+    }
   }
 
-  .menu-item {
+  .scrollbar {
+    height: 2px;
+  }
+
+  .nav-item {
     width: 100px;
     height: 100px;
-    flex-shrink: 0;
-    text-align: center;
-    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &:hover {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
+      box-shadow: ${(props) => props.theme.boxShadow};
     }
   }
 

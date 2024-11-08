@@ -18,13 +18,14 @@
     "styled-components": "^5"
   },
   "dependencies": {
+    "@react-spring/web": "^9.7.5",
     "antd": "^5.21.0",
-    "chroma-js": "^3.1.1",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "swiper": "^11.1.14"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.5.0",
