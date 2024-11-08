@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { useTheme } from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Mousewheel } from "swiper/modules";
+import { useSpring, animated } from "@react-spring/web";
 
 import Icon from "src/framework/component/icon";
 import HomeSvg from "src/assets/svg/home.svg";
@@ -11,14 +12,34 @@ import "swiper/css/scrollbar";
 
 function Menu(props: StyledWrapComponents) {
   const { className } = props;
+  const theme = useTheme();
   const [div, setDiv] = useState<HTMLDivElement | null>(null);
+
+  const navItemAnimate = useSpring({
+    // 初始状态，设置 y 坐标为 0
+    from: { y: 0 },
+    // 目标状态，设置 y 坐标为 -20（向下跳跃），并且透明度为 1（显示）
+    to: async (next, cancel) => {
+      // 等待下一次动画开始
+      await next({ y: -10 });
+      // 模拟跳跃效果，先向上移动再落回
+      await next({ y: 0 });
+      // 可选：跳跃后稍微下移
+      await next({ y: -4 });
+      // 回到原位
+      await next({ y: 0 });
+    },
+    // 配置动画参数，如持续时间和缓动函数
+    config: { duration: 60 },
+  });
+
   // 当前用户的菜单
   const [menus, setMenus] = useState(() => window.preload.getLocalUserMenu()!);
-  // 当前选中的一级菜单
-  const [] = useState<UserMenu>()
 
-  //
-  const [childMenu, setChildMenu] = useState<UserMenu[]>([]);
+  // 当前展示的子菜单
+  const [currentMenu, setCurrentMenu] = useState<UserMenu>();
+
+  // 常用菜单
   const [commonlyUsed, setConmonlyUsed] = useState<UserMenu[]>(
     () => (localStorage.getItem("commonlyUsed") as unknown as UserMenu[]) || []
   );
@@ -43,21 +64,33 @@ function Menu(props: StyledWrapComponents) {
         >
           {menus.map((item) => (
             <SwiperSlide className="swiper-slide" key={item.id}>
-              <div className="nav-item">
-                <div>
+              <div
+                className={`nav-item ${
+                  item.id === currentMenu?.id ? "nav-item-active" : ""
+                }`}
+                onMouseEnter={() => setCurrentMenu(item)}
+              >
+                <animated.div
+                  style={
+                    item.id === currentMenu?.id ? navItemAnimate : undefined
+                  }
+                >
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Icon icon={HomeSvg} />
+                    <Icon
+                      width={28}
+                      height={28}
+                      icon={HomeSvg}
+                      fill={theme.colorText}
+                    />
                   </div>
-                  <div>{item.name}</div>
-                </div>
+                  <div style={{ marginTop: 8 }}>{item.name}</div>
+                </animated.div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
 
-        <div className="child-wrapper">
-          {childMenu.map((item) => item.name)}
-        </div>
+        <div className="child-wrapper"></div>
       </div>
     </div>
   );
@@ -90,6 +123,10 @@ export default styled(Menu)`
 
   .scrollbar {
     height: 2px;
+    background-color: ${(props) => props.theme.colorPrimaryBg};
+    .swiper-scrollbar-drag {
+      background-color: ${(props) => props.theme.colorPrimary};
+    }
   }
 
   .nav-item {
@@ -98,10 +135,16 @@ export default styled(Menu)`
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
     &:hover {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
       box-shadow: ${(props) => props.theme.boxShadow};
     }
+  }
+
+  .nav-item-active {
+    background-color: ${(props) => props.theme.colorPrimary};
+    color: ${(props) => props.theme.colorText};
   }
 
   .child-wrapper {
