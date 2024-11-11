@@ -298,6 +298,7 @@ export default styled(Menu)`
   }
 
   .child-nav {
+    margin-top: ${props => props.theme.padding}px;
     width: 33%;
     cursor: pointer;
 
