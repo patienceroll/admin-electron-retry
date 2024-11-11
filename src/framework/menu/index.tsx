@@ -3,6 +3,7 @@ import styled, { useTheme } from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Mousewheel } from "swiper/modules";
 import { useSpring, animated } from "@react-spring/web";
+import { Col, Row, Typography } from "antd";
 
 import Icon from "src/framework/component/icon";
 
@@ -29,6 +30,10 @@ import approvalRecordSvg from "src/assets/svg/approval-record.svg";
 
 import "swiper/css";
 import "swiper/css/scrollbar";
+
+type CommandyMenu = UserMenu & {
+  count: number;
+};
 
 const IconMap = {
   "approval-record": approvalRecordSvg,
@@ -83,9 +88,33 @@ function Menu(props: StyledWrapComponents) {
   const [currentMenu, setCurrentMenu] = useState<UserMenu>();
 
   // 常用菜单
-  const [commonlyUsed, setConmonlyUsed] = useState<UserMenu[]>(
-    () => (localStorage.getItem("commonlyUsed") as unknown as UserMenu[]) || []
-  );
+  const [commonlyUsed, setConmonlyUsed] = useState<CommandyMenu[]>(() => {
+    const data = localStorage.getItem("commonlyUsed");
+    if (data) {
+      return JSON.parse(data);
+    }
+    return [];
+  });
+
+  console.log(commonlyUsed);
+  function pushARecordToLocal(params: UserMenu) {
+    setConmonlyUsed((t) => {
+      let newData: CommandyMenu[] = [];
+      if (t.find((item) => item.id === params.id)) {
+        const temp = t.map((i) => ({
+          ...i,
+          count: params.id === i.id ? i.count + 1 : 1,
+        }));
+        newData = temp.sort((a, b) => b.count - a.count).slice(0, 8);
+      } else {
+        newData = Array.from(t);
+        newData.push({ ...params, count: 1 });
+        newData = newData.sort((a, b) => b.count - a.count).slice(0, 8);
+      }
+      localStorage.setItem("commonlyUsed", JSON.stringify(newData));
+      return newData;
+    });
+  }
 
   return (
     <div className={className} onClick={window.preload.hideMenu}>
@@ -96,9 +125,9 @@ function Menu(props: StyledWrapComponents) {
           e.preventDefault();
         }}
       >
-        <div className="commonly"></div>
         <div className="scrollbar" ref={setDiv} />
         <Swiper
+          style={{ height: 102 }}
           slidesPerView={"auto"}
           scrollbar={{ draggable: true, el: div }}
           mousewheel={{ thresholdDelta: 4, sensitivity: 300 }}
@@ -130,18 +159,68 @@ function Menu(props: StyledWrapComponents) {
           })}
         </Swiper>
 
-        {currentMenu && (
-          <div className="child-wrapper">
-            {currentMenu.child instanceof Array &&
-              currentMenu.child.length !== 0 &&
-              currentMenu!.child!.map((item) => (
-                <div key={item.id}>{item.name}</div>
-              ))}
-            {(!currentMenu.child || currentMenu.child.length === 0) && (
-              <div>{currentMenu.name}</div>
-            )}
-          </div>
-        )}
+        <div className="link-wrapper">
+          {commonlyUsed.length !== 0 && (
+            <div>
+              <Typography.Title style={{ marginTop: 0 }} level={5}>
+                常用菜单
+              </Typography.Title>
+              <Row gutter={[20, 20]}>
+                {commonlyUsed.map((item) => (
+                  <Col
+                    key={item.id}
+                    span={4}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      window.preload.open(item.path, item.name);
+                      window.preload.hideMenu();
+                      pushARecordToLocal(item);
+                    }}
+                  >
+                    {item.name}
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          )}
+
+          {currentMenu && (
+            <Typography.Title level={5}>
+              {currentMenu.name}菜单
+            </Typography.Title>
+          )}
+          {currentMenu && (
+            <div className="child-wrapper">
+              {currentMenu.child instanceof Array &&
+                currentMenu.child.length !== 0 &&
+                currentMenu!.child!.map((item) => (
+                  <div
+                    className="child-nav"
+                    key={item.id}
+                    onClick={() => {
+                      window.preload.open(item.path, item.name);
+                      window.preload.hideMenu();
+                      pushARecordToLocal(item);
+                    }}
+                  >
+                    {item.name}
+                  </div>
+                ))}
+              {(!currentMenu.child || currentMenu.child.length === 0) && (
+                <div
+                  className="child-nav"
+                  onClick={() => {
+                    window.preload.open(currentMenu.path, currentMenu.name);
+                    window.preload.hideMenu();
+                    pushARecordToLocal(currentMenu);
+                  }}
+                >
+                  {currentMenu.name}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -164,6 +243,7 @@ export default styled(Menu)`
 
   .swiper-slide {
     width: fit-content;
+    box-sizing: border-box;
     border-top: 1px solid ${(props) => props.theme.colorBorder};
     border-bottom: 1px solid ${(props) => props.theme.colorBorder};
     border-right: 1px solid ${(props) => props.theme.colorBorder};
@@ -187,7 +267,7 @@ export default styled(Menu)`
     justify-content: center;
     align-items: center;
     user-select: none;
-    &:hover { 
+    &:hover {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
       box-shadow: ${(props) => props.theme.boxShadow};
       color: ${(props) => props.theme.colorPrimary};
@@ -206,8 +286,23 @@ export default styled(Menu)`
     }
   }
 
+  .link-wrapper {
+    height: calc(100vh - 104px);
+    box-sizing: border-box;
+    padding: ${(props) => props.theme.padding}px;
+  }
+
   .child-wrapper {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .child-nav {
+    width: 33%;
+    cursor: pointer;
+
+    &:hover {
+      color:${props => props.theme.colorPrimaryActive}
+    }
   }
 `;
