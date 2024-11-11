@@ -11,6 +11,9 @@ import {
   notification,
 } from "antd";
 
+import Icon from "src/framework/component/icon";
+import closeSvg from "src/assets/svg/close.svg";
+
 import {
   login as loginApi,
   getUser,
@@ -92,11 +95,9 @@ function Login(props: StyledWrapComponents) {
     <div className={className}>
       <div className="left">
         <img src={images.login} />
-        <div className="action">
-          <Button onClick={window.preload.quit}>退出应用</Button>
-        </div>
       </div>
       <div className="right">
+        <Icon className="close" onClick={window.preload.quit} icon={closeSvg} />
         <Form form={form} name="login" style={{ width: 300 }}>
           <Form.Item
             name="account"
@@ -185,12 +186,6 @@ export default styled(Login)`
       object-fit: cover;
       vertical-align: top;
     }
-
-    .action {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
   }
 
   .right {
@@ -199,5 +194,14 @@ export default styled(Login)`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+  }
+
+  .close {
+    position: absolute;
+    right: ${(props) => props.theme.padding}px;
+    top: ${(props) => props.theme.padding}px;
+    cursor: pointer;
+    
   }
 `;
