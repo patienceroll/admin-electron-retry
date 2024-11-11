@@ -90,7 +90,16 @@ function Menu(props: StyledWrapComponents) {
           ))}
         </Swiper>
 
-        <div className="child-wrapper"></div>
+        {currentMenu && (
+          <div className="child-wrapper">
+            {currentMenu.child instanceof Array &&
+              currentMenu.child.length !== 0 &&
+              currentMenu!.child!.map((item) => <div>{item.name}</div>)}
+            {(!currentMenu.child || currentMenu.child.length === 0) && (
+              <div>{currentMenu.name}</div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

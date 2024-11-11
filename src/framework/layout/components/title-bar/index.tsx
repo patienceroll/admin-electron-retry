@@ -6,6 +6,10 @@ import Icon from "src/framework/component/icon";
 
 import logo from "src/assets/logo/logo@512x512.png";
 import menuSvg from "src/assets/svg/menu.svg";
+import minimizeSvg from "src/assets/svg/minimize.svg";
+import maximizeSvg from "src/assets/svg/maximize.svg";
+import unmaximizeSvg from "src/assets/svg/unmaximize.svg";
+import closeSvg from "src/assets/svg/close.svg";
 
 function Component(props: StyledWrapComponents) {
   const { colorTextBase } = useTheme();
@@ -74,15 +78,7 @@ function Component(props: StyledWrapComponents) {
                           window.preload.close(item.path);
                         }}
                       >
-                        <svg
-                          viewBox="0 0 1024 1024"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill={colorTextBase}
-                            d="M577.574 512l343.643-343.696a45.008 45.008 0 0 0 0-63.3l-1.885-1.842a44.997 44.997 0 0 0-63.288 0L512.348 447.29 168.662 103.162a45.008 45.008 0 0 0-63.3 0l-1.874 1.874a44.165 44.165 0 0 0 0 63.3L447.174 512 103.488 855.686a44.987 44.987 0 0 0 0 63.299l1.875 1.874a45.008 45.008 0 0 0 63.299 0l343.686-343.685 343.696 343.685a44.997 44.997 0 0 0 63.288 0l1.885-1.874a45.008 45.008 0 0 0 0-63.3z"
-                          />
-                        </svg>
+                        <Icon icon={closeSvg} fill={colorTextBase} />
                       </div>
                     )}
                   </div>
@@ -96,35 +92,23 @@ function Component(props: StyledWrapComponents) {
 
         <div className="options">
           <div className="option" onClick={window.preload.minimize}>
-            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-              <path d="M52.37546667 445.632l933.27253333-2.1248 0.17386667 68.26666667-933.27253334 2.1248z" />
-            </svg>
+            <Icon icon={minimizeSvg} />
           </div>
 
           {isMaximize && (
             <div className="option" onClick={window.preload.unmaximize}>
-              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                <path d="M165.712 334.501v537.51h537.51V334.5z m179.17-179.17v89.585h447.924v447.925h89.585V155.33z m-89.585-89.584h716.68v716.678h-179.17v179.17H76.126V244.916h179.17z" />
-              </svg>
+              <Icon icon={unmaximizeSvg} />
             </div>
           )}
 
           {!isMaximize && (
             <div className="option" onClick={window.preload.maximize}>
-              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                <path d="M180.592 168.48v683.46h683.46V168.48zM95.16 83.049h854.324v854.325H95.16z" />
-              </svg>
+              <Icon icon={maximizeSvg} />
             </div>
           )}
 
           <div className="option" onClick={window.preload.quit}>
-            <svg
-              className="close"
-              viewBox="0 0 1024 1024"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M577.574 512l343.643-343.696a45.008 45.008 0 0 0 0-63.3l-1.885-1.842a44.997 44.997 0 0 0-63.288 0L512.348 447.29 168.662 103.162a45.008 45.008 0 0 0-63.3 0l-1.874 1.874a44.165 44.165 0 0 0 0 63.3L447.174 512 103.488 855.686a44.987 44.987 0 0 0 0 63.299l1.875 1.874a45.008 45.008 0 0 0 63.299 0l343.686-343.685 343.696 343.685a44.997 44.997 0 0 0 63.288 0l1.885-1.874a45.008 45.008 0 0 0 0-63.3z" />
-            </svg>
+            <Icon icon={closeSvg} />
           </div>
         </div>
       </div>
@@ -153,7 +137,7 @@ export default styled(Component)`
       cursor: pointer;
 
       .menu {
-        fill: ${props => props.theme.colorPrimaryActive};
+        fill: ${(props) => props.theme.colorPrimaryActive};
       }
     }
   }
@@ -193,8 +177,6 @@ export default styled(Component)`
     display: flex;
     align-items: center;
   }
-
-
 
   .reduce {
     flex: 1;
