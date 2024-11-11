@@ -7,6 +7,7 @@ import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-nati
 import { WebpackPlugin } from "@electron-forge/plugin-webpack";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
+import path from "path";
 
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
@@ -14,10 +15,22 @@ import { rendererConfig } from "./webpack.renderer.config";
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    icon: path.resolve(__dirname, "./src/assets/logo/logo.ico"),
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      usePackageJson: false,
+      authors: "zxl",
+      description: "DOMS",
+      version: "1.0.0",
+      // exe: "DOMS",
+      setupExe: "DOMS-install.exe",
+      // 生成的 Setup.exe 的图标文件路径
+      setupIcon: path.resolve(__dirname, "./src/assets/logo/logo.ico"),
+      // 应用程序图标的 URL（显示在“控制面板”>“程序和功能”中）
+      // iconUrl: "https://www.electronjs.org/zh/assets/img/favicon.ico",
+    }),
     new MakerZIP({}, ["darwin"]),
     new MakerRpm({}),
     new MakerDeb({}),

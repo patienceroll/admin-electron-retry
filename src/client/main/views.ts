@@ -11,7 +11,7 @@ export default class Views {
     const host = env.app[mergeOptions?.app!];
     const app = mergeOptions?.app!;
 
-    let fullPath = `${host.entry}/#${path}`;
+    let fullPath = `${host.entry}#${path}`;
     if (mergeOptions?.query) {
       const params = new URLSearchParams(mergeOptions.query);
       fullPath += params.toString();

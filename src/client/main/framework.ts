@@ -1,13 +1,11 @@
 import {
   BaseWindow,
-  BrowserView,
   BrowserWindow,
   nativeImage,
   WebContentsView,
 } from "electron";
 import path from "path";
 
-import Logo from "src/assets/logo/logo@512x512.png";
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
 import ThemeLocal from "src/client/local/theme-local/theme-local";
@@ -51,7 +49,7 @@ export default class Framework {
       width: 1200,
       minHeight: 800,
       minWidth: 1200,
-      icon: nativeImage.createFromPath(path.resolve(__dirname, Logo)),
+      // icon: nativeImage.createFromPath(path.resolve(__dirname, Logo)),
       frame: true,
       titleBarStyle: "hidden",
       center: true,
@@ -68,14 +66,14 @@ export default class Framework {
       frame: true,
       titleBarStyle: "hidden",
       center: true,
-      icon: nativeImage.createFromPath(path.resolve(__dirname, Logo)),
+      // icon: nativeImage.createFromPath(path.resolve(__dirname, Logo)),
       webPreferences: {
         preload: env.FRAMEWORK_PRELOAD_WEBPACK_ENTRY,
       },
     });
     this.loginWindow.setBackgroundColor(this.theme.backgroundColor);
     this.loginWindow.webContents.loadURL(
-      `${env.FRAMEWORK_WEBPACK_ENTRY}/#/login`
+      `${env.FRAMEWORK_WEBPACK_ENTRY}#/login`
     );
     // this.loginWindow.webContents.openDevTools({mode:'undocked'})
   }
@@ -101,7 +99,7 @@ export default class Framework {
     });
     this.menuView.setBackgroundColor(this.theme.backgroundColor);
     this.menuView.setBounds(this.getContentSize());
-    this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}/#/menu`);
+    this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}#/menu`);
   }
 
   /** 注册channel事件 */
@@ -122,6 +120,7 @@ export default class Framework {
     view.view.setBounds(this.getContentSize());
     this.baseWindow.contentView.addChildView(view.view);
     view.view.setBackgroundColor(this.theme.backgroundColor);
+    // view.view.webContents.openDevTools({ mode: "undocked" });
   }
 
   close(path: string) {
@@ -134,7 +133,7 @@ export default class Framework {
   loginSuccess() {
     this.loginWindow.close();
     this.frameworkView.webContents.loadURL(
-      `${env.FRAMEWORK_WEBPACK_ENTRY}/#/layout`
+      `${env.FRAMEWORK_WEBPACK_ENTRY}#/layout`
     );
     this.baseWindow.contentView.addChildView(this.frameworkView);
     this.baseWindow.show();
@@ -154,7 +153,7 @@ export default class Framework {
       this.createMenuView();
     }
     this.baseWindow.contentView.addChildView(this.menuView!);
-    this.menuView!.webContents.openDevTools({ mode: "undocked" });
+    // this.menuView!.webContents.openDevTools({ mode: "undocked" });
   }
 
   /** 隐藏菜单窗口 */
