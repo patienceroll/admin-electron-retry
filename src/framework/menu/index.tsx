@@ -5,10 +5,53 @@ import { Scrollbar, Mousewheel } from "swiper/modules";
 import { useSpring, animated } from "@react-spring/web";
 
 import Icon from "src/framework/component/icon";
+
 import HomeSvg from "src/assets/svg/home.svg";
+import clientSvg from "src/assets/svg/client.svg";
+import systemSvg from "src/assets/svg/system.svg";
+import visualizationSvg from "src/assets/svg/visualization.svg";
+import organizationSvg from "src/assets/svg/organization.svg";
+import projectSvg from "src/assets/svg/project.svg";
+import qualitySvg from "src/assets/svg/quality.svg";
+import salesSvg from "src/assets/svg/sales.svg";
+import paymentSvg from "src/assets/svg/payment.svg";
+import administrationSvg from "src/assets/svg/administration.svg";
+import materialSvg from "src/assets/svg/material.svg";
+import supplierSvg from "src/assets/svg/supplier.svg";
+import fileSvg from "src/assets/svg/file.svg";
+import logisticsSvg from "src/assets/svg/logistics.svg";
+import inventorySvg from "src/assets/svg/inventory.svg";
+import purchasSvg from "src/assets/svg/purchas.svg";
+import approvalSvg from "src/assets/svg/approval.svg";
+import produceSvg from "src/assets/svg/produce.svg";
+import jihuiSvg from "src/assets/svg/chance.svg";
+import approvalRecordSvg from "src/assets/svg/approval-record.svg";
 
 import "swiper/css";
 import "swiper/css/scrollbar";
+
+const IconMap = {
+  "approval-record": approvalRecordSvg,
+  home: HomeSvg,
+  client: clientSvg,
+  system: systemSvg,
+  visualization: visualizationSvg,
+  organization: organizationSvg,
+  project: projectSvg,
+  quality: qualitySvg,
+  sales: salesSvg,
+  payment: paymentSvg,
+  administration: administrationSvg,
+  material: materialSvg,
+  supplier: supplierSvg,
+  file: fileSvg,
+  logistics: logisticsSvg,
+  inventory: inventorySvg,
+  purchas: purchasSvg,
+  approval: approvalSvg,
+  produce: produceSvg,
+  jihui: jihuiSvg,
+};
 
 function Menu(props: StyledWrapComponents) {
   const { className } = props;
@@ -62,39 +105,38 @@ function Menu(props: StyledWrapComponents) {
           direction="horizontal"
           modules={[Scrollbar, Mousewheel]}
         >
-          {menus.map((item) => (
-            <SwiperSlide className="swiper-slide" key={item.id}>
-              <div
-                className={`nav-item ${
-                  item.id === currentMenu?.id ? "nav-item-active" : ""
-                }`}
-                onMouseEnter={() => setCurrentMenu(item)}
-              >
-                <animated.div
-                  style={
-                    item.id === currentMenu?.id ? navItemAnimate : undefined
-                  }
+          {menus.map((item) => {
+            const active = item.id === currentMenu?.id;
+            return (
+              <SwiperSlide className="swiper-slide" key={item.id}>
+                <div
+                  className={`nav-item ${active ? "nav-item-active" : ""}`}
+                  onMouseEnter={() => setCurrentMenu(item)}
                 >
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Icon
-                      width={28}
-                      height={28}
-                      icon={HomeSvg}
-                      fill={theme.colorText}
-                    />
-                  </div>
-                  <div style={{ marginTop: 8 }}>{item.name}</div>
-                </animated.div>
-              </div>
-            </SwiperSlide>
-          ))}
+                  <animated.div style={active ? navItemAnimate : undefined}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <Icon
+                        width={28}
+                        height={28}
+                        icon={IconMap[item.icon as keyof typeof IconMap]}
+                        fill={active ? theme.colorPrimary : theme.colorText}
+                      />
+                    </div>
+                    <div style={{ marginTop: 8 }}>{item.name}</div>
+                  </animated.div>
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
 
         {currentMenu && (
           <div className="child-wrapper">
             {currentMenu.child instanceof Array &&
               currentMenu.child.length !== 0 &&
-              currentMenu!.child!.map((item) => <div>{item.name}</div>)}
+              currentMenu!.child!.map((item) => (
+                <div key={item.id}>{item.name}</div>
+              ))}
             {(!currentMenu.child || currentMenu.child.length === 0) && (
               <div>{currentMenu.name}</div>
             )}
@@ -145,15 +187,23 @@ export default styled(Menu)`
     justify-content: center;
     align-items: center;
     user-select: none;
-    &:hover {
+    &:hover { 
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
       box-shadow: ${(props) => props.theme.boxShadow};
+      color: ${(props) => props.theme.colorPrimary};
+      svg {
+        fill: ${(props) => props.theme.colorPrimary};
+      }
     }
   }
 
   .nav-item-active {
     background-color: ${(props) => props.theme.colorPrimary};
-    color: ${(props) => props.theme.colorText};
+    color: ${(props) => props.theme.colorBgBase};
+
+    svg {
+      fill: ${(props) => props.theme.colorBgBase};
+    }
   }
 
   .child-wrapper {
