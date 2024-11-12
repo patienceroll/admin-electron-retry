@@ -1,8 +1,8 @@
 {
   "name": "admin-electron-retry",
-  "productName": "admin-electron-retry",
+  "productName": "DOMS",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "DOMS",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",

@@ -7,6 +7,9 @@ import { Col, Row, Typography } from "antd";
 
 import Icon from "src/framework/component/icon";
 
+import images from "src/assets/images";
+
+
 import HomeSvg from "src/assets/svg/home.svg";
 import clientSvg from "src/assets/svg/client.svg";
 import systemSvg from "src/assets/svg/system.svg";
@@ -127,7 +130,7 @@ function Menu(props: StyledWrapComponents) {
       >
         <div className="scrollbar" ref={setDiv} />
         <Swiper
-          style={{ height: 102 }}
+          style={{ height: 102,boxShadow: theme.boxShadow }}
           slidesPerView={"auto"}
           scrollbar={{ draggable: true, el: div }}
           mousewheel={{ thresholdDelta: 4, sensitivity: 300 }}
@@ -232,13 +235,17 @@ export default styled(Menu)`
   display: flex;
   justify-content: center;
   align-items: top;
-  background-color: ${(props) => props.theme.colorBgMask};
+  /* background-color: ${(props) => props.theme.colorBgBlur}; */
+  background-color: #f5f7ff;
+  background-image: url(${images.bg});
+  background-size: 100%;
+  background-repeat: no-repeat;
 
   .nav {
     max-width: 100%;
     border-radius: ${(props) => props.theme.borderRadius}px;
     box-shadow: ${(props) => props.theme.boxShadow};
-    background-color: ${(props) => props.theme.colorBgLayout};
+    background-color: ${(props) => props.theme.colorBgBlur};
   }
 
   .swiper-slide {

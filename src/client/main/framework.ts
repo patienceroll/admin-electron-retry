@@ -1,10 +1,4 @@
-import {
-  BaseWindow,
-  BrowserWindow,
-  nativeImage,
-  WebContentsView,
-} from "electron";
-import path from "path";
+import { BaseWindow, BrowserWindow, WebContentsView } from "electron";
 
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
@@ -100,6 +94,7 @@ export default class Framework {
     this.menuView.setBackgroundColor(this.theme.backgroundColor);
     this.menuView.setBounds(this.getContentSize());
     this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}#/menu`);
+    this.menuView.webContents.openDevTools();
   }
 
   /** 注册channel事件 */
@@ -131,7 +126,7 @@ export default class Framework {
 
   /** 登录成功之后, */
   loginSuccess() {
-    this.loginWindow.close();
+    this.loginWindow.destroy();
     this.frameworkView.webContents.loadURL(
       `${env.FRAMEWORK_WEBPACK_ENTRY}#/layout`
     );

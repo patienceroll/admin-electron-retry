@@ -4,6 +4,20 @@ import Framework from "src/client/main/framework";
 
 let framework: Framework;
 
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on("second-instance", function () {
+    if (framework) {
+      if (framework.loginWindow.isDestroyed()) {
+        framework.baseWindow.focus();
+      } else {
+        framework.loginWindow.focus();
+      }
+    }
+  });
+}
+
 function createWindow() {
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
