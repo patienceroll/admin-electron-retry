@@ -1,6 +1,8 @@
 import { notification } from "antd";
 import buildQuery from "./build-query";
 
+import controler from "src/framework/component/progress-bar/controler";
+
 function isIntanceofBodyInit(data: unknown) {
   return (
     data instanceof ReadableStream ||
@@ -41,6 +43,8 @@ function getDefaultHeader() {
 
 function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
   const [url, params, init = {}] = argument;
+
+  const control = controler.push();
 
   const mergeInit: FetchInit = {
     ...init,
@@ -98,7 +102,8 @@ function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
         });
       }
       return Promise.reject(err);
-    });
+    })
+    .finally(control.resolve);
 }
 
 /**

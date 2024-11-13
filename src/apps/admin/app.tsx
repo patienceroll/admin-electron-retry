@@ -8,6 +8,7 @@ import ThemeProvider from "src/framework/component/theme-provider";
 import Home from "./pages/home";
 import UserInfo from "./pages/user-info";
 import OrganizationCompany from "./pages/organization/company";
+import ProgressBar from "src/framework/component/progress-bar";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
@@ -32,6 +33,7 @@ export default function () {
       }}
     >
       <ThemeProvider>
+        <ProgressBar />
         <HashRouter>
           <Routes>
             <Route path="/home" Component={Home} />
