@@ -19,12 +19,16 @@ type RoutePreload = {
   ) => void;
   /** 关闭一个tab菜单(路由) */
   close: (path: string) => void;
+  /** 获取当前的路由信息 */
   getRoutes: () => GetRoutes;
+  /** 监听路由变化 */
   onRoutesChange: (callback: (routes: GetRoutes) => void) => DisposeFunction;
   /** 显示菜单 */
   showMenu: () => void;
   /** 隐藏菜单 */
   hideMenu: () => void;
   /** 当前菜单是否展示 */
-  isMenuShowed: () => boolean 
+  isMenuShowed: () => boolean ;
+  /** 切换到已经打开的页面 */
+  switchPage: (path:string) => void
 };

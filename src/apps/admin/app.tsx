@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
 import { ConfigProvider, theme } from "antd";
+import locale from "antd/locale/zh_CN";
 
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
@@ -24,6 +25,7 @@ export default function () {
 
   return (
     <ConfigProvider
+      locale={locale}
       theme={{
         token: { colorPrimary: themebase.colorPrimary },
         algorithm: [

@@ -70,7 +70,7 @@ function ProgressBar(props: StyledWrapComponents) {
     };
   }, []);
 
-  return show.whether &&  <animated.div className={className} style={style} />;
+  return show.whether ?  <animated.div className={className} style={style} /> : null;
 }
 
 export default styled(ProgressBar)`

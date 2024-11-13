@@ -31,6 +31,7 @@ export default class Views {
       this.value.set(path, newView);
     }
 
+  
     const returnView = this.value.get(path)!;
     returnView.query = mergeOptions?.query;
     returnView.app = app;

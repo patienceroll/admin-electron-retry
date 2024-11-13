@@ -28,7 +28,10 @@ export default function routePreload(): RoutePreload {
       return ipcRenderer.sendSync("hideMenu");
     },
     isMenuShowed() {
-      return ipcRenderer.sendSync('isMenuShowed')
-    }
+      return ipcRenderer.sendSync("isMenuShowed");
+    },
+    switchPage(path) {
+      return ipcRenderer.sendSync("switchPage",path);
+    },
   };
 }

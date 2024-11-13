@@ -61,7 +61,7 @@ function Component(props: StyledWrapComponents) {
               onChange={(path) => {
                 const item = routes.routes.find((tab) => tab.path === path);
                 if (item) {
-                  window.preload.open(item.path, item.name);
+                  window.preload.switchPage(item.path);
                 }
               }}
               value={routes.current}

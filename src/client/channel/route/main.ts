@@ -60,4 +60,18 @@ export default function routeMain(options: { framework: Framework }) {
       ? framework.baseWindow.contentView.children.includes(framework.menuView)
       : false;
   });
+
+  ipcMain.on("switchPage", function (event, path: string) {
+    const item = framework.views.value.get(path);
+    if (item) {
+      framework.views.hideAllView();
+      item.view.setVisible(true);
+      item.view.setBounds(framework.getContentSize());
+      framework.baseWindow.contentView.addChildView(item.view);
+      item.view.setBackgroundColor(framework.theme.backgroundColor);
+      framework.path = path
+      onRoutesChange()
+    }
+    event.returnValue = void 0;
+  });
 }
