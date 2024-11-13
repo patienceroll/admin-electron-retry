@@ -31,4 +31,13 @@ export default function localMain(options: { framework: Framework }) {
   ipcMain.on("getLocalUserMenu", function (event) {
     event.returnValue = framework.userLocal.menu;
   });
+
+  ipcMain.on("getLocalUser", function (event) {
+    event.returnValue = framework.userLocal.user;
+  });
+
+  ipcMain.on("setLocalUser", function (event, user) {
+    framework.userLocal.user = user;
+    event.returnValue = void 0;
+  });
 }

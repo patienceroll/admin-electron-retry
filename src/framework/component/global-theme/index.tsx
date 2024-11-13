@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: ${(props) => props.theme.colorPrimary};
+      background-color: ${(props) => props.theme.colorPrimaryBgHover};
       border-radius: 4px;
       opacity: 0.3;
     }

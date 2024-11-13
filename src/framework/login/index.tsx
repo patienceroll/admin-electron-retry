@@ -51,6 +51,7 @@ function Login(props: StyledWrapComponents) {
         return getUser();
       })
       .then((res) => {
+        window.preload.setLocalUser(res.data);
         if (res.data.company_list.length === 0) {
           notification.error({
             message: "温馨提示",
@@ -195,7 +196,7 @@ export default styled(Login)`
     justify-content: center;
     align-items: center;
     position: relative;
-    background-color: ${props => props.theme.colorBgBase};
+    background-color: ${(props) => props.theme.colorBgBase};
   }
 
   .close {
@@ -203,8 +204,8 @@ export default styled(Login)`
     right: ${(props) => props.theme.padding}px;
     top: ${(props) => props.theme.padding}px;
     cursor: pointer;
-    &:hover  {
-      background-color: ${props => props.theme.colorPrimaryBgHover};
+    &:hover {
+      background-color: ${(props) => props.theme.colorPrimaryBgHover};
     }
   }
 `;

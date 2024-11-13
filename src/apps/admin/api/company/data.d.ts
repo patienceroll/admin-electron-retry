@@ -20,3 +20,39 @@ type Company = {
   status: number;
   updated_at: string;
 };
+
+type CompanyListItem = {
+  id: number;
+  company_id: number;
+  type: string;
+  title: string;
+  content: string;
+  push_time: string;
+  status: number;
+  created_id: number;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
+  btn_power: BtnPower;
+  // created_user: BlockCreateUser;
+  company: BlockCompany;
+  department_id: number;
+  staff_id: number;
+  start_time: string;
+  end_time: string;
+  hour: string;
+  reason: string;
+  department: {
+    id: number;
+    name: string;
+  };
+  staff: BlockStaff;
+  name: string;
+  short_name: string;
+  province: string;
+  city: string;
+  county: string;
+  address: string;
+  is_main: number;
+  employee_count: number;
+};

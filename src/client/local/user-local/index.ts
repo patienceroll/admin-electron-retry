@@ -28,12 +28,21 @@ export default class UserLocal {
     this._local.syncToFile();
   }
 
+  get user() {
+    return this._local.store.user;
+  }
+
+  set user(user) {
+    this._local.store.user = user;
+    this._local.syncToFile();
+  }
+
   get menu() {
-    return this._local.store.menu
+    return this._local.store.menu;
   }
 
   set menu(menu) {
     this._local.store.menu = menu;
-    this._local.syncToFile()
+    this._local.syncToFile();
   }
 }

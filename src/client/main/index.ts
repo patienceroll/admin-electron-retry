@@ -24,7 +24,7 @@ function createWindow() {
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          "default-src 'self' 'unsafe-eval' 'unsafe-inline'; connect-src 'self' http://118.89.67.217:9638;font-src 'self' data:",
+          "default-src 'self' 'unsafe-eval' 'unsafe-inline' ; connect-src 'self' http://118.89.67.217:9638;font-src 'self' data: ; img-src 'self' data:",
         ],
       },
     });

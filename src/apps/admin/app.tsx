@@ -7,7 +7,7 @@ import ThemeProvider from "src/framework/component/theme-provider";
 
 import Home from "./pages/home";
 import UserInfo from "./pages/user-info";
-
+import OrganizationCompany from "./pages/organization/company";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
@@ -20,7 +20,6 @@ export default function () {
   useEffect(() => {
     return window.preload.onThemeChange(setThemeBase);
   }, []);
-
 
   return (
     <ConfigProvider
@@ -37,6 +36,10 @@ export default function () {
           <Routes>
             <Route path="/home" Component={Home} />
             <Route path="/user-info" Component={UserInfo} />
+            <Route
+              path="/organization/company"
+              Component={OrganizationCompany}
+            />
           </Routes>
         </HashRouter>
         <GlobalStyle />

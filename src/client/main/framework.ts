@@ -115,7 +115,7 @@ export default class Framework {
     view.view.setBounds(this.getContentSize());
     this.baseWindow.contentView.addChildView(view.view);
     view.view.setBackgroundColor(this.theme.backgroundColor);
-    // view.view.webContents.openDevTools({ mode: "undocked" });
+    view.view.webContents.openDevTools({ mode: "right" });
   }
 
   close(path: string) {

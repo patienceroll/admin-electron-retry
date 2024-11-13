@@ -25,3 +25,18 @@ type DisposeFunction = VoidFunction;
 type StyledWrapComponents<T = unknown> = {
   className?: string;
 } & T;
+
+type ListParam<T = {}> = {
+  page: number;
+  pageSize: number;
+} & T;
+
+type List<T> = {
+  list: T[];
+  pageInfo: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPage: number;
+  };
+};

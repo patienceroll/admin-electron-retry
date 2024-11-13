@@ -9,4 +9,8 @@ type LocalPreload = {
   setLocalUserMenu: (menu: UserMenu[]) => void;
   /** 获取当前登录的用户的菜单 */
   getLocalUserMenu: () => UserMenu[] | undefined;
+  /** 设置当前登录的用户信息 */
+  setLocalUser: (menu: User) => void;
+  /** 获取当前登录的用户信息 */
+  getLocalUser: () => User | undefined;
 };

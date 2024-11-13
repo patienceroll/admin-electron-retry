@@ -28,6 +28,9 @@ export default function () {
           darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
           // theme.compactAlgorithm,
         ],
+        components: {
+          Segmented: {},
+        },
       }}
     >
       <ThemeProvider>
