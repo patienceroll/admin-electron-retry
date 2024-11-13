@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Mousewheel } from "swiper/modules";
 import { useSpring, animated } from "@react-spring/web";
-import { Col, Row, Typography } from "antd";
 
 import Icon from "src/framework/component/icon";
+import Title from "src/framework/menu/components/title";
+import Item from "src/framework/menu/components/item";
 
 import images from "src/assets/images";
-
 
 import HomeSvg from "src/assets/svg/home.svg";
 import clientSvg from "src/assets/svg/client.svg";
@@ -33,6 +33,7 @@ import approvalRecordSvg from "src/assets/svg/approval-record.svg";
 
 import "swiper/css";
 import "swiper/css/scrollbar";
+import FadeInWrapper from "../component/fade-in-wrapper";
 
 type CommandyMenu = UserMenu & {
   count: number;
@@ -65,6 +66,7 @@ function Menu(props: StyledWrapComponents) {
   const { className } = props;
   const theme = useTheme();
   const [div, setDiv] = useState<HTMLDivElement | null>(null);
+  const timer = useRef<NodeJS.Timeout>();
 
   const navItemAnimate = useSpring({
     // 初始状态，设置 y 坐标为 0
@@ -99,7 +101,6 @@ function Menu(props: StyledWrapComponents) {
     return [];
   });
 
-  console.log(commonlyUsed);
   function pushARecordToLocal(params: UserMenu) {
     setConmonlyUsed((t) => {
       let newData: CommandyMenu[] = [];
@@ -130,7 +131,7 @@ function Menu(props: StyledWrapComponents) {
       >
         <div className="scrollbar" ref={setDiv} />
         <Swiper
-          style={{ height: 102,boxShadow: theme.boxShadow }}
+          style={{ height: 102, boxShadow: theme.boxShadow }}
           slidesPerView={"auto"}
           scrollbar={{ draggable: true, el: div }}
           mousewheel={{ thresholdDelta: 4, sensitivity: 300 }}
@@ -143,7 +144,12 @@ function Menu(props: StyledWrapComponents) {
               <SwiperSlide className="swiper-slide" key={item.id}>
                 <div
                   className={`nav-item ${active ? "nav-item-active" : ""}`}
-                  onMouseEnter={() => setCurrentMenu(item)}
+                  onMouseEnter={() => {
+                    if (timer.current) clearTimeout(timer.current);
+                    timer.current = setTimeout(() => {
+                      setCurrentMenu(item);
+                    }, 300);
+                  }}
                 >
                   <animated.div style={active ? navItemAnimate : undefined}>
                     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -165,63 +171,56 @@ function Menu(props: StyledWrapComponents) {
         <div className="link-wrapper">
           {commonlyUsed.length !== 0 && (
             <div>
-              <Typography.Title style={{ marginTop: 0 }} level={5}>
-                常用菜单
-              </Typography.Title>
-              <Row gutter={[20, 20]}>
+              <Title>常用菜单</Title>
+
+              <div>
                 {commonlyUsed.map((item) => (
-                  <Col
+                  <Item
+                    item={item}
                     key={item.id}
-                    span={4}
-                    style={{ cursor: "pointer" }}
                     onClick={() => {
                       window.preload.open(item.path, item.name);
                       window.preload.hideMenu();
                       pushARecordToLocal(item);
                     }}
-                  >
-                    {item.name}
-                  </Col>
+                  />
                 ))}
-              </Row>
+              </div>
             </div>
           )}
 
           {currentMenu && (
-            <Typography.Title level={5}>
-              {currentMenu.name}菜单
-            </Typography.Title>
-          )}
-          {currentMenu && (
-            <div className="child-wrapper">
-              {currentMenu.child instanceof Array &&
-                currentMenu.child.length !== 0 &&
-                currentMenu!.child!.map((item) => (
-                  <div
-                    className="child-nav"
-                    key={item.id}
+            <FadeInWrapper>
+              <Title style={{ marginTop: theme.margin * 2 }}>
+                {currentMenu.name}菜单
+              </Title>
+              <div className="child-wrapper">
+                {currentMenu.child instanceof Array &&
+                  currentMenu.child.length !== 0 &&
+                  currentMenu!.child!.map((item) => (
+                    <Item
+                      item={item}
+                      key={item.id}
+                      onClick={() => {
+                        window.preload.open(item.path, item.name);
+                        window.preload.hideMenu();
+                        pushARecordToLocal(item);
+                      }}
+                    />
+                  ))}
+                {(!currentMenu.child || currentMenu.child.length === 0) && (
+                  <Item
+                    item={currentMenu}
+                    key={currentMenu.id}
                     onClick={() => {
-                      window.preload.open(item.path, item.name);
+                      window.preload.open(currentMenu.path, currentMenu.name);
                       window.preload.hideMenu();
-                      pushARecordToLocal(item);
+                      pushARecordToLocal(currentMenu);
                     }}
-                  >
-                    {item.name}
-                  </div>
-                ))}
-              {(!currentMenu.child || currentMenu.child.length === 0) && (
-                <div
-                  className="child-nav"
-                  onClick={() => {
-                    window.preload.open(currentMenu.path, currentMenu.name);
-                    window.preload.hideMenu();
-                    pushARecordToLocal(currentMenu);
-                  }}
-                >
-                  {currentMenu.name}
-                </div>
-              )}
-            </div>
+                  />
+                )}
+              </div>
+            </FadeInWrapper>
           )}
         </div>
       </div>
@@ -305,12 +304,12 @@ export default styled(Menu)`
   }
 
   .child-nav {
-    margin-top: ${props => props.theme.padding}px;
+    margin-top: ${(props) => props.theme.padding}px;
     width: 33%;
     cursor: pointer;
 
     &:hover {
-      color:${props => props.theme.colorPrimaryActive}
+      color: ${(props) => props.theme.colorPrimaryActive};
     }
   }
 `;
