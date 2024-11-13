@@ -7,6 +7,7 @@ import { useSpring, animated } from "@react-spring/web";
 import Icon from "src/framework/component/icon";
 import Title from "src/framework/menu/components/title";
 import Item from "src/framework/menu/components/item";
+import FadeInWrapper from "src/framework/component/fade-in-wrapper";
 
 import images from "src/assets/images";
 
@@ -33,7 +34,6 @@ import approvalRecordSvg from "src/assets/svg/approval-record.svg";
 
 import "swiper/css";
 import "swiper/css/scrollbar";
-import FadeInWrapper from "../component/fade-in-wrapper";
 
 type CommandyMenu = UserMenu & {
   count: number;

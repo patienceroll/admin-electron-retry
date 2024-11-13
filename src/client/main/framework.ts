@@ -94,7 +94,7 @@ export default class Framework {
     this.menuView.setBackgroundColor(this.theme.backgroundColor);
     this.menuView.setBounds(this.getContentSize());
     this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}#/menu`);
-    this.menuView.webContents.openDevTools();
+    // this.menuView.webContents.openDevTools();
   }
 
   /** 注册channel事件 */
