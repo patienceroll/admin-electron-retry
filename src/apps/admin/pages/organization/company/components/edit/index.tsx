@@ -62,7 +62,7 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
       onClose={open.setFalse}
       onCancel={open.setFalse}
     >
-      <Form form={form} autoComplete="off" labelCol={{span:6}}>
+      <Form form={form} autoComplete="off" labelCol={{ span: 6 }}>
         <Form.Item
           name="name"
           label="公司"
@@ -71,7 +71,7 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
           <Input placeholder="请输入公司" />
         </Form.Item>
         <Form.Item name="short_name" label="简称">
-          <Input />
+          <Input placeholder="请输入公司简称" />
         </Form.Item>
         <Form.Item name="staff_id" label="法人">
           <Select
@@ -81,6 +81,7 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
             optionFilterProp="name"
             fieldNames={{ label: "name", value: "id" }}
             filterOption
+            placeholder="请选择公司法人"
           />
         </Form.Item>
         <Form.Item name="is_main" label="是否为总公司">
@@ -94,9 +95,6 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
             <Radio value={1}>启用</Radio>
             <Radio value={0}>停用</Radio>
           </Radio.Group>
-        </Form.Item>
-        <Form.Item name="id" hidden>
-          <Input />
         </Form.Item>
       </Form>
     </Modal>

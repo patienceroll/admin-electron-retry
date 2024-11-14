@@ -7,7 +7,7 @@ import { getCompanyList } from "src/apps/admin/api/company";
 
 import Edit, { createRef } from "./components/edit";
 
-function company(props: StyledWrapComponents) {
+function Company(props: StyledWrapComponents) {
   const { className } = props;
 
   const ref = createRef();
@@ -90,7 +90,7 @@ function company(props: StyledWrapComponents) {
   );
 }
 
-export default styled(company)`
+export default styled(Company)`
   .wraper {
     display: flex;
     box-sizing: border-box;
