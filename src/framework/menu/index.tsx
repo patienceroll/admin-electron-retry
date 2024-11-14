@@ -62,8 +62,8 @@ const IconMap = {
   jihui: jihuiSvg,
 };
 
-function Menu(props: StyledWrapComponents) {
-  const { className } = props;
+function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
+  const { className, darkMode } = props;
   const theme = useTheme();
   const [div, setDiv] = useState<HTMLDivElement | null>(null);
   const timer = useRef<NodeJS.Timeout>();
@@ -177,6 +177,7 @@ function Menu(props: StyledWrapComponents) {
                 {commonlyUsed.map((item) => (
                   <Item
                     item={item}
+                    darkMode={darkMode}
                     key={item.id}
                     onClick={() => {
                       window.preload.open(item.path, item.name);
@@ -199,6 +200,7 @@ function Menu(props: StyledWrapComponents) {
                   currentMenu.child.length !== 0 &&
                   currentMenu!.child!.map((item) => (
                     <Item
+                      darkMode={darkMode}
                       item={item}
                       key={item.id}
                       onClick={() => {
@@ -210,6 +212,7 @@ function Menu(props: StyledWrapComponents) {
                   ))}
                 {(!currentMenu.child || currentMenu.child.length === 0) && (
                   <Item
+                    darkMode={darkMode}
                     item={currentMenu}
                     key={currentMenu.id}
                     onClick={() => {
@@ -234,9 +237,11 @@ export default styled(Menu)`
   display: flex;
   justify-content: center;
   align-items: top;
-  /* background-color: ${(props) => props.theme.colorBgBlur}; */
-  background-color: #f5f7ff;
-  background-image: url(${images.bg});
+  background-color: ${(props) =>
+    props.darkMode ? props.theme.colorBgBase : "#f5f7ff"};
+
+  background-image: ${(props) =>
+    props.darkMode ? "none" : ` url(${images.bg})`};
   background-size: 100%;
   background-repeat: no-repeat;
 

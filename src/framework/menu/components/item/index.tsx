@@ -7,6 +7,7 @@ import useWather from "src/hooks/use-wather";
 function Item(
   props: StyledWrapComponents<{
     item: UserMenu;
+    darkMode: boolean;
     onClick: React.MouseEventHandler<HTMLDivElement>;
   }>
 ) {
@@ -60,8 +61,10 @@ export default styled(Item)`
   border-radius: ${(props) => props.theme.borderRadius}px;
   background-image: linear-gradient(
     133deg,
-    #fafbff 0%,
-    #ffffff 28%,
-    #ffffff 100%
+    ${(props) => (props.darkMode ? props.theme.colorBgContainer : "#fafbff")} 0%,
+    ${(props) => (props.darkMode ? props.theme.colorBgContainer : "#fff")}
+      28%,
+    ${(props) => (props.darkMode ? props.theme.colorBgContainer : "#fff")}
+      100%
   );
 `;

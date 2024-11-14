@@ -23,7 +23,7 @@ export default function () {
 
   return (
     <ConfigProvider
-    locale={locale}
+      locale={locale}
       theme={{
         token: { colorPrimary: themebase.colorPrimary },
         algorithm: [
@@ -40,7 +40,7 @@ export default function () {
           <Routes>
             <Route path="/layout" element={<Layout />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/menu" element={<Menu />} />
+            <Route path="/menu" element={<Menu darkMode={darkMode} />} />
           </Routes>
         </HashRouter>
         <GlobalStyle />
