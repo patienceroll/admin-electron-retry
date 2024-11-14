@@ -1,27 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PageWrapper from "src/framework/component/page-wrapper";
 import styled from "styled-components";
-import { Badge, Button, Descriptions, Divider, Space, Typography } from "antd";
+import {
+  Badge,
+  Button,
+  Descriptions,
+  Divider,
+  FloatButton,
+  Space,
+  Typography,
+} from "antd";
 
 import { getCompanyList } from "src/apps/admin/api/company";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ReloadSvg from "src/assets/svg/reload.svg";
 
 import Edit, { createRef } from "./components/edit";
+import useWather from "src/hooks/use-wather";
 
 function Company(props: StyledWrapComponents) {
   const { className } = props;
 
   const ref = createRef();
+  const [loading] = useWather();
   const [company, setCompany] = useState<CompanyListItem[]>([]);
 
-  function getCompany() {
-    return getCompanyList({ page: 1, pageSize: 100 }).then((res) => {
-      setCompany(res.data.list);
-    });
-  }
+  const getCompany = useCallback(
+    function () {
+      loading.setTrue();
+      return getCompanyList({ page: 1, pageSize: 100 })
+        .then((res) => {
+          setCompany(res.data.list);
+        })
+        .finally(loading.setFalse);
+    },
+    [loading]
+  );
 
   useEffect(() => {
     getCompany();
-  }, []);
+  }, [getCompany]);
 
   return (
     <PageWrapper className={className}>
@@ -73,7 +92,7 @@ function Company(props: StyledWrapComponents) {
                     <Button
                       type="text"
                       onClick={() => {
-                        ref.current?.edit(item);
+                        ref.current?.edit(item).then(getCompany);
                       }}
                     >
                       编辑
@@ -86,6 +105,32 @@ function Company(props: StyledWrapComponents) {
         ))}
       </div>
       <Edit ref={ref} />
+
+      <FloatButton.Group shape="square">
+        <FloatButton
+          tooltip="新建公司"
+          icon={<Icon width={18} height={18} icon={AddSvg} />}
+          onClick={() => {
+            ref.current?.create().then(getCompany);
+          }}
+        />
+        <FloatButton
+          tooltip="刷新"
+          onClick={() => {
+            if (!loading.whether) {
+              getCompany();
+            }
+          }}
+          icon={
+            <Icon
+              className={loading.whether ? "rotate" : undefined}
+              width={18}
+              height={18}
+              icon={ReloadSvg}
+            />
+          }
+        />
+      </FloatButton.Group>
     </PageWrapper>
   );
 }
@@ -130,5 +175,18 @@ export default styled(Company)`
     position: absolute;
     bottom: ${(props) => props.theme.padding}px;
     right: ${(props) => props.theme.padding}px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .rotate {
+    animation: spin 2s linear infinite;
   }
 `;

@@ -11,6 +11,7 @@ import styled from "styled-components";
 import useWather from "src/hooks/use-wather";
 import useOption from "src/hooks/use-option";
 import { getStaffOption } from "src/apps/admin/api/staff";
+import { addCompany, editCompany } from "src/apps/admin/api/company";
 
 type Ref = {
   edit: (item: CompanyListItem) => Promise<void>;
@@ -27,16 +28,34 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
     reject: (reason?: unknown) => void;
   }>({ resolve() {}, reject() {} });
   const [open] = useWather();
+  const [loading] = useWather();
   const [form] = Form.useForm();
   const [staff] = useOption(getStaffOption);
 
   const [item, setItem] = useState<CompanyListItem>();
+
+  function submit() {
+    form
+      .validateFields()
+      .then((store) => {
+        loading.setTrue();
+        if (item === undefined) return addCompany(store);
+        return editCompany({ ...store, id: item.id });
+      })
+      .then(() => {
+        promiseResolver.current.resolve();
+        open.setFalse();
+        loading.setFalse();
+      })
+      .catch(loading.setFalse);
+  }
 
   useImperativeHandle(ref, () => ({
     create() {
       return new Promise<void>((resolve, reject) => {
         setItem(undefined);
         open.setTrue();
+        form.resetFields();
         promiseResolver.current = { resolve, reject };
       });
     },
@@ -44,6 +63,7 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
       return new Promise<void>((resolve, reject) => {
         setItem(item);
         open.setTrue();
+        form.setFieldsValue(item);
         promiseResolver.current = { resolve, reject };
       });
     },
@@ -61,6 +81,8 @@ const EditCompany = forwardRef<Ref>(function (props, ref) {
       title={item ? "编辑公司" : "新增公司"}
       onClose={open.setFalse}
       onCancel={open.setFalse}
+      onOk={submit}
+      confirmLoading={loading.whether}
     >
       <Form form={form} autoComplete="off" labelCol={{ span: 6 }}>
         <Form.Item
