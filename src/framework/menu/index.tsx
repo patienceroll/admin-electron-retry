@@ -148,7 +148,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
                     if (timer.current) clearTimeout(timer.current);
                     timer.current = setTimeout(() => {
                       setCurrentMenu(item);
-                    }, 300);
+                    }, 150);
                   }}
                 >
                   <animated.div style={active ? navItemAnimate : undefined}>

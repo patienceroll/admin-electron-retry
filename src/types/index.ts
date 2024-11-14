@@ -40,3 +40,8 @@ type List<T> = {
     totalPage: number;
   };
 };
+
+
+type OptionParams<T> = {
+  page: -1;
+} & T;

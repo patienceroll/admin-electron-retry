@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import PageWrapper from "src/framework/component/page-wrapper";
 import styled from "styled-components";
+import { Badge, Button, Descriptions, Divider, Space, Typography } from "antd";
 
 import { getCompanyList } from "src/apps/admin/api/company";
-import { Badge, Button, Descriptions, Divider, Space, Typography } from "antd";
+
+import Edit, { createRef } from "./components/edit";
 
 function company(props: StyledWrapComponents) {
   const { className } = props;
 
+  const ref = createRef();
   const [company, setCompany] = useState<CompanyListItem[]>([]);
 
   function getCompany() {
@@ -67,7 +70,14 @@ function company(props: StyledWrapComponents) {
                 <div className="action">
                   <Space>
                     <Button type="text">详情</Button>
-                    <Button type="text">编辑</Button>
+                    <Button
+                      type="text"
+                      onClick={() => {
+                        ref.current?.edit(item);
+                      }}
+                    >
+                      编辑
+                    </Button>
                   </Space>
                 </div>
               </div>
@@ -75,6 +85,7 @@ function company(props: StyledWrapComponents) {
           </div>
         ))}
       </div>
+      <Edit ref={ref} />
     </PageWrapper>
   );
 }
@@ -94,7 +105,7 @@ export default styled(company)`
   .item {
     box-sizing: border-box;
     width: 250px;
-    height: 280px;
+    height: 320px;
     padding: ${(props) => props.theme.padding}px;
     box-shadow: ${(props) => props.theme.boxShadow};
     border: 1px solid ${(props) => props.theme.colorBorder};

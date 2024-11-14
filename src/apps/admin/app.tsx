@@ -30,7 +30,7 @@ export default function () {
         token: { colorPrimary: themebase.colorPrimary },
         algorithm: [
           darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-          theme.compactAlgorithm,
+          // theme.compactAlgorithm,
         ],
       }}
     >
