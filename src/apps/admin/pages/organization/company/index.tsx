@@ -88,7 +88,7 @@ function Company(props: StyledWrapComponents) {
 
                 <div className="action">
                   <Space>
-                    <Button type="text">详情</Button>
+                    <Button type="text" disabled>详情</Button>
                     <Button
                       type="text"
                       onClick={() => {
@@ -139,12 +139,11 @@ export default styled(Company)`
   .wraper {
     display: flex;
     box-sizing: border-box;
-    padding: ${(props) => props.theme.padding}px;
   }
 
   .item-wrapper {
     margin-right: ${(props) => props.theme.margin}px;
-    margin-top: ${(props) => props.theme.margin}px;
+    margin-bottom: ${(props) => props.theme.margin}px;
   }
 
   .item {

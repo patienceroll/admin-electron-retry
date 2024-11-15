@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme, ThemeConfig } from "antd";
 import locale from "antd/locale/zh_CN";
 
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
+import ProgressBar from "src/framework/component/progress-bar";
 
 import Home from "./pages/home";
 import UserInfo from "./pages/user-info";
 import OrganizationCompany from "./pages/organization/company";
-import ProgressBar from "src/framework/component/progress-bar";
+import OrganizationDepartment from "./pages/organization/department";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
   const [darkMode, setDarkMode] = useState(() => window.preload.darkMode);
+
+  const themeDefault: ThemeConfig = {
+    token: { colorPrimary: themebase.colorPrimary },
+    algorithm: [
+      darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      // theme.compactAlgorithm,
+    ],
+  };
+
+  const designToken = theme.getDesignToken(themeDefault);
 
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
@@ -26,13 +37,11 @@ export default function () {
   return (
     <ConfigProvider
       locale={locale}
-      theme={{
-        token: { colorPrimary: themebase.colorPrimary },
-        algorithm: [
-          darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-          // theme.compactAlgorithm,
-        ],
-      }}
+      theme={Object.assign<ThemeConfig, ThemeConfig>(themeDefault, {
+        components: {
+          Segmented: {},
+        },
+      })}
     >
       <ThemeProvider>
         <ProgressBar />
@@ -43,6 +52,10 @@ export default function () {
             <Route
               path="/organization/company"
               Component={OrganizationCompany}
+            />
+            <Route
+              path="/organization/department"
+              Component={OrganizationDepartment}
             />
           </Routes>
         </HashRouter>

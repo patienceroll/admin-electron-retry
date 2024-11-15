@@ -12,7 +12,7 @@ import unmaximizeSvg from "src/assets/svg/unmaximize.svg";
 import closeSvg from "src/assets/svg/close.svg";
 
 function Component(props: StyledWrapComponents) {
-  const { colorTextBase } = useTheme();
+  const { colorTextBase, colorBgBase } = useTheme();
 
   const [isMaximize, setIsMaximize] = useState(() =>
     window.preload.isMaximize()
@@ -71,15 +71,24 @@ function Component(props: StyledWrapComponents) {
                   <div style={{ display: "flex" }}>
                     <span>{item.name}</span>
                     {routes.routes.length !== 1 && (
-                      <div
-                        className="close-tab"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          window.preload.close(item.path);
-                        }}
-                      >
-                        <Icon icon={closeSvg} fill={colorTextBase} />
-                      </div>
+                      <>
+                        &nbsp;
+                        <Icon
+                          className="close-icon"
+                          icon={closeSvg}
+                          width={14}
+                          height={14}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.preload.close(item.path);
+                          }}
+                          fill={
+                            routes.current === item.path
+                              ? colorBgBase
+                              : colorTextBase
+                          }
+                        />
+                      </>
                     )}
                   </div>
                 ),
@@ -183,25 +192,16 @@ export default styled(Component)`
     -webkit-app-region: drag;
   }
 
-  .close-tab {
-    width: 14px;
-    height: 14px;
-    margin-top: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-sizing: border-box;
-
-    svg {
-      width: 8px;
-      height: 8px;
-    }
-  }
-
   .options {
     flex-shrink: 0;
     display: flex;
+  }
+
+  .close-icon {
+    margin-top: 8px;
+    &:hover {
+      background-color: ${(props) => props.theme.colorBgTextActive};
+    }
   }
 
   .option {

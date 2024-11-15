@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme, ThemeConfig } from "antd";
 import locale from "antd/locale/zh_CN";
 
 import Layout from "src/framework/layout";
@@ -13,6 +13,15 @@ export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
   const [darkMode, setDarkMode] = useState(() => window.preload.darkMode);
 
+  const themeDefault: ThemeConfig = {
+    token: { colorPrimary: themebase.colorPrimary },
+    algorithm: [
+      darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      // theme.compactAlgorithm,
+    ],
+  };
+  const designToken = theme.getDesignToken(themeDefault);
+
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
   }, []);
@@ -24,16 +33,14 @@ export default function () {
   return (
     <ConfigProvider
       locale={locale}
-      theme={{
-        token: { colorPrimary: themebase.colorPrimary },
-        algorithm: [
-          darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-          // theme.compactAlgorithm,
-        ],
+      theme={Object.assign<ThemeConfig, ThemeConfig>(themeDefault, {
         components: {
-          Segmented: {},
+          Segmented: {
+            itemSelectedBg: designToken.colorPrimary,
+            itemSelectedColor: designToken.colorBgBase,
+          },
         },
-      }}
+      })}
     >
       <ThemeProvider>
         <HashRouter>
