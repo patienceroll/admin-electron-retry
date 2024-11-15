@@ -116,6 +116,10 @@ export default function <P extends Record<string | number, unknown>, Item>(
       );
     }, []);
 
+  const measureColumnWidth = useCallback((column: ProColumns<Item>[]) => {
+    return column.reduce((pre, current) => pre + Number(current.width || 0), 0);
+  }, []);
+
   return useMemo(
     () => ({
       getData,
@@ -130,7 +134,17 @@ export default function <P extends Record<string | number, unknown>, Item>(
       onReset,
       onFinish,
       column,
+      measureColumnWidth,
     }),
-    [getData, loading.whether, options, onChange, onReset, onFinish, column]
+    [
+      getData,
+      loading.whether,
+      options,
+      onChange,
+      onReset,
+      onFinish,
+      column,
+      measureColumnWidth,
+    ]
   );
 }

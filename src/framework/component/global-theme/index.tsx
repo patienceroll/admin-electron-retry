@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     background-color: ${(props) => props.theme.colorBgBase};
-    color: ${props => props.theme.colorTextBase}
+    color: ${(props) => props.theme.colorTextBase}
   }
 
  * {
@@ -33,7 +33,20 @@ const GlobalStyle = createGlobalStyle`
     &::-webkit-scrollbar-corner {
       display: none;
     } 
+
+
 }
+
+.ant-pro-table {
+  .ant-table-content {
+    padding-bottom: 0;
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+}
+
+
+
 `;
 
 export default GlobalStyle;

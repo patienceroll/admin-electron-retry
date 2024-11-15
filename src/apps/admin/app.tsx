@@ -18,7 +18,7 @@ export default function () {
   const [darkMode, setDarkMode] = useState(() => window.preload.darkMode);
 
   const themeDefault: ThemeConfig = {
-    token: { colorPrimary: themebase.colorPrimary },
+    token: { colorPrimary: themebase.colorPrimary, },
     algorithm: [
       darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
       // theme.compactAlgorithm,
@@ -41,6 +41,7 @@ export default function () {
       theme={Object.assign<ThemeConfig, ThemeConfig>(themeDefault, {
         components: {
           Segmented: {},
+          Input: {},
           Button: {
             textTextColor: designToken.colorPrimary,
             textTextHoverColor: designToken.colorPrimaryTextHover,
