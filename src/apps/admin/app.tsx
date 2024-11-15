@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
 import { ConfigProvider, theme, ThemeConfig } from "antd";
+import { ProConfigProvider } from "@ant-design/pro-components";
 import locale from "antd/locale/zh_CN";
 
 import GlobalStyle from "src/framework/component/global-theme";
@@ -40,27 +41,36 @@ export default function () {
       theme={Object.assign<ThemeConfig, ThemeConfig>(themeDefault, {
         components: {
           Segmented: {},
+          Button: {
+            textTextColor: designToken.colorPrimary,
+            textTextHoverColor: designToken.colorPrimaryTextHover,
+            textTextActiveColor: designToken.colorPrimaryTextActive,
+            textHoverBg: designToken.colorPrimaryBg,
+            colorBgTextActive: designToken.colorPrimaryBgHover,
+          },
         },
       })}
     >
-      <ThemeProvider>
-        <ProgressBar />
-        <HashRouter>
-          <Routes>
-            <Route path="/home" Component={Home} />
-            <Route path="/user-info" Component={UserInfo} />
-            <Route
-              path="/organization/company"
-              Component={OrganizationCompany}
-            />
-            <Route
-              path="/organization/department"
-              Component={OrganizationDepartment}
-            />
-          </Routes>
-        </HashRouter>
-        <GlobalStyle />
-      </ThemeProvider>
+      <ProConfigProvider token={{}}>
+        <ThemeProvider>
+          <ProgressBar />
+          <HashRouter>
+            <Routes>
+              <Route path="/home" Component={Home} />
+              <Route path="/user-info" Component={UserInfo} />
+              <Route
+                path="/organization/company"
+                Component={OrganizationCompany}
+              />
+              <Route
+                path="/organization/department"
+                Component={OrganizationDepartment}
+              />
+            </Routes>
+          </HashRouter>
+          <GlobalStyle />
+        </ThemeProvider>
+      </ProConfigProvider>
     </ConfigProvider>
   );
 }

@@ -109,11 +109,11 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
           ...i,
           count: params.id === i.id ? i.count + 1 : 1,
         }));
-        newData = temp.sort((a, b) => b.count - a.count).slice(0, 8);
+        newData = temp.sort((a, b) => b.count - a.count);
       } else {
         newData = Array.from(t);
         newData.push({ ...params, count: 1 });
-        newData = newData.sort((a, b) => b.count - a.count).slice(0, 8);
+        newData = newData.sort((a, b) => b.count - a.count);
       }
       localStorage.setItem("commonlyUsed", JSON.stringify(newData));
       return newData;
@@ -174,7 +174,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
               <Title>常用菜单</Title>
 
               <div>
-                {commonlyUsed.map((item) => (
+                {commonlyUsed.slice(0, 10).map((item) => (
                   <Item
                     item={item}
                     darkMode={darkMode}

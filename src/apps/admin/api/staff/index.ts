@@ -4,7 +4,7 @@ import fetch from "src/util/fetch";
  * 员工-列表
  */
 export function getStaffList(
-  params: ListParam & { department_id?: Department["id"] }
+  params: ListParam & { department_id?: DepartmentListItem["id"] }
 ) {
   return fetch.GET<List<StaffListItem>>(fetch.base(`/api/staff/list`), params);
 }
@@ -12,6 +12,8 @@ export function getStaffList(
 /**
  * 员工-选项
  */
-export function getStaffOption(params: { department_id?: Department["id"] }) {
+export function getStaffOption(params: {
+  department_id?: DepartmentListItem["id"];
+}) {
   return fetch.GET<StaffListItem[]>(fetch.base(`/api/staff/list`), params);
 }

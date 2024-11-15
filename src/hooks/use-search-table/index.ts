@@ -1,8 +1,7 @@
 import { useCallback, useMemo, useRef } from "react";
-
 import { TablePaginationConfig, TableProps } from "antd";
+import { ProColumns, ProTableProps } from "@ant-design/pro-components";
 
-import { ProTableProps } from "@ant-design/pro-components";
 import useUpdate from "../use-update";
 import useWather from "../use-wather";
 
@@ -11,7 +10,7 @@ interface Api<Params, Item> {
 }
 
 export default function <P extends Record<string | number, unknown>, Item>(
-  api: Api<P, Item>,
+  api: Api<P, Item>
 ) {
   const [update] = useUpdate();
 
@@ -34,14 +33,14 @@ export default function <P extends Record<string | number, unknown>, Item>(
       const p = Object.assign(
         params.current,
         page.current,
-        extraParams.current,
+        extraParams.current
       ) as P;
       return api(p).then((res) => {
         listResponse.current = res;
         return res;
       });
     },
-    [api],
+    [api]
   );
 
   const getData = useCallback(
@@ -59,7 +58,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
         })
         .finally(loading.setFalse);
     },
-    [_api, loading, update],
+    [_api, loading, update]
   );
 
   const options: ProTableProps<Item, P>["options"] = useMemo(
@@ -67,7 +66,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
       reload: getData,
       density: false,
     }),
-    [getData],
+    [getData]
   );
 
   const onChange = useCallback<NonNullable<TableProps<Item>["onChange"]>>(
@@ -86,10 +85,38 @@ export default function <P extends Record<string | number, unknown>, Item>(
       //   }
       getData();
     },
-    [getData],
+    [getData]
   );
 
-  const returnValue = useMemo(
+  const onReset = useCallback(() => {
+    page.current.page = 1;
+    params.current = {} as P;
+    getData();
+  }, [getData]);
+
+  const onFinish = useCallback(
+    (store: any) => {
+      page.current.page = 1;
+      params.current = store;
+      return getData();
+    },
+    [getData]
+  );
+
+  const column: (column: ProColumns<Item>[]) => ProColumns<Item>[] =
+    useCallback((column) => {
+      return column.map((item) =>
+        Object.assign<ProColumns<Item>, ProColumns<Item>>(
+          {
+            width: 100,
+            align: "center",
+          },
+          item
+        )
+      );
+    }, []);
+
+  return useMemo(
     () => ({
       getData,
       reload: getData,
@@ -100,9 +127,10 @@ export default function <P extends Record<string | number, unknown>, Item>(
       dataSource: list.current,
       options,
       onChange,
+      onReset,
+      onFinish,
+      column,
     }),
-    [getData, loading.whether, onChange, options],
+    [getData, loading.whether, options, onChange, onReset, onFinish, column]
   );
-
-  return [returnValue];
 }

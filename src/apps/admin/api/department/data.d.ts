@@ -1,3 +1,5 @@
+type DepartmentListItemStatus = 0 | 1 | 2;
+
 /** 部门列表项 */
 type DepartmentListItem = {
   id: number;
@@ -8,7 +10,7 @@ type DepartmentListItem = {
   identify: string;
   staff_id: number;
   remark: string;
-  status: number;
+  status: DepartmentListItemStatus;
   created_id: number;
   deleted_at: string;
   updated_at: string;

@@ -1,10 +1,22 @@
 import fetch from "src/util/fetch";
 
+export const DepartmentStatus = new Map<
+  DepartmentListItemStatus,
+  EnumValue<DepartmentListItemStatus>
+>([
+  [0, { value: 0, color: "rgba(0, 0, 0, 0.25)", text: "草稿" }],
+  [1, { value: 1, color: "green", text: "启用" }],
+  [2, { value: 2, color: "rgb(156,156,148)", text: "停用" }],
+]);
+
 /**
  * 部门-列表
  */
 export function getDepartmentList(
-  params: ListParam<{ company_id?: Company["id"] }>
+  params: ListParam<{
+    company_id?: Company["id"];
+    department_id?: DepartmentListItem["id"];
+  }>
 ) {
   return fetch.GET<List<DepartmentListItem>>(
     fetch.base(`/api/department/list`),

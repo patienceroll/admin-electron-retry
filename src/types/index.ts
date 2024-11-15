@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare module "*.png" {
   const value: string;
   export default value;
@@ -41,7 +42,12 @@ type List<T> = {
   };
 };
 
-
 type OptionParams<T> = {
   page: -1;
 } & T;
+
+type EnumValue<Value> = {
+  value: Value
+  color: React.CSSProperties['color'];
+  text: string;
+};

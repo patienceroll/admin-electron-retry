@@ -82,7 +82,7 @@ export default class Framework {
 
     const { width, height } = this.baseWindow.getContentBounds();
     this.frameworkView.setBounds({ width, height, x: 0, y: 0 });
-    this.frameworkView.webContents.openDevTools();
+    // this.frameworkView.webContents.openDevTools();
   }
 
   private createMenuView() {
