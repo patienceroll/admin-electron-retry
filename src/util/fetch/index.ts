@@ -1,7 +1,7 @@
-import { notification } from "antd";
 import buildQuery from "./build-query";
 
 import controler from "src/framework/component/progress-bar/controler";
+import contextedNotify from "../contexted-notify";
 
 function isIntanceofBodyInit(data: unknown) {
   return (
@@ -79,7 +79,7 @@ function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
     .catch((err) => {
       if (typeof err === "object" && err.type === "service-error") {
         const { data } = err as { data: BaseResponse };
-        notification.error({
+        contextedNotify.notification?.error({
           description: data.message,
           message: "温馨提示",
         });
@@ -91,12 +91,12 @@ function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
         console.log("用户取消请求");
       } else if (err instanceof Response) {
         const { status, statusText } = err;
-        notification.error({
+        contextedNotify.notification?.error({
           description: `${status || ""}-${statusText || ""}`,
           message: "服务器错误",
         });
       } else if (err instanceof Error) {
-        notification.error({
+        contextedNotify.notification?.error({
           description: `${err.message}`,
           message: "请检查网络环境",
         });

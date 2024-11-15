@@ -32,6 +32,7 @@ function ProgressBar(props: StyledWrapComponents) {
   });
 
   useEffect(() => {
+
     function listen(status: "start" | "finished") {
       if (status === "start") {
         if (animationFrame.current)
@@ -42,6 +43,8 @@ function ProgressBar(props: StyledWrapComponents) {
         const count = (barIntevalLength / 1000) * 60;
         /** 一次多长 */
         const length = 100 / count;
+
+        // eslint-disable-next-line no-inner-declarations
         function recusion() {
           animationFrame.current = requestAnimationFrame(() => {
             const nextLength = width.current + length;
@@ -50,6 +53,8 @@ function ProgressBar(props: StyledWrapComponents) {
             recusion();
           });
         }
+        
+
         recusion();
       }
 
@@ -60,7 +65,7 @@ function ProgressBar(props: StyledWrapComponents) {
         setStatus("finished");
         setTimeout(() => {
           show.setFalse();
-          width.current = 0
+          width.current = 0;
         }, finishDuration);
       }
     }
@@ -70,7 +75,9 @@ function ProgressBar(props: StyledWrapComponents) {
     };
   }, []);
 
-  return show.whether ?  <animated.div className={className} style={style} /> : null;
+  return show.whether ? (
+    <animated.div className={className} style={style} />
+  ) : null;
 }
 
 export default styled(ProgressBar)`

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, theme, ThemeConfig } from "antd";
+import { ConfigProvider, notification, theme, ThemeConfig } from "antd";
 import locale from "antd/locale/zh_CN";
 
 import Layout from "src/framework/layout";
@@ -8,10 +8,14 @@ import Login from "./login";
 import Menu from "./menu";
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
+import ProgressBar from "src/framework/component/progress-bar";
+
+import contextedNotify from "src/util/contexted-notify";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
   const [darkMode, setDarkMode] = useState(() => window.preload.darkMode);
+  const [api, contextHolder] = notification.useNotification();
 
   const themeDefault: ThemeConfig = {
     token: { colorPrimary: themebase.colorPrimary },
@@ -21,6 +25,10 @@ export default function () {
     ],
   };
   const designToken = theme.getDesignToken(themeDefault);
+
+  useEffect(() => {
+    contextedNotify.notification = api;
+  }, [api]);
 
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
@@ -43,6 +51,8 @@ export default function () {
       })}
     >
       <ThemeProvider>
+        <ProgressBar />
+        {contextHolder}
         <HashRouter>
           <Routes>
             <Route path="/layout" element={<Layout />} />

@@ -4,7 +4,7 @@ type Queue = {
 
 type Callback = (status: "start" | "finished") => void;
 
-class ProgressControler {
+export  class ProgressControler {
   private idRooter = 1;
 
   private createId() {

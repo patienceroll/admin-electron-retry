@@ -15,10 +15,12 @@ import {
   getDepartmentList,
   getDepartmentTree,
 } from "src/apps/admin/api/department";
+import Edit, { createRef } from "./components/edit";
 
 function Department() {
   const table = useSearchTable(getDepartmentList);
   const theme = useTheme();
+  const ref = createRef();
 
   const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
 
@@ -65,9 +67,16 @@ function Department() {
       title: "编辑",
       fixed: "right",
       width: 150,
-      render: () => (
+      render: (_, row) => (
         <Space>
-          <Button type="text">编辑</Button>
+          <Button
+            type="text"
+            onClick={() => {
+              ref.current?.edit(row).finally(table.reload);
+            }}
+          >
+            编辑
+          </Button>
           <Button type="text" danger>
             删除
           </Button>
@@ -88,7 +97,7 @@ function Department() {
           <QueryFilter
             defaultCollapsed
             split
-            style={{ padding: 0,rowGap:0 }}
+            style={{ padding: 0, rowGap: 0 }}
             loading={table.loading}
             onReset={table.onReset}
             onFinish={table.onFinish}
@@ -123,7 +132,9 @@ function Department() {
             type="primary"
             // hidden={!menu.getPermission()}
             key={1}
-            onClick={() => {}}
+            onClick={() => {
+              ref.current?.create().then(table.reload);
+            }}
           >
             新增部门
           </Button>,
@@ -131,6 +142,7 @@ function Department() {
         columns={column}
         scroll={{ x: table.measureColumnWidth(column) }}
       />
+      <Edit ref={ref} />
     </PageWrapper>
   );
 }
