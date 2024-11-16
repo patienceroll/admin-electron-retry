@@ -42,10 +42,7 @@ type CompanyListItem = {
   end_time: string;
   hour: string;
   reason: string;
-  department: {
-    id: number;
-    name: string;
-  };
+  department:Department;
   staff: BlockStaff;
   name: string;
   short_name: string;

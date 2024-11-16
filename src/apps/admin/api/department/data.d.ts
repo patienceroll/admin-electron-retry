@@ -1,5 +1,12 @@
 type DepartmentListItemStatus = 0 | 1 | 2;
 
+
+/** 部门元素 */
+type Department =    {
+  id: number;
+  name: string;
+}
+
 /** 部门列表项 */
 type DepartmentListItem = {
   id: number;
@@ -21,7 +28,7 @@ type DepartmentListItem = {
   created_user: BlockCreateUser;
   company?: Company;
   staff?: Staff;
-  p_department?: { name: string };
+  p_department?: Department;
   department_level: null;
 };
 

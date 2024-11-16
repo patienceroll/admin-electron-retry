@@ -1,3 +1,18 @@
+type Staff = {
+  avatar: string;
+  avatar_path: string;
+  code: string;
+  id: number;
+  ID_card: string;
+  name: string;
+  phone: string;
+  user_id: number;
+  wechat: string;
+  staff_id: number;
+  job: Job;
+  department?: Department;
+};
+
 /** 员工 */
 type StaffListItem = {
   avatar_path?: string;
@@ -43,14 +58,8 @@ type StaffListItem = {
   work_age: string;
   created_user: BlockCreateUser;
   company?: BlockCompany;
-  department?: {
-    id: number;
-    name: string;
-  };
-  job: {
-    id: number;
-    name: string;
-  };
+  department?: Department;
+  job: Job;
   role: {
     id: number;
     name: string;

@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, Modal, notification, theme, ThemeConfig } from "antd";
+import {
+  ConfigProvider,
+  message,
+  Modal,
+  notification,
+  theme,
+  ThemeConfig,
+} from "antd";
 import { ProConfigProvider } from "@ant-design/pro-components";
 import locale from "antd/locale/zh_CN";
 
@@ -12,9 +19,12 @@ import Home from "./pages/home";
 import UserInfo from "./pages/user-info";
 import OrganizationCompany from "./pages/organization/company";
 import OrganizationDepartment from "./pages/organization/department";
+import OrganizationStaff from "./pages/organization/staff";
+import OrganizationJob from "./pages/organization/job";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
+import contextedMessage from "src/framework/component/contexted-message";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
@@ -22,12 +32,13 @@ export default function () {
 
   const [api, contextHolder] = notification.useNotification();
   const [modalApi, modalContextHolder] = Modal.useModal();
+  const [messageApi, messageContextHolder] = message.useMessage();
 
   const themeDefault: ThemeConfig = {
     token: { colorPrimary: themebase.colorPrimary },
     algorithm: [
       darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-      // theme.compactAlgorithm,
+      theme.compactAlgorithm,
     ],
   };
 
@@ -36,10 +47,14 @@ export default function () {
   useEffect(() => {
     contextedNotify.notification = api;
   }, [api]);
-  
+
   useEffect(() => {
     contextedModal.modal = modalApi;
   }, [modalApi]);
+  
+  useEffect(() => {
+    contextedMessage.message = messageApi;
+  }, [messageApi]);
 
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
@@ -72,6 +87,7 @@ export default function () {
           <ProgressBar />
           {contextHolder}
           {modalContextHolder}
+          {messageContextHolder}
           <HashRouter>
             <Routes>
               <Route path="/home" Component={Home} />
@@ -84,6 +100,8 @@ export default function () {
                 path="/organization/department"
                 Component={OrganizationDepartment}
               />
+              <Route path="/organization/staff" Component={OrganizationStaff} />
+              <Route path="/organization/job" Component={OrganizationJob} />
             </Routes>
           </HashRouter>
           <GlobalStyle />

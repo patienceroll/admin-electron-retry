@@ -162,4 +162,4 @@ export default {
   PATCH,
   requestProgramResponse,
   base,
-};
+} as const;
