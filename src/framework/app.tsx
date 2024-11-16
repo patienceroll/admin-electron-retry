@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, notification, theme, ThemeConfig } from "antd";
+import { ConfigProvider, Modal, notification, theme, ThemeConfig } from "antd";
 import locale from "antd/locale/zh_CN";
 
 import Layout from "src/framework/layout";
@@ -10,12 +10,14 @@ import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
 import ProgressBar from "src/framework/component/progress-bar";
 
-import contextedNotify from "src/util/contexted-notify";
+import contextedNotify from "src/framework/component/contexted-notify";
+import contextedModal from "src/framework/component/contexted-modal";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
   const [darkMode, setDarkMode] = useState(() => window.preload.darkMode);
   const [api, contextHolder] = notification.useNotification();
+  const [modalApi, modalContextHolder] = Modal.useModal();
 
   const themeDefault: ThemeConfig = {
     token: { colorPrimary: themebase.colorPrimary },
@@ -29,6 +31,10 @@ export default function () {
   useEffect(() => {
     contextedNotify.notification = api;
   }, [api]);
+
+  useEffect(() => {
+    contextedModal.modal = modalApi;
+  }, [modalApi]);
 
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
@@ -53,6 +59,7 @@ export default function () {
       <ThemeProvider>
         <ProgressBar />
         {contextHolder}
+        {modalContextHolder}
         <HashRouter>
           <Routes>
             <Route path="/layout" element={<Layout />} />

@@ -1,7 +1,7 @@
 import buildQuery from "./build-query";
 
 import controler from "src/framework/component/progress-bar/controler";
-import contextedNotify from "../contexted-notify";
+import contextedNotify from "../../framework/component/contexted-notify";
 
 function isIntanceofBodyInit(data: unknown) {
   return (

@@ -1,10 +1,10 @@
 import { NotificationInstance } from "antd/lib/notification/interface";
 
-type EnvImporter = {
+type ContextedNotify = {
   notify?: NotificationInstance;
 };
 
-const store: EnvImporter = {};
+const store: ContextedNotify = {};
 
 export default {
   get notification() {

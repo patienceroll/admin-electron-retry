@@ -11,11 +11,13 @@ import { Affix, Button, Card, Space } from "antd";
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
 import {
+  deleteDepartment,
   DepartmentStatus,
   getDepartmentList,
   getDepartmentTree,
 } from "src/apps/admin/api/department";
 import Edit, { createRef } from "./components/edit";
+import contextedModal from "src/framework/component/contexted-modal";
 
 function Department() {
   const table = useSearchTable(getDepartmentList);
@@ -77,7 +79,19 @@ function Department() {
           >
             编辑
           </Button>
-          <Button type="text" danger>
+          <Button
+            type="text"
+            danger
+            onClick={() => {
+              contextedModal.modal?.confirm({
+                title: "确定删除",
+                content: `确定要删除部门：${row.name}`,
+                onOk() {
+                  return deleteDepartment({ id: row.id }).then(table.reload);
+                },
+              });
+            }}
+          >
             删除
           </Button>
         </Space>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, notification, theme, ThemeConfig } from "antd";
+import { ConfigProvider, Modal, notification, theme, ThemeConfig } from "antd";
 import { ProConfigProvider } from "@ant-design/pro-components";
 import locale from "antd/locale/zh_CN";
 
@@ -13,12 +13,15 @@ import UserInfo from "./pages/user-info";
 import OrganizationCompany from "./pages/organization/company";
 import OrganizationDepartment from "./pages/organization/department";
 
-import contextedNotify from "src/util/contexted-notify";
+import contextedNotify from "src/framework/component/contexted-notify";
+import contextedModal from "src/framework/component/contexted-modal";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
   const [darkMode, setDarkMode] = useState(() => window.preload.darkMode);
+
   const [api, contextHolder] = notification.useNotification();
+  const [modalApi, modalContextHolder] = Modal.useModal();
 
   const themeDefault: ThemeConfig = {
     token: { colorPrimary: themebase.colorPrimary },
@@ -33,6 +36,10 @@ export default function () {
   useEffect(() => {
     contextedNotify.notification = api;
   }, [api]);
+  
+  useEffect(() => {
+    contextedModal.modal = modalApi;
+  }, [modalApi]);
 
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
@@ -56,6 +63,7 @@ export default function () {
             textHoverBg: designToken.colorPrimaryBg,
             colorBgTextActive: designToken.colorPrimaryBgHover,
           },
+          Card: {},
         },
       })}
     >
@@ -63,6 +71,7 @@ export default function () {
         <ThemeProvider>
           <ProgressBar />
           {contextHolder}
+          {modalContextHolder}
           <HashRouter>
             <Routes>
               <Route path="/home" Component={Home} />
