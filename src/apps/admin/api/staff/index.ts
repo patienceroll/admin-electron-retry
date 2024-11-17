@@ -1,5 +1,14 @@
 import fetch from "src/util/fetch";
 
+export const StaffStatus = new Map<
+  StaffListItemStatus,
+  EnumValue<StaffListItemStatus>
+>([
+  [0, { value: 0, color: "rgba(0, 0, 0, 0.25)", text: "离职" }],
+  [1, { value: 1, color: "#cfc922", text: "试用" }],
+  [2, { value: 2, color: "green", text: "转正" }],
+]);
+
 /**
  * 员工-列表
  */

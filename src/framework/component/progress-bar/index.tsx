@@ -73,7 +73,7 @@ function ProgressBar(props: StyledWrapComponents) {
     return () => {
       controler.remove(listen);
     };
-  }, []);
+  }, [show, update]);
 
   return show.whether ? (
     <animated.div className={className} style={style} />

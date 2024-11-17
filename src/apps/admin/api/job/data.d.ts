@@ -1,6 +1,9 @@
 type JobListItemStatus = 0 | 1 | 2;
 
-type Job = {};
+type Job = {
+  id: number;
+  name: string;
+};
 
 type JobListItem = {
   id: number;

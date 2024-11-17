@@ -1,3 +1,6 @@
+type StaffListItemStatus = 0 | 1 | 2;
+
+
 type Staff = {
   avatar: string;
   avatar_path: string;

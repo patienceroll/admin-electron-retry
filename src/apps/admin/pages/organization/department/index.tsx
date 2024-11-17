@@ -132,9 +132,9 @@ function Department() {
           </QueryFilter>
         </Card>
       </Affix>
-      <br />
       <ProTable
         rowKey="id"
+        style={{ marginTop: theme.margin }}
         search={false}
         loading={table.loading}
         options={table.options}
