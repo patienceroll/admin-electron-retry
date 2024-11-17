@@ -18,10 +18,14 @@ import DeleteSvg from "src/assets/svg/delete.svg";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
 
+import Edit, { createRef } from "./components/edit";
+
 function Job(props: StyledWrapComponents) {
   const { className } = props;
 
   const theme = useTheme();
+
+  const ref = createRef();
 
   const [loading] = useWather();
 
@@ -82,7 +86,12 @@ function Job(props: StyledWrapComponents) {
                 />
               }
               actions={[
-                <Icon icon={EditSvg} />,
+                <Icon
+                  icon={EditSvg}
+                  onClick={() => {
+                    ref.current?.edit(item).then(table.reload);
+                  }}
+                />,
                 <Icon
                   icon={DeleteSvg}
                   fill={theme.colorError}
@@ -92,40 +101,13 @@ function Job(props: StyledWrapComponents) {
                       content: `确定删除${item.name}?`,
                       onOk() {
                         return deleteJob({ id: item.id }).then(() => {
-                          contextedMessage.message?.success('成功删除')
+                          contextedMessage.message?.success("成功删除");
                           table.reload();
                         });
                       },
                     });
                   }}
                 />,
-                // <EditOutlined
-                //   key="edit"
-                //   title="编辑"
-                //   onClick={() => {
-                //     modify.current?.edit(i).then(() => {
-                //       message.success("编辑成功");
-                //       reload();
-                //     });
-                //   }}
-                // />,
-                // <DeleteOutlined
-                //   key="delete"
-                //   title="删除"
-                //   style={{ color: "#f36969" }}
-                //   onClick={() => {
-                //     asyncConfirm({
-                //       title: "删除",
-                //       content: `确定删除${i.name}?`,
-                //       submitting() {
-                //         return deleteJob({ id: i.id }).then(() => {
-                //           message.success("删除成功");
-                //           reload();
-                //         });
-                //       },
-                //     });
-                //   }}
-                // />,
               ]}
             >
               <Descriptions column={1}>
@@ -151,6 +133,7 @@ function Job(props: StyledWrapComponents) {
           />
         </div>
       </div>
+      <Edit ref={ref} />
     </PageWrapper>
   );
 }
