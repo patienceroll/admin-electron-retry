@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Badge, Card, Descriptions, Pagination, Space } from "antd";
+import {
+  Badge,
+  Button,
+  Card,
+  Descriptions,
+  FloatButton,
+  Pagination,
+  Space,
+} from "antd";
 import {
   ProFormSelect,
   ProFormText,
@@ -15,6 +23,7 @@ import Icon from "src/framework/component/icon";
 
 import EditSvg from "src/assets/svg/eidt.svg";
 import DeleteSvg from "src/assets/svg/delete.svg";
+import AddSvg from "src/assets/svg/add.svg";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
 
@@ -120,6 +129,15 @@ function Job(props: StyledWrapComponents) {
         </div>
 
         <div className="page">
+          <Button
+            type="primary"
+            icon={<Icon width={18} height={18} icon={AddSvg} fill={theme.colorBgBase} />}
+            onClick={() => {
+              ref.current?.create().then(table.reload);
+            }}
+          >
+            新建职位
+          </Button>
           <Pagination
             {...table.pagination}
             onChange={(page, pageSize) => {
@@ -133,6 +151,7 @@ function Job(props: StyledWrapComponents) {
           />
         </div>
       </div>
+
       <Edit ref={ref} />
     </PageWrapper>
   );
@@ -164,6 +183,6 @@ export default styled(Job)`
 
   .page {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
   }
 `;
