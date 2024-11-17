@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import {
-  Badge,
-  Button,
-  Card,
-  Descriptions,
-  FloatButton,
-  Pagination,
-  Space,
-} from "antd";
+import { Badge, Button, Card, Descriptions, Pagination, Space } from "antd";
 import {
   ProFormSelect,
   ProFormText,
+  ProFormTreeSelect,
   QueryFilter,
 } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
-import useWather from "src/hooks/use-wather";
 import useSearchTable from "src/hooks/use-search-table";
 import { deleteJob, getJobList, JobStatus } from "src/apps/admin/api/job";
 import Icon from "src/framework/component/icon";
@@ -28,6 +20,7 @@ import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
 
 import Edit, { createRef } from "./components/edit";
+import { getDepartmentTree } from "src/apps/admin/api/department";
 
 function Job(props: StyledWrapComponents) {
   const { className } = props;
@@ -36,12 +29,18 @@ function Job(props: StyledWrapComponents) {
 
   const ref = createRef();
 
-  const [loading] = useWather();
-
   const table = useSearchTable(getJobList);
+
+  const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
+  function getTree() {
+    getDepartmentTree().then((res) => {
+      setDeparmentTree(res.data);
+    });
+  }
 
   useEffect(() => {
     table.reload();
+    getTree();
   }, []);
 
   return (
@@ -56,6 +55,19 @@ function Job(props: StyledWrapComponents) {
             onReset={table.onReset}
             onFinish={table.onFinish}
           >
+            <ProFormTreeSelect
+              label="部门"
+              name="department_id"
+              placeholder="搜索该部门下的职位"
+              fieldProps={{
+                treeData: deparmentTree,
+                fieldNames: {
+                  children: "child",
+                  label: "name",
+                  value: "id",
+                },
+              }}
+            />
             <ProFormText label="职位" name="keyword" placeholder="搜索职位" />
             <ProFormSelect
               label="状态"
@@ -131,7 +143,14 @@ function Job(props: StyledWrapComponents) {
         <div className="page">
           <Button
             type="primary"
-            icon={<Icon width={18} height={18} icon={AddSvg} fill={theme.colorBgBase} />}
+            icon={
+              <Icon
+                width={18}
+                height={18}
+                icon={AddSvg}
+                fill={theme.colorBgBase}
+              />
+            }
             onClick={() => {
               ref.current?.create().then(table.reload);
             }}
