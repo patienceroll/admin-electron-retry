@@ -28,7 +28,8 @@
     "react-hooks/rules-of-hooks": "warn",
     "import/no-named-as-default": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-this-alias":"warn",
-    "@typescript-eslint/ban-types": "off"
+    "@typescript-eslint/no-this-alias": "warn",
+    "@typescript-eslint/ban-types": "off",
+    "no-inner-declarations": "warn"
   }
 }

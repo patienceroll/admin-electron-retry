@@ -121,6 +121,8 @@ function Department() {
               name="department_id"
               fieldProps={{
                 treeData: deparmentTree,
+                showSearch: true,
+                treeNodeFilterProp:'name',
                 fieldNames: {
                   children: "child",
                   label: "name",

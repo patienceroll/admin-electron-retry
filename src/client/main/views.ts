@@ -1,4 +1,4 @@
-import { WebContentsView } from "electron";
+import { BrowserWindow, WebContentsView } from "electron";
 import env from "src/client/env";
 
 export default class Views {
@@ -8,8 +8,8 @@ export default class Views {
     const [path, name, options] = arg;
     const mergeOptions = Object.assign({ app: "admin" }, options);
 
-    const host = env.app[mergeOptions?.app!];
-    const app = mergeOptions?.app!;
+    const host = env.app[mergeOptions!.app!];
+    const app = mergeOptions!.app!;
 
     let fullPath = `${host.entry}#${path}`;
     if (mergeOptions?.query) {
@@ -29,9 +29,33 @@ export default class Views {
         }),
       };
       this.value.set(path, newView);
+      newView.view.webContents.setWindowOpenHandler((options) => {
+        return {
+          action: "allow",
+          createWindow(options) {
+            const window = new BrowserWindow(options);
+            window.setMenu(null);
+            window.webContents.openDevTools()
+            return window.webContents;
+          },
+          overrideBrowserWindowOptions: {
+            height: 800,
+            width: 1200,
+            minHeight: 800,
+            minWidth: 1200,
+            title: options.frameName,
+            autoHideMenuBar: true,
+            titleBarStyle: "default",
+            // alwaysOnTop: true,
+            center: true,
+            webPreferences: {
+              preload: host.preload,
+            },
+          },
+        };
+      });
     }
 
-  
     const returnView = this.value.get(path)!;
     returnView.query = mergeOptions?.query;
     returnView.app = app;
@@ -40,7 +64,7 @@ export default class Views {
   }
 
   /** 删除一个页面 */
-  close(path:string) {
+  close(path: string) {
     this.value.delete(path);
   }
 
@@ -52,6 +76,6 @@ export default class Views {
 
   /** 删除所有页面 */
   closeAll() {
-    this.value.clear()
+    this.value.clear();
   }
 }

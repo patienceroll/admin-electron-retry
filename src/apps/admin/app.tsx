@@ -20,6 +20,8 @@ import UserInfo from "./pages/user-info";
 import OrganizationCompany from "./pages/organization/company";
 import OrganizationDepartment from "./pages/organization/department";
 import OrganizationStaff from "./pages/organization/staff";
+import OrganizationStaffCreate from "./pages/organization/staff/create";
+import OrganizationStaffEdit from "./pages/organization/staff/edit";
 import OrganizationJob from "./pages/organization/job";
 
 import contextedNotify from "src/framework/component/contexted-notify";
@@ -101,6 +103,8 @@ export default function () {
                 Component={OrganizationDepartment}
               />
               <Route path="/organization/staff" Component={OrganizationStaff} />
+              <Route path="/organization/staff/create" Component={OrganizationStaffCreate} />
+              <Route path="/organization/staff/edit" Component={OrganizationStaffEdit} />
               <Route path="/organization/job" Component={OrganizationJob} />
             </Routes>
           </HashRouter>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Affix, Button, Card } from "antd";
+import { Affix, Button, Card, Space } from "antd";
 import {
   ProFormSelect,
   ProFormText,
@@ -13,6 +13,7 @@ import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
 import { getStaffList, StaffStatus } from "src/apps/admin/api/staff";
 import { getDepartmentTree } from "src/apps/admin/api/department";
+import openWindow from "src/util/open-window";
 
 function Staff() {
   const table = useSearchTable(getStaffList);
@@ -98,6 +99,29 @@ function Staff() {
       title: "操作",
       fixed: "right",
       width: 150,
+      render: (_, row) => (
+        <Space>
+          <Button
+            type="text"
+            onClick={function () {
+              const window = openWindow.openCurrentAppWindow(
+                `/organization/staff/edit?id=${row.id}`,
+                "编辑员工"
+              );
+              function listener(event: MessageEvent<"success">) {
+                if (event.data === "success") {
+                  table.reload();
+                }
+              }
+              if (window) {
+                window.addEventListener("message", listener);
+              }
+            }}
+          >
+            编辑
+          </Button>
+        </Space>
+      ),
     },
   ]);
 
@@ -124,6 +148,8 @@ function Staff() {
               placeholder="搜索该部门下的员工"
               fieldProps={{
                 treeData: deparmentTree,
+                showSearch: true,
+                treeNodeFilterProp:'name',
                 fieldNames: {
                   children: "child",
                   label: "name",
@@ -135,6 +161,14 @@ function Staff() {
               name="keyword"
               label="关键词"
               placeholder="搜索姓名/工号"
+            />
+            <ProFormSelect
+              name="status"
+              label="状态"
+              options={Array.from(StaffStatus.values()).map((item) => ({
+                label: item.text,
+                value: item.value,
+              }))}
             />
             <ProFormSelect
               name="statuses"
@@ -164,9 +198,20 @@ function Staff() {
             type="primary"
             // hidden={!menu.getPermission()}
             key={1}
-            // onClick={() => {
-            //   ref.current?.create().then(table.reload);
-            // }}
+            onClick={() => {
+              const window = openWindow.openCurrentAppWindow(
+                "/organization/staff/create",
+                "新建员工"
+              );
+              function listener(event: MessageEvent<"success">) {
+                if (event.data === "success") {
+                  table.reload();
+                }
+              }
+              if (window) {
+                window.addEventListener("message", listener);
+              }
+            }}
           >
             新增部门
           </Button>,

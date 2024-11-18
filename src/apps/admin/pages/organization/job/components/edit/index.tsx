@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Radio, Select, TreeSelect } from "antd";
+import { Form, Input, Modal, Radio, TreeSelect } from "antd";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -11,8 +11,6 @@ import {
   editDepartment,
   getDepartmentTree,
 } from "src/apps/admin/api/department";
-import { getStaffOption } from "src/apps/admin/api/staff";
-import useOption from "src/hooks/use-option";
 
 import useWather from "src/hooks/use-wather";
 

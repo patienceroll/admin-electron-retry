@@ -5,7 +5,7 @@ import { Scrollbar, Mousewheel } from "swiper/modules";
 import { useSpring, animated } from "@react-spring/web";
 
 import Icon from "src/framework/component/icon";
-import Title from "src/framework/menu/components/title";
+import Title from "src/framework/component/title";
 import Item from "src/framework/menu/components/item";
 import FadeInWrapper from "src/framework/component/fade-in-wrapper";
 

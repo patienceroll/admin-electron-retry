@@ -61,6 +61,8 @@ function Job(props: StyledWrapComponents) {
               placeholder="搜索该部门下的职位"
               fieldProps={{
                 treeData: deparmentTree,
+                showSearch: true,
+                treeNodeFilterProp:'name',
                 fieldNames: {
                   children: "child",
                   label: "name",
@@ -148,7 +150,7 @@ function Job(props: StyledWrapComponents) {
                 width={18}
                 height={18}
                 icon={AddSvg}
-                fill={theme.colorBgBase}
+                fill={theme.colorTextBase}
               />
             }
             onClick={() => {
@@ -192,6 +194,7 @@ export default styled(Job)`
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
   }
 
   .item {
