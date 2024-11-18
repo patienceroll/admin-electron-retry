@@ -11,9 +11,15 @@ import {
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
-import { getStaffList, StaffStatus } from "src/apps/admin/api/staff";
+import {
+  deleteStaff,
+  getStaffList,
+  StaffStatus,
+} from "src/apps/admin/api/staff";
 import { getDepartmentTree } from "src/apps/admin/api/department";
 import openWindow from "src/util/open-window";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
 
 function Staff() {
   const table = useSearchTable(getStaffList);
@@ -98,7 +104,7 @@ function Staff() {
     {
       title: "操作",
       fixed: "right",
-      width: 150,
+      width: 180,
       render: (_, row) => (
         <Space>
           <Button
@@ -111,6 +117,7 @@ function Staff() {
               function listener(event: MessageEvent<"success">) {
                 if (event.data === "success") {
                   table.reload();
+                  contextedMessage.message?.success("编辑成功");
                 }
               }
               if (window) {
@@ -119,6 +126,25 @@ function Staff() {
             }}
           >
             编辑
+          </Button>
+          <Button type="text">权限</Button>
+          <Button
+            type="text"
+            danger
+            onClick={() => {
+              contextedModal.modal?.confirm({
+                title: "删除",
+                content: `确定删除${row.name}?`,
+                onOk() {
+                  return deleteStaff({ id: row.id }).then(() => {
+                    contextedMessage.message?.success("删除成功");
+                    table.reload();
+                  });
+                },
+              });
+            }}
+          >
+            删除
           </Button>
         </Space>
       ),
@@ -149,7 +175,7 @@ function Staff() {
               fieldProps={{
                 treeData: deparmentTree,
                 showSearch: true,
-                treeNodeFilterProp:'name',
+                treeNodeFilterProp: "name",
                 fieldNames: {
                   children: "child",
                   label: "name",
@@ -206,6 +232,7 @@ function Staff() {
               function listener(event: MessageEvent<"success">) {
                 if (event.data === "success") {
                   table.reload();
+                  contextedMessage.message?.success("新建成功");
                 }
               }
               if (window) {
