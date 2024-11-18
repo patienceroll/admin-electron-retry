@@ -1,6 +1,6 @@
 import styled, { useTheme } from "styled-components";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Divider, Form, Row } from "antd";
+import { Button, Col, Form, Row, Space } from "antd";
 import {
   ProFormDatePicker,
   ProFormRadio,
@@ -15,13 +15,17 @@ import Title from "src/framework/component/title";
 import { getDepartmentTree } from "src/apps/admin/api/department";
 import useOption from "src/hooks/use-option";
 import { getJobOptions } from "src/apps/admin/api/job";
+import useWather from "src/hooks/use-wather";
+import { addStaff } from "src/apps/admin/api/staff";
 
-function Create() {
+function Create(props: StyledWrapComponents) {
+  const { className } = props;
   const theme = useTheme();
   const [form] = Form.useForm();
 
   const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
 
+  const [loading] = useWather();
   const [job] = useOption(getJobOptions);
 
   function getTree() {
@@ -30,12 +34,26 @@ function Create() {
     });
   }
 
+  function submit() {
+    form
+      .validateFields()
+      .then((store) => {
+        loading.setTrue();
+        return addStaff(store);
+      })
+      .then(() => {
+        window.parent.postMessage("success");
+        window.close()
+      })
+      .finally(loading.setFalse);
+  }
+
   useEffect(() => {
     getTree();
   }, []);
 
   return (
-    <PageWrapper>
+    <PageWrapper className={className}>
       <Form form={form} labelCol={{ span: 6 }}>
         <Title>基本信息</Title>
         <Row
@@ -188,17 +206,88 @@ function Create() {
               ]}
             />
           </Col>
+          <Col flex="400px">
+            <ProFormRadio.Group
+              name="is_married"
+              label="婚姻状态"
+              options={[
+                { label: "未婚", value: 0 },
+                { label: "已婚", value: 1 },
+                { label: "已婚已孕", value: 2 },
+                { label: "离异", value: 3 },
+              ]}
+            />
+          </Col>
+        </Row>
+
+        <Title>学历信息</Title>
+        <Row
+          style={{ margin: theme.margin }}
+          gutter={[theme.padding, theme.padding]}
+        >
+          <Col flex="400px">
+            <ProFormSelect
+              name="educational"
+              label="学历"
+              placeholder="请选择学历"
+              options={[
+                "小学",
+                "初中",
+                "高中",
+                "职高",
+                "大专",
+                "大专（非全日制）",
+                "本科",
+                "本科（非全日制）",
+                "硕士",
+                "博士",
+              ].map((item) => ({
+                label: item,
+                value: item,
+              }))}
+            />
+          </Col>
+          <Col flex="400px">
+            <ProFormText
+              name="school"
+              label="毕业院校"
+              placeholder="请输入毕业院校"
+            />
+          </Col>
+          <Col flex="400px">
+            <ProFormText
+              name="profession"
+              label="专业"
+              placeholder="请输入专业"
+            />
+          </Col>
+          <Col flex="400px">
+            <ProFormText
+              name="position_title"
+              label="职称"
+              placeholder="请输入职称"
+            />
+          </Col>
         </Row>
       </Form>
-
-      {/* <Button
-        onClick={function () {
-          window.parent.postMessage("success");
-          window.close()
-        }}
-      >完成编辑</Button> */}
+      <div className="submit">
+        <Space>
+          <Button type="default" onClick={() => {window.close()}}>
+            返回
+          </Button>
+          <Button type="primary" onClick={submit} loading={loading.whether}>
+            保存
+          </Button>
+        </Space>
+      </div>
     </PageWrapper>
   );
 }
 
-export default styled(Create)``;
+export default styled(Create)`
+  .submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
