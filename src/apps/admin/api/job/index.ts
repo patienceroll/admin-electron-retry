@@ -24,6 +24,20 @@ export function getJobList(
 }
 
 /**
+ * 职位-列表
+ */
+export function getJobOptions(
+  params: ListParam & {
+    company_ids?: Company["id"][];
+    keyword?: string;
+    statuses?: number[];
+    department_id?:Department['id']
+  },
+) {
+  return fetch.GET<JobListItem[]>(fetch.base(`/api/job/list`), params);
+}
+
+/**
  * 职位-详情
  */
 export function getJob(params: Pick<JobListItem, "id">) {
