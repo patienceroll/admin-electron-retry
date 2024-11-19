@@ -21,7 +21,8 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-export default forwardRef<Ref>(function (prop, ref) {
+export default forwardRef<Ref, { id: Staff["id"] }>(function (props, ref) {
+  const { id } = props;
   const promiseResolver = useRef<{
     resolve: () => void;
     reject: (reason?: unknown) => void;
@@ -37,8 +38,20 @@ export default forwardRef<Ref>(function (prop, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        if (item === undefined) return addBankAccount(store);
-        return editBankAccount({ ...store, id: item.id });
+        if (item === undefined)
+          return addBankAccount({
+            ...store,
+            staff_id: id,
+            table_id: id,
+            type: 4,
+          });
+        return editBankAccount({
+          ...store,
+          id: item.id,
+          staff_id: id,
+          table_id: id,
+          type: 4,
+        });
       })
       .then(() => {
         promiseResolver.current.resolve();

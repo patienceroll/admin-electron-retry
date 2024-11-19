@@ -27,7 +27,8 @@ import {
 import useSearchTable from "src/hooks/use-search-table";
 import { getBankAccountList } from "src/apps/admin/api/bank-account";
 import FlexCenter from "src/framework/component/flex-center";
-import * as EditConcat from "./components/edit-bank";
+import * as EditConcat from "./components/edit-concat";
+import * as EditBank from "./components/edit-bank";
 import contextedMessage from "src/framework/component/contexted-message";
 
 function Edit(props: StyledWrapComponents) {
@@ -45,7 +46,8 @@ function Edit(props: StyledWrapComponents) {
   const concat = useSearchTable(getStaffContactList);
   const account = useSearchTable(getBankAccountList);
 
-  const accountRef = EditConcat.createRef();
+  const concatRef = EditConcat.createRef();
+  const accountRef = EditBank.createRef();
 
   function getTree() {
     getDepartmentTree().then((res) => {
@@ -364,7 +366,17 @@ function Edit(props: StyledWrapComponents) {
         >
           <Title style={{ marginTop: theme.margin * 2 }}>紧急联系人</Title>
           <FlexCenter>
-            <Button type="primary">新增紧急联系人</Button>
+            <Button
+              type="primary"
+              onClick={function () {
+                concatRef.current?.create().then(() => {
+                  concat.reload();
+                  contextedMessage.message?.success("新增成功");
+                });
+              }}
+            >
+              新增紧急联系人
+            </Button>
           </FlexCenter>
         </div>
         <ProTable
@@ -430,7 +442,8 @@ function Edit(props: StyledWrapComponents) {
           </Space>
         </div>
 
-        <EditConcat.default ref={accountRef} />
+        <EditConcat.default ref={concatRef} id={Number(id)} />
+        <EditBank.default ref={accountRef} id={Number(id)} />
       </PageWrapper>
     </Spin>
   );
@@ -441,5 +454,6 @@ export default styled(Edit)`
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: ${props => props.theme.margin * 4}px;
   }
 `;

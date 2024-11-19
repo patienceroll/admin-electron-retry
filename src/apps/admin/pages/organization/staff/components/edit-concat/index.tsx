@@ -7,10 +7,7 @@ import React, {
 } from "react";
 
 import useWather from "src/hooks/use-wather";
-import {
-  addBankAccount,
-} from "src/apps/admin/api/bank-account";
-import { addStaffContact } from "src/apps/admin/api/staff";
+import { addStaffContact, editStaffContact } from "src/apps/admin/api/staff";
 
 type Ref = {
   edit: (item: StaffContact) => Promise<void>;
@@ -21,7 +18,8 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-export default forwardRef<Ref>(function (prop, ref) {
+export default forwardRef<Ref, { id: Staff["id"] }>(function (props, ref) {
+  const { id } = props;
   const promiseResolver = useRef<{
     resolve: () => void;
     reject: (reason?: unknown) => void;
@@ -37,8 +35,12 @@ export default forwardRef<Ref>(function (prop, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        if (item === undefined) return addStaffContact(store);
-        return addBankAccount({ ...store, id: item.id });
+        if (item === undefined)
+          return addStaffContact({
+            ...store,
+            staff_id: id,
+          });
+        return editStaffContact({ ...store, id: item.id, staff_id: id });
       })
       .then(() => {
         promiseResolver.current.resolve();
