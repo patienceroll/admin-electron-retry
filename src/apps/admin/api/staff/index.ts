@@ -62,3 +62,47 @@ export function postStaffRole(params: {
 }) {
   return fetch.POST(fetch.base(`/api/staff/role`), params);
 }
+
+
+
+/**
+ * 紧急联系人-列表
+ */
+export function getStaffContactList(
+  params: ListParam & {
+    staff_id: Staff["id"];
+  },
+) {
+  return fetch.GET<List<StaffContact>>(
+    fetch.base(`/api/staff-contact/list`),
+    params,
+  );
+}
+
+/**
+ * 紧急联系人-详情
+ */
+export function getStaffContact(params: Pick<StaffContact, "id">) {
+  return fetch.GET<Staff>(fetch.base(`/api/staff-contact/detail`), params);
+}
+
+/**
+ * 紧急联系人-添加
+ */
+export function addStaffContact(params: any) {
+  return fetch.POST(fetch.base(`/api/staff-contact`), params);
+}
+
+/**
+ * 紧急联系人-编辑
+ */
+export function editStaffContact(params: any) {
+  return fetch.PUT(fetch.base(`/api/staff-contact`), params);
+}
+
+/**
+ * 紧急联系人-删除
+ */
+export function deleteStaffContact(params: Pick<StaffContact, "id">) {
+  return fetch.DELETE(fetch.base(`/api/staff-contact`), params);
+}

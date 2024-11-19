@@ -1,6 +1,5 @@
 type StaffListItemStatus = 0 | 1 | 2;
 
-
 type Staff = {
   avatar: string;
   avatar_path: string;
@@ -72,27 +71,22 @@ type StaffListItem = {
 };
 
 /** 员工紧急联系人 */
-// type StaffContact = {
-//   id: number;
-//   company_id: number;
-//   department_id: number;
-//   name: string;
-//   status: number;
-//   created_id: number;
-//   deleted_at: string;
-//   updated_at: string;
-//   created_at: string;
-//   btn_power: BtnPower;
-//   created_user: BlockCreateUser;
-//   company: BlockCompany;
-//   department: [
-//     {
-//       id: number;
-//       name: string;
-//     }
-//   ];
-//   staff_id: number;
-//   relation: string;
-//   work_unit: string;
-//   phone: string;
-// };
+type StaffContact = {
+  id: number;
+  company_id: number;
+  department_id: number;
+  name: string;
+  status: number;
+  created_id: number;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
+  btn_power: BtnPower;
+  created_user: BlockCreateUser;
+  company: Company;
+  department: Department[];
+  staff_id: number;
+  relation: string;
+  work_unit: string;
+  phone: string;
+};

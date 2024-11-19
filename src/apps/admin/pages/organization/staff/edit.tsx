@@ -8,6 +8,7 @@ import {
   ProFormText,
   ProFormTextArea,
   ProFormTreeSelect,
+  ProTable,
 } from "@ant-design/pro-components";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
@@ -18,7 +19,16 @@ import { getDepartmentTree } from "src/apps/admin/api/department";
 import useOption from "src/hooks/use-option";
 import { getJobOptions } from "src/apps/admin/api/job";
 import useWather from "src/hooks/use-wather";
-import { editStaff, getStaffDetail } from "src/apps/admin/api/staff";
+import {
+  editStaff,
+  getStaffContactList,
+  getStaffDetail,
+} from "src/apps/admin/api/staff";
+import useSearchTable from "src/hooks/use-search-table";
+import { getBankAccountList } from "src/apps/admin/api/bank-account";
+import FlexCenter from "src/framework/component/flex-center";
+import * as EditConcat from "./components/edit-bank";
+import contextedMessage from "src/framework/component/contexted-message";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -32,12 +42,49 @@ function Edit(props: StyledWrapComponents) {
 
   const [loading] = useWather();
   const [job] = useOption(getJobOptions);
+  const concat = useSearchTable(getStaffContactList);
+  const account = useSearchTable(getBankAccountList);
+
+  const accountRef = EditConcat.createRef();
 
   function getTree() {
     getDepartmentTree().then((res) => {
       setDeparmentTree(res.data);
     });
   }
+
+  const concatColumn = concat.column([
+    {
+      title: "姓名",
+      dataIndex: "name",
+    },
+    {
+      title: "关系",
+      dataIndex: "relation",
+    },
+    {
+      title: "工作单位",
+      dataIndex: "work_unit",
+    },
+    {
+      title: "电话",
+      dataIndex: "phone",
+    },
+  ]);
+  const acountColumn = account.column([
+    {
+      title: "银行",
+      dataIndex: "bank_name",
+    },
+    {
+      title: "开户行",
+      dataIndex: "bank_address",
+    },
+    {
+      title: "账号",
+      dataIndex: "account",
+    },
+  ]);
 
   function submit() {
     form
@@ -64,6 +111,13 @@ function Edit(props: StyledWrapComponents) {
 
   useEffect(() => {
     getTree();
+  }, []);
+
+  useEffect(() => {
+    concat.extraParams.current.staff_id = Number(id);
+    account.extraParams.current.table_id = Number(id);
+    concat.reload();
+    account.reload();
   }, []);
 
   useEffect(() => {
@@ -301,6 +355,65 @@ function Edit(props: StyledWrapComponents) {
             </Col>
           </Row>
         </Form>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 800,
+          }}
+        >
+          <Title style={{ marginTop: theme.margin * 2 }}>紧急联系人</Title>
+          <FlexCenter>
+            <Button type="primary">新增紧急联系人</Button>
+          </FlexCenter>
+        </div>
+        <ProTable
+          rowKey="id"
+          search={false}
+          loading={concat.loading}
+          options={concat.options}
+          dataSource={concat.dataSource}
+          pagination={concat.pagination}
+          onChange={concat.onChange}
+          columns={concatColumn}
+          style={{ marginTop: theme.margin, width: 800 }}
+          scroll={{ x: concat.measureColumnWidth(concatColumn) }}
+        />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 800,
+          }}
+        >
+          <Title style={{ marginTop: theme.margin * 2 }}>账户</Title>
+          <FlexCenter>
+            <Button
+              type="primary"
+              onClick={function () {
+                accountRef.current?.create().then(() => {
+                  account.reload();
+                  contextedMessage.message?.success("新增成功");
+                });
+              }}
+            >
+              新增账户
+            </Button>
+          </FlexCenter>
+        </div>
+        <ProTable
+          rowKey="id"
+          search={false}
+          loading={account.loading}
+          options={account.options}
+          dataSource={account.dataSource}
+          pagination={account.pagination}
+          onChange={account.onChange}
+          columns={acountColumn}
+          style={{ marginTop: theme.margin, width: 800 }}
+          scroll={{ x: account.measureColumnWidth(acountColumn) }}
+        />
         <div className="submit">
           <Space>
             <Button
@@ -316,6 +429,8 @@ function Edit(props: StyledWrapComponents) {
             </Button>
           </Space>
         </div>
+
+        <EditConcat.default ref={accountRef} />
       </PageWrapper>
     </Spin>
   );
