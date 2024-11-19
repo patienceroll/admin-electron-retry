@@ -37,8 +37,8 @@ export default forwardRef<Ref>(function (prop, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        if (item === undefined) return editBankAccount(store);
-        return addBankAccount({ ...store, id: item.id });
+        if (item === undefined) return addBankAccount(store);
+        return editBankAccount({ ...store, id: item.id });
       })
       .then(() => {
         promiseResolver.current.resolve();
