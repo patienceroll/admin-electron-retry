@@ -51,3 +51,46 @@ type EnumValue<Value> = {
   color: React.CSSProperties['color'];
   text: string;
 };
+
+
+/** 权限 1 表示有权限 */
+type BtnPower = Partial<{
+  /** 启用 */
+  is_enable: 0 | 1;
+  /** 1可以删除，0不可删除 */
+  is_edit: 1 | 0;
+  /** 删除 */
+  is_delete: 1 | 0;
+  /** 提交一个审批 */
+  is_submit: 1 | 0;
+  /** 审批 */
+  is_approve: 1 | 0;
+  /** 取消申请 */
+  is_cancel: 1 | 0;
+  /** 作废 */
+  is_invalid: 1 | 0;
+  /** 取消作废 */
+  is_cancel_invalid: 1 | 0;
+  /** 中止 */
+  is_suspend: 1 | 0;
+  /** 取消中止 */
+  is_cancel_suspend: 1 | 0;
+  /** 完结 */
+  is_end: 1 | 0;
+  /** 取消完结 */
+  is_cancel_end: 1 | 0;
+  /** 提交跟进内容 */
+  is_save_process: 1 | 0;
+  /** 点评 */
+  is_evaluate: 1 | 0;
+  /** 开始入库（其他可随意修改文案） */
+  is_start: 1 | 0;
+  /** 是否可以申请 */
+  is_apply: 0 | 1;
+  /** 开始收货 */
+  is_receive: 0 | 1;
+  /** 修改金额 */
+  is_amend: 0 | 1;
+  /** 撤销 */
+  is_cancel_operate: 0 | 1;
+}>;

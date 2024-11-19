@@ -54,3 +54,11 @@ export function editStaff(params: any) {
 export function deleteStaff(params: Pick<StaffListItem, "id">) {
   return fetch.DELETE(fetch.base(`/api/staff`), params);
 }
+
+/** 员工 设置角色 */
+export function postStaffRole(params: {
+  staff_id: Staff["id"];
+  role_ids: RoleListItem["id"][];
+}) {
+  return fetch.POST(fetch.base(`/api/staff/role`), params);
+}

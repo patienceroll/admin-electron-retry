@@ -20,10 +20,12 @@ import { getDepartmentTree } from "src/apps/admin/api/department";
 import openWindow from "src/util/open-window";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
+import EditPermission, { createRef } from "./components/edit-permission";
 
 function Staff() {
   const table = useSearchTable(getStaffList);
   const theme = useTheme();
+  const permissionRef = createRef();
 
   const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
 
@@ -127,7 +129,17 @@ function Staff() {
           >
             编辑
           </Button>
-          <Button type="text">权限</Button>
+          <Button
+            type="text"
+            onClick={function () {
+              permissionRef.current?.setPermission(row).then(() => {
+                contextedMessage.message?.success("成功设置");
+                table.reload();
+              });
+            }}
+          >
+            权限
+          </Button>
           <Button
             type="text"
             danger
@@ -246,6 +258,7 @@ function Staff() {
         columns={column}
         scroll={{ x: table.measureColumnWidth(column) }}
       />
+      <EditPermission ref={permissionRef} />
     </PageWrapper>
   );
 }

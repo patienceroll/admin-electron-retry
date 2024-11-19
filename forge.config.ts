@@ -41,7 +41,9 @@ const config: ForgeConfig = {
     new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       mainConfig,
+      port: 3001,
       devServer: {
+        
         client: {
           overlay: {
             errors: true,
