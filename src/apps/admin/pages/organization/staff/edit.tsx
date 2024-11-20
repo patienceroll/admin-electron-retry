@@ -1,15 +1,6 @@
 import styled, { useTheme } from "styled-components";
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Descriptions,
-  Form,
-  Row,
-  Space,
-  Spin,
-  Upload,
-} from "antd";
+import { Button, Col, Descriptions, Form, Row, Space, Spin } from "antd";
 import {
   ProFormDatePicker,
   ProFormRadio,
@@ -21,7 +12,6 @@ import {
 } from "@ant-design/pro-components";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
-import { UploadRequestOption } from "rc-upload/lib/interface";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
@@ -40,10 +30,8 @@ import FlexCenter from "src/framework/component/flex-center";
 import * as EditConcat from "./components/edit-concat";
 import * as EditBank from "./components/edit-bank";
 import contextedMessage from "src/framework/component/contexted-message";
-import { beforeUploadImage } from "src/util/file/validate";
-import qiniu from "src/util/qiniu";
-import { onPrgress } from "src/util/file/upload";
-import { bindBusinessFile, postFile } from "src/apps/admin/api/business-file";
+
+import UploadFileInfo from "./components/upload-file-info";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -51,6 +39,7 @@ function Edit(props: StyledWrapComponents) {
   const id = search.get("id")!;
   const theme = useTheme();
   const [form] = Form.useForm();
+  const [fileForm] = Form.useForm();
 
   const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
   const [detail, setDetail] = useState<StaffListItem>();
@@ -125,38 +114,6 @@ function Edit(props: StyledWrapComponents) {
       .finally(loading.setFalse);
   }
 
-  function cusUpload(
-    params: Pick<Parameters<typeof bindBusinessFile>[0], "service" | "identify">
-  ) {
-    return function (option: UploadRequestOption<any>) {
-      const file = option.file as File;
-      const cancel = onPrgress(option.onProgress);
-      qiniu
-        .uploadFile(file)
-        .then((res) => {
-          return postFile({
-            path: res.key,
-            name: res.hash,
-            extend: {
-              file_size: file.size,
-              file_type: file.type,
-            },
-          });
-        })
-        .then((res) => {
-          return bindBusinessFile({
-            ...params,
-            is_cover: 1,
-            file_ids: [res.data.id],
-            table_id: Number(id),
-          });
-        })
-        .then(option.onSuccess)
-        .catch(option.onError)
-        .finally(cancel);
-    };
-  }
-
   useEffect(() => {
     getTree();
   }, []);
@@ -180,9 +137,34 @@ function Edit(props: StyledWrapComponents) {
         entry_time: item.entry_time ? dayjs(item.entry_time) : undefined,
         inner_time: item.inner_time ? dayjs(item.inner_time) : undefined,
       });
+
+      const value: Record<string, any[]> = {};
+      const list: BusinessFileIdentify[] = [
+        "头像",
+        "招商银行",
+        "身份证正面",
+        "身份证背面",
+        "毕业证",
+        "学位证",
+      ];
+      list.map((key) => {
+        const files = res.data.file[key];
+        if (files) {
+          value[key] = files.map((item) => ({
+            uid: String(item.file_id),
+            url: item.path,
+            name: item.name,
+            fileName: item.name,
+            thumbUrl: item.path,
+            status: "done",
+          }));
+        }
+      });
+
+      fileForm.setFieldsValue(value);
       setDetail(res.data);
     });
-  }, [form, id, job]);
+  }, [fileForm, form, id, job]);
 
   return (
     <Spin spinning={detail === undefined}>
@@ -474,115 +456,74 @@ function Edit(props: StyledWrapComponents) {
         />
 
         <Title style={{ marginTop: theme.margin * 2 }}>附件信息</Title>
-        <Descriptions
-          layout="vertical"
-          style={{width:800}}
-          items={[
-            {
-              label: "头像",
-              children: (
-                <Upload
-                  accept=".png,.jpg,.jpeg"
-                  listType="picture-card"
-                  beforeUpload={beforeUploadImage}
-                  maxCount={1}
-                  customRequest={cusUpload({
-                    service: "staff",
-                    identify: "头像",
-                  })}
-                >
-                  上传
-                </Upload>
-              ),
-            },
-            {
-              label: "招商银行",
-              children: (
-                <Upload
-                  accept=".png,.jpg,.jpeg"
-                  listType="picture-card"
-                  beforeUpload={beforeUploadImage}
-                  maxCount={1}
-                  customRequest={cusUpload({
-                    service: "staff",
-                    identify: "招商银行",
-                  })}
-                >
-                  上传
-                </Upload>
-              ),
-            },
-            {
-              label: "身份证正面",
-              children: (
-                <Upload
-                  accept=".png,.jpg,.jpeg"
-                  listType="picture-card"
-                  beforeUpload={beforeUploadImage}
-                  maxCount={1}
-                  customRequest={cusUpload({
-                    service: "staff",
-                    identify: "身份证正面",
-                  })}
-                >
-                  上传
-                </Upload>
-              ),
-            },
-            {
-              label: "身份证背面",
-              children: (
-                <Upload
-                  accept=".png,.jpg,.jpeg"
-                  listType="picture-card"
-                  beforeUpload={beforeUploadImage}
-                  maxCount={1}
-                  customRequest={cusUpload({
-                    service: "staff",
-                    identify: "身份证背面",
-                  })}
-                >
-                  上传
-                </Upload>
-              ),
-            },
-            {
-              label: "毕业证",
-              children: (
-                <Upload
-                  accept=".png,.jpg,.jpeg"
-                  listType="picture-card"
-                  beforeUpload={beforeUploadImage}
-                  maxCount={1}
-                  customRequest={cusUpload({
-                    service: "staff",
-                    identify: "毕业证",
-                  })}
-                >
-                  上传
-                </Upload>
-              ),
-            },
-            {
-              label: "学位证",
-              children: (
-                <Upload
-                  accept=".png,.jpg,.jpeg"
-                  listType="picture-card"
-                  beforeUpload={beforeUploadImage}
-                  maxCount={1}
-                  customRequest={cusUpload({
-                    service: "staff",
-                    identify: "学位证",
-                  })}
-                >
-                  上传
-                </Upload>
-              ),
-            },
-          ]}
-        />
-
+        <Form form={fileForm}>
+          <Descriptions
+            layout="vertical"
+            style={{ width: 800 }}
+            items={[
+              {
+                label: "头像",
+                children: (
+                  <UploadFileInfo
+                    tableId={id}
+                    service="staff"
+                    identify="头像"
+                  />
+                ),
+              },
+              {
+                label: "招商银行",
+                children: (
+                  <UploadFileInfo
+                    tableId={id}
+                    service="staff"
+                    identify="招商银行"
+                  />
+                ),
+              },
+              {
+                label: "身份证正面",
+                children: (
+                  <UploadFileInfo
+                    tableId={id}
+                    service="staff"
+                    identify="身份证正面"
+                  />
+                ),
+              },
+              {
+                label: "身份证背面",
+                children: (
+                  <UploadFileInfo
+                    tableId={id}
+                    service="staff"
+                    identify="身份证背面"
+                  />
+                ),
+              },
+              {
+                label: "毕业证",
+                children: (
+                  <UploadFileInfo
+                    tableId={id}
+                    service="staff"
+                    identify="毕业证"
+                  />
+                ),
+              },
+              {
+                label: "学位证",
+                children: (
+                  <UploadFileInfo
+                    tableId={id}
+                    service="staff"
+                    identify="学位证"
+                  />
+                ),
+              },
+            ]}
+          />
+        </Form>
         <div className="submit">
           <Space>
             <Button

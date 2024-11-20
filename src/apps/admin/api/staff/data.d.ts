@@ -62,13 +62,15 @@ type StaffListItem = {
   company?: BlockCompany;
   department?: Department;
   job: Job;
-  role: {
-    id: number;
-    name: string;
-    slug: string;
-    laravel_through_key: number;
-  }[];
+  role: Role[];
 };
+
+type StaffDetail = StaffListItem & {
+  file: Record<
+  BusinessParams["identify"],
+  undefined | (Omit<FileResponse, "id"> & { file_id: number })[]
+>;
+}
 
 /** 员工紧急联系人 */
 type StaffContact = {

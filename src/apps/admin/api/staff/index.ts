@@ -31,7 +31,7 @@ export function getStaffOption(params: {
  * 员工-详情
  */
 export function getStaffDetail(params: Pick<StaffListItem, "id">) {
-  return fetch.GET<StaffListItem>(fetch.base(`/api/staff/detail`), params);
+  return fetch.GET<StaffDetail>(fetch.base(`/api/staff/detail`), params);
 }
 
 /**
