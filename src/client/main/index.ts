@@ -1,6 +1,7 @@
 import { app, BrowserWindow, session } from "electron";
 
 import Framework from "src/client/main/framework";
+import buildCSP from "../csp-policy";
 
 let framework: Framework;
 
@@ -24,8 +25,20 @@ function createWindow() {
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          "default-src 'self' 'unsafe-eval' 'unsafe-inline' ; connect-src 'self' http://118.89.67.217:9638;font-src 'self' data: ; img-src 'self' data:",
+          buildCSP({
+            defaultSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'"],
+            connectSrc: [
+              "'self'",
+              "http://118.89.67.217:9638",
+              "https://api.qiniu.com",
+            ],
+            fontSrc: ["'self'", "data:"],
+            imgSrc: ["'self'", "data:"],
+          }),
         ],
+        // "Content-Security-Policy": [
+        //   "default-src 'self' 'unsafe-eval' 'unsafe-inline' ; connect-src 'self' http://118.89.67.217:9638 https://api.qiniu.com;font-src 'self' data: ; img-src 'self' data:",
+        // ],
       },
     });
   });

@@ -59,6 +59,7 @@ const EditPermission = forwardRef<Ref>(function (props, ref) {
         open.setTrue();
         form.resetFields();
         role.loadOption()
+        form.setFieldsValue({ role_ids: s.role.map((i) => i.id) });
         promiseResolver.current = { resolve, reject };
       });
     },

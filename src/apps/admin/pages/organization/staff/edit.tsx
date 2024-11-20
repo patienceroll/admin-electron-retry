@@ -1,6 +1,15 @@
 import styled, { useTheme } from "styled-components";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Space, Spin } from "antd";
+import {
+  Button,
+  Col,
+  Descriptions,
+  Form,
+  Row,
+  Space,
+  Spin,
+  Upload,
+} from "antd";
 import {
   ProFormDatePicker,
   ProFormRadio,
@@ -30,6 +39,9 @@ import FlexCenter from "src/framework/component/flex-center";
 import * as EditConcat from "./components/edit-concat";
 import * as EditBank from "./components/edit-bank";
 import contextedMessage from "src/framework/component/contexted-message";
+import { beforeUploadImage } from "src/util/file/validate";
+import qiniu from "src/util/qiniu";
+import { onPrgress } from "src/util/file/upload";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -426,6 +438,37 @@ function Edit(props: StyledWrapComponents) {
           style={{ marginTop: theme.margin, width: 800 }}
           scroll={{ x: account.measureColumnWidth(acountColumn) }}
         />
+
+        <Title style={{ marginTop: theme.margin * 2 }}>附件信息</Title>
+        <Descriptions
+          layout="vertical"
+          items={[
+            {
+              label: "头像",
+              children: (
+                <Upload
+                  accept=".png,.jpg,.jpeg"
+                  listType="picture-card"
+                  beforeUpload={beforeUploadImage}
+                  customRequest={(option) => {
+                    const cancel = onPrgress(option.onProgress);
+                    qiniu
+                      .uploadFile(option.file as File)
+                      .then((res) => {
+                        console.log(res)
+                        option.onSuccess?.(res);
+                      })
+                      .catch(option.onError)
+                      .finally(cancel);
+                  }}
+                >
+                  上传
+                </Upload>
+              ),
+            },
+          ]}
+        />
+
         <div className="submit">
           <Space>
             <Button
@@ -454,6 +497,6 @@ export default styled(Edit)`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: ${props => props.theme.margin * 4}px;
+    margin-top: ${(props) => props.theme.margin * 4}px;
   }
 `;

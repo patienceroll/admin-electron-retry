@@ -1,4 +1,4 @@
-import { BrowserWindow, WebContentsView } from "electron";
+import { BrowserWindow, nativeTheme, WebContentsView } from "electron";
 import env from "src/client/env";
 
 export default class Views {
@@ -46,6 +46,7 @@ export default class Views {
             title: options.frameName,
             autoHideMenuBar: true,
             titleBarStyle: "default",
+            backgroundColor: nativeTheme.shouldUseDarkColors ? "#000" : '#fff',
             // alwaysOnTop: true,
             center: true,
             webPreferences: {
