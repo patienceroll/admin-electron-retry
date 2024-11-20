@@ -42,6 +42,7 @@ import contextedMessage from "src/framework/component/contexted-message";
 import { beforeUploadImage } from "src/util/file/validate";
 import qiniu from "src/util/qiniu";
 import { onPrgress } from "src/util/file/upload";
+import { bindBusinessFile, postFile } from "src/apps/admin/api/business-file";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -450,14 +451,32 @@ function Edit(props: StyledWrapComponents) {
                   accept=".png,.jpg,.jpeg"
                   listType="picture-card"
                   beforeUpload={beforeUploadImage}
+                  maxCount={1}
                   customRequest={(option) => {
+                    const file = option.file as File;
                     const cancel = onPrgress(option.onProgress);
                     qiniu
-                      .uploadFile(option.file as File)
+                      .uploadFile(file)
                       .then((res) => {
-                        console.log(res)
-                        option.onSuccess?.(res);
+                        return postFile({
+                          path: res.key,
+                          name: res.hash,
+                          extend: {
+                            file_size: file.size,
+                            file_type: file.type,
+                          },
+                        });
                       })
+                      .then((res) => {
+                        return bindBusinessFile({
+                          service: "staff",
+                          identify: "头像",
+                          is_cover: 1,
+                          file_ids: [res.data.id],
+                          table_id: Number(id),
+                        });
+                      })
+                      .then(option.onSuccess)
                       .catch(option.onError)
                       .finally(cancel);
                   }}

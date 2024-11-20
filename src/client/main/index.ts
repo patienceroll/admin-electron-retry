@@ -26,14 +26,19 @@ function createWindow() {
         ...details.responseHeaders,
         "Content-Security-Policy": [
           buildCSP({
-            defaultSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'"],
+            defaultSrc: ["'self'"],
             connectSrc: [
               "'self'",
               "http://118.89.67.217:9638",
               "https://api.qiniu.com",
+              "https://upload-z2.qiniup.com"
             ],
             fontSrc: ["'self'", "data:"],
-            imgSrc: ["'self'", "data:"],
+            imgSrc: ["*", "data:","blob:"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: app.isPackaged
+              ? ["'self'"]
+              : ["'self'", "'unsafe-eval'"],
           }),
         ],
         // "Content-Security-Policy": [

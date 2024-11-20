@@ -17,8 +17,14 @@ export default function buildCSP(policy: CSPPolicy): string {
 
   for (const [directive, value] of Object.entries(policy)) {
     if (value !== undefined) {
+      // 将指令名称转换为正确的格式（小写并使用连字符）
+      const formattedDirective = directive
+        .replace(/([A-Z])/g, "-$1")
+        .toLowerCase();
       directives.push(
-        `${directive} ${Array.isArray(value) ? value.join(" ") : value};`
+        `${formattedDirective} ${
+          Array.isArray(value) ? value.join(" ") : value
+        };`
       );
     }
   }
