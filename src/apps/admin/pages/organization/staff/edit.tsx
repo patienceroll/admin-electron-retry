@@ -21,6 +21,7 @@ import {
 } from "@ant-design/pro-components";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
+import { UploadRequestOption } from "rc-upload/lib/interface";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
@@ -122,6 +123,38 @@ function Edit(props: StyledWrapComponents) {
         window.close();
       })
       .finally(loading.setFalse);
+  }
+
+  function cusUpload(
+    params: Pick<Parameters<typeof bindBusinessFile>[0], "service" | "identify">
+  ) {
+    return function (option: UploadRequestOption<any>) {
+      const file = option.file as File;
+      const cancel = onPrgress(option.onProgress);
+      qiniu
+        .uploadFile(file)
+        .then((res) => {
+          return postFile({
+            path: res.key,
+            name: res.hash,
+            extend: {
+              file_size: file.size,
+              file_type: file.type,
+            },
+          });
+        })
+        .then((res) => {
+          return bindBusinessFile({
+            ...params,
+            is_cover: 1,
+            file_ids: [res.data.id],
+            table_id: Number(id),
+          });
+        })
+        .then(option.onSuccess)
+        .catch(option.onError)
+        .finally(cancel);
+    };
   }
 
   useEffect(() => {
@@ -443,6 +476,7 @@ function Edit(props: StyledWrapComponents) {
         <Title style={{ marginTop: theme.margin * 2 }}>附件信息</Title>
         <Descriptions
           layout="vertical"
+          style={{width:800}}
           items={[
             {
               label: "头像",
@@ -452,34 +486,95 @@ function Edit(props: StyledWrapComponents) {
                   listType="picture-card"
                   beforeUpload={beforeUploadImage}
                   maxCount={1}
-                  customRequest={(option) => {
-                    const file = option.file as File;
-                    const cancel = onPrgress(option.onProgress);
-                    qiniu
-                      .uploadFile(file)
-                      .then((res) => {
-                        return postFile({
-                          path: res.key,
-                          name: res.hash,
-                          extend: {
-                            file_size: file.size,
-                            file_type: file.type,
-                          },
-                        });
-                      })
-                      .then((res) => {
-                        return bindBusinessFile({
-                          service: "staff",
-                          identify: "头像",
-                          is_cover: 1,
-                          file_ids: [res.data.id],
-                          table_id: Number(id),
-                        });
-                      })
-                      .then(option.onSuccess)
-                      .catch(option.onError)
-                      .finally(cancel);
-                  }}
+                  customRequest={cusUpload({
+                    service: "staff",
+                    identify: "头像",
+                  })}
+                >
+                  上传
+                </Upload>
+              ),
+            },
+            {
+              label: "招商银行",
+              children: (
+                <Upload
+                  accept=".png,.jpg,.jpeg"
+                  listType="picture-card"
+                  beforeUpload={beforeUploadImage}
+                  maxCount={1}
+                  customRequest={cusUpload({
+                    service: "staff",
+                    identify: "招商银行",
+                  })}
+                >
+                  上传
+                </Upload>
+              ),
+            },
+            {
+              label: "身份证正面",
+              children: (
+                <Upload
+                  accept=".png,.jpg,.jpeg"
+                  listType="picture-card"
+                  beforeUpload={beforeUploadImage}
+                  maxCount={1}
+                  customRequest={cusUpload({
+                    service: "staff",
+                    identify: "身份证正面",
+                  })}
+                >
+                  上传
+                </Upload>
+              ),
+            },
+            {
+              label: "身份证背面",
+              children: (
+                <Upload
+                  accept=".png,.jpg,.jpeg"
+                  listType="picture-card"
+                  beforeUpload={beforeUploadImage}
+                  maxCount={1}
+                  customRequest={cusUpload({
+                    service: "staff",
+                    identify: "身份证背面",
+                  })}
+                >
+                  上传
+                </Upload>
+              ),
+            },
+            {
+              label: "毕业证",
+              children: (
+                <Upload
+                  accept=".png,.jpg,.jpeg"
+                  listType="picture-card"
+                  beforeUpload={beforeUploadImage}
+                  maxCount={1}
+                  customRequest={cusUpload({
+                    service: "staff",
+                    identify: "毕业证",
+                  })}
+                >
+                  上传
+                </Upload>
+              ),
+            },
+            {
+              label: "学位证",
+              children: (
+                <Upload
+                  accept=".png,.jpg,.jpeg"
+                  listType="picture-card"
+                  beforeUpload={beforeUploadImage}
+                  maxCount={1}
+                  customRequest={cusUpload({
+                    service: "staff",
+                    identify: "学位证",
+                  })}
                 >
                   上传
                 </Upload>
