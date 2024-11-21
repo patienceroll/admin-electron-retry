@@ -6,6 +6,7 @@ import ThemeLocal from "src/client/local/theme-local/theme-local";
 import windowMain from "src/client/channel/window/main";
 import loginMain from "src/client/channel/login/main";
 import localMain from "src/client/channel/local/main";
+import filesMain from "src/client/channel/files/main";
 
 import env from "src/client/env";
 import Views from "src/client/main/views";
@@ -104,6 +105,7 @@ export default class Framework {
     windowMain({ framework: this });
     loginMain({ framework: this });
     localMain({ framework: this });
+    filesMain({ framework: this });
   }
 
   open(...arg: Parameters<RoutePreload["open"]>) {

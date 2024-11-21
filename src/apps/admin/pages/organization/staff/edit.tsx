@@ -157,6 +157,9 @@ function Edit(props: StyledWrapComponents) {
             fileName: item.name,
             thumbUrl: item.path,
             status: "done",
+            response: {
+              url: item.full_path,
+            },
           }));
         }
       });

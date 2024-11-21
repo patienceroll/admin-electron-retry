@@ -19,7 +19,7 @@ interface Window {
     ThemePreload &
     LoginPreload &
     RoutePreload &
-    WindowPreload;
+    WindowPreload & FilesPreload;
 }
 
 type DisposeFunction = VoidFunction;

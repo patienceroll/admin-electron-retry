@@ -7,6 +7,7 @@ import routePreload from "src/client/channel/route/preload";
 import windowPredload from "src/client/channel/window/preload";
 import loginPreload from "src/client/channel/login/preload";
 import localPreload from "src/client/channel/local/preload";
+import filesPreload from "src/client/channel/files/preload";
 
 contextBridge.exposeInMainWorld(
   "preload",
@@ -15,6 +16,7 @@ contextBridge.exposeInMainWorld(
     routePreload(),
     windowPredload(),
     loginPreload(),
-    localPreload()
+    localPreload(),
+    filesPreload()
   )
 );
