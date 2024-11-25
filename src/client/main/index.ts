@@ -22,7 +22,7 @@ if (!app.requestSingleInstanceLock()) {
 
 function createWindow() {
   if (app.isPackaged) {
-    new Update().checkForUpdates();
+    new Update().queryUpdate();
   }
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({

@@ -19,3 +19,16 @@ export function postFile(params: {
 }) {
   return fetch.POST<FileResponse>(fetch.base("/api/file"), params);
 }
+
+/** 业务文件夹 */
+export function getFolder(params: {
+  /** 0是顶层 */
+  pid: number;
+  /**  2业务文件 1 公司文件 */
+  type: 1 | 2;
+}) {
+  return fetch.GET<FolderListItem>(fetch.base("/api/file-dir/list"), {
+    page: 0,
+    ...params,
+  });
+}

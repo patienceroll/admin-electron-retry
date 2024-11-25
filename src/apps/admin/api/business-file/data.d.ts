@@ -59,3 +59,39 @@ type FileResponse = {
   updated_at?: string;
   full_path: string;
 };
+
+/** 文件夹 */
+type Folder = {
+  id: number;
+  company_id: number;
+  /**  2业务文件 1 公司文件 */
+  type: 1 | 2;
+  pid: number;
+  name: string;
+  is_secret: 0 | 1;
+  list: number;
+  status: number;
+  created_id: number;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
+  btn_power: BtnPower;
+  created_user: CreateUser | null;
+  company: BlockCompany | null;
+};
+
+/** 文件夹列表项 */
+type FolderListItem = {
+  /**  当前文件夹的文件 */
+  current_dir?: Folder & {
+    /** 文件 */
+    file: FolderFile[];
+  };
+  /** 父文件夹路径 */
+  parent_dir: {
+    id: number;
+    name: string;
+  }[];
+  /** 文件夹 */
+  list: Folder[];
+};

@@ -41,4 +41,10 @@ export default class Update {
   checkForUpdates() {
     autoUpdater.checkForUpdates();
   }
+
+  queryUpdate() {
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 60 * 1000 * 60 * 10);
+  }
 }
