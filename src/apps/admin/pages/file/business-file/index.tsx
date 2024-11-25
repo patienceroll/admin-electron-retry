@@ -7,6 +7,7 @@ import { getFolder } from "src/apps/admin/api/business-file";
 import useWather from "src/hooks/use-wather";
 import FolderSvg from "src/assets/svg/文件夹.svg";
 import Icon from "src/framework/component/icon";
+import FileSvg from "src/assets/svg/文件.svg";
 
 function BusinessFile(props: StyledWrapComponents) {
   const { className } = props;
@@ -45,14 +46,23 @@ function BusinessFile(props: StyledWrapComponents) {
               items={[
                 {
                   title: "根目录",
+                  className: "bread",
                   onClick() {
                     getFolderBy();
                   },
                 },
+                ...folder.parent_dir.map((item) => ({
+                  title: item.name,
+                  className: "bread",
+                  onClick() {
+                    getFolderBy({ pid: item.id });
+                  },
+                })),
               ]}
             />
           </div>
           <Segmented
+            style={{ alignSelf: "auto" }}
             value={listType}
             options={[
               {
@@ -68,13 +78,13 @@ function BusinessFile(props: StyledWrapComponents) {
           />
         </div>
       </Affix>
-      {listType === "row" && (
+      {listType === "row" && folder.list.length !== 0 && (
         <List
           dataSource={folder.list}
           renderItem={(item) => (
             <List.Item
               className="item"
-              onDoubleClick={() => getFolderBy({ type: 2, pid: item.id })}
+              onClick={() => getFolderBy({ type: 2, pid: item.id })}
             >
               <List.Item.Meta
                 title={item.name}
@@ -85,6 +95,23 @@ function BusinessFile(props: StyledWrapComponents) {
           )}
         />
       )}
+      {listType === "row" &&
+        folder.current_dir &&
+        folder.current_dir.file.length !== 0 && (
+          <List
+            locale={{ emptyText: null }}
+            dataSource={folder.current_dir.file}
+            renderItem={(item) => (
+              <List.Item className="item">
+                <List.Item.Meta
+                  title={item.name}
+                  avatar={<Icon icon={FileSvg} />}
+                  description={`${item.created_user?.name} ${item.created_at}`}
+                />
+              </List.Item>
+            )}
+          />
+        )}
     </PageWrapper>
   );
 }
@@ -97,6 +124,13 @@ export default styled(BusinessFile)`
     padding: ${(props) => props.theme.padding}px;
     box-shadow: ${(props) => props.theme.boxShadow};
     border-radius: ${(props) => props.theme.borderRadius}px;
+  }
+
+  .bread {
+    cursor: pointer;
+    &:hover {
+      color: ${(props) => props.theme.colorLinkHover};
+    }
   }
 
   .item {
