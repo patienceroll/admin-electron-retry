@@ -23,6 +23,8 @@ import OrganizationStaff from "./pages/organization/staff";
 import OrganizationStaffCreate from "./pages/organization/staff/create";
 import OrganizationStaffEdit from "./pages/organization/staff/edit";
 import OrganizationJob from "./pages/organization/job";
+import Page404 from "src/framework/404";
+import FileBussinsefile from "./pages/file/business-file";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -53,7 +55,7 @@ export default function () {
   useEffect(() => {
     contextedModal.modal = modalApi;
   }, [modalApi]);
-  
+
   useEffect(() => {
     contextedMessage.message = messageApi;
   }, [messageApi]);
@@ -103,9 +105,18 @@ export default function () {
                 Component={OrganizationDepartment}
               />
               <Route path="/organization/staff" Component={OrganizationStaff} />
-              <Route path="/organization/staff/create" Component={OrganizationStaffCreate} />
-              <Route path="/organization/staff/edit" Component={OrganizationStaffEdit} />
+              <Route
+                path="/organization/staff/create"
+                Component={OrganizationStaffCreate}
+              />
+              <Route
+                path="/organization/staff/edit"
+                Component={OrganizationStaffEdit}
+              />
               <Route path="/organization/job" Component={OrganizationJob} />
+              <Route path="/file/business-file" Component={FileBussinsefile} />
+
+              <Route path="*" element={<Page404 />} />
             </Routes>
           </HashRouter>
           <GlobalStyle />

@@ -6,6 +6,7 @@ import locale from "antd/locale/zh_CN";
 import Layout from "src/framework/layout";
 import Login from "./login";
 import Menu from "./menu";
+import Page404 from './404'
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
 import ProgressBar from "src/framework/component/progress-bar";
@@ -73,6 +74,7 @@ export default function () {
             <Route path="/layout" element={<Layout />} />
             <Route path="/login" element={<Login />} />
             <Route path="/menu" element={<Menu darkMode={darkMode} />} />
+            <Route path="*" element={<Page404 />} />
           </Routes>
         </HashRouter>
         <GlobalStyle />
