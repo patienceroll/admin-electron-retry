@@ -155,7 +155,7 @@ function Edit(props: StyledWrapComponents) {
             url: item.path,
             name: item.name,
             fileName: item.name,
-            thumbUrl: item.path,
+            thumbUrl: item.full_path,
             status: "done",
             response: {
               url: item.full_path,
