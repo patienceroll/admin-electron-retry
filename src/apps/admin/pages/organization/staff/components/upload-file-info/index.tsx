@@ -1,11 +1,12 @@
 import { Form, Upload } from "antd";
 import React from "react";
 import { UploadRequestOption } from "rc-upload/lib/interface";
+import { onPrgress } from "src/util/file/upload";
 
 import { beforeUploadImage } from "src/util/file/validate";
 import qiniu from "src/util/qiniu";
 import { bindBusinessFile, postFile } from "src/apps/admin/api/business-file";
-import { onPrgress } from "src/util/file/upload";
+import contextedNotify from "src/framework/component/contexted-notify";
 
 export default function (
   props: Pick<
@@ -63,7 +64,14 @@ export default function (
         accept=".png,.jpg,.jpeg"
         listType="picture-card"
         beforeUpload={beforeUploadImage}
-        onPreview={(file) => window.preload.viewImage(file.response!.url)}
+        onPreview={(file) =>
+          window.preload.previewFile(file.response!.url).catch((err) => {
+            contextedNotify.notification?.error({
+              message: "文件预览失败",
+              description: err.message,
+            });
+          })
+        }
         customRequest={cusUpload({
           service,
           identify,
