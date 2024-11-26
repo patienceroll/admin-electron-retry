@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 
 import Framework from "src/client/main/framework";
+import { parseUrlFile } from "src/util/file/parse";
 
 function get(url: string) {
   return new Promise<http.IncomingMessage>((resolve, reject) => {
@@ -12,7 +13,7 @@ function get(url: string) {
       if (response.statusCode === 200) {
         resolve(response);
       }
-      reject(response);
+      reject(new Error(`${response.statusCode} ${response.statusMessage}`));
     });
   });
 }
@@ -44,5 +45,23 @@ export default function filesMain(options: { framework: Framework }) {
     // 等待文件流完成
     await promisifyStream(fileStream);
     await shell.openPath(tempPath);
+  });
+
+  ipcMain.handle("previewFile", async function (event, url: string) {
+    try {
+      const { filename, extension } = parseUrlFile(url);
+      const tempPath = path.resolve(
+        app.getPath("temp"),
+        `${filename}.${extension}`
+      );
+      const response = await get(url);
+      const fileStream = fs.createWriteStream(tempPath);
+      response.pipe(fileStream);
+      // 等待文件流完成
+      await promisifyStream(fileStream);
+      await shell.openPath(tempPath);
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
   });
 }

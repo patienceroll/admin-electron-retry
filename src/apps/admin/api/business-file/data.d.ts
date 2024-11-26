@@ -95,3 +95,20 @@ type FolderListItem = {
   /** 文件夹 */
   list: Folder[];
 };
+
+/** 文件夹文件项 */
+type FolderFile = {
+  id: number;
+  file_dir_id: number;
+  name: string;
+  path: string;
+  full_path: string;
+  extend: {
+    file_type: string;
+    file_size: number;
+  };
+  status: number;
+  created_id: number;
+  created_at: string;
+  created_user: BlockCreateUser;
+};

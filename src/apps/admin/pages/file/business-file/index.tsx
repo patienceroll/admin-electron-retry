@@ -1,6 +1,6 @@
 import styled, { useTheme } from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
-import { Affix, Breadcrumb, List, Segmented } from "antd";
+import { Affix, Breadcrumb, Col, List, Row, Segmented } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import { getFolder } from "src/apps/admin/api/business-file";
@@ -8,6 +8,9 @@ import useWather from "src/hooks/use-wather";
 import FolderSvg from "src/assets/svg/文件夹.svg";
 import Icon from "src/framework/component/icon";
 import FileSvg from "src/assets/svg/文件.svg";
+import FolderItem from "./components/folder-item";
+import FileItem from "./components/file-item";
+import contextedNotify from "src/framework/component/contexted-notify";
 
 function BusinessFile(props: StyledWrapComponents) {
   const { className } = props;
@@ -102,7 +105,17 @@ function BusinessFile(props: StyledWrapComponents) {
             locale={{ emptyText: null }}
             dataSource={folder.current_dir.file}
             renderItem={(item) => (
-              <List.Item className="item">
+              <List.Item
+                className="item"
+                onClick={function () {
+                  window.preload.previewFile(item.full_path).catch((err) => {
+                    contextedNotify.notification?.error({
+                      message: "文件预览失败",
+                      description: err.message,
+                    });
+                  });
+                }}
+              >
                 <List.Item.Meta
                   title={item.name}
                   avatar={<Icon icon={FileSvg} />}
@@ -112,6 +125,40 @@ function BusinessFile(props: StyledWrapComponents) {
             )}
           />
         )}
+
+      {listType === "item" && (
+        <Row gutter={[20, 20]}>
+          {folder.list.map((item) => (
+            <Col flex="100px" key={item.id}>
+              <FolderItem
+                item={item}
+                onClick={function () {
+                  getFolderBy({ pid: item.id });
+                }}
+              />
+            </Col>
+          ))}
+        </Row>
+      )}
+      {listType === "item" && folder.current_dir?.file && (
+        <Row gutter={[20, 20]}>
+          {folder.current_dir.file.map((item) => (
+            <Col flex="100px" key={item.id}>
+              <FileItem
+                item={item}
+                onClick={function () {
+                  window.preload.previewFile(item.full_path).catch((err) => {
+                    contextedNotify.notification?.error({
+                      message: "文件预览失败",
+                      description: err.message,
+                    });
+                  });
+                }}
+              />
+            </Col>
+          ))}
+        </Row>
+      )}
     </PageWrapper>
   );
 }

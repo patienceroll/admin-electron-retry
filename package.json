@@ -22,6 +22,7 @@
     "@react-spring/web": "^9.7.5",
     "antd": "^5.21.0",
     "dayjs": "^1.11.13",
+    "decimal.js": "^10.4.3",
     "electron-squirrel-startup": "^1.0.1",
     "qiniu-js": "^4.0.0-beta.6",
     "react": "^18.3.1",

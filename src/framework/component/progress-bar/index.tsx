@@ -1,6 +1,7 @@
 import { animated, useSpring } from "@react-spring/web";
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
+import Decimal from "decimal.js";
 
 import controler from "./controler";
 import useUpdate from "src/hooks/use-update";
@@ -10,19 +11,25 @@ import useWather from "src/hooks/use-wather";
 const barIntevalLength = 5000;
 /** 当触发 finished 的时候,结束动画时常 ms  */
 const finishDuration = 300;
+// 渐变宽度百分比长度 / 2
+const linearLength = 20;
 
 function ProgressBar(props: StyledWrapComponents) {
   const { className } = props;
+  const theme = useTheme();
 
   const width = useRef(0);
   const animationFrame = useRef<number>();
+  const [linearPosition, setLinearPosition] = useState(
+    () => new Decimal(-linearLength)
+  );
   const [status, setStatus] = useState<"start" | "finished">("start");
 
   const [update] = useUpdate();
   const [show] = useWather();
 
   const style = useSpring({
-    height: 2,
+    height: 3,
     width: `${width.current}%`,
     config: {
       tension: 250,
@@ -32,7 +39,26 @@ function ProgressBar(props: StyledWrapComponents) {
   });
 
   useEffect(() => {
+    let animate: number;
+    function recusion() {
+      animate = requestAnimationFrame(function () {
+        setLinearPosition((value) => {
+          if (value.toNumber() >= 100 + linearLength) return new Decimal(-linearLength);
+          return new Decimal(value.add(0.6));
+        });
+        recusion();
+      });
+    }
+    if (show.whether) {
+      recusion();
+    }
 
+    return function () {
+      cancelAnimationFrame(animate);
+    };
+  }, [show.whether]);
+
+  useEffect(() => {
     function listen(status: "start" | "finished") {
       if (status === "start") {
         if (animationFrame.current)
@@ -53,7 +79,6 @@ function ProgressBar(props: StyledWrapComponents) {
             recusion();
           });
         }
-        
 
         recusion();
       }
@@ -76,7 +101,17 @@ function ProgressBar(props: StyledWrapComponents) {
   }, [show, update]);
 
   return show.whether ? (
-    <animated.div className={className} style={style} />
+    <animated.div
+      className={className}
+      style={{
+        ...style,
+        backgroundImage: `linear-gradient(to right, ${theme.colorPrimary} ${
+          linearPosition.toNumber() - linearLength
+        }%, ${theme.colorPrimaryHover} ${linearPosition.toNumber()}%, ${
+          theme.colorPrimary
+        } ${linearPosition.toNumber() + linearLength}%)`,
+      }}
+    />
   ) : null;
 }
 
@@ -84,7 +119,6 @@ export default styled(ProgressBar)`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: ${(props) => props.theme.colorPrimary};
   z-index: 10000;
   width: 100%;
 `;
