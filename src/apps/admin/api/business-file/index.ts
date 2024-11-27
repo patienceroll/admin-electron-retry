@@ -32,3 +32,13 @@ export function getFolder(params: {
     ...params,
   });
 }
+
+/** 新建文件夹 */
+export function postFolder(params: Pick<Folder, "is_secret" | "pid" | "name">) {
+  return fetch.POST(fetch.base(`/api/file-dir`), params);
+}
+
+/** 编辑文件夹 */
+export function putFolder(params: Pick<Folder, "is_secret" | "id" | "name">) {
+  return fetch.PUT(fetch.base(`/api/file-dir`), params);
+}

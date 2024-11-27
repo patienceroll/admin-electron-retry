@@ -25,6 +25,7 @@ import OrganizationStaffEdit from "./pages/organization/staff/edit";
 import OrganizationJob from "./pages/organization/job";
 import Page404 from "src/framework/404";
 import FileBussinsefile from "./pages/file/business-file";
+import FileCompanyfile from "./pages/file/company-file";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -115,6 +116,7 @@ export default function () {
               />
               <Route path="/organization/job" Component={OrganizationJob} />
               <Route path="/file/business-file" Component={FileBussinsefile} />
+              <Route path="/file/company-file" Component={FileCompanyfile} />
 
               <Route path="*" element={<Page404 />} />
             </Routes>
