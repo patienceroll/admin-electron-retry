@@ -24,17 +24,14 @@ function Item(
       className={className}
       style={{ backgroundColor: style.backgroundColor }}
       {...restProps}
+      onMouseOver={function () {
+        api.start({ scale: 1.1, backgroundColor: theme.colorBgTextHover });
+      }}
+      onMouseLeave={function () {
+        api.start({ scale: 1, backgroundColor: "transparent" });
+      }}
     >
-      <animated.div
-        className="inner"
-        style={{ scale: style.scale }}
-        onMouseOver={function () {
-          api.start({ scale: 1.1, backgroundColor: theme.colorPrimaryBgHover });
-        }}
-        onMouseLeave={function () {
-          api.start({ scale: 1, backgroundColor: "transparent" });
-        }}
-      >
+      <animated.div className="inner" style={{ scale: style.scale }}>
         <Icon icon={FileSvg} width={34} height={34} />
         <div className="name">{item.name}</div>
       </animated.div>
@@ -50,7 +47,6 @@ export default styled(Item)`
   justify-content: center;
   height: 100px;
   width: 100px;
-
 
   .inner {
     text-align: center;

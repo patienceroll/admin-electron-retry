@@ -173,7 +173,7 @@ function Edit(props: StyledWrapComponents) {
     <Spin spinning={detail === undefined}>
       <PageWrapper className={className}>
         <Form form={form} labelCol={{ span: 6 }}>
-          <Title>基本信息</Title>
+          <Title style={{ width: 400 }}>基本信息</Title>
           <Row
             style={{ margin: theme.margin }}
             gutter={[theme.padding, theme.padding]}
@@ -298,7 +298,9 @@ function Edit(props: StyledWrapComponents) {
             </Col>
           </Row>
 
-          <Title style={{ marginTop: theme.margin }}>状态信息</Title>
+          <Title style={{ marginTop: theme.margin, width: 400 }}>
+            状态信息
+          </Title>
           <Row
             style={{ margin: theme.margin }}
             gutter={[theme.padding, theme.padding]}
@@ -338,7 +340,7 @@ function Edit(props: StyledWrapComponents) {
             </Col>
           </Row>
 
-          <Title>学历信息</Title>
+          <Title style={{ width: 400 }}>学历信息</Title>
           <Row
             style={{ margin: theme.margin }}
             gutter={[theme.padding, theme.padding]}
@@ -395,7 +397,9 @@ function Edit(props: StyledWrapComponents) {
             width: 800,
           }}
         >
-          <Title style={{ marginTop: theme.margin * 2 }}>紧急联系人</Title>
+          <Title style={{ marginTop: theme.margin * 2, width: 400 }}>
+            紧急联系人
+          </Title>
           <FlexCenter>
             <Button
               type="primary"
@@ -430,7 +434,9 @@ function Edit(props: StyledWrapComponents) {
             width: 800,
           }}
         >
-          <Title style={{ marginTop: theme.margin * 2 }}>账户</Title>
+          <Title style={{ marginTop: theme.margin * 2, width: 400 }}>
+            账户
+          </Title>
           <FlexCenter>
             <Button
               type="primary"
@@ -458,7 +464,9 @@ function Edit(props: StyledWrapComponents) {
           scroll={{ x: account.measureColumnWidth(acountColumn) }}
         />
 
-        <Title style={{ marginTop: theme.margin * 2 }}>附件信息</Title>
+        <Title style={{ marginTop: theme.margin * 2, width: 400 }}>
+          附件信息
+        </Title>
         <Form form={fileForm}>
           <Descriptions
             layout="vertical"

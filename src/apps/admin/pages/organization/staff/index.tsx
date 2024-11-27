@@ -97,6 +97,7 @@ function Staff() {
     {
       title: "头像",
       valueType: "image",
+      renderText: (_,row) => row.avatar_path
     },
     {
       title: "状态",

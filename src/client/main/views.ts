@@ -35,7 +35,7 @@ export default class Views {
           createWindow(options) {
             const window = new BrowserWindow(options);
             window.setMenu(null);
-            window.webContents.openDevTools()
+            // window.webContents.openDevTools()
             return window.webContents;
           },
           overrideBrowserWindowOptions: {

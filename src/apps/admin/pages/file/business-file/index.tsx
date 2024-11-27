@@ -11,6 +11,7 @@ import FileSvg from "src/assets/svg/文件.svg";
 import FolderItem from "./components/folder-item";
 import FileItem from "./components/file-item";
 import contextedNotify from "src/framework/component/contexted-notify";
+import Title from "src/framework/component/title";
 
 function BusinessFile(props: StyledWrapComponents) {
   const { className } = props;
@@ -44,8 +45,9 @@ function BusinessFile(props: StyledWrapComponents) {
     <PageWrapper className={className}>
       <Affix offsetTop={theme.padding}>
         <div className="top">
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <Title style={{flex:1}}>
             <Breadcrumb
+              style={{ lineHeight: "38px" }}
               items={[
                 {
                   title: "根目录",
@@ -63,9 +65,9 @@ function BusinessFile(props: StyledWrapComponents) {
                 })),
               ]}
             />
-          </div>
+          </Title>
           <Segmented
-            style={{ alignSelf: "auto" }}
+            style={{flexShrink:0}}
             value={listType}
             options={[
               {
@@ -167,10 +169,7 @@ export default styled(BusinessFile)`
   .top {
     display: flex;
     justify-content: space-between;
-    background-color: ${(props) => props.theme.colorBgContainer};
-    padding: ${(props) => props.theme.padding}px;
-    box-shadow: ${(props) => props.theme.boxShadow};
-    border-radius: ${(props) => props.theme.borderRadius}px;
+    margin-bottom: ${(props) => props.theme.margin}px;
   }
 
   .bread {

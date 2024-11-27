@@ -21,8 +21,7 @@ export default styled(Title)`
   overflow: hidden;
 
   .inner {
-    flex-shrink: 0;
-    width: 400px;
+    flex: 1;
     font-size: ${(props) => props.theme.fontSizeHeading5}px;
     font-weight: 700;
     padding-left: ${(props) => props.theme.padding}px;
