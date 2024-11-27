@@ -42,3 +42,15 @@ export function postFolder(params: Pick<Folder, "is_secret" | "pid" | "name">) {
 export function putFolder(params: Pick<Folder, "is_secret" | "id" | "name">) {
   return fetch.PUT(fetch.base(`/api/file-dir`), params);
 }
+
+/** 删除文件夹  */
+export function deleteFolder(params: Pick<Folder, "id">) {
+  return fetch.DELETE(fetch.base("/api/file-dir"), params);
+}
+
+
+
+/** 删除文件  */
+export function deleteFile(params: Pick<FolderFile, "id">) {
+  return fetch.DELETE(fetch.base("/api/file"), params);
+}

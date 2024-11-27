@@ -16,14 +16,15 @@ import useWather from "src/hooks/use-wather";
 import FolderSvg from "src/assets/svg/文件夹.svg";
 import Icon from "src/framework/component/icon";
 import FileSvg from "src/assets/svg/文件.svg";
-import FolderItem from "src/apps/admin/pages/file/business-file/components/folder-item";
-import FileItem from "src/apps/admin/pages/file/business-file/components/file-item";
+import FolderItem from "src/apps/admin/pages/file/company-file/components/folder-item";
+import FileItem from "src/apps/admin/pages/file/company-file/components/file-item";
 import contextedNotify from "src/framework/component/contexted-notify";
 import Title from "src/framework/component/title";
 import AddSvg from "src/assets/svg/add.svg";
 import UploadSvg from "src/assets/svg/upload.svg";
 import * as EditFolder from "./components/edit-folder";
 import contextedMessage from "src/framework/component/contexted-message";
+import * as UploadFile from "./components/upload-file";
 
 function BusinessFile(props: StyledWrapComponents) {
   const { className } = props;
@@ -31,6 +32,7 @@ function BusinessFile(props: StyledWrapComponents) {
   const theme = useTheme();
 
   const ref = EditFolder.createRef();
+  const uploadRef = UploadFile.createRef();
 
   const [listType, sertListType] = useState<"row" | "item">("item");
   const [folder, setFolder] = useState<FolderListItem>({
@@ -50,6 +52,10 @@ function BusinessFile(props: StyledWrapComponents) {
     },
     [loading]
   );
+
+  function reload() {
+    getFolderBy({ pid: folder.current_dir?.id || 0 });
+  }
 
   useEffect(() => {
     getFolderBy();
@@ -105,7 +111,7 @@ function BusinessFile(props: StyledWrapComponents) {
           renderItem={(item) => (
             <List.Item
               className="item"
-              onClick={() => getFolderBy({ type: 2, pid: item.id })}
+              onClick={() => getFolderBy({ pid: item.id })}
             >
               <List.Item.Meta
                 title={item.name}
@@ -149,6 +155,7 @@ function BusinessFile(props: StyledWrapComponents) {
           {folder.list.map((item) => (
             <Col flex="100px" key={item.id}>
               <FolderItem
+                onTriggerReload={reload}
                 item={item}
                 onClick={function () {
                   getFolderBy({ pid: item.id });
@@ -164,6 +171,7 @@ function BusinessFile(props: StyledWrapComponents) {
             <Col flex="100px" key={item.id}>
               <FileItem
                 item={item}
+                onTriggerReload={reload}
                 onClick={function () {
                   window.preload.previewFile(item.full_path).catch((err) => {
                     contextedNotify.notification?.error({
@@ -193,11 +201,16 @@ function BusinessFile(props: StyledWrapComponents) {
           <FloatButton
             tooltip="上传文件到当前目录"
             icon={<Icon width={18} height={18} icon={UploadSvg} />}
-            onClick={() => {}}
+            onClick={() => {
+              uploadRef.current?.upload({
+                file_dir_id: folder.current_dir!.id,
+              });
+            }}
           />
         )}
       </FloatButton.Group>
       <EditFolder.default ref={ref} />
+      <UploadFile.default ref={uploadRef} />
     </PageWrapper>
   );
 }
