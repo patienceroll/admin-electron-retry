@@ -45,10 +45,9 @@ const Component = forwardRef<Ref, Props>(function (props, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        debugger;
         return postFile({
           file_dir_id: config.current.item.file_dir_id,
-          path: store.file[0].response.key,
+          path: store.file[0].response.path,
           name: store.file[0].name,
           extend: {
             file_size: store.file[0].size,

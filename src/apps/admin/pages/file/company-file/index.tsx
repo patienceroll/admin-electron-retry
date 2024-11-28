@@ -204,7 +204,7 @@ function BusinessFile(props: StyledWrapComponents) {
             onClick={() => {
               uploadRef.current?.upload({
                 file_dir_id: folder.current_dir!.id,
-              });
+              }).then(reload);
             }}
           />
         )}
