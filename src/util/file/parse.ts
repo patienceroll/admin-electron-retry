@@ -8,7 +8,6 @@ export function parseUrlFile(url: string) {
 
   // 获取文件名
   const filename = pathname.split("/").pop();
-
   // 检查是否有文件名和后缀
   if (!filename || filename.lastIndexOf(".") === -1) {
     throw new Error("Invalid URL: No filename or extension found.");

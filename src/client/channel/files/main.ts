@@ -31,10 +31,7 @@ export default function filesMain(options: { framework: Framework }) {
   ipcMain.handle("previewFile", async function (event, url: string) {
     try {
       const { filename, extension } = parseUrlFile(url);
-      const tempPath = path.resolve(
-        app.getPath("temp"),
-        `${filename}.${extension}`
-      );
+      const tempPath = path.resolve(app.getPath("temp"), `${filename}`);
       const response = await get(url);
       const fileStream = fs.createWriteStream(tempPath);
       response.pipe(fileStream);
