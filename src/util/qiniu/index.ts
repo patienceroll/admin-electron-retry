@@ -1,47 +1,50 @@
-import { createDirectUploadTask } from "qiniu-js";
-import {
-  CanceledResult,
-  ErrorResult,
-  SuccessResult,
-} from "qiniu-js/output/@internal";
-import { TokenProvider } from "qiniu-js/output/@internal/types/token";
-
 import { getQiniuToken } from "src/apps/admin/api/qiniu-yun";
+import * as qiniu from "qiniu-js";
+import dayjs from "dayjs";
+import contextedNotify from "src/framework/component/contexted-notify";
 
 class QiniuYun {
-  tokenProvider: TokenProvider = () =>
-    new Promise<string>((resolve, reject) => {
+  tokenProvider() {
+    return new Promise<string>((resolve, reject) => {
       return getQiniuToken()
         .then((res) => {
           resolve(res.data.token);
         })
         .catch(reject);
     });
+  }
+  async upload(file: File, key?: string) {
+    const user = window.preload.getLocalUser();
+    const currentTime = dayjs();
+    const mergekey =
+      key ||
+      `${user ? `${user.name + user.id}` : "unknow-user"}/${currentTime.format(
+        "YYYY-MM-DD"
+      )}/${currentTime.valueOf()}/${file.name}`;
+    const token = await this.tokenProvider();
+    const observal = qiniu.upload(file, mergekey, token);
 
-  /** 上传相对比较小的文件,可以不关注进度 */
-  uploadFile(file: File) {
-    return createDirectUploadTask(
-      { type: "file", data: file },
-      {
-        tokenProvider: this.tokenProvider,
-      }
-    )
-      .start()
-      .then((res) => {
-        if ((res as SuccessResult<string>).result) {
-          return JSON.parse((res as SuccessResult<string>).result) as {
-            hash: string;
-            key: string;
-          };
-        }
-        if ((res as CanceledResult).canceled) {
-          return Promise.reject("已取消");
-        }
-        if ((res as ErrorResult).error) {
-          return Promise.reject((res as ErrorResult).error);
-        }
-        return Promise.reject("unkonw-error");
+    return await new Promise<{
+      hash: string;
+      key: string;
+    }>((resolve, reject) => {
+      observal.subscribe({
+        error(err) {
+          if (
+            err instanceof qiniu.QiniuNetworkError ||
+            err instanceof qiniu.QiniuRequestError ||
+            err instanceof qiniu.QiniuError
+          ) {
+            contextedNotify.notification?.error({
+              message: "上传失败",
+              description: err.message,
+            });
+          }
+          reject(err);
+        },
+        complete: resolve,
       });
+    });
   }
 }
 

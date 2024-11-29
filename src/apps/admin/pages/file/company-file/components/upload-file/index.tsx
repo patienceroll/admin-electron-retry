@@ -115,7 +115,7 @@ const Component = forwardRef<Ref, Props>(function (props, ref) {
               const file = option.file as File;
               const cancel = onPrgress(option.onProgress);
               qiniu
-                .uploadFile(file)
+                .upload(file)
                 .then((res) => {
                   option.onSuccess?.({
                     path: res.key,

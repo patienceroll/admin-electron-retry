@@ -23,7 +23,7 @@ export default function (
       const file = option.file as File;
       const cancel = onPrgress(option.onProgress);
       qiniu
-        .uploadFile(file)
+        .upload(file)
         .then((res) => {
           return postFile({
             path: res.key,
