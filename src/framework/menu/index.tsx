@@ -66,7 +66,6 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
   const { className, darkMode } = props;
   const theme = useTheme();
   const [div, setDiv] = useState<HTMLDivElement | null>(null);
-  const timer = useRef<NodeJS.Timeout>();
 
   const navItemAnimate = useSpring({
     // 初始状态，设置 y 坐标为 0
@@ -144,11 +143,8 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
               <SwiperSlide className="swiper-slide" key={item.id}>
                 <div
                   className={`nav-item ${active ? "nav-item-active" : ""}`}
-                  onMouseEnter={() => {
-                    if (timer.current) clearTimeout(timer.current);
-                    timer.current = setTimeout(() => {
-                      setCurrentMenu(item);
-                    }, 150);
+                  onClick={() => {
+                    setCurrentMenu(item);
                   }}
                 >
                   <animated.div style={active ? navItemAnimate : undefined}>
