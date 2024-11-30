@@ -42,9 +42,13 @@ export default function filesMain(options: { framework: Framework }) {
   ipcMain.handle("previewFile", async function (event, url: string) {
     try {
       const { filename, extension } = parseUrlFile(url);
-      const tempPath = path.resolve(app.getPath("temp"), `${filename}`);
-      if (fs.existsSync(tempPath)) {
-        await shell.openPath(tempPath);
+      const tempPath = path.resolve(app.getPath("temp"), app.getName());
+      if (!fs.existsSync(tempPath)) {
+        fs.mkdirSync(tempPath);
+      }
+      const tempFileName = path.resolve(tempPath, `${filename}`);
+      if (fs.existsSync(tempFileName)) {
+        await shell.openPath(tempFileName);
       } else {
         const headResponse = await head(url);
         const contentLength = headResponse.headers["content-length"];
@@ -58,11 +62,11 @@ export default function filesMain(options: { framework: Framework }) {
           }
         }
         const response = await get(url);
-        const fileStream = fs.createWriteStream(tempPath);
+        const fileStream = fs.createWriteStream(tempFileName);
         response.pipe(fileStream);
         // 等待文件流完成
         await promisifyStream(fileStream);
-        await shell.openPath(tempPath);
+        await shell.openPath(tempFileName);
       }
     } catch (err: any) {
       throw new Error(err.message);
