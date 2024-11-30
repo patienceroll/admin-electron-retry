@@ -44,7 +44,6 @@ function Item(
       placement="bottom"
       content={
         <Space>
-          <Button type="primary">编辑</Button>
           <Button type="primary" danger onClick={onDelete}>
             删除
           </Button>

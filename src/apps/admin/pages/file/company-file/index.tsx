@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   Affix,
   Breadcrumb,
+  Button,
   Col,
   FloatButton,
   List,
@@ -11,7 +12,11 @@ import {
 } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
-import { getFolder } from "src/apps/admin/api/business-file";
+import {
+  deleteFile,
+  deleteFolder,
+  getFolder,
+} from "src/apps/admin/api/business-file";
 import useWather from "src/hooks/use-wather";
 import FolderSvg from "src/assets/svg/文件夹.svg";
 import Icon from "src/framework/component/icon";
@@ -25,6 +30,7 @@ import UploadSvg from "src/assets/svg/upload.svg";
 import * as EditFolder from "./components/edit-folder";
 import contextedMessage from "src/framework/component/contexted-message";
 import * as UploadFile from "./components/upload-file";
+import contextedModal from "src/framework/component/contexted-modal";
 
 function BusinessFile(props: StyledWrapComponents) {
   const { className } = props;
@@ -112,6 +118,36 @@ function BusinessFile(props: StyledWrapComponents) {
             <List.Item
               className="item"
               onClick={() => getFolderBy({ pid: item.id })}
+              actions={[
+                <Button
+                  type="text"
+                  onClick={function (event) {
+                    event.stopPropagation();
+                    ref.current?.edit(item).then(reload);
+                  }}
+                >
+                  编辑
+                </Button>,
+                <Button
+                  type="text"
+                  danger
+                  onClick={function (event) {
+                    event.stopPropagation();
+                    contextedModal.modal?.confirm({
+                      title: "删除",
+                      content: `确定删除文件夹 ${item.name}?`,
+                      onOk() {
+                        return deleteFolder({ id: item.id }).then(() => {
+                          contextedMessage.message?.success("成功删除");
+                          reload();
+                        });
+                      },
+                    });
+                  }}
+                >
+                  删除
+                </Button>,
+              ]}
             >
               <List.Item.Meta
                 title={item.name}
@@ -139,6 +175,27 @@ function BusinessFile(props: StyledWrapComponents) {
                     });
                   });
                 }}
+                actions={[
+                  <Button
+                    type="text"
+                    danger
+                    onClick={function (event) {
+                      event.stopPropagation();
+                      contextedModal.modal?.confirm({
+                        title: "删除",
+                        content: `确定删除文件 ${item.name}?`,
+                        onOk() {
+                          return deleteFile({ id: item.id }).then(() => {
+                            contextedMessage.message?.success("成功删除");
+                            reload();
+                          });
+                        },
+                      });
+                    }}
+                  >
+                    删除
+                  </Button>,
+                ]}
               >
                 <List.Item.Meta
                   title={item.name}
@@ -157,6 +214,9 @@ function BusinessFile(props: StyledWrapComponents) {
               <FolderItem
                 onTriggerReload={reload}
                 item={item}
+                onEdit={function () {
+                  ref.current?.edit(item).then(reload);
+                }}
                 onClick={function () {
                   getFolderBy({ pid: item.id });
                 }}
@@ -193,7 +253,7 @@ function BusinessFile(props: StyledWrapComponents) {
           onClick={() => {
             ref.current?.create(folder).then(() => {
               contextedMessage.message?.success("成功新增");
-              getFolderBy({ pid: folder.current_dir?.id || 0 });
+              reload();
             });
           }}
         />
@@ -202,9 +262,11 @@ function BusinessFile(props: StyledWrapComponents) {
             tooltip="上传文件到当前目录"
             icon={<Icon width={18} height={18} icon={UploadSvg} />}
             onClick={() => {
-              uploadRef.current?.upload({
-                file_dir_id: folder.current_dir!.id,
-              }).then(reload);
+              uploadRef.current
+                ?.upload({
+                  file_dir_id: folder.current_dir!.id,
+                })
+                .then(reload);
             }}
           />
         )}

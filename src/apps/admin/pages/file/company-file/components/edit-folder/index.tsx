@@ -11,7 +11,7 @@ import useWather from "src/hooks/use-wather";
 import { postFolder, putFolder } from "src/apps/admin/api/business-file";
 
 type Ref = {
-  edit: (item: FolderListItem) => Promise<void>;
+  edit: (item: Folder) => Promise<void>;
   create: (item: FolderListItem) => Promise<void>;
 };
 
@@ -29,12 +29,14 @@ const EditFolder = forwardRef<Ref>(function (props, ref) {
   const [form] = Form.useForm();
 
   const [item, setItem] = useState<FolderListItem>();
+  const [folder, setFolder] = useState<Folder>();
   const [type, setType] = useState<"新增" | "编辑">("新增");
 
   useImperativeHandle(ref, () => ({
     create(item) {
       return new Promise<void>((resolve, reject) => {
         setItem(item);
+        setFolder(undefined);
         setType("新增");
         open.setTrue();
         form.resetFields();
@@ -43,7 +45,8 @@ const EditFolder = forwardRef<Ref>(function (props, ref) {
     },
     edit(item) {
       return new Promise<void>((resolve, reject) => {
-        setItem(item);
+        setItem(undefined);
+        setFolder(item);
         setType("编辑");
         open.setTrue();
         form.setFieldsValue(item);
@@ -58,8 +61,8 @@ const EditFolder = forwardRef<Ref>(function (props, ref) {
       .then((store) => {
         loading.setTrue();
         if (type === "新增")
-          return postFolder({ ...store, pid: item!.current_dir?.id || 0});
-        return putFolder({ ...store, id: item!.current_dir?.id || 0 });
+          return postFolder({ ...store, pid: item!.current_dir?.id || 0 });
+        return putFolder({ ...store, id: folder!.id });
       })
       .then(() => {
         promiseResolver.current.resolve();

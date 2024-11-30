@@ -84,6 +84,9 @@ export default function () {
             colorBgTextActive: designToken.colorPrimaryBgHover,
           },
           Card: {},
+          Breadcrumb: {
+            lastItemColor: designToken.colorPrimary
+          }
         },
       })}
     >

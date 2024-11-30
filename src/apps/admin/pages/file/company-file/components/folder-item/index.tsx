@@ -14,10 +14,11 @@ function Item(
     {
       item: Folder;
       onTriggerReload: VoidFunction;
+      onEdit: VoidFunction;
     } & React.DelHTMLAttributes<HTMLDivElement>
   >
 ) {
-  const { className, item, onTriggerReload, ...restProps } = props;
+  const { className, item, onTriggerReload, onEdit, ...restProps } = props;
   const theme = useTheme();
 
   const [style, api] = useSpring(() => ({
@@ -44,7 +45,9 @@ function Item(
       placement="bottom"
       content={
         <Space>
-          <Button type="primary">编辑</Button>
+          <Button type="primary" onClick={onEdit}>
+            编辑
+          </Button>
           <Button type="primary" danger onClick={onDelete}>
             删除
           </Button>
