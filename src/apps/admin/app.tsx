@@ -26,7 +26,9 @@ import OrganizationJob from "./pages/organization/job";
 import Page404 from "src/framework/404";
 import FileBussinsefile from "./pages/file/business-file";
 import FileCompanyfile from "./pages/file/company-file";
-import CommonOperationLog from "./pages/common/operation-log"
+import CommonOperationLog from "./pages/common/operation-log";
+import CommonMessage from "./pages/common/message";
+import CommonUser from "./pages/common/user";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -125,6 +127,8 @@ export default function () {
 
 
               <Route path="/common/operation-log" Component={CommonOperationLog} />
+              <Route path="/common/message" Component={CommonMessage} />
+              <Route path="/common/user" Component={CommonUser} />
 
 
 
