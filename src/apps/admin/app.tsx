@@ -29,6 +29,7 @@ import FileCompanyfile from "./pages/file/company-file";
 import CommonOperationLog from "./pages/common/operation-log";
 import CommonMessage from "./pages/common/message";
 import CommonUser from "./pages/common/user";
+import VisualizationArchitecture from "./pages/visualization/architecture";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -88,8 +89,8 @@ export default function () {
           },
           Card: {},
           Breadcrumb: {
-            lastItemColor: designToken.colorPrimary
-          }
+            lastItemColor: designToken.colorPrimary,
+          },
         },
       })}
     >
@@ -103,7 +104,7 @@ export default function () {
             <Routes>
               <Route path="/home" Component={Home} />
               <Route path="/user-info" Component={UserInfo} />
-              
+
               <Route
                 path="/organization/company"
                 Component={OrganizationCompany}
@@ -125,12 +126,17 @@ export default function () {
               <Route path="/file/business-file" Component={FileBussinsefile} />
               <Route path="/file/company-file" Component={FileCompanyfile} />
 
-
-              <Route path="/common/operation-log" Component={CommonOperationLog} />
+              <Route
+                path="/common/operation-log"
+                Component={CommonOperationLog}
+              />
               <Route path="/common/message" Component={CommonMessage} />
               <Route path="/common/user" Component={CommonUser} />
 
-
+              <Route
+                path="/visualization/architecture"
+                Component={VisualizationArchitecture}
+              />
 
               <Route path="*" element={<Page404 />} />
             </Routes>

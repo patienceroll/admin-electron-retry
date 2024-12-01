@@ -25,6 +25,20 @@ export function getDepartmentList(
 }
 
 /**
+ * 部门-选项
+ */
+export function getDepartmentOption(
+  params: ListParam<{
+    company_id?: Company["id"];
+    department_id?: DepartmentListItem["id"];
+  }>
+) {
+  return fetch.GET<DepartmentListItem[]>(fetch.base(`/api/department/list`), {
+    ...params,
+    page: 0,
+  });
+}
+/**
  * 部门-详情
  */
 export function getDepartmentDetail(params: Pick<DepartmentListItem, "id">) {
