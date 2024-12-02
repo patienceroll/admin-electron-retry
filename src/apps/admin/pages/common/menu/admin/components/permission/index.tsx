@@ -20,6 +20,8 @@ import {
 } from "src/hooks/use-search-table";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
+import * as Edit from "../permission-edit"
+
 
 type Ref = {
   show: (item: Menu) => void;
@@ -33,6 +35,8 @@ const Permisson = forwardRef<Ref>(function (props, ref) {
   const [open] = useWather();
   const [option] = useOption(getPermissionsOption);
   const theme = useTheme();
+
+  const edit = Edit.createRef()
 
   const [item, setItem] = useState<Menu>();
 
@@ -110,6 +114,7 @@ const Permisson = forwardRef<Ref>(function (props, ref) {
         columns={column}
         scroll={{ x: tableMeasureColumnWidth(column) }}
       />
+      <Edit.default ref={edit} />
     </Modal>
   );
 });
