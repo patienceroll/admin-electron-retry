@@ -65,14 +65,24 @@ export const editMenuPermission = (data: {
 };
 
 /**
- * 菜单权限-新增
+ * 菜单权限-列表
  */
-export const gettPermissions = (
+export const getPermissions = (
   data: ListParam & {
     menu_id?: Menu["id"];
   }
 ) => {
   return fetch.GET<List<Permission>>(fetch.base("/api/permission/list"), data);
+};
+
+/**
+ * 菜单权限-选项
+ */
+export const getPermissionsOption = (data: { menu_id?: Menu["id"] }) => {
+  return fetch.GET<Permission[]>(fetch.base("/api/permission/list"), {
+    ...data,
+    page: 0,
+  });
 };
 
 /**

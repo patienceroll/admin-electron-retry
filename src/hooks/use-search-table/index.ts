@@ -9,6 +9,22 @@ interface Api<Params, Item> {
   (params: Params): Promise<BaseResponse<List<Item>>>;
 }
 
+export function tableColumn<T>(column: ProColumns<T>[]): ProColumns<T>[] {
+  return column.map((item) =>
+    Object.assign<ProColumns<T>, ProColumns<T>>(
+      {
+        width: 100,
+        align: "center",
+      },
+      item
+    )
+  );
+}
+
+export function tableMeasureColumnWidth<T>(column: ProColumns<T>[]) {
+  return column.reduce((pre, current) => pre + Number(current.width || 0), 0);
+}
+
 export default function <P extends Record<string | number, unknown>, Item>(
   api: Api<P, Item>
 ) {
@@ -104,21 +120,9 @@ export default function <P extends Record<string | number, unknown>, Item>(
   );
 
   const column: (column: ProColumns<Item>[]) => ProColumns<Item>[] =
-    useCallback((column) => {
-      return column.map((item) =>
-        Object.assign<ProColumns<Item>, ProColumns<Item>>(
-          {
-            width: 100,
-            align: "center",
-          },
-          item
-        )
-      );
-    }, []);
+    useCallback(tableColumn, []);
 
-  const measureColumnWidth = useCallback((column: ProColumns<Item>[]) => {
-    return column.reduce((pre, current) => pre + Number(current.width || 0), 0);
-  }, []);
+  const measureColumnWidth = useCallback(tableMeasureColumnWidth, []);
 
   return useMemo(
     () => ({

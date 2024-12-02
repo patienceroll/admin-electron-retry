@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Mousewheel } from "swiper/modules";
@@ -39,7 +39,7 @@ type CommandyMenu = UserMenu & {
   count: number;
 };
 
-const IconMap = {
+export const IconMap = {
   "approval-record": approvalRecordSvg,
   home: HomeSvg,
   client: clientSvg,

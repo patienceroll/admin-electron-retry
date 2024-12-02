@@ -43,6 +43,11 @@ const GlobalStyle = createGlobalStyle`
     scrollbar-color: auto;
     scrollbar-width: auto;
   }
+
+  .ant-table-body {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
 }
 
 
