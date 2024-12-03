@@ -45,7 +45,7 @@ function BusinessFile(props: StyledWrapComponents) {
     <PageWrapper className={className}>
       <Affix offsetTop={theme.padding}>
         <div className="top">
-          <Title style={{flex:1}}>
+          <Title style={{ flex: 1 }}>
             <Breadcrumb
               style={{ lineHeight: "38px" }}
               items={[
@@ -67,7 +67,7 @@ function BusinessFile(props: StyledWrapComponents) {
             />
           </Title>
           <Segmented
-            style={{flexShrink:0}}
+            style={{ flexShrink: 0 }}
             value={listType}
             options={[
               {
@@ -129,7 +129,7 @@ function BusinessFile(props: StyledWrapComponents) {
         )}
 
       {listType === "item" && (
-        <Row gutter={[20, 20]}>
+        <Row gutter={[theme.padding, theme.padding]}>
           {folder.list.map((item) => (
             <Col flex="100px" key={item.id}>
               <FolderItem
@@ -143,7 +143,7 @@ function BusinessFile(props: StyledWrapComponents) {
         </Row>
       )}
       {listType === "item" && folder.current_dir?.file && (
-        <Row gutter={[20, 20]}>
+        <Row gutter={[theme.padding, theme.padding]}>
           {folder.current_dir.file.map((item) => (
             <Col flex="100px" key={item.id}>
               <FileItem

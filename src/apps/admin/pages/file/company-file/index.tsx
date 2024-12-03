@@ -208,7 +208,7 @@ function BusinessFile(props: StyledWrapComponents) {
         )}
 
       {listType === "item" && (
-        <Row gutter={[20, 20]}>
+        <Row gutter={[theme.padding, theme.padding]}>
           {folder.list.map((item) => (
             <Col flex="100px" key={item.id}>
               <FolderItem
@@ -226,7 +226,7 @@ function BusinessFile(props: StyledWrapComponents) {
         </Row>
       )}
       {listType === "item" && folder.current_dir?.file && (
-        <Row gutter={[20, 20]}>
+        <Row gutter={[theme.padding, theme.padding]}>
           {folder.current_dir.file.map((item) => (
             <Col flex="100px" key={item.id}>
               <FileItem
