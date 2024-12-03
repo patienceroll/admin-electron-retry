@@ -16,12 +16,14 @@ import * as Edit from "./components/edit";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 import openWindow from "src/util/open-window";
+import * as Permission from "./components/permission";
 
 const Role = function (props: StyledWrapComponents) {
   const { className } = props;
   const theme = useTheme();
 
   const ref = Edit.createRef();
+  const permission = Permission.createRef();
 
   const table = useSearchTable(getRoleList);
 
@@ -85,7 +87,11 @@ const Role = function (props: StyledWrapComponents) {
                       key="permission"
                       className="icon"
                       icon={Organization}
-                      onClick={() => {}}
+                      onClick={() => {
+                        permission.current?.edit(i).then(() => {
+                          contextedMessage.message?.success("成功保存");
+                        });
+                      }}
                     />,
                     <Icon
                       key="delete"
@@ -160,6 +166,7 @@ const Role = function (props: StyledWrapComponents) {
         />
       </FloatButton.Group>
       <Edit.default ref={ref} />
+      <Permission.default ref={permission} />
     </PageWrapper>
   );
 };

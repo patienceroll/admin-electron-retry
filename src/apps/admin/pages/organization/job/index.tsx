@@ -143,6 +143,19 @@ function Job(props: StyledWrapComponents) {
         </div>
 
         <div className="page">
+        <Pagination
+            {...table.pagination}
+            onChange={(page, pageSize) => {
+              table.onChange(
+                { current: page, pageSize },
+                {},
+                {},
+                { action: "paginate", currentDataSource: [] }
+              );
+            }}
+          />
+
+
           <Button
             type="primary"
             icon={
@@ -159,17 +172,7 @@ function Job(props: StyledWrapComponents) {
           >
             新建职位
           </Button>
-          <Pagination
-            {...table.pagination}
-            onChange={(page, pageSize) => {
-              table.onChange(
-                { current: page, pageSize },
-                {},
-                {},
-                { action: "paginate", currentDataSource: [] }
-              );
-            }}
-          />
+    
         </div>
       </div>
 
