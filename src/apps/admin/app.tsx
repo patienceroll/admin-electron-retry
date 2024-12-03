@@ -92,6 +92,9 @@ export default function () {
           Breadcrumb: {
             lastItemColor: designToken.colorPrimary,
           },
+          InputNumber:{
+            controlWidth: 200
+          }
         },
       })}
     >

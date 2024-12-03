@@ -6,7 +6,11 @@ export const getMenuTree = (params: {
   /** 1:手机 2:PC */
   type: 1 | 2;
 }) => {
-  return fetch.GET<Menu[]>(fetch.base("/api/menu/tree"), params);
+  return fetch.GET<Menu[]>(fetch.base("/api/menu/tree"), params, {
+    headers: {
+      "menu-slug": "menu-management",
+    },
+  });
 };
 
 /** 菜单-当前用户树形图 */

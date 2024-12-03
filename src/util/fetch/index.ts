@@ -48,11 +48,7 @@ function requestProgramResponse<T>(...argument: Parameters<typeof request>) {
 
   const mergeInit: FetchInit = {
     ...init,
-    headers: Object.assign(
-      getDefaultHeader(),
-      { "Menu-Slug": "" },
-      init.headers || {}
-    ),
+    headers: Object.assign(getDefaultHeader(), init.headers || {}),
   };
 
   /** 当请求传递的是 FormData 的时候,删除 Content-Type  */

@@ -5,6 +5,7 @@ import { Segmented } from "antd";
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
 import Admin from "./admin";
+import App from "./app"
 
 function Menu(props: StyledWrapComponents) {
   const { className } = props;
@@ -32,6 +33,7 @@ function Menu(props: StyledWrapComponents) {
         </div>
       </div>
       {type === "admin" && <Admin />}
+      {type === "app" && <App />}
     </PageWrapper>
   );
 }
