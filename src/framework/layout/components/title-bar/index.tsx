@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Segmented } from "antd";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel, FreeMode } from "swiper/modules";
 
 import Icon from "src/framework/component/icon";
 
@@ -11,8 +12,11 @@ import maximizeSvg from "src/assets/svg/maximize.svg";
 import unmaximizeSvg from "src/assets/svg/unmaximize.svg";
 import closeSvg from "src/assets/svg/close.svg";
 
+import "swiper/css";
+import "swiper/css/scrollbar";
+
 function Component(props: StyledWrapComponents) {
-  const { colorTextBase, colorBgBase } = useTheme();
+  const theme = useTheme();
 
   const [isMaximize, setIsMaximize] = useState(() =>
     window.preload.isMaximize()
@@ -57,43 +61,49 @@ function Component(props: StyledWrapComponents) {
 
         <div className="content">
           <div className="tabs">
-            <Segmented
-              onChange={(path) => {
-                const item = routes.routes.find((tab) => tab.path === path);
-                if (item) {
-                  window.preload.switchPage(item.path);
-                }
-              }}
-              value={routes.current}
-              options={routes.routes.map((item) => ({
-                value: item.path,
-                label: (
-                  <div style={{ display: "flex" }}>
-                    <span>{item.name}</span>
-                    {routes.routes.length !== 1 && (
-                      <>
-                        &nbsp;
-                        <Icon
-                          className="close-icon"
-                          icon={closeSvg}
-                          width={14}
-                          height={14}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            window.preload.close(item.path);
-                          }}
-                          fill={
-                            routes.current === item.path
-                              ? colorBgBase
-                              : colorTextBase
-                          }
-                        />
-                      </>
-                    )}
+            <Swiper
+              className="swiper"
+              slidesPerView={"auto"}
+              direction="horizontal"
+              modules={[Mousewheel, FreeMode]}
+              freeMode
+              mousewheel={{ thresholdDelta: 4, sensitivity: 300 }}
+            >
+              {routes.routes.map((item) => (
+                <SwiperSlide
+                  key={item.path}
+                  className={`tab-item ${
+                    item.path === routes.current ? "tab-item-active" : ""
+                  }`}
+                  onClick={function () {
+                    const instance = routes.routes.find(
+                      (tab) => tab.path === item?.path
+                    );
+                    if (instance) {
+                      window.preload.switchPage(instance.path);
+                    }
+                  }}
+                >
+                  <div>{item.name}</div>
+                  <div className="close-icon-wrapper">
+                    <Icon
+                      icon={closeSvg}
+                      width={theme.fontSize - 2}
+                      height={theme.fontSize - 2}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.preload.close(item.path);
+                      }}
+                      fill={
+                        routes.current === item.path
+                          ? theme.colorBgBase
+                          : theme.colorTextBase
+                      }
+                    />
                   </div>
-                ),
-              }))}
-            />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
 
           <div className="reduce" />
@@ -180,28 +190,78 @@ export default styled(Component)`
   }
 
   .tabs {
-    height: 100%;
-    flex-shrink: 0;
-    cursor: default;
+    flex-shrink: 1;
+    flex-grow: 0;
+    flex-basis: auto;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -5px;
+      right: -5px;
+      box-shadow: inset -5px 0 10px -10px
+          ${(props) => props.theme.colorTextBase},
+        inset 5px 0 10px -10px ${(props) => props.theme.colorTextBase};
+      z-index: 2; /* 确保阴影在最上层 */
+      pointer-events: none;
+    }
+  }
+
+  .tab-item {
     display: flex;
-    align-items: center;
+    width: fit-content;
+    padding-left: ${(props) => props.theme.padding / 2}px;
+    line-height: 30px;
+    color: ${(props) => props.theme.colorTextBase};
+    background-color: ${(props) => props.theme.colorPrimaryBg};
+    cursor: pointer;
+    font-size: ${(props) => props.theme.fontSize};
+
+    &:hover {
+      background-color: ${(props) => props.theme.colorPrimaryBgHover};
+    }
+
+    .close-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-inline: ${(props) => props.theme.padding - 7}px;
+      &:hover {
+        background-color: ${(props) => props.theme.colorBgTextActive};
+      }
+    }
+  }
+
+  .tab-item-active {
+    cursor: default;
+    background-color: ${(props) => props.theme.colorPrimary};
+    font-weight: ${(props) => props.theme.fontWeightStrong};
+    color: ${(props) => props.theme.colorBgBase};
+
+    &:hover {
+      background-color: ${(props) => props.theme.colorPrimary};
+    }
+
+    .close-icon-wrapper {
+      cursor: pointer;
+      &:hover {
+        background-color: ${(props) => props.theme.colorPrimaryActive};
+      }
+    }
   }
 
   .reduce {
     flex: 1;
     -webkit-app-region: drag;
+    min-width: 200px;
   }
 
   .options {
     flex-shrink: 0;
     display: flex;
-  }
-
-  .close-icon {
-    margin-top: 8px;
-    &:hover {
-      background-color: ${(props) => props.theme.colorBgTextActive};
-    }
   }
 
   .option {
