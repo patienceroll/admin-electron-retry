@@ -83,7 +83,7 @@ export default class Framework {
 
     const { width, height } = this.baseWindow.getContentBounds();
     this.frameworkView.setBounds({ width, height, x: 0, y: 0 });
-     this.frameworkView.webContents.openDevTools({ mode: "undocked" });
+    //  this.frameworkView.webContents.openDevTools({ mode: "undocked" });
   }
 
   private createMenuView() {
@@ -117,7 +117,7 @@ export default class Framework {
     view.view.setBounds(this.getContentSize());
     this.baseWindow.contentView.addChildView(view.view);
     view.view.setBackgroundColor(this.theme.backgroundColor);
-    // view.view.webContents.openDevTools({ mode: "right" });
+    view.view.webContents.openDevTools({ mode: "right" });
   }
 
   close(path: string) {

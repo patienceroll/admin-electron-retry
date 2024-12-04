@@ -35,7 +35,6 @@ export default class Views {
           createWindow(options) {
             const window = new BrowserWindow(options);
             window.setMenu(null);
-            // window.webContents.openDevTools()
             return window.webContents;
           },
           overrideBrowserWindowOptions: {
@@ -46,7 +45,7 @@ export default class Views {
             title: options.frameName,
             autoHideMenuBar: true,
             titleBarStyle: "default",
-            backgroundColor: nativeTheme.shouldUseDarkColors ? "#000" : '#fff',
+            backgroundColor: nativeTheme.shouldUseDarkColors ? "#000" : "#fff",
             // alwaysOnTop: true,
             center: true,
             webPreferences: {

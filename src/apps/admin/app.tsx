@@ -32,6 +32,7 @@ import CommonUser from "./pages/common/user";
 import CommonRole from "./pages/common/role";
 import CommonRoleEdit from "./pages/common/role/detail";
 import CommonMenu from "./pages/common/menu";
+import CommonMenuStaff from "./pages/common/menu-staff";
 import VisualizationArchitecture from "./pages/visualization/architecture";
 
 import contextedNotify from "src/framework/component/contexted-notify";
@@ -139,6 +140,7 @@ export default function () {
               <Route path="/common/message" Component={CommonMessage} />
               <Route path="/common/user" Component={CommonUser} />
               <Route path="/system/menu" Component={CommonMenu} />
+              <Route path="/common/menu-staff" Component={CommonMenuStaff} />
               <Route path="/system/role" Component={CommonRole} />
               <Route path="/system/role/detail" Component={CommonRoleEdit} />
 

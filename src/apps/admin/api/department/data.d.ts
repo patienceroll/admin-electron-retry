@@ -1,11 +1,11 @@
 type DepartmentListItemStatus = 0 | 1 | 2;
 
-
 /** 部门元素 */
-type Department =    {
+type Department = {
   id: number;
   name: string;
-}
+  department?: DepartmentListItem;
+};
 
 /** 部门列表项 */
 type DepartmentListItem = {

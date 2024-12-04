@@ -13,6 +13,6 @@ type Menu = {
   status: 1 | 2;
   permission: Permission[];
   child?: Menu[];
-  menu_staff?: Staff[];
+  menu_staff?: { staff: Staff; id: Staff["id"] }[];
   menu_department?: Department[];
 };
