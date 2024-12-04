@@ -85,15 +85,17 @@ function Component(props: StyledWrapComponents) {
                   }}
                 >
                   <div>{item.name}</div>
-                  <div className="close-icon-wrapper">
+                  <div
+                    className="close-icon-wrapper"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.preload.close(item.path);
+                    }}
+                  >
                     <Icon
                       icon={closeSvg}
                       width={theme.fontSize - 2}
                       height={theme.fontSize - 2}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.preload.close(item.path);
-                      }}
                       fill={
                         routes.current === item.path
                           ? theme.colorBgBase
