@@ -1,4 +1,4 @@
-import { Checkbox, Col, Modal, Row, Space } from "antd";
+import { Button, Checkbox, Col, Modal, Row, Space, Tag } from "antd";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -9,12 +9,14 @@ import styled from "styled-components";
 import { ProTable } from "@ant-design/pro-components";
 
 import useWather from "src/hooks/use-wather";
-import { getRoleMenu } from "src/apps/admin/api/role";
+import { getRoleMenu, postRolePermissions } from "src/apps/admin/api/role";
 import {
   tableColumn,
   tableMeasureColumnWidth,
 } from "src/hooks/use-search-table";
 import useUpdate from "src/hooks/use-update";
+import contextedMessage from "src/framework/component/contexted-message";
+import * as PermissionDataEdit from "../permission-data-edit";
 
 type Data = Omit<RoleMenu, "child"> & { children?: Data[] };
 
@@ -26,7 +28,7 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-const Permission = forwardRef<Ref>(function (props, ref) {
+const Permission = forwardRef<Ref, StyledWrapComponents>(function (props, ref) {
   const [open] = useWather();
   const [getting] = useWather();
   const [loading] = useWather();
@@ -35,6 +37,8 @@ const Permission = forwardRef<Ref>(function (props, ref) {
     resolve: () => void;
     reject: (reason?: unknown) => void;
   }>({ resolve() {}, reject() {} });
+
+  const permissionDataEdit = PermissionDataEdit.createRef();
 
   const store = useRef(
     new Map<
@@ -105,34 +109,36 @@ const Permission = forwardRef<Ref>(function (props, ref) {
       title: "数据权限",
       dataIndex: "data_permission",
       width: 150,
-      render(_, row, ...arg) {
-        return <Space></Space>;
-        // return (
-        //   <>
-        //     {row.data_permission.map((i) => (
-        //       <Tag key={i.id}>{i.department_name}</Tag>
-        //     ))}
-        //     {action<RoleMenu>([
-        //       {
-        //         text: "修改",
-        //         show: (entity) => entity.level !== 1,
-        //         onClick(params) {
-        //           if (config.current.item) {
-        //             dataP.current
-        //               ?.edit({
-        //                 role: config.current.item,
-        //                 roleMenu: params.entity,
-        //               })
-        //               .then(() => {
-        //                 message.success("成功修改");
-        //                 getPermission();
-        //               });
-        //           }
-        //         },
-        //       },
-        //     ])(_, row, ...arg)}
-        //   </>
-        // );
+      render(_, row) {
+        return (
+          <div className="permission">
+            <div className="tag">
+              {row.data_permission.map((i) => (
+                <Tag key={i.id}>{i.department_name}</Tag>
+              ))}
+            </div>
+            {row.level !== 1 && (
+              <div className="button">
+                <Button
+                  type="text"
+                  onClick={function () {
+                    permissionDataEdit.current
+                      ?.edit({
+                        role: item!,
+                        roleMenu: row,
+                      })
+                      .then(() => {
+                        contextedMessage.message?.success("成功修改");
+                        getPermission({ role_id: item!.id });
+                      });
+                  }}
+                >
+                  修改
+                </Button>
+              </div>
+            )}
+          </div>
+        );
       },
     },
     {
@@ -171,14 +177,34 @@ const Permission = forwardRef<Ref>(function (props, ref) {
     },
   ]);
 
+  function submit() {
+    if (item) {
+      const ids = Array.from(store.current.values()).flat();
+      loading.setTrue();
+      postRolePermissions({
+        role_id: item.id,
+        permission_ids: ids,
+      })
+        .then(() => {
+          promiseResolver.current.resolve();
+          open.setFalse();
+          loading.setFalse();
+          contextedMessage.message?.success("成功保存");
+        })
+        .catch(loading.setFalse);
+    }
+  }
+
   return (
     <Modal
+      className={props.className}
       title={`${item?.name}权限`}
       open={open.whether}
       maskClosable={!loading.whether}
       closeIcon={loading.whether}
       onCancel={open.setFalse}
       width={700}
+      onOk={submit}
     >
       <ProTable
         search={false}
@@ -190,8 +216,23 @@ const Permission = forwardRef<Ref>(function (props, ref) {
         options={false}
         columns={column}
       />
+      <PermissionDataEdit.default ref={permissionDataEdit} />
     </Modal>
   );
 });
 
-export default styled(Permission)``;
+export default styled(Permission)`
+  .permission {
+    display: flex;
+  }
+
+  .tag {
+    flex: 1;
+  }
+
+  .button {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+`;
