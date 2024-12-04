@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Tag } from "antd";
+import { Button, Space, Tag } from "antd";
 import { ProTable } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -66,6 +66,15 @@ const MenuStaff = function () {
       title: "操作",
       dataIndex: "id",
       width: 250,
+      render(_, row) {
+        if (row.level === 1) return null;
+        return (
+          <Space>
+            <Button type="text">设置组织</Button>
+            <Button type="text">设置人员</Button>
+          </Space>
+        );
+      },
       //   render: action<Menu>([
       //     {
       //       text: "设置组织",
