@@ -14,5 +14,10 @@ type Menu = {
   permission: Permission[];
   child?: Menu[];
   menu_staff?: { staff: Staff; id: Staff["id"] }[];
-  menu_department?: Department[];
+  menu_department?: {
+    department: Department;
+    department_id: Department["id"];
+    id: number;
+    menu_id: Menu["id"];
+  }[];
 };

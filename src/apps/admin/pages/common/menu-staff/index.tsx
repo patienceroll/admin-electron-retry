@@ -10,11 +10,14 @@ import {
   tableColumn,
   tableMeasureColumnWidth,
 } from "src/hooks/use-search-table";
+import * as Department from "./components/department";
+import contextedMessage from "src/framework/component/contexted-message";
 
 type Data = Omit<Menu, "child"> & { children?: Data[] };
 
 const MenuStaff = function () {
   const [loading] = useWather();
+  const departmentRef = Department.createRef();
 
   const [dataSource, setDataSource] = useState<Data[]>([]);
 
@@ -70,25 +73,21 @@ const MenuStaff = function () {
         if (row.level === 1) return null;
         return (
           <Space>
-            <Button type="text">设置组织</Button>
+            <Button
+              type="text"
+              onClick={function () {
+                departmentRef.current?.edit(row).then(() => {
+                  contextedMessage.message?.success("成功设置");
+                  getData();
+                });
+              }}
+            >
+              设置组织
+            </Button>
             <Button type="text">设置人员</Button>
           </Space>
         );
       },
-      //   render: action<Menu>([
-      //     {
-      //       text: "设置组织",
-      //       color: "blue",
-      //       show(entity) {
-      //         return entity.level !== 1;
-      //       },
-      //       onClick(entity) {
-      //         departmentScope.current?.edit(entity.entity).then(() => {
-      //           message.success("设置成功");
-      //           load();
-      //         });
-      //       },
-      //     },
       //     {
       //       text: "设置人员",
       //       color: "blue",
@@ -118,6 +117,7 @@ const MenuStaff = function () {
         columns={column}
         scroll={{ x: tableMeasureColumnWidth(column) }}
       />
+      <Department.default ref={departmentRef} />
     </PageWrapper>
   );
 };
