@@ -2,7 +2,7 @@ import { useRef } from "react";
 import useUpdate from "../use-update";
 
 export default function <T, P>(
-  Api: (params: OptionParams<P>) => Promise<BaseResponse<T[]>>,
+  Api: (params: OptionParams<P>) => Promise<BaseResponse<T[]>>
 ) {
   const [update] = useUpdate();
 

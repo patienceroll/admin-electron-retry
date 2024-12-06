@@ -12,12 +12,14 @@ import {
 } from "src/hooks/use-search-table";
 import * as Department from "./components/department";
 import contextedMessage from "src/framework/component/contexted-message";
+import * as Staff from "./components/staff";
 
 type Data = Omit<Menu, "child"> & { children?: Data[] };
 
 const MenuStaff = function () {
   const [loading] = useWather();
   const departmentRef = Department.createRef();
+  const staffRef = Staff.createRef();
 
   const [dataSource, setDataSource] = useState<Data[]>([]);
 
@@ -84,24 +86,20 @@ const MenuStaff = function () {
             >
               设置组织
             </Button>
-            <Button type="text">设置人员</Button>
+            <Button
+              type="text"
+              onClick={function () {
+                staffRef.current?.edit(row).then(() => {
+                  contextedMessage.message?.success("成功设置");
+                  getData();
+                });
+              }}
+            >
+              设置人员
+            </Button>
           </Space>
         );
       },
-      //     {
-      //       text: "设置人员",
-      //       color: "blue",
-      //       show(entity) {
-      //         return entity.level !== 1;
-      //       },
-      //       onClick(entity) {
-      //         staffScope.current?.edit(entity.entity).then(() => {
-      //           message.success("设置成功");
-      //           load();
-      //         });
-      //       },
-      //     },
-      //   ]),
     },
   ]);
 
@@ -118,6 +116,7 @@ const MenuStaff = function () {
         scroll={{ x: tableMeasureColumnWidth(column) }}
       />
       <Department.default ref={departmentRef} />
+      <Staff.default ref={staffRef} />
     </PageWrapper>
   );
 };

@@ -63,6 +63,12 @@ export function postStaffRole(params: {
   return fetch.POST(fetch.base(`/api/staff/role`), params);
 }
 
+/** 员工 树形选项 */
+export function staffTreeOptions() {
+  return fetch.GET<StaffTreeOption[]>(fetch.base(`/api/staff/mail`));
+}
+
+
 
 
 /**

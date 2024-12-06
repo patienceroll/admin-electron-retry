@@ -67,10 +67,10 @@ type StaffListItem = {
 
 type StaffDetail = StaffListItem & {
   file: Record<
-  BusinessParams["identify"],
-  undefined | (Omit<FileResponse, "id"> & { file_id: number })[]
->;
-}
+    BusinessParams["identify"],
+    undefined | (Omit<FileResponse, "id"> & { file_id: number })[]
+  >;
+};
 
 /** 员工紧急联系人 */
 type StaffContact = {
@@ -91,4 +91,15 @@ type StaffContact = {
   relation: string;
   work_unit: string;
   phone: string;
+};
+
+type StaffTreeOption = {
+  id: number;
+  /** 部门 */
+  name: string;
+  pid: number;
+  remark: string;
+  child?: StaffTreeOption[];
+  /** 员工 */
+  employee?: Staff[];
 };
