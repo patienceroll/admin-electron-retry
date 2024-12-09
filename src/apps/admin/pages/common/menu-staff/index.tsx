@@ -53,6 +53,7 @@ const MenuStaff = function () {
       title: "组织",
 
       render: (_, entity) => {
+        if (entity.level === 1) return '-';
         return entity.menu_department?.map((department) => (
           <Tag key={department.id}>{department.department?.name}</Tag>
         ));
@@ -62,6 +63,7 @@ const MenuStaff = function () {
       title: "人员",
 
       render: (_, entity) => {
+        if (entity.level === 1) return '-';
         return entity.menu_staff?.map((staff) => (
           <Tag key={staff.id}>{staff.staff?.name}</Tag>
         ));
@@ -72,7 +74,7 @@ const MenuStaff = function () {
       dataIndex: "id",
       width: 250,
       render(_, row) {
-        if (row.level === 1) return null;
+        if (row.level === 1) return '-';
         return (
           <Space>
             <Button

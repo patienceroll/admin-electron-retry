@@ -38,20 +38,17 @@ function Component(props: StyledWrapComponents) {
   return (
     <div className={props.className}>
       <div className="bar">
-        <div className="menu-wrapper">
-          <Icon
-            className="menu"
-            icon={menuSvg}
-            width={20}
-            height={20}
-            onClick={() => {
-              if (window.preload.isMenuShowed()) {
-                window.preload.hideMenu();
-              } else {
-                window.preload.showMenu();
-              }
-            }}
-          />
+        <div
+          className="menu-wrapper"
+          onClick={() => {
+            if (window.preload.isMenuShowed()) {
+              window.preload.hideMenu();
+            } else {
+              window.preload.showMenu();
+            }
+          }}
+        >
+          <Icon className="menu" icon={menuSvg} width={20} height={20} />
         </div>
         <div className="title">
           <img src={logo} />
