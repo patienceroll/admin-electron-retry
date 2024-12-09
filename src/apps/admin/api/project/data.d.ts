@@ -1,5 +1,75 @@
+/** 项目状态
+ * 0 草稿 1待签约 2履约中 3已完结 4已中止 5已放弃 */
+type ProjectStatus = 0 | 1 | 2 | 3 | 4 | 5;
+
 type Project = {
   id: number;
   name: string;
   short_name: string;
+};
+
+type ProjectListItem = {
+  trade: string;
+  file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
+  id: number;
+  company_id: number;
+  department_id: number;
+  name: string;
+  code: string;
+  status: ProjectStatus;
+  created_id: number;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
+  investment_amount: string;
+  estimated_amount: string;
+  capital_source: string;
+  staff: Staff;
+  btn_power: BtnPower;
+  created_user: CreateUser;
+  company: Company;
+  project_status: string;
+  department: Department[];
+  category: string;
+  client: Client | null;
+  build_content: string;
+  staff_id: number;
+  relation: string;
+  work_unit: string;
+  phone: string;
+  type: number;
+  table: string;
+  table_id: number;
+  company_name: string;
+  company_address: string;
+  linkman: string;
+  bank_name: string;
+  bank_address: string;
+  tax_code: string;
+  hang_time: string;
+  bid_open_time: string;
+  purchase_date: string;
+  win_bid_amount: string;
+  is_importance: number;
+  is_abandon: number;
+  is_approve: 0 | 1;
+  abandon_time: string;
+  abandon_remark: string;
+  remark: string;
+  account: string;
+  type_show: string;
+  project_id: number;
+  short_name: string;
+  nature: string;
+  province: string;
+  city: string;
+  county: string;
+  address: string;
+  longitude: string;
+  latitude: string;
+  is_sign: number;
+  is_sign_show: string;
+  status_show: string;
+  project: Project;
+  name_show: string;
 };

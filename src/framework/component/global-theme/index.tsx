@@ -48,6 +48,14 @@ const GlobalStyle = createGlobalStyle`
     scrollbar-color: auto;
     scrollbar-width: auto;
   }
+
+  .ant-pro-table-list-toolbar-container {
+    padding-block: ${(props) => props.theme.padding - 4}px;
+  }
+}
+
+.ant-pro-query-filter-row {
+  row-gap: ${(props) => props.theme.padding}px;
 }
 
 

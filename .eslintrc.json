@@ -31,6 +31,7 @@
     "@typescript-eslint/no-this-alias": "warn",
     "@typescript-eslint/ban-types": "off",
     "no-inner-declarations": "warn",
-    "@typescript-eslint/no-empty-interface": "off"
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Affix, Button, Card, Space } from "antd";
+import { Affix, Button, Card, FloatButton, Space } from "antd";
 import {
   ProFormSelect,
   ProFormText,
@@ -21,6 +21,8 @@ import openWindow from "src/util/open-window";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 import EditPermission, { createRef } from "./components/edit-permission";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
 
 function Staff() {
   const table = useSearchTable(getStaffList);
@@ -97,7 +99,7 @@ function Staff() {
     {
       title: "头像",
       valueType: "image",
-      renderText: (_,row) => row.avatar_path
+      renderText: (_, row) => row.avatar_path,
     },
     {
       title: "状态",
@@ -232,33 +234,30 @@ function Staff() {
         dataSource={table.dataSource}
         pagination={table.pagination}
         onChange={table.onChange}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            // hidden={!menu.getPermission()}
-            key={1}
-            onClick={() => {
-              const window = openWindow.openCurrentAppWindow(
-                "/organization/staff/create",
-                "新建员工"
-              );
-              function listener(event: MessageEvent<"success">) {
-                if (event.data === "success") {
-                  table.reload();
-                  contextedMessage.message?.success("新建成功");
-                }
-              }
-              if (window) {
-                window.addEventListener("message", listener);
-              }
-            }}
-          >
-            新增部门
-          </Button>,
-        ]}
         columns={column}
         scroll={{ x: table.measureColumnWidth(column) }}
       />
+      <FloatButton.Group shape="square">
+        <FloatButton
+          tooltip="新建员工"
+          icon={<Icon width={18} height={18} icon={AddSvg} />}
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              "/organization/staff/create",
+              "新建员工"
+            );
+            function listener(event: MessageEvent<"success">) {
+              if (event.data === "success") {
+                table.reload();
+                contextedMessage.message?.success("新建成功");
+              }
+            }
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        />
+      </FloatButton.Group>
       <EditPermission ref={permissionRef} />
     </PageWrapper>
   );

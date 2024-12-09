@@ -34,6 +34,7 @@ import CommonRoleEdit from "./pages/common/role/detail";
 import CommonMenu from "./pages/common/menu";
 import CommonMenuStaff from "./pages/common/menu-staff";
 import VisualizationArchitecture from "./pages/visualization/architecture";
+import Client from "./pages/client/client";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -77,6 +78,7 @@ export default function () {
     return window.preload.onThemeChange(setThemeBase);
   }, []);
 
+
   return (
     <ConfigProvider
       locale={locale}
@@ -91,7 +93,10 @@ export default function () {
             textHoverBg: designToken.colorPrimaryBg,
             colorBgTextActive: designToken.colorPrimaryBgHover,
           },
-          Card: {},
+          Card: {
+            padding: designToken.padding,
+            paddingLG: designToken.padding
+          },
           Breadcrumb: {
             lastItemColor: designToken.colorPrimary,
           },
@@ -148,6 +153,8 @@ export default function () {
                 path="/visualization/architecture"
                 Component={VisualizationArchitecture}
               />
+
+              <Route path="/client/client" Component={Client} />
 
               <Route path="*" element={<Page404 />} />
             </Routes>

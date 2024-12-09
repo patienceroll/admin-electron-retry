@@ -6,7 +6,7 @@ import {
 } from "@ant-design/pro-components";
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Affix, Button, Card, Space } from "antd";
+import { Affix, Button, Card, FloatButton, Space } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
@@ -18,6 +18,9 @@ import {
 } from "src/apps/admin/api/department";
 import Edit, { createRef } from "./components/edit";
 import contextedModal from "src/framework/component/contexted-modal";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import contextedMessage from "src/framework/component/contexted-message";
 
 function Department() {
   const table = useSearchTable(getDepartmentList);
@@ -122,7 +125,7 @@ function Department() {
               fieldProps={{
                 treeData: deparmentTree,
                 showSearch: true,
-                treeNodeFilterProp:'name',
+                treeNodeFilterProp: "name",
                 fieldNames: {
                   children: "child",
                   label: "name",
@@ -143,21 +146,23 @@ function Department() {
         dataSource={table.dataSource}
         pagination={table.pagination}
         onChange={table.onChange}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            // hidden={!menu.getPermission()}
-            key={1}
-            onClick={() => {
-              ref.current?.create().then(table.reload);
-            }}
-          >
-            新增部门
-          </Button>,
-        ]}
         columns={column}
         scroll={{ x: table.measureColumnWidth(column) }}
       />
+
+      <FloatButton.Group shape="square">
+        <FloatButton
+          tooltip="新增部门"
+          icon={<Icon width={18} height={18} icon={AddSvg} />}
+          onClick={() => {
+            ref.current?.create().then(() => {
+              contextedMessage.message?.success("新增成功");
+              table.reload();
+            });
+          }}
+        />
+      </FloatButton.Group>
+
       <Edit ref={ref} />
     </PageWrapper>
   );
