@@ -27,7 +27,16 @@ function Client() {
       fixed: "left",
       width: 200,
       render: (_, record) => (
-        <Typography.Link onClick={() => {}}>{record.name}</Typography.Link>
+        <Typography.Link
+          onClick={() => {
+            openWindow.openCurrentAppWindow(
+              `/client/client/detail?id=${record.id}`,
+              "客户 - " + record.name_show
+            );
+          }}
+        >
+          {record.name}
+        </Typography.Link>
       ),
     },
     {
