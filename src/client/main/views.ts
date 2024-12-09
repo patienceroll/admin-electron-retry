@@ -1,5 +1,6 @@
 import { BrowserWindow, nativeTheme, WebContentsView } from "electron";
 import env from "src/client/env";
+import devTool from "../env/dev-tool";
 
 export default class Views {
   value: Map<ViewsValue["path"], ViewsValue> = new Map();
@@ -35,6 +36,9 @@ export default class Views {
           createWindow(options) {
             const window = new BrowserWindow(options);
             window.setMenu(null);
+            if (devTool.open) {
+              window.webContents.openDevTools();
+            }
             return window.webContents;
           },
           overrideBrowserWindowOptions: {

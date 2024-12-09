@@ -11,6 +11,7 @@ import filesMain from "src/client/channel/files/main";
 import env from "src/client/env";
 import Views from "src/client/main/views";
 import UserLocal from "../local/user-local";
+import devTool from "../env/dev-tool";
 
 export default class Framework {
   /** 基础窗口 */
@@ -70,7 +71,9 @@ export default class Framework {
     this.loginWindow.webContents.loadURL(
       `${env.FRAMEWORK_WEBPACK_ENTRY}#/login`
     );
-    // this.loginWindow.webContents.openDevTools({mode:'undocked'})
+    if (devTool.login) {
+      this.loginWindow.webContents.openDevTools({ mode: "undocked" });
+    }
   }
 
   private createFramework() {
@@ -83,7 +86,9 @@ export default class Framework {
 
     const { width, height } = this.baseWindow.getContentBounds();
     this.frameworkView.setBounds({ width, height, x: 0, y: 0 });
-    //  this.frameworkView.webContents.openDevTools({ mode: "undocked" });
+    if (devTool.framework) {
+      this.frameworkView.webContents.openDevTools({ mode: "undocked" });
+    }
   }
 
   private createMenuView() {
@@ -95,7 +100,9 @@ export default class Framework {
     this.menuView.setBackgroundColor(this.theme.backgroundColor);
     this.menuView.setBounds(this.getContentSize());
     this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}#/menu`);
-    // this.menuView.webContents.openDevTools();
+    if (devTool.menu) {
+      this.menuView.webContents.openDevTools();
+    }
   }
 
   /** 注册channel事件 */
@@ -117,7 +124,9 @@ export default class Framework {
     view.view.setBounds(this.getContentSize());
     this.baseWindow.contentView.addChildView(view.view);
     view.view.setBackgroundColor(this.theme.backgroundColor);
-    view.view.webContents.openDevTools({ mode: "right" });
+    if (devTool.page) {
+      view.view.webContents.openDevTools({ mode: "right" });
+    }
   }
 
   close(path: string) {
@@ -135,7 +144,6 @@ export default class Framework {
     this.baseWindow.contentView.addChildView(this.frameworkView);
     this.baseWindow.show();
     this.open("/home", "首页");
-    // this.frameworkView.webContents.openDevTools({ mode: "undocked" });
   }
 
   /** 获取content区域的大小和位置 */
@@ -150,7 +158,6 @@ export default class Framework {
       this.createMenuView();
     }
     this.baseWindow.contentView.addChildView(this.menuView!);
-    // this.menuView!.webContents.openDevTools({ mode: "undocked" });
   }
 
   /** 隐藏菜单窗口 */
