@@ -1,4 +1,7 @@
+/// <reference types="@amap/amap-jsapi-types" />
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 declare module "*.png" {
   const value: string;
   export default value;
@@ -14,12 +17,41 @@ declare module "*.svg" {
   export default content;
 }
 
+declare namespace AMap {
+  class PlaceSearch {
+    constructor(options?: {
+      /** 城市 */
+      city?: string;
+      /** 数据类别 */
+      type?: string;
+      /** 每页结果数,默认10 */
+      pageSize?: number;
+      /** 请求页码，默认1 */
+      pageIndex?: number;
+      /** 返回信息详略，默认为base（基本信息） */
+      extensions?: "base";
+    });
+
+    search: (
+      keyword: string,
+      callback: (
+        status: AMap.Geocoder.SearchStatus,
+        result: string | Record<string, any> | 0,
+      ) => void,
+    ) => void;
+  }
+}
+
 interface Window {
+  _AMapSecurityConfig: {
+    securityJsCode: string;
+  };
   preload: LocalPreload &
     ThemePreload &
     LoginPreload &
     RoutePreload &
-    WindowPreload & FilesPreload;
+    WindowPreload &
+    FilesPreload;
 }
 
 type DisposeFunction = VoidFunction;
@@ -47,11 +79,10 @@ type OptionParams<T> = {
 } & T;
 
 type EnumValue<Value> = {
-  value: Value
-  color: React.CSSProperties['color'];
+  value: Value;
+  color: React.CSSProperties["color"];
   text: string;
 };
-
 
 /** 权限 1 表示有权限 */
 type BtnPower = Partial<{

@@ -18,6 +18,7 @@
     "styled-components": "^5"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@ant-design/pro-components": "^2.8.2",
     "@react-spring/web": "^9.7.5",
     "antd": "^5.21.0",
@@ -33,6 +34,7 @@
     "swiper": "^11.1.14"
   },
   "devDependencies": {
+    "@amap/amap-jsapi-types": "^0.0.15",
     "@electron-forge/cli": "^7.5.0",
     "@electron-forge/maker-deb": "^7.5.0",
     "@electron-forge/maker-rpm": "^7.5.0",
@@ -43,6 +45,7 @@
     "@electron-forge/plugin-webpack": "^7.5.0",
     "@electron/fuses": "^1.8.0",
     "@svgr/webpack": "^8.1.0",
+    "@types/amap-js-api-geocoder": "^1.4.4",
     "@types/chroma-js": "^2.4.4",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",

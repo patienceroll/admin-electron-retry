@@ -42,7 +42,7 @@ function createWindow() {
             styleSrc: ["'self'", "'unsafe-inline'"],
             scriptSrc: app.isPackaged
               ? ["'self'"]
-              : ["'self'", "'unsafe-eval'"],
+              : ["'self'", "'unsafe-eval'", "*://*.amap.com"],
           }),
         ],
         // "Content-Security-Policy": [

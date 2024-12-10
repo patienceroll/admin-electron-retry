@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@amap/amap-jsapi-loader@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/@amap/amap-jsapi-loader/-/amap-jsapi-loader-1.0.1.tgz#9ec4b4d5d2467eac451f6c852e35db69e9f9f0c0"
+  integrity sha512-nPyLKt7Ow/ThHLkSvn2etQlUzqxmTVgK7bIgwdBRTg2HK5668oN7xVxkaiRe3YZEzGzfV2XgH5Jmu2T73ljejw==
+
+"@amap/amap-jsapi-types@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.npmmirror.com/@amap/amap-jsapi-types/-/amap-jsapi-types-0.0.15.tgz#9e2d102c2ac9f7e7c1752f63f7be628c62c8d04b"
+  integrity sha512-oqyRqHpVDZh5bUe2mAJh41ZsziSj0eUzwcfIbiaBNB0eiTJnZNhKsTdk77VOklOjwuwNfsblpKW9LjmWNpeQ7A==
+
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
   resolved "https://registry.npmmirror.com/@ampproject/remapping/-/remapping-2.3.0.tgz#ed441b6fa600072520ce18b43d2c8cc8caecc7f4"
@@ -2095,6 +2105,18 @@
   version "1.0.4"
   resolved "https://registry.npmmirror.com/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
+
+"@types/amap-js-api-geocoder@^1.4.4":
+  version "1.4.4"
+  resolved "https://registry.npmmirror.com/@types/amap-js-api-geocoder/-/amap-js-api-geocoder-1.4.4.tgz#9b1cd90594b5b7b29ee7b9d55fd9b28e22c2169d"
+  integrity sha512-BH3bAHxiw3uZTAsHCRGB337TOggSYB4u0pVLTqrM5/ZX4Zu9o+SbAa8tLkQ9o+NJp35Q7PxCLX6jBaTcdhnCJg==
+  dependencies:
+    "@types/amap-js-api" "*"
+
+"@types/amap-js-api@*":
+  version "1.4.16"
+  resolved "https://registry.npmmirror.com/@types/amap-js-api/-/amap-js-api-1.4.16.tgz#12cd7989f337bfa04ae37f54c3e80ee70d083f55"
+  integrity sha512-gfcEswuU4GNRdGAh74FhxfLlU6qxmVIJYPf3HV0uKucCWQ9iSr8TonDhqBvHVmmQEY60K+UAeIh0YLwKo/jpFQ==
 
 "@types/body-parser@*":
   version "1.19.5"

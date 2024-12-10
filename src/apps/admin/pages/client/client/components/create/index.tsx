@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import useWather from "src/hooks/use-wather";
 import { addClient } from "src/apps/admin/api/client";
+import AddressFormInput from "src/framework/component/address-form-input";
 
 type Ref = {
   create: () => Promise<ClientAddResponse>;
@@ -103,31 +104,13 @@ const Create = forwardRef<Ref>(function (props, ref) {
             placeholder="请选择客户类型"
           />
         </Form.Item>
-        {/* <Form.Item label="地址" name="address" rules={[{ required: true }]}>
-          <Input
-            placeholder="请输入地址"
-            addonAfter={
-              <EnvironmentFilled
-                onClick={() => {
-                  address({ defaultAddress: choosedAddressValue.current }).then(
-                    (res) => {
-                      form.setFieldValue(
-                        "address",
-                        `${res.district.map((i) => i.text).join("")}${
-                          res.address.name
-                        }`
-                      );
-                      choosedAddressValue.current = {
-                        address: res.address,
-                        district: res.district,
-                      };
-                    }
-                  );
-                }}
-              />
-            }
-          />
-        </Form.Item> */}
+        <Form.Item
+          label="地址"
+          name="address"
+          rules={[{ required: true, message: "请搜索地址" }]}
+        >
+          <AddressFormInput />
+        </Form.Item>
         <Form.Item label="性质" name="nature" rules={[{ required: true }]}>
           <Input placeholder="请输入性质" />
         </Form.Item>
