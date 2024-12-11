@@ -33,7 +33,7 @@ type UserMenu = {
   menu_staff: string[];
   name: string;
   path: string;
-  // permission: Permission[];
+  permission: Permission[];
   pid: number;
   slug: string;
   status: number;

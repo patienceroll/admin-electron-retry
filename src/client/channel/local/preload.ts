@@ -21,10 +21,16 @@ export default function localPreload(): LocalPreload {
       return ipcRenderer.sendSync("getLocalUserMenu");
     },
     getLocalUser() {
-      return ipcRenderer.sendSync("getLocalUser")
+      return ipcRenderer.sendSync("getLocalUser");
     },
     setLocalUser(menu) {
-      return ipcRenderer.sendSync("setLocalUser",menu);
+      return ipcRenderer.sendSync("setLocalUser", menu);
+    },
+    getLocalUserPermission() {
+      return ipcRenderer.sendSync("getLocalUserPermission");
+    },
+    getLocalUserHasPermission(path, slug) {
+      return ipcRenderer.sendSync("getLocalUserHasPermission", path, slug);
     },
   };
 }

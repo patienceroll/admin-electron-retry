@@ -223,18 +223,23 @@ function Client() {
             tooltip="批量跟进"
           />
         )}
-        <FloatButton
-          icon={<Icon width={18} height={18} icon={ExportSvg} />}
-          tooltip="导出"
-          onClick={function () {
-            contextedMessage.message?.info("正在导出...");
-            clientExport({ ...table.params, ...table.extraParams }).then(
-              (res) => {
-                window.preload.previewFile(res.data.file_path);
-              }
-            );
-          }}
-        />
+        {window.preload.getLocalUserHasPermission(
+          "/client/client",
+          "export"
+        ) && (
+          <FloatButton
+            icon={<Icon width={18} height={18} icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              clientExport({ ...table.params, ...table.extraParams }).then(
+                (res) => {
+                  window.preload.previewFile(res.data.file_path);
+                }
+              );
+            }}
+          />
+        )}
       </FloatButton.Group>
       <Create.default ref={create} />
     </PageWrapper>

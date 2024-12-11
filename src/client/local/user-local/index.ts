@@ -43,6 +43,34 @@ export default class UserLocal {
 
   set menu(menu) {
     this._local.store.menu = menu;
+    const flatedMenu: UserMenu[] = [];
+    function recusion(items: UserMenu[]) {
+      items.forEach((item) => {
+        flatedMenu.push(item);
+        if (item.child instanceof Array) {
+          recusion(item.child);
+        }
+      });
+    }
+    if (menu) {
+      recusion(menu);
+    }
+    this._local.store.permission = {};
+
+    flatedMenu.forEach((item) => {
+      if (item.permission instanceof Array) {
+        this._local.store.permission![item.path] = {};
+
+        item.permission.forEach((per) => {
+          this._local.store.permission![item.path][per.slug] = per.status === 1;
+        });
+      }
+    });
+
     this._local.syncToFile();
+  }
+
+  get permission() {
+    return this._local.store.permission;
   }
 }

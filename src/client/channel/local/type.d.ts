@@ -13,4 +13,8 @@ type LocalPreload = {
   setLocalUser: (menu: User) => void;
   /** 获取当前登录的用户信息 */
   getLocalUser: () => User | undefined;
+  /** 获取当前登录的用户操作权限信息 */
+  getLocalUserPermission: () => Record<string, Record<string, boolean>>;
+  /** 获取当前用户是否有权限 */
+  getLocalUserHasPermission: (path: string, slug: string) => boolean;
 };

@@ -40,4 +40,19 @@ export default function localMain(options: { framework: Framework }) {
     framework.userLocal.user = user;
     event.returnValue = void 0;
   });
+
+  ipcMain.on("getLocalUserPermission", function (event) {
+    event.returnValue = framework.userLocal.permission;
+  });
+
+  ipcMain.on("getLocalUserHasPermission", function (event, path, slug) {
+    const permission = framework.userLocal.permission || {};
+    const slugs = permission[path];
+
+    if (slug) {
+      event.returnValue = slugs[slug];
+    } else {
+      event.returnValue = false;
+    }
+  });
 }
