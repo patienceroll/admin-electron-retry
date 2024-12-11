@@ -39,14 +39,8 @@ function Staff() {
 
   const column = table.column([
     {
-      title: "关键词",
-      dataIndex: "name",
-      fixed: "left",
-    },
-    {
       title: "部门",
-      render: (_, row) => row.department?.name || "-",
-
+      render: (_, row) => row.department?.name,
       fixed: "left",
     },
     {
