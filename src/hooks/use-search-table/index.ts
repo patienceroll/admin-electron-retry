@@ -13,8 +13,8 @@ export function tableColumn<T>(column: ProColumns<T>[]): ProColumns<T>[] {
   return column.map((item) =>
     Object.assign<ProColumns<T>, ProColumns<T>>(
       {
-        width: 100,
-        align: "center",
+        width: 120,
+        // align: "center",
       },
       item
     )

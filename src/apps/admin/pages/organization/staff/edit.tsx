@@ -410,7 +410,7 @@ function Edit(props: StyledWrapComponents) {
                 });
               }}
             >
-              新增紧急联系人
+              新增
             </Button>
           </FlexCenter>
         </div>
@@ -447,7 +447,7 @@ function Edit(props: StyledWrapComponents) {
                 });
               }}
             >
-              新增账户
+              新增
             </Button>
           </FlexCenter>
         </div>

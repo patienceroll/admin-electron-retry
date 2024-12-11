@@ -40,7 +40,6 @@ function Client() {
       title: "客户",
       dataIndex: "name",
       fixed: "left",
-      width: 200,
       render: (_, record) => (
         <Typography.Link
           onClick={() => {
@@ -53,6 +52,7 @@ function Client() {
           {record.name}
         </Typography.Link>
       ),
+        ellipsis: true,
     },
     {
       title: "简称",
@@ -63,33 +63,76 @@ function Client() {
       title: "类型",
       dataIndex: "type",
       valueEnum: projectTypeMap,
+        ellipsis: true,
     },
     {
       title: "性质",
       dataIndex: "nature",
+        ellipsis: true,
     },
-    {
-      title: "地址",
-      width: 200,
-      renderText(_, row) {
-        return row.address;
+      {
+          title: "等级",
+          dataIndex: "grade",
+          ellipsis: true,
       },
-      ellipsis: true,
-    },
+      {
+          title: "规模",
+          dataIndex: "scale",
+          ellipsis: true,
+      },
+      {
+          title: "省",
+          dataIndex: "province",
+          ellipsis: true,
+      },
+      {
+          title: "市",
+          dataIndex: "city",
+          ellipsis: true,
+      },
+      {
+          title: "区",
+          dataIndex: "county",
+          ellipsis: true,
+      },
+      {
+          title: "成立日期",
+          dataIndex: "establishment_date",
+          ellipsis: true,
+      },
+    // {
+    //   title: "地址",
+    //   renderText(_, row) {
+    //     return row.address;
+    //   },
+    //   ellipsis: true,
+    // },
+      {
+          title: "信息完善度",
+          dataIndex: "60%",
+          ellipsis: true,
+      },
     {
       title: "是否签约",
       dataIndex: "is_sign",
       valueEnum: watherMap,
+        ellipsis: true,
     },
+      {
+          title: "负责人",
+          dataIndex: "xxx",
+          ellipsis: true,
+      },
     {
       title: "状态",
       dataIndex: "status",
       key: "statuses",
       valueEnum: StaffStatus,
+        ellipsis: true,
     },
     {
       dataIndex: "id",
-      title: "操作",
+      // title: "操作",
       fixed: "right",
       width: 160,
       render(_, row) {
@@ -181,6 +224,7 @@ function Client() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={column}
+        size={"small"}
         scroll={{ x: table.measureColumnWidth(column) }}
         rowSelection={{
           selectedRowKeys: select.map((i) => i.id),
