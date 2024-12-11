@@ -41,14 +41,15 @@ const Create = forwardRef<Ref>(function (props, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-
+        console.log(store);
         return addClient({
           ...store,
-          // province: choosedAddressValue.current?.district[0].text,
-          // city: choosedAddressValue.current?.district[1].text,
-          // county: choosedAddressValue.current?.district[2].text,
-          // latitude: choosedAddressValue.current?.address.location.lat,
-          // longitude: choosedAddressValue.current?.address.location.lng,
+          province: store.address.province,
+          city: store.address.city,
+          county: store.address.county,
+          latitude: store.address.lat,
+          longitude: store.address.lng,
+          address: store.address.address,
         });
       })
       .then((res) => {

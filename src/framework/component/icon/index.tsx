@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createElement } from "react";
 import { useTheme } from "styled-components";
 
 function Icon(
@@ -9,7 +9,7 @@ function Icon(
   const { icon, ...restProps } = props;
   const theme = useTheme();
 
-  return React.createElement(
+  return createElement(
     icon,
     Object.assign(
       {

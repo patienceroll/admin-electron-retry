@@ -22,6 +22,9 @@ type Value = {
   province: string;
   city: string;
   county: string;
+  provinceCode: string;
+  cityCode: string;
+  countyCode: string;
   latitude: number;
   longitude: number;
   address: string;
@@ -128,9 +131,12 @@ const ChooseAddress = forwardRef<Ref, StyledWrapComponents>(function (
 
   function onOk() {
     promiseResolver.current.resolve({
-      province: district![0].value,
-      city: district![1].value,
-      county: district![2].value,
+      province: district![0].text,
+      city: district![1].text,
+      county: district![2].text,
+      provinceCode: district![0].value,
+      cityCode: district![1].value,
+      countyCode: district![2].value,
       latitude: currentAddress!.lat,
       longitude: currentAddress!.lng,
       address: currentAddress!.address,

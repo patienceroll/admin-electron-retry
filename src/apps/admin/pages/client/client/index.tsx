@@ -1,24 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Affix, Button, Card, FloatButton, Space, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
-import { ProFormText, ProTable, QueryFilter } from "@ant-design/pro-components";
+import {
+  ProFormSelect,
+  ProFormText,
+  ProTable,
+  QueryFilter,
+} from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
-import { getClientList, StaffStatus } from "src/apps/admin/api/client";
+import {
+  clientExport,
+  deleteClient,
+  getClientList,
+  StaffStatus,
+} from "src/apps/admin/api/client";
 import { projectTypeMap } from "src/apps/admin/api/project";
 import { watherMap } from "src/apps/admin/api/general";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
+import FollowSvg from "src/assets/svg/线索跟进.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
 import * as Create from "./components/create";
 import contextedMessage from "src/framework/component/contexted-message";
 import openWindow from "src/util/open-window";
+import contextedModal from "src/framework/component/contexted-modal";
 
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
 
   const create = Create.createRef();
+
+  const [select, setSelect] = useState<ClientListItem[]>([]);
 
   const column = table.column([
     {
@@ -31,7 +46,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户 - " + record.name_show
+              "客户详情 - " + record.name_show
             );
           }}
         >
@@ -80,8 +95,42 @@ function Client() {
       render(_, row) {
         return (
           <Space>
-            <Button type="text">编辑</Button>
-            <Button type="text" danger>
+            <Button
+              type="text"
+              onClick={function () {
+                const window = openWindow.openCurrentAppWindow(
+                  `/client/client/edit?id=${row.id}`,
+                  `编辑 - ${row.name_show}`
+                );
+                function listener(event: MessageEvent<"success">) {
+                  if (event.data === "success") {
+                    table.reload();
+                    contextedMessage.message?.success("编辑成功");
+                  }
+                }
+                if (window) {
+                  window.addEventListener("message", listener);
+                }
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.name}?`,
+                  onOk() {
+                    return deleteClient({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("成功删除");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
               删除
             </Button>
           </Space>
@@ -112,6 +161,12 @@ function Client() {
               name="keyword"
               placeholder="按客户搜索"
             />
+            <ProFormSelect
+              label="客户类型"
+              name="type"
+              options={Array.from(projectTypeMap.values())}
+              fieldProps={{ fieldNames: { label: "text", value: "value" } }}
+            />
           </QueryFilter>
         </Card>
       </Affix>
@@ -127,6 +182,15 @@ function Client() {
         onChange={table.onChange}
         columns={column}
         scroll={{ x: table.measureColumnWidth(column) }}
+        rowSelection={{
+          selectedRowKeys: select.map((i) => i.id),
+          preserveSelectedRowKeys: true,
+          type: "checkbox",
+          fixed: "left",
+          onChange(_, rows) {
+            setSelect(rows);
+          },
+        }}
       />
 
       <FloatButton.Group shape="square">
@@ -138,7 +202,8 @@ function Client() {
               contextedMessage.message?.success("新增成功");
               table.reload();
               const window = openWindow.openCurrentAppWindow(
-                `/client/client/edit?id=${result.id}`
+                `/client/client/edit?id=${result.id}`,
+                "编辑新创建的客户"
               );
               function listener(event: MessageEvent<"success">) {
                 if (event.data === "success") {
@@ -150,6 +215,24 @@ function Client() {
                 window.addEventListener("message", listener);
               }
             });
+          }}
+        />
+        {select.length !== 0 && (
+          <FloatButton
+            icon={<Icon width={18} height={18} icon={FollowSvg} />}
+            tooltip="批量跟进"
+          />
+        )}
+        <FloatButton
+          icon={<Icon width={18} height={18} icon={ExportSvg} />}
+          tooltip="导出"
+          onClick={function () {
+            contextedMessage.message?.info("正在导出...");
+            clientExport({ ...table.params, ...table.extraParams }).then(
+              (res) => {
+                window.preload.previewFile(res.data.file_path);
+              }
+            );
           }}
         />
       </FloatButton.Group>

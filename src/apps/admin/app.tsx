@@ -36,6 +36,7 @@ import CommonMenuStaff from "./pages/common/menu-staff";
 import VisualizationArchitecture from "./pages/visualization/architecture";
 import Client from "./pages/client/client";
 import ClientDetail from "./pages/client/client/detail";
+import ClientEdit from "./pages/client/client/edit";
 
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -157,6 +158,7 @@ export default function () {
 
               <Route path="/client/client" Component={Client} />
               <Route path="/client/client/detail" Component={ClientDetail} />
+              <Route path="/client/client/edit" Component={ClientEdit} />
 
               <Route path="*" element={<Page404 />} />
             </Routes>
