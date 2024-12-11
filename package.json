@@ -21,6 +21,7 @@
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@ant-design/pro-components": "^2.8.2",
     "@react-spring/web": "^9.7.5",
+    "@vant/area-data": "^2.0.0",
     "antd": "^5.21.0",
     "dayjs": "^1.11.13",
     "decimal.js": "^10.4.3",

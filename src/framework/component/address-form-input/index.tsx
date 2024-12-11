@@ -1,5 +1,5 @@
 import { Input, InputRef } from "antd";
-import React, { useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import styled from "styled-components";
 import { InputProps } from "antd/lib";
 
@@ -14,35 +14,49 @@ type Value = {
   address: string;
 };
 
-function AddressFormInput(
-  props: Omit<InputProps, "value" | "onChange"> & {
-    outRef?: React.RefObject<InputRef>;
-  } & {
+const AddressFormInput = forwardRef(function (
+  props: Omit<InputProps, "value" | "onChange"> & {} & {
     value?: Value;
-  }
+    onChange?: (value: Value) => void;
+  },
+  ref
 ) {
-  const { value, outRef, ...rest } = props;
-  const _inputRef = useRef<InputRef>(null);
-  const inputRef = outRef || _inputRef;
+  const {
+    value,
+    className,
+    placeholder = "请点击然后在地图上搜索地址",
+    onChange,
+    ...rest
+  } = props;
+  const inputRef = useRef<InputRef>(null);
+
   const chooseAddressRef = ChooseAddress.createRef();
+
+  useImperativeHandle(ref, () => {});
 
   return (
     <>
       <Input
         {...rest}
         ref={inputRef}
+        className={className}
         value={value?.address}
+        placeholder={placeholder}
         onFocus={function (e) {
           if (rest.onFocus) {
             rest.onFocus(e);
           }
           inputRef.current?.blur();
-          chooseAddressRef.current?.choose().then((res) => {});
+          chooseAddressRef.current?.choose().then((res) => {
+            onChange?.(res);
+          });
         }}
       />
       <ChooseAddress.default ref={chooseAddressRef} />
     </>
   );
-}
+});
 
-export default styled(AddressFormInput)``;
+export default styled(AddressFormInput)`
+  cursor: pointer;
+`;

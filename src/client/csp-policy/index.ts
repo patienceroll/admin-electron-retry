@@ -9,6 +9,7 @@ type CSPPolicy = {
   frameSrc?: string | string[];
   childSrc?: string | string[];
   connectSrc?: string | string[];
+  workerSrc?: string | string[];
   // 可以继续添加其他指令
 };
 

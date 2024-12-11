@@ -2510,6 +2510,11 @@
   resolved "https://registry.npmmirror.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
+"@vant/area-data@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@vant/area-data/-/area-data-2.0.0.tgz#9be3b812245d9edf5fc1116c58ccaee826c234d4"
+  integrity sha512-zgP4AA8z09S9QTNgVCCHo9cHjcybrv22RJDYPjuCkecn4SB98T5EoPQh2TwqbQXmUhbaOGgiZGy3OUaUxnY7qg==
+
 "@vercel/webpack-asset-relocator-loader@1.7.3":
   version "1.7.3"
   resolved "https://registry.npmmirror.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.7.3.tgz#e65ca1fd9feb045039788f9b4710e5acc84b01b0"

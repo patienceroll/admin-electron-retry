@@ -34,15 +34,16 @@ function createWindow() {
             connectSrc: [
               "'self'",
               "http://118.89.67.217:9638",
-              "https://api.qiniu.com",
-              "https://upload-z2.qiniup.com",
+              "*.qiniu.com",
+              "*.amap.com",
             ],
             fontSrc: ["'self'", "data:"],
             imgSrc: ["*", "data:", "blob:"],
             styleSrc: ["'self'", "'unsafe-inline'"],
+            workerSrc: ["'self'", "blob:"],
             scriptSrc: app.isPackaged
               ? ["'self'"]
-              : ["'self'", "'unsafe-eval'", "*://*.amap.com"],
+              : ["'self'", "'unsafe-eval'", "'unsafe-inline'", "*.amap.com"],
           }),
         ],
         // "Content-Security-Policy": [
