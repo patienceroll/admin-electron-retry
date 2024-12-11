@@ -125,3 +125,13 @@ type BtnPower = Partial<{
   /** 撤销 */
   is_cancel_operate: 0 | 1;
 }>;
+
+
+type AddresssParams = {
+  province?: string;
+  city?: string;
+  county?: string;
+  address?: string;
+  longitude?: string;
+  latitude?: string;
+}

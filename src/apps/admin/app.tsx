@@ -80,7 +80,6 @@ export default function () {
     return window.preload.onThemeChange(setThemeBase);
   }, []);
 
-
   return (
     <ConfigProvider
       locale={locale}
@@ -97,13 +96,17 @@ export default function () {
           },
           Card: {
             padding: designToken.padding,
-            paddingLG: designToken.padding
+            paddingLG: designToken.padding,
           },
           Breadcrumb: {
             lastItemColor: designToken.colorPrimary,
           },
           InputNumber: {
             controlWidth: 200,
+          },
+          Typography: {
+            colorLink: designToken.colorPrimary,
+            colorLinkActive:  designToken.colorPrimary,
           },
         },
       })}

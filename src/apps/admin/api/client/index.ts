@@ -65,7 +65,7 @@ export function addClient(
       "name" | "short_name" | "type" | "nature" | "address" | "is_sign"
     >
   > &
-    ChoosedAddressParams & { project_id?: Project["id"] }
+    AddresssParams & { project_id?: Project["id"] }
 ) {
   return fetch.POST<ClientAddResponse>(fetch.base(`/api/client`), params);
 }
