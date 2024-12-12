@@ -229,6 +229,7 @@ function Staff() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={column}
+        size={"small"}
         scroll={{ x: table.measureColumnWidth(column) }}
       />
       <FloatButton.Group shape="square">
