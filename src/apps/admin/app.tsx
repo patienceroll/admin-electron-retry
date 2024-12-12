@@ -107,6 +107,8 @@ export default function () {
           Typography: {
             colorLink: designToken.colorPrimary,
             colorLinkActive:  designToken.colorPrimary,
+            titleMarginBottom: 0,
+            titleMarginTop: 0,
           },
         },
       })}

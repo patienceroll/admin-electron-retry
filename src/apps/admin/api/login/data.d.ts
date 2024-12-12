@@ -16,7 +16,7 @@ type User = {
   name: string;
   password: string;
   phone: string;
-  staff: null;
+  staff?: Staff;
   status: number;
   type: string;
   updated_at: string;
@@ -37,4 +37,4 @@ type UserMenu = {
   pid: number;
   slug: string;
   status: number;
-}
+};
