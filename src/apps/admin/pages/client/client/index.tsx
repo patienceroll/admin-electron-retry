@@ -102,17 +102,12 @@ function Client() {
             dataIndex: "establishment_date",
             ellipsis: true,
         },
-        // {
-        //   title: "地址",
-        //   renderText(_, row) {
-        //     return row.address;
-        //   },
-        //   ellipsis: true,
-        // },
         {
             title: "信息完善度",
             dataIndex: "60%",
             ellipsis: true,
+            valueType: 'progress',
+            renderText:() => 90
         },
         {
             title: "是否签约",
