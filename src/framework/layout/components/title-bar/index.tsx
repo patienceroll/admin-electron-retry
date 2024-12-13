@@ -69,9 +69,8 @@ function Component(props: StyledWrapComponents) {
               {routes.routes.map((item) => (
                 <SwiperSlide
                   key={item.path}
-                  className={`tab-item ${
-                    item.path === routes.current ? "tab-item-active" : ""
-                  }`}
+                  className={`tab-item ${item.path === routes.current ? "tab-item-active" : ""
+                    }`}
                   onClick={function () {
                     const instance = routes.routes.find(
                       (tab) => tab.path === item?.path
@@ -81,8 +80,8 @@ function Component(props: StyledWrapComponents) {
                     }
                   }}
                 >
-                  <div>{item.name}</div>
-                  <div
+                  <div>{item.name}</div>  
+                  {routes.routes.length !== 1 && <div
                     className="close-icon-wrapper"
                     onClick={(e) => {
                       e.preventDefault();
@@ -99,7 +98,7 @@ function Component(props: StyledWrapComponents) {
                           : theme.colorTextBase
                       }
                     />
-                  </div>
+                  </div>}
                 </SwiperSlide>
               ))}
             </Swiper>
