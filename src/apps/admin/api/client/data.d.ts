@@ -57,7 +57,7 @@ type ClientListItem = {
   staff_id: number;
   status: number;
   status_show: string;
-  type: number;
+  type: ProjectStatus;
   type_show: string;
   updated_at: string;
   win_bid_amount: string;

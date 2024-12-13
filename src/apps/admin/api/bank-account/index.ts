@@ -8,12 +8,26 @@ export function getBankAccountList(
     type: 1 | 2 | 4 | 3;
     /** 目标表id */
     table_id?: number;
-  },
+  }
 ) {
   return fetch.GET<List<BankAccount>>(
     fetch.base(`/api/bank-account/list`),
-    params,
+    params
   );
+}
+/**
+ * 账户-选项
+ */
+export function getBankAccountOptions(
+  params: ListParam & {
+    /**  '类型;1:公司,2:客户,3:供应商,4:员工' */
+    type: 1 | 2 | 4 | 3;
+    /** 目标表id */
+    table_id?: number;
+    table?:string
+  }
+) {
+  return fetch.GET<BankAccount[]>(fetch.base(`/api/bank-account/list`), params);
 }
 
 /**
