@@ -10,7 +10,7 @@ const config = {
   // 展示有tab页面的开发者工具
   page: true,
   // 展示通过 window.open 打开的页面的开发者工具
-  open: false,
+  open: true,
 };
 
 export default {
