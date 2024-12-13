@@ -4,6 +4,7 @@ import Framework from "src/client/main/framework";
 
 export default function themeMain(params: { framework: Framework }) {
   const { framework } = params;
+
   nativeTheme.on("updated", function () {
     framework.baseWindow.setBackgroundColor(framework.theme.backgroundColor);
     framework.frameworkView.setBackgroundColor(framework.theme.backgroundColor);
@@ -54,6 +55,15 @@ export default function themeMain(params: { framework: Framework }) {
 
   ipcMain.on("setTheme", function (event, theme: Partial<Theme>) {
     framework.theme.value = Object.assign(framework.theme.value, theme);
+    const value = framework.theme.value;
+    framework.frameworkView.webContents.send("onThemeChange", value);
+    framework.menuView?.webContents.send("onThemeChange", value);
+    framework.views.value.forEach((view) => {
+      view.view.webContents.send("onThemeChange", value);
+    });
+    if (!framework.loginWindow.isDestroyed()) {
+      framework.loginWindow.webContents.send("onThemeChange", value);
+    }
     event.returnValue = void 0;
   });
 

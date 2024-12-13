@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PageWrapper from "src/framework/component/page-wrapper";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import {
   Badge,
   Button,
@@ -23,6 +23,7 @@ function Company(props: StyledWrapComponents) {
   const { className } = props;
 
   const ref = createRef();
+   const theme = useTheme();
   const [loading] = useWather();
   const [company, setCompany] = useState<CompanyListItem[]>([]);
 
@@ -109,7 +110,7 @@ function Company(props: StyledWrapComponents) {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建公司"
-          icon={<Icon width={18} height={18} icon={AddSvg} />}
+          icon={<Icon width={theme.fontSize} height={theme.fontSize} icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(getCompany);
           }}

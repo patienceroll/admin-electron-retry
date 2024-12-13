@@ -1,6 +1,6 @@
 import { ProTable } from "@ant-design/pro-components";
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Button, FloatButton, Space, Tag } from "antd";
 
 import useWather from "src/hooks/use-wather";
@@ -22,7 +22,8 @@ type Data = Omit<Menu, "child"> & { children?: Data[] };
 function Admin() {
   const [loading] = useWather();
   const [dataSource, setDataSource] = useState<Data[]>([]);
-
+ const theme = useTheme();
+ 
   const ref = Edit.createRef();
   const permission = Permission.createRef();
 
@@ -173,7 +174,7 @@ function Admin() {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建菜单"
-          icon={<Icon width={18} height={18} icon={AddSvg} />}
+          icon={<Icon width={theme.fontSize} height={theme.fontSize} icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(function () {
               load();

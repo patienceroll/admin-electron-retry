@@ -50,12 +50,17 @@ export default function () {
   const [modalApi, modalContextHolder] = Modal.useModal();
   const [messageApi, messageContextHolder] = message.useMessage();
 
+  const algorithm = [
+    darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+  ]
+
+  if (themebase.layout === 'compact') {
+    algorithm.push(theme.compactAlgorithm)
+  }
+
   const themeDefault: ThemeConfig = {
     token: { colorPrimary: themebase.colorPrimary },
-    algorithm: [
-      darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-      // theme.compactAlgorithm,
-    ],
+    algorithm,
   };
 
   const designToken = theme.getDesignToken(themeDefault);
@@ -106,7 +111,7 @@ export default function () {
           },
           Typography: {
             colorLink: designToken.colorPrimary,
-            colorLinkActive:  designToken.colorPrimary,
+            colorLinkActive: designToken.colorPrimary,
             titleMarginBottom: 0,
             titleMarginTop: 0,
           },

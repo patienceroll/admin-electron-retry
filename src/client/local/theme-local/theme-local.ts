@@ -6,6 +6,7 @@ class ThemeLocal {
   private static get defaultTheme(): Theme {
     return {
       colorPrimary: systemPreferences.getAccentColor(),
+      layout: "normal",
     };
   }
 

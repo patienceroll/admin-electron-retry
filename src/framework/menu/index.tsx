@@ -3,11 +3,14 @@ import styled, { useTheme } from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Mousewheel } from "swiper/modules";
 import { useSpring, animated } from "@react-spring/web";
+import { FloatButton } from "antd";
 
 import Icon from "src/framework/component/icon";
 import Title from "src/framework/component/title";
 import Item from "src/framework/menu/components/item";
 import FadeInWrapper from "src/framework/component/fade-in-wrapper";
+import PageWrapper from "../component/page-wrapper";
+import * as SystemConfig from "./components/system-config"
 
 import images from "src/assets/images";
 
@@ -64,6 +67,7 @@ export const IconMap = {
 
 function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
   const { className, darkMode } = props;
+  const systemConfig = SystemConfig.createRef()
   const theme = useTheme();
   const [div, setDiv] = useState<HTMLDivElement | null>(null);
 
@@ -120,14 +124,8 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
   }
 
   return (
-    <div className={className} onClick={window.preload.hideMenu}>
-      <div
-        className="nav"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-      >
+    <PageWrapper className={className}>
+      <div className="nav">
         <div className="scrollbar" ref={setDiv} />
         <Swiper
           style={{ height: 102, boxShadow: theme.boxShadow }}
@@ -223,7 +221,17 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
           )}
         </div>
       </div>
-    </div>
+      <FloatButton
+        shape="square"
+        type="primary"
+        tooltip="系统设置"
+        onClick={() => {
+          systemConfig.current?.open()
+        }}
+        icon={<Icon width={theme.fontSize} height={theme.fontSize} fill={theme.colorBgBase} icon={systemSvg} />}
+      />
+      <SystemConfig.default ref={systemConfig} />
+    </PageWrapper>
   );
 }
 
@@ -231,6 +239,7 @@ export default styled(Menu)`
   height: 100vh;
   width: 100vw;
   display: flex;
+  padding: 0;
   justify-content: center;
   align-items: top;
   background-color: ${(props) =>

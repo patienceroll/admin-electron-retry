@@ -234,7 +234,7 @@ function Staff() {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建员工"
-          icon={<Icon width={18} height={18} icon={AddSvg} />}
+          icon={<Icon width={theme.fontSize} height={theme.fontSize} icon={AddSvg} />}
           onClick={() => {
             const window = openWindow.openCurrentAppWindow(
               "/organization/staff/create",

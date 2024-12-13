@@ -1,5 +1,7 @@
 type Theme = {
   colorPrimary: string;
+  /** 系统紧凑度 */
+  layout: "normal" | "compact";
 };
 
 type ThemePreload = {

@@ -6,7 +6,7 @@ const config = {
   // 展示登录页面的开发者工具
   login: false,
   // 展示菜单页面的开发者工具
-  menu: false,
+  menu: true,
   // 展示有tab页面的开发者工具
   page: true,
   // 展示通过 window.open 打开的页面的开发者工具

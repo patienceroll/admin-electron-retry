@@ -22,15 +22,20 @@ export default function () {
   const [modalApi, modalContextHolder] = Modal.useModal();
   const [messageApi, messageContextHolder] = message.useMessage();
 
+  const algorithm = [
+    darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+  ]
+
+  if (themebase.layout === 'compact') {
+    algorithm.push(theme.compactAlgorithm)
+  }
+
   const themeDefault: ThemeConfig = {
     token: { colorPrimary: themebase.colorPrimary },
-    algorithm: [
-      darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-      // theme.compactAlgorithm,
-    ],
+    algorithm,
   };
   const designToken = theme.getDesignToken(themeDefault);
-
+  
   useEffect(() => {
     contextedNotify.notification = api;
   }, [api]);
