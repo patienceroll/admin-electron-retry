@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Anchor, Col, Row } from "antd/es";
 import { useLocation } from "react-router/dist";
 import styled, { useTheme } from "styled-components";
@@ -14,6 +14,7 @@ import useOption from "src/hooks/use-option";
 import { getClientContactOptions } from "src/apps/admin/api/client-concat";
 import { tableColumn } from "src/hooks/use-search-table";
 import { getBankAccountOptions } from "src/apps/admin/api/bank-account";
+import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -24,14 +25,18 @@ function Detail(props: StyledWrapComponents) {
   const theme = useTheme();
   const [concat] = useOption(getClientContactOptions);
   const [bankAccount] = useOption(getBankAccountOptions);
+  const [saleContact] = useOption(getSalesContractOption);
 
   const [detail, setDetail] = useState<ClientListItem>();
 
-  function getDetail() {
-    getClient({ id: Number(id) }).then((res) => {
-      setDetail(res.data);
-    });
-  }
+  const getDetail = useCallback(
+    function () {
+      getClient({ id: Number(id) }).then((res) => {
+        setDetail(res.data);
+      });
+    },
+    [id]
+  );
 
   useEffect(() => {
     getDetail();
@@ -41,7 +46,10 @@ function Detail(props: StyledWrapComponents) {
     bankAccount.params.type = 2;
     bankAccount.params.table = "client";
     bankAccount.loadOption();
-  }, []);
+    saleContact.params.client_id = Number(id);
+    saleContact.params.is_show_detail = 1;
+    saleContact.loadOption();
+  }, [bankAccount, concat, getDetail, id, saleContact]);
 
   return (
     <PageWrapper className={className}>
@@ -152,6 +160,195 @@ function Detail(props: StyledWrapComponents) {
           },
         ])}
       />
+
+      <Title style={{ marginTop: theme.margin }} id="销售合同">
+        销售合同
+      </Title>
+
+      <ProTable
+        search={false}
+        pagination={false}
+        options={false}
+        rowKey="id"
+        style={{ marginTop: theme.margin }}
+        loading={saleContact.loading}
+        dataSource={saleContact.list}
+        columns={tableColumn<SalesContractListItem>([
+          {
+            title: "公司",
+            dataIndex: "company_name",
+          },
+          {
+            title: "地址",
+            dataIndex: "company_address",
+          },
+          {
+            title: "联系人",
+            dataIndex: "linkman",
+          },
+          {
+            title: "电话",
+            dataIndex: "phone",
+          },
+          {
+            title: "银行",
+            dataIndex: "bank_name",
+          },
+          {
+            title: "开户行",
+            dataIndex: "bank_address",
+          },
+          {
+            title: "税号",
+            dataIndex: "tax_code",
+          },
+          {
+            title: "账号",
+            dataIndex: "account",
+          },
+        ])}
+      />
+
+      <Title style={{ marginTop: theme.margin }} id="子合同需求单">
+        子合同需求单
+      </Title>
+
+      <ProTable
+        search={false}
+        pagination={false}
+        options={false}
+        rowKey="id"
+        style={{ marginTop: theme.margin }}
+        loading={saleContact.loading}
+        dataSource={saleContact.list}
+        columns={tableColumn<SalesContractListItem>([
+          {
+            title: "公司",
+            dataIndex: "company_name",
+          },
+          {
+            title: "地址",
+            dataIndex: "company_address",
+          },
+          {
+            title: "联系人",
+            dataIndex: "linkman",
+          },
+          {
+            title: "电话",
+            dataIndex: "phone",
+          },
+          {
+            title: "银行",
+            dataIndex: "bank_name",
+          },
+          {
+            title: "开户行",
+            dataIndex: "bank_address",
+          },
+          {
+            title: "税号",
+            dataIndex: "tax_code",
+          },
+          {
+            title: "账号",
+            dataIndex: "account",
+          },
+        ])}
+      />
+      <Title style={{ marginTop: theme.margin }} id="销售发货">
+        销售发货
+      </Title>
+      <ProTable
+        search={false}
+        pagination={false}
+        options={false}
+        rowKey="id"
+        style={{ marginTop: theme.margin }}
+        loading={saleContact.loading}
+        dataSource={saleContact.list}
+        columns={tableColumn<SalesContractListItem>([
+          {
+            title: "公司",
+            dataIndex: "company_name",
+          },
+          {
+            title: "地址",
+            dataIndex: "company_address",
+          },
+          {
+            title: "联系人",
+            dataIndex: "linkman",
+          },
+          {
+            title: "电话",
+            dataIndex: "phone",
+          },
+          {
+            title: "银行",
+            dataIndex: "bank_name",
+          },
+          {
+            title: "开户行",
+            dataIndex: "bank_address",
+          },
+          {
+            title: "税号",
+            dataIndex: "tax_code",
+          },
+          {
+            title: "账号",
+            dataIndex: "account",
+          },
+        ])}
+      />
+      <Title style={{ marginTop: theme.margin }} id="销售退货">
+        销售退货
+      </Title>
+      <ProTable
+        search={false}
+        pagination={false}
+        options={false}
+        rowKey="id"
+        style={{ marginTop: theme.margin }}
+        loading={saleContact.loading}
+        dataSource={saleContact.list}
+        columns={tableColumn<SalesContractListItem>([
+          {
+            title: "公司",
+            dataIndex: "company_name",
+          },
+          {
+            title: "地址",
+            dataIndex: "company_address",
+          },
+          {
+            title: "联系人",
+            dataIndex: "linkman",
+          },
+          {
+            title: "电话",
+            dataIndex: "phone",
+          },
+          {
+            title: "银行",
+            dataIndex: "bank_name",
+          },
+          {
+            title: "开户行",
+            dataIndex: "bank_address",
+          },
+          {
+            title: "税号",
+            dataIndex: "tax_code",
+          },
+          {
+            title: "账号",
+            dataIndex: "account",
+          },
+        ])}
+      />
+
       <Title style={{ marginTop: theme.margin }} id="系统信息">
         系统信息
       </Title>
@@ -185,27 +382,19 @@ function Detail(props: StyledWrapComponents) {
             ?.scrollIntoView({ behavior: "smooth" });
         }}
         items={[
-          {
-            key: "基本信息",
-            href: "基本信息",
-            title: "基本信息",
-          },
-          {
-            key: "联系人",
-            href: "联系人",
-            title: "联系人",
-          },
-          {
-            key: "账号信息",
-            href: "账号信息",
-            title: "账号信息",
-          },
-          {
-            key: "系统信息",
-            href: "系统信息",
-            title: "系统信息",
-          },
-        ]}
+          "基本信息",
+          "联系人",
+          "账号信息",
+          "销售合同",
+          "子合同需求单",
+          "销售发货",
+          "销售退货",
+          "系统信息",
+        ].map((item) => ({
+          key: item,
+          title: item,
+          href: item,
+        }))}
       />
     </PageWrapper>
   );
@@ -217,7 +406,7 @@ export default styled(Detail)`
   .anchor {
     position: fixed;
     top: 50%;
-    right: 100px;
+    right: 50px;
     transform: translateY(-50%);
   }
 `;
