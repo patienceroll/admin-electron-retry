@@ -47,7 +47,6 @@ type ClientListItem = {
   name: string;
   nature: string;
   project: Project;
-
   project_id: number;
   province: string;
   purchase_date: string;

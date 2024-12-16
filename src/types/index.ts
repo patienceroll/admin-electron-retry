@@ -17,6 +17,11 @@ declare module "*.svg" {
   export default content;
 }
 
+declare module "*.css" {
+  const value: string;
+  export default value;
+}
+
 declare namespace AMap {
   class PlaceSearch {
     constructor(options?: {
