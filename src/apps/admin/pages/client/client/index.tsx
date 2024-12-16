@@ -54,6 +54,7 @@ function Client() {
                     {record.name}
                 </Typography.Link>
             ),
+            width: 260,
             ellipsis: true,
         },
         {
@@ -104,10 +105,9 @@ function Client() {
         },
         {
             title: "信息完善度",
-            dataIndex: "60%",
+            dataIndex: "perfect_ratio",
             ellipsis: true,
             valueType: 'progress',
-            renderText:() => 90
         },
         {
             title: "是否签约",
@@ -117,8 +117,8 @@ function Client() {
         },
         {
             title: "负责人",
-            dataIndex: "xxx",
-            ellipsis: true,
+            dataIndex: "staff",
+            renderText: (_, row) => row.staff?.name,
         },
         {
             title: "状态",
@@ -128,8 +128,14 @@ function Client() {
             ellipsis: true,
         },
         {
+            title: "创建时间",
+            dataIndex: "created_at",
+            width: 140,
+            ellipsis: true,
+        },
+        {
             dataIndex: "id",
-            // title: "操作",
+            title: "操作",
             fixed: "right",
             width: 160,
             render(_, row) {
