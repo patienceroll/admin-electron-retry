@@ -15,6 +15,12 @@ export function tableColumn<T>(column: ProColumns<T>[]): ProColumns<T>[] {
       {
         width: 120,
         // align: "center",
+        onHeaderCell(row) {
+          return Object.assign<any, any>(
+            { columnData: row },
+            item.onHeaderCell?.(row) || {}
+          );
+        },
       },
       item
     )

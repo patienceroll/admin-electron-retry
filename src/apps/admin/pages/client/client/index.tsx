@@ -32,7 +32,6 @@ import useColumnState from "src/hooks/use-colum-state";
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
-  const columnState = useColumnState("clientlist");
 
   const create = Create.createRef();
   const follow = Follow.createRef();
@@ -125,7 +124,6 @@ function Client() {
     {
       title: "状态",
       dataIndex: "status",
-      key: "statuses",
       valueEnum: StaffStatus,
       ellipsis: true,
     },
@@ -189,6 +187,8 @@ function Client() {
     },
   ]);
 
+  const columnState = useColumnState("clientlist", column);
+
   useEffect(() => {
     table.reload();
   }, []);
@@ -230,12 +230,17 @@ function Client() {
         dataSource={table.dataSource}
         pagination={table.pagination}
         onChange={table.onChange}
-        columns={column}
+        columns={columnState.column}
         size={"small"}
         scroll={{ x: table.measureColumnWidth(column) }}
         columnsState={{
           value: columnState.data?.data,
-          onChange: (state) => columnState.onChange(state, column),
+          onChange: columnState.onChange,
+        }}
+        components={{
+          header: {
+            cell: columnState.tableHeaderCellRender,
+          },
         }}
         rowSelection={{
           selectedRowKeys: select.map((i) => i.id),
