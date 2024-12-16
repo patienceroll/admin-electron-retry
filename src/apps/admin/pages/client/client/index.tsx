@@ -129,7 +129,7 @@ function Client() {
     },
     {
       dataIndex: "id",
-      // title: "操作",
+      title: "操作",
       fixed: "right",
       width: 160,
       render(_, row) {

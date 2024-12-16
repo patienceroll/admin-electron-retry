@@ -26,6 +26,7 @@ export default function useTableColumnState<T>(
             if (typeof item.dataIndex === "string") {
               newState[item.dataIndex] = {
                 width: typeof item.width === "number" ? item.width : undefined,
+                fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
               };
             }
           });
@@ -106,6 +107,9 @@ export default function useTableColumnState<T>(
     tableHeaderCellRender,
     column: column.map((item) => {
       if (typeof item.dataIndex === "string" && data) {
+        if (!data.data[item.dataIndex]) {
+          console.log(item.dataIndex);
+        }
         const wid = data.data[item.dataIndex].width;
         return { ...item, width: wid ? wid : item.width };
       } else {
