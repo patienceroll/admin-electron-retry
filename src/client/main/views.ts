@@ -7,7 +7,10 @@ export default class Views {
 
   open(...arg: Parameters<RoutePreload["open"]>) {
     const [path, name, options] = arg;
-    const mergeOptions = Object.assign({ app: "admin" }, options);
+    const mergeOptions = Object.assign<
+      NonNullable<typeof options>,
+      NonNullable<typeof options>
+    >({ app: "admin" }, options || {});
 
     const host = env.app[mergeOptions!.app!];
     const app = mergeOptions!.app!;

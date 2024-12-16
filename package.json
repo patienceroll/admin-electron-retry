@@ -25,6 +25,8 @@
     "antd": "^5.21.0",
     "dayjs": "^1.11.13",
     "decimal.js": "^10.4.3",
+    "dexie": "^4.0.10",
+    "dexie-react-hooks": "^1.1.7",
     "echarts": "^5.5.1",
     "electron-squirrel-startup": "^1.0.1",
     "qiniu-js": "3.4.2",

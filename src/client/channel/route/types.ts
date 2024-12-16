@@ -11,6 +11,7 @@ type RoutePreload = {
   /** 打开一个新页面 */
   open: (
     path: string,
+    /** 路由名称 */
     name: string,
     options?: {
       app?: Apps;
@@ -28,7 +29,7 @@ type RoutePreload = {
   /** 隐藏菜单 */
   hideMenu: () => void;
   /** 当前菜单是否展示 */
-  isMenuShowed: () => boolean ;
+  isMenuShowed: () => boolean;
   /** 切换到已经打开的页面 */
-  switchPage: (path:string) => void
+  switchPage: (path: string) => void;
 };
