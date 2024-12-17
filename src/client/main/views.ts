@@ -1,4 +1,4 @@
-import { BrowserWindow, nativeTheme, WebContentsView } from "electron";
+import { BrowserWindow, ipcMain, nativeTheme, WebContentsView } from "electron";
 import env from "src/client/env";
 import devTool from "../env/dev-tool";
 
@@ -15,7 +15,7 @@ export default class Views {
     const host = env.app[mergeOptions!.app!];
     const app = mergeOptions!.app!;
 
-    let fullPath = `${host.entry}#${path}`;
+    let fullPath = path;
     if (mergeOptions?.query) {
       const params = new URLSearchParams(mergeOptions.query);
       fullPath += params.toString();
@@ -66,7 +66,12 @@ export default class Views {
     const returnView = this.value.get(path)!;
     returnView.query = mergeOptions?.query;
     returnView.app = app;
-    returnView.view.webContents.loadURL(fullPath);
+   
+    returnView.view.webContents.loadURL(host.entry);
+    ipcMain.once("appMounted", function (event) {
+      event.sender.send("onChangePath", fullPath);
+    });
+
     return returnView;
   }
 

@@ -11,7 +11,7 @@ function FC404(props: StyledWrapComponents) {
       <Result
         className="result"
         title="404"
-        subTitle={`您没有权限访问当前页面或者页面丢失:${location.hash}`}
+        subTitle={`您没有权限访问当前页面或者页面丢失:${location.pathname}`}
         icon={
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
             <path

@@ -69,8 +69,8 @@ export default function routeMain(options: { framework: Framework }) {
       item.view.setBounds(framework.getContentSize());
       framework.baseWindow.contentView.addChildView(item.view);
       item.view.setBackgroundColor(framework.theme.backgroundColor);
-      framework.path = path
-      onRoutesChange()
+      framework.path = path;
+      onRoutesChange();
     }
     event.returnValue = void 0;
   });

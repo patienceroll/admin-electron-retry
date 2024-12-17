@@ -9,13 +9,29 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import path from "path";
 
+import buildCSP from "./src/client/csp-policy";
+
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
 
+const devContentSecurityPolicy = buildCSP({
+  defaultSrc: ["'self'"],
+  connectSrc: [
+    "'self'",
+    "http://118.89.67.217:9638",
+    "*.qiniu.com",
+    "*.amap.com",
+  ],
+  fontSrc: ["'self'", "data:"],
+  imgSrc: ["*", "data:", "blob:"],
+  styleSrc: ["'self'", "'unsafe-inline'"],
+  workerSrc: ["'self'", "blob:"],
+  scriptSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'", "*.amap.com"],
+});
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    name: 'DOMS',
+    name: "DOMS",
     icon: path.resolve(__dirname, "./src/assets/logo/logo"),
   },
   rebuildConfig: {},
@@ -23,7 +39,7 @@ const config: ForgeConfig = {
     new MakerSquirrel({
       usePackageJson: false,
       authors: "zxl",
-      name: 'DOMS',
+      name: "DOMS",
       description: "DOMS",
       version: "1.0.0",
       // exe: "DOMS",
@@ -41,17 +57,6 @@ const config: ForgeConfig = {
     new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       mainConfig,
-      port: 3001,
-      devServer: {
-        
-        client: {
-          overlay: {
-            errors: true,
-            runtimeErrors: false,
-            warnings: true,
-          },
-        },
-      },
       renderer: {
         config: rendererConfig,
         entryPoints: [
@@ -72,6 +77,29 @@ const config: ForgeConfig = {
             },
           },
         ],
+      },
+      port: 3001,
+      devContentSecurityPolicy,
+      devServer: {
+        client: {
+          overlay: {
+            errors: true,
+            runtimeErrors: false,
+            warnings: true,
+          },
+        },
+        proxy: {
+          "/framework/*": {
+            target: "http://localhost:3001",
+            changeOrigin: true,
+            pathRewrite: () => "/framework",
+          },
+          "/admin/*": {
+            target: "http://localhost:3001",
+            changeOrigin: true,
+            pathRewrite: () => "/admin",
+          },
+        },
       },
     }),
     // Fuses are used to enable/disable various Electron functionality

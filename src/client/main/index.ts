@@ -1,7 +1,6 @@
-import { app, autoUpdater, BrowserWindow, session } from "electron";
+import { app, BrowserWindow, session } from "electron";
 
 import Framework from "src/client/main/framework";
-import buildCSP from "../csp-policy";
 import Update from "../update";
 
 let framework: Framework;
@@ -24,34 +23,32 @@ function createWindow() {
   if (app.isPackaged) {
     new Update().queryUpdate();
   }
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        "Content-Security-Policy": [
-          buildCSP({
-            defaultSrc: ["'self'"],
-            connectSrc: [
-              "'self'",
-              "http://118.89.67.217:9638",
-              "*.qiniu.com",
-              "*.amap.com",
-            ],
-            fontSrc: ["'self'", "data:"],
-            imgSrc: ["*", "data:", "blob:"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            workerSrc: ["'self'", "blob:"],
-            scriptSrc: app.isPackaged
-              ? ["'self'"]
-              : ["'self'", "'unsafe-eval'", "'unsafe-inline'", "*.amap.com"],
-          }),
-        ],
-        // "Content-Security-Policy": [
-        //   "default-src 'self' 'unsafe-eval' 'unsafe-inline' ; connect-src 'self' http://118.89.67.217:9638 https://api.qiniu.com;font-src 'self' data: ; img-src 'self' data:",
-        // ],
-      },
-    });
-  });
+  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  //   debugger;
+  //   callback({
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       "Content-Security-Policy": [
+  //         buildCSP({
+  //           defaultSrc: ["'self'"],
+  //           connectSrc: [
+  //             "'self'",
+  //             "http://118.89.67.217:9638",
+  //             "*.qiniu.com",
+  //             "*.amap.com",
+  //           ],
+  //           fontSrc: ["'self'", "data:"],
+  //           imgSrc: ["*", "data:", "blob:"],
+  //           styleSrc: ["'self'", "'unsafe-inline'"],
+  //           workerSrc: ["'self'", "blob:"],
+  //           scriptSrc: app.isPackaged
+  //             ? ["'self'"]
+  //             : ["'self'", "'unsafe-eval'", "'unsafe-inline'", "*.amap.com"],
+  //         }),
+  //       ],
+  //     },
+  //   });
+  // });
   framework = new Framework();
 }
 

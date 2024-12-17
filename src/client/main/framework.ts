@@ -1,4 +1,4 @@
-import { BaseWindow, BrowserWindow, WebContentsView } from "electron";
+import { BaseWindow, BrowserWindow, ipcMain, WebContentsView } from "electron";
 
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
@@ -68,12 +68,14 @@ export default class Framework {
       },
     });
     this.loginWindow.setBackgroundColor(this.theme.backgroundColor);
-    this.loginWindow.webContents.loadURL(
-      `${env.FRAMEWORK_WEBPACK_ENTRY}#/login`
-    );
     if (devTool.login) {
       this.loginWindow.webContents.openDevTools({ mode: "undocked" });
     }
+
+    this.loginWindow.webContents.loadURL(env.FRAMEWORK_WEBPACK_ENTRY);
+    ipcMain.once("appMounted", function (event) {
+      event.sender.send("onChangePath", "/login");
+    });
   }
 
   private createFramework() {
@@ -99,7 +101,11 @@ export default class Framework {
     });
     this.menuView.setBackgroundColor(this.theme.backgroundColor);
     this.menuView.setBounds(this.getContentSize());
-    this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}#/menu`);
+    this.menuView.webContents.loadURL(env.FRAMEWORK_WEBPACK_ENTRY);
+    ipcMain.once("appMounted", function (event) {
+      event.sender.send("onChangePath", "/menu");
+    });
+
     if (devTool.menu) {
       this.menuView.webContents.openDevTools();
     }
@@ -138,9 +144,10 @@ export default class Framework {
   /** 登录成功之后, */
   loginSuccess() {
     this.loginWindow.destroy();
-    this.frameworkView.webContents.loadURL(
-      `${env.FRAMEWORK_WEBPACK_ENTRY}#/layout`
-    );
+    this.frameworkView.webContents.loadURL(env.FRAMEWORK_WEBPACK_ENTRY);
+    ipcMain.once("appMounted", function (event) {
+      event.sender.send("onChangePath", "/layout");
+    });
     this.baseWindow.contentView.addChildView(this.frameworkView);
     this.baseWindow.show();
     this.open("/home", "首页");

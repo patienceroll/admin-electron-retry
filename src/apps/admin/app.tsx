@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
-import { Route, Routes, HashRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import {
   ConfigProvider,
   message,
@@ -20,6 +20,7 @@ import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
 
 const Home = lazy(() => import("./pages/home"));
+const Blank = lazy(() => import("src/framework/blank"));
 const UserInfo = lazy(() => import("./pages/user-info"));
 const OrganizationCompany = lazy(() => import("./pages/organization/company"));
 const OrganizationDepartment = lazy(
@@ -130,9 +131,10 @@ export default function () {
           {contextHolder}
           {modalContextHolder}
           {messageContextHolder}
-          <HashRouter>
+          <BrowserRouter basename="/admin">
             <Suspense>
               <Routes>
+                <Route path="/" element={<Blank />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/user-info" element={<UserInfo />} />
 
@@ -198,7 +200,7 @@ export default function () {
                 <Route path="*" element={<Page404 />} />
               </Routes>
             </Suspense>
-          </HashRouter>
+          </BrowserRouter>
           <GlobalStyle />
         </ThemeProvider>
       </ProConfigProvider>
