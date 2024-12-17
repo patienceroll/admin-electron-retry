@@ -76,3 +76,12 @@ type ClientAddResponse = Pick<
   | "id"
   | "status_show"
 >;
+
+
+type Client = {
+  id: number;
+  type: string;
+  name: string;
+  phone: string;
+  avatar: string;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Route, Routes, HashRouter } from "react-router-dom";
 import {
   ConfigProvider,
@@ -15,32 +15,40 @@ import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
 import ProgressBar from "src/framework/component/progress-bar";
 
-import Home from "./pages/home";
-import UserInfo from "./pages/user-info";
-import OrganizationCompany from "./pages/organization/company";
-import OrganizationDepartment from "./pages/organization/department";
-import OrganizationStaff from "./pages/organization/staff";
-import OrganizationStaffCreate from "./pages/organization/staff/create";
-import OrganizationStaffEdit from "./pages/organization/staff/edit";
-import OrganizationJob from "./pages/organization/job";
-import Page404 from "src/framework/404";
-import FileBussinsefile from "./pages/file/business-file";
-import FileCompanyfile from "./pages/file/company-file";
-import CommonOperationLog from "./pages/common/operation-log";
-import CommonMessage from "./pages/common/message";
-import CommonUser from "./pages/common/user";
-import CommonRole from "./pages/common/role";
-import CommonRoleEdit from "./pages/common/role/detail";
-import CommonMenu from "./pages/common/menu";
-import CommonMenuStaff from "./pages/common/menu-staff";
-import VisualizationArchitecture from "./pages/visualization/architecture";
-import Client from "./pages/client/client";
-import ClientDetail from "./pages/client/client/detail";
-import ClientEdit from "./pages/client/client/edit";
-
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
+
+const Home = lazy(() => import("./pages/home"));
+const UserInfo = lazy(() => import("./pages/user-info"));
+const OrganizationCompany = lazy(() => import("./pages/organization/company"));
+const OrganizationDepartment = lazy(
+  () => import("./pages/organization/department")
+);
+const OrganizationStaff = lazy(() => import("./pages/organization/staff"));
+const OrganizationStaffCreate = lazy(
+  () => import("./pages/organization/staff/create")
+);
+const OrganizationStaffEdit = lazy(
+  () => import("./pages/organization/staff/edit")
+);
+const OrganizationJob = lazy(() => import("./pages/organization/job"));
+const Page404 = lazy(() => import("src/framework/404"));
+const FileBussinsefile = lazy(() => import("./pages/file/business-file"));
+const FileCompanyfile = lazy(() => import("./pages/file/company-file"));
+const CommonOperationLog = lazy(() => import("./pages/common/operation-log"));
+const CommonMessage = lazy(() => import("./pages/common/message"));
+const CommonUser = lazy(() => import("./pages/common/user"));
+const CommonRole = lazy(() => import("./pages/common/role"));
+const CommonRoleEdit = lazy(() => import("./pages/common/role/detail"));
+const CommonMenu = lazy(() => import("./pages/common/menu"));
+const CommonMenuStaff = lazy(() => import("./pages/common/menu-staff"));
+const VisualizationArchitecture = lazy(
+  () => import("./pages/visualization/architecture")
+);
+const Client = lazy(() => import("./pages/client/client"));
+const ClientDetail = lazy(() => import("./pages/client/client/detail"));
+const ClientEdit = lazy(() => import("./pages/client/client/edit"));
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
@@ -50,12 +58,10 @@ export default function () {
   const [modalApi, modalContextHolder] = Modal.useModal();
   const [messageApi, messageContextHolder] = message.useMessage();
 
-  const algorithm = [
-    darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-  ]
+  const algorithm = [darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm];
 
-  if (themebase.layout === 'compact') {
-    algorithm.push(theme.compactAlgorithm)
+  if (themebase.layout === "compact") {
+    algorithm.push(theme.compactAlgorithm);
   }
 
   const themeDefault: ThemeConfig = {
@@ -125,53 +131,73 @@ export default function () {
           {modalContextHolder}
           {messageContextHolder}
           <HashRouter>
-            <Routes>
-              <Route path="/home" Component={Home} />
-              <Route path="/user-info" Component={UserInfo} />
+            <Suspense>
+              <Routes>
+                <Route path="/home" element={<Home />} />
+                <Route path="/user-info" element={<UserInfo />} />
 
-              <Route
-                path="/organization/company"
-                Component={OrganizationCompany}
-              />
-              <Route
-                path="/organization/department"
-                Component={OrganizationDepartment}
-              />
-              <Route path="/organization/staff" Component={OrganizationStaff} />
-              <Route
-                path="/organization/staff/create"
-                Component={OrganizationStaffCreate}
-              />
-              <Route
-                path="/organization/staff/edit"
-                Component={OrganizationStaffEdit}
-              />
-              <Route path="/organization/job" Component={OrganizationJob} />
-              <Route path="/file/business-file" Component={FileBussinsefile} />
-              <Route path="/file/company-file" Component={FileCompanyfile} />
+                <Route
+                  path="/organization/company"
+                  element={<OrganizationCompany />}
+                />
+                <Route
+                  path="/organization/department"
+                  element={<OrganizationDepartment />}
+                />
+                <Route
+                  path="/organization/staff"
+                  element={<OrganizationStaff />}
+                />
+                <Route
+                  path="/organization/staff/create"
+                  element={<OrganizationStaffCreate />}
+                />
+                <Route
+                  path="/organization/staff/edit"
+                  element={<OrganizationStaffEdit />}
+                />
+                <Route path="/organization/job" element={<OrganizationJob />} />
+                <Route
+                  path="/file/business-file"
+                  element={<FileBussinsefile />}
+                />
+                <Route
+                  path="/file/company-file"
+                  element={<FileCompanyfile />}
+                />
 
-              <Route
-                path="/common/operation-log"
-                Component={CommonOperationLog}
-              />
-              <Route path="/common/message" Component={CommonMessage} />
-              <Route path="/common/user" Component={CommonUser} />
-              <Route path="/system/menu" Component={CommonMenu} />
-              <Route path="/common/menu-staff" Component={CommonMenuStaff} />
-              <Route path="/system/role" Component={CommonRole} />
-              <Route path="/system/role/detail" Component={CommonRoleEdit} />
+                <Route
+                  path="/common/operation-log"
+                  element={<CommonOperationLog />}
+                />
+                <Route path="/common/message" element={<CommonMessage />} />
+                <Route path="/common/user" element={<CommonUser />} />
+                <Route path="/system/menu" element={<CommonMenu />} />
+                <Route
+                  path="/common/menu-staff"
+                  element={<CommonMenuStaff />}
+                />
+                <Route path="/system/role" element={<CommonRole />} />
+                <Route
+                  path="/system/role/detail"
+                  element={<CommonRoleEdit />}
+                />
 
-              <Route
-                path="/visualization/architecture"
-                Component={VisualizationArchitecture}
-              />
+                <Route
+                  path="/visualization/architecture"
+                  element={<VisualizationArchitecture />}
+                />
 
-              <Route path="/client/client" Component={Client} />
-              <Route path="/client/client/detail" Component={ClientDetail} />
-              <Route path="/client/client/edit" Component={ClientEdit} />
+                <Route path="/client/client" element={<Client />} />
+                <Route
+                  path="/client/client/detail"
+                  element={<ClientDetail />}
+                />
+                <Route path="/client/client/edit" element={<ClientEdit />} />
 
-              <Route path="*" element={<Page404 />} />
-            </Routes>
+                <Route path="*" element={<Page404 />} />
+              </Routes>
+            </Suspense>
           </HashRouter>
           <GlobalStyle />
         </ThemeProvider>

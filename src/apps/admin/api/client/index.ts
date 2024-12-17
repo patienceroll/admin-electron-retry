@@ -30,7 +30,7 @@ export function getClientList(
   params: ListParam & {
     is_sign?: ClientListItem["is_sign"];
     project_id?: Project["id"];
-    business_opportunity_id?: BusinessOpportunity["id"];
+    business_opportunity_id?: BusinessOpportunityListItem["id"];
   }
 ) {
   return fetch.GET<List<ClientListItem>>(
@@ -43,7 +43,7 @@ export function getClientList(
 export function getClientOption(params: {
   is_sign?: ClientListItem["is_sign"];
   project_id?: Project["id"];
-  business_opportunity_id?: BusinessOpportunity["id"];
+  business_opportunity_id?: BusinessOpportunityListItem["id"];
 }) {
   return fetch.GET<ClientListItem[]>(fetch.base(`/api/client/list`), params);
 }

@@ -26,6 +26,7 @@ export default function useTableColumnState<T>(
             if (typeof item.dataIndex === "string") {
               newState[item.dataIndex] = {
                 width: typeof item.width === "number" ? item.width : undefined,
+                fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
               };
             }
           });
@@ -73,11 +74,11 @@ export default function useTableColumnState<T>(
         axis="x"
         width={100}
         onResizeStart={(e) => {
-          start.current = e.clientX as number;
+          start.current = (e as any).clientX as number;
         }}
         onResizeStop={(e) => {
           if (data) {
-            const stop = e.clientX as number;
+            const stop = (e as any).clientX as number;
             let changeWidth = 0;
             const elementWidth = th.current?.clientWidth || 100;
             changeWidth = stop - start.current;
