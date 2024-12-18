@@ -10,7 +10,6 @@ import { projectTypeMap } from "src/apps/admin/api/project";
 import InfoItem from "src/framework/component/info-item";
 
 import Title from "src/framework/component/title";
-import useOption from "src/hooks/use-option";
 import { getClientContactList } from "src/apps/admin/api/client-concat";
 import useSearchTable, {
   tableColumn,
@@ -18,6 +17,9 @@ import useSearchTable, {
 } from "src/hooks/use-search-table";
 import { getBankAccountList } from "src/apps/admin/api/bank-account";
 import { getSalesContractList } from "src/apps/admin/api/sales-contract";
+import { getSalesOrderList } from "src/apps/admin/api/sales-order";
+import { getSalesDeliverList } from "src/apps/admin/api/sales-deliver";
+import { getSalesReturnList } from "src/apps/admin/api/sales-return";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -29,6 +31,9 @@ function Detail(props: StyledWrapComponents) {
   const concat = useSearchTable(getClientContactList);
   const bankAccount = useSearchTable(getBankAccountList);
   const saleContact = useSearchTable(getSalesContractList);
+  const saleOrder = useSearchTable(getSalesOrderList);
+  const saleDeliver = useSearchTable(getSalesDeliverList);
+  const saleReturn = useSearchTable(getSalesReturnList)
 
   const [detail, setDetail] = useState<ClientListItem>();
 
@@ -52,6 +57,15 @@ function Detail(props: StyledWrapComponents) {
     saleContact.extraParams.current.client_id = Number(id);
     saleContact.extraParams.current.is_show_detail = 1;
     saleContact.reload();
+    saleOrder.extraParams.current.client_id = Number(id);
+    saleOrder.extraParams.current.is_show_detail = 1;
+    saleOrder.reload();
+    saleDeliver.extraParams.current.client_id = Number(id);
+    saleDeliver.extraParams.current.is_show_detail = 1;
+    saleDeliver.reload();
+    saleReturn.extraParams.current.client_id = Number(id);
+    saleReturn.extraParams.current.is_show_detail = 1;
+    saleReturn.reload();
   }, []);
 
   const column = tableColumn<
@@ -69,7 +83,9 @@ function Detail(props: StyledWrapComponents) {
       width: 200,
       renderText: (_, row) => {
         const value = row.material_sku?.attr_snapshoot || {};
-        return Object.keys(value).map((key) => `${key}:${value[key]}`).join(" ");
+        return Object.keys(value)
+          .map((key) => `${key}:${value[key]}`)
+          .join(" ");
       },
     },
     {
@@ -275,141 +291,141 @@ function Detail(props: StyledWrapComponents) {
         子合同需求单
       </Title>
 
-      {/* <ProTable
+      <ProTable
         search={false}
-        pagination={false}
-        options={false}
         rowKey="id"
         style={{ marginTop: theme.margin }}
-        loading={saleContact.loading}
-        dataSource={saleContact.list}
-        columns={tableColumn<SalesContractListItem>([
+        options={saleOrder.options}
+        loading={saleOrder.loading}
+        dataSource={saleOrder.dataSource}
+        pagination={saleOrder.pagination}
+        onChange={saleOrder.onChange}
+        columns={saleOrder.column([
           {
-            title: "公司",
-            dataIndex: "company_name",
+            title: "子合同编号",
+            dataIndex: "code",
           },
           {
-            title: "地址",
-            dataIndex: "company_address",
-          },
-          {
-            title: "联系人",
-            dataIndex: "linkman",
-          },
-          {
-            title: "电话",
-            dataIndex: "phone",
-          },
-          {
-            title: "银行",
-            dataIndex: "bank_name",
-          },
-          {
-            title: "开户行",
-            dataIndex: "bank_address",
-          },
-          {
-            title: "税号",
-            dataIndex: "tax_code",
-          },
-          {
-            title: "账号",
-            dataIndex: "account",
+            title: "子合同日期",
+            dataIndex: "bill_date",
           },
         ])}
-      /> */}
+        scroll={{ x: tableMeasureColumnWidth(column) }}
+        expandable={{
+          childrenColumnName: "detail",
+          columnWidth: 100,
+          rowExpandable(record) {
+            return Boolean(record.detail && record.detail.length !== 0);
+          },
+          expandedRowRender(row) {
+            if (!row.detail) return null;
+
+            return (
+              <ProTable
+                style={{ width: "100%" }}
+                rowKey="id"
+                search={false}
+                options={false}
+                pagination={false}
+                dataSource={row.detail}
+                columns={column}
+              />
+            );
+          },
+        }}
+      />
       <Title style={{ marginTop: theme.margin }} id="销售发货">
         销售发货
       </Title>
-      {/* <ProTable
+      <ProTable
         search={false}
-        pagination={false}
-        options={false}
         rowKey="id"
         style={{ marginTop: theme.margin }}
-        loading={saleContact.loading}
-        dataSource={saleContact.list}
-        columns={tableColumn<SalesContractListItem>([
+        options={saleDeliver.options}
+        loading={saleDeliver.loading}
+        dataSource={saleDeliver.dataSource}
+        pagination={saleDeliver.pagination}
+        onChange={saleDeliver.onChange}
+        columns={saleDeliver.column([
           {
-            title: "公司",
-            dataIndex: "company_name",
+            title: "子合同编号",
+            dataIndex: "code",
           },
           {
-            title: "地址",
-            dataIndex: "company_address",
-          },
-          {
-            title: "联系人",
-            dataIndex: "linkman",
-          },
-          {
-            title: "电话",
-            dataIndex: "phone",
-          },
-          {
-            title: "银行",
-            dataIndex: "bank_name",
-          },
-          {
-            title: "开户行",
-            dataIndex: "bank_address",
-          },
-          {
-            title: "税号",
-            dataIndex: "tax_code",
-          },
-          {
-            title: "账号",
-            dataIndex: "account",
+            title: "子合同日期",
+            dataIndex: "bill_date",
           },
         ])}
-      /> */}
+        scroll={{ x: tableMeasureColumnWidth(column) }}
+        expandable={{
+          childrenColumnName: "detail",
+          columnWidth: 100,
+          rowExpandable(record) {
+            return Boolean(record.detail && record.detail.length !== 0);
+          },
+          expandedRowRender(row) {
+            if (!row.detail) return null;
+
+            return (
+              <ProTable
+                style={{ width: "100%" }}
+                rowKey="id"
+                search={false}
+                options={false}
+                pagination={false}
+                dataSource={row.detail}
+                columns={column}
+              />
+            );
+          },
+        }}
+      />
       <Title style={{ marginTop: theme.margin }} id="销售退货">
         销售退货
       </Title>
-      {/* <ProTable
+      <ProTable
         search={false}
-        pagination={false}
-        options={false}
         rowKey="id"
         style={{ marginTop: theme.margin }}
-        loading={saleContact.loading}
-        dataSource={saleContact.list}
-        columns={tableColumn<SalesContractListItem>([
+        options={saleReturn.options}
+        loading={saleReturn.loading}
+        dataSource={saleReturn.dataSource}
+        pagination={saleReturn.pagination}
+        onChange={saleReturn.onChange}
+        columns={saleReturn.column([
           {
-            title: "公司",
-            dataIndex: "company_name",
+            title: "子合同编号",
+            dataIndex: "code",
           },
           {
-            title: "地址",
-            dataIndex: "company_address",
-          },
-          {
-            title: "联系人",
-            dataIndex: "linkman",
-          },
-          {
-            title: "电话",
-            dataIndex: "phone",
-          },
-          {
-            title: "银行",
-            dataIndex: "bank_name",
-          },
-          {
-            title: "开户行",
-            dataIndex: "bank_address",
-          },
-          {
-            title: "税号",
-            dataIndex: "tax_code",
-          },
-          {
-            title: "账号",
-            dataIndex: "account",
+            title: "子合同日期",
+            dataIndex: "bill_date",
           },
         ])}
-      /> */}
+        scroll={{ x: tableMeasureColumnWidth(column) }}
+        expandable={{
+          childrenColumnName: "detail",
+          columnWidth: 100,
+          rowExpandable(record) {
+            return Boolean(record.detail && record.detail.length !== 0);
+          },
+          expandedRowRender(row) {
+            if (!row.detail) return null;
+
+            return (
+              <ProTable
+                style={{ width: "100%" }}
+                rowKey="id"
+                search={false}
+                options={false}
+                pagination={false}
+                dataSource={row.detail}
+                columns={column}
+              />
+            );
+          },
+        }}
+      />
 
       <Title style={{ marginTop: theme.margin }} id="系统信息">
         系统信息
