@@ -47,7 +47,7 @@ const AddressFormInput = forwardRef(function (
             rest.onFocus(e);
           }
           inputRef.current?.blur();
-          chooseAddressRef.current?.choose().then((res) => {
+          chooseAddressRef.current?.choose(value).then((res) => {
             onChange?.(res);
           });
         }}

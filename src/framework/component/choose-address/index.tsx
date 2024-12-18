@@ -31,7 +31,12 @@ type Value = {
 };
 
 type Ref = {
-  choose: () => Promise<Value>;
+  choose: (
+    value?: Pick<
+      Value,
+      "address" | "city" | "county" | "province" | "latitude" | "longitude"
+    >
+  ) => Promise<Value>;
 };
 
 type AddressListItem = {
@@ -67,16 +72,45 @@ const ChooseAddress = forwardRef<Ref, StyledWrapComponents>(function (
   const [currentAddress, setCurrentAddress] = useState<AddressListItem>();
 
   useImperativeHandle(ref, () => ({
-    choose() {
+    choose(inputAddress) {
       return new Promise((resolve, reject) => {
         promiseResolver.current = { reject, resolve };
         open.setTrue();
+
         intervalQuery({
           condition() {
             return Boolean(mapCom.current);
           },
           onSuccess() {
-            mapCom.current?.getMap().then(setMap);
+            mapCom.current?.getMap().then((map) => {
+              setMap(map);
+              if (inputAddress) {
+                const addressItem: AddressListItem = {
+                  id: "1",
+                  lat: inputAddress.latitude,
+                  lng: inputAddress.longitude,
+                  name: inputAddress.address,
+                  address: inputAddress.address,
+                };
+                const lnglat = new AMap.LngLat(
+                  inputAddress.longitude,
+                  inputAddress.latitude
+                );
+                const marker = new AMap.Marker({ position: lnglat });
+                map.add(marker);
+                map.setCenter(lnglat);
+                map.setZoom(14);
+                setCurrentAddress(addressItem);
+                setAddressList([addressItem]);
+                setDistrict(
+                  [
+                    inputAddress.province,
+                    inputAddress.city,
+                    inputAddress.county,
+                  ].map((item) => ({ text: item, value: item }))
+                );
+              }
+            });
           },
         });
       });
