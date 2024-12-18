@@ -8,6 +8,7 @@ export function getBankAccountList(
     type: 1 | 2 | 4 | 3;
     /** 目标表id */
     table_id?: number;
+    table?:string
   }
 ) {
   return fetch.GET<List<BankAccount>>(
