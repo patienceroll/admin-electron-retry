@@ -6,6 +6,8 @@ export function getSalesContractList(
   params: ListParam & {
     status?: BillStatus;
     project_id?: Project["id"];
+    client_id?:ClientListItem['id'],
+    is_show_detail?: 0|1
   }
 ) {
   return fetch.GET<List<SalesContractListItem>>(

@@ -21,7 +21,7 @@ export function getClientContactOptions(
     client_id?: ClientListItem["id"];
   }
 ) {
-  return fetch.GET<ClientContaListItem[]>(
+  return fetch.GET<Pick<ClientContaListItem, "id" | "name">[]>(
     fetch.base(`/api/client-contact/list`),
     params
   );
