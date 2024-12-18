@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, HashRouter } from "react-router-dom";
-import { ConfigProvider, message, Modal, notification, theme, ThemeConfig } from "antd";
+import {
+  ConfigProvider,
+  message,
+  Modal,
+  notification,
+  theme,
+  ThemeConfig,
+} from "antd";
 import locale from "antd/locale/zh_CN";
 
-import Layout from "src/framework/layout";
-import Login from "./login";
-import Menu from "./menu";
-import Page404 from './404'
 import GlobalStyle from "src/framework/component/global-theme";
 import ThemeProvider from "src/framework/component/theme-provider";
 import ProgressBar from "src/framework/component/progress-bar";
@@ -14,6 +16,7 @@ import ProgressBar from "src/framework/component/progress-bar";
 import contextedNotify from "src/framework/component/contexted-notify";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
+import Route from "./route";
 
 export default function () {
   const [themebase, setThemeBase] = useState(() => window.preload.getTheme());
@@ -22,12 +25,10 @@ export default function () {
   const [modalApi, modalContextHolder] = Modal.useModal();
   const [messageApi, messageContextHolder] = message.useMessage();
 
-  const algorithm = [
-    darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-  ]
+  const algorithm = [darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm];
 
-  if (themebase.layout === 'compact') {
-    algorithm.push(theme.compactAlgorithm)
+  if (themebase.layout === "compact") {
+    algorithm.push(theme.compactAlgorithm);
   }
 
   const themeDefault: ThemeConfig = {
@@ -35,7 +36,7 @@ export default function () {
     algorithm,
   };
   const designToken = theme.getDesignToken(themeDefault);
-  
+
   useEffect(() => {
     contextedNotify.notification = api;
   }, [api]);
@@ -48,7 +49,6 @@ export default function () {
     contextedMessage.message = messageApi;
   }, [messageApi]);
 
-
   useEffect(() => {
     return window.preload.onDarkModeChange(setDarkMode);
   }, []);
@@ -56,7 +56,7 @@ export default function () {
   useEffect(() => {
     return window.preload.onThemeChange(setThemeBase);
   }, []);
-
+  
   return (
     <ConfigProvider
       locale={locale}
@@ -74,14 +74,7 @@ export default function () {
         {contextHolder}
         {modalContextHolder}
         {messageContextHolder}
-        <HashRouter>
-          <Routes>
-            <Route path="/layout" element={<Layout />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/menu" element={<Menu darkMode={darkMode} />} />
-            <Route path="*" element={<Page404 />} />
-          </Routes>
-        </HashRouter>
+        <Route darkMode={darkMode} />
         <GlobalStyle />
       </ThemeProvider>
     </ConfigProvider>

@@ -8,6 +8,7 @@ import windowPredload from "src/client/channel/window/preload";
 import loginPreload from "src/client/channel/login/preload";
 import localPreload from "src/client/channel/local/preload";
 import filesPreload from "src/client/channel/files/preload";
+import electronPreload from "src/client/channel/electron/preload";
 
 contextBridge.exposeInMainWorld(
   "preload",
@@ -17,6 +18,7 @@ contextBridge.exposeInMainWorld(
     windowPredload(),
     loginPreload(),
     localPreload(),
-    filesPreload()
+    filesPreload(),
+    electronPreload()
   )
 );

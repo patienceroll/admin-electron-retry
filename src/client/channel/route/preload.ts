@@ -31,7 +31,19 @@ export default function routePreload(): RoutePreload {
       return ipcRenderer.sendSync("isMenuShowed");
     },
     switchPage(path) {
-      return ipcRenderer.sendSync("switchPage",path);
+      return ipcRenderer.sendSync("switchPage", path);
+    },
+    appMounted() {
+      return ipcRenderer.sendSync("appMounted");
+    },
+    onChangePath(callback) {
+      function listener(_: Electron.IpcRendererEvent, path: string) {
+        callback(path);
+      }
+      ipcRenderer.on("onChangePath", listener);
+      return function () {
+        ipcRenderer.removeListener("onChangePath", listener);
+      };
     },
   };
 }

@@ -1,4 +1,10 @@
-import { BaseWindow, BrowserWindow, WebContentsView } from "electron";
+import {
+  app,
+  BaseWindow,
+  BrowserWindow,
+  ipcMain,
+  WebContentsView,
+} from "electron";
 
 import themeMain from "src/client/channel/theme/main";
 import routeMain from "src/client/channel/route/main";
@@ -7,6 +13,7 @@ import windowMain from "src/client/channel/window/main";
 import loginMain from "src/client/channel/login/main";
 import localMain from "src/client/channel/local/main";
 import filesMain from "src/client/channel/files/main";
+import ElectronMain from "src/client/channel/electron/main";
 
 import env from "src/client/env";
 import Views from "src/client/main/views";
@@ -68,11 +75,23 @@ export default class Framework {
       },
     });
     this.loginWindow.setBackgroundColor(this.theme.backgroundColor);
-    this.loginWindow.webContents.loadURL(
-      `${env.FRAMEWORK_WEBPACK_ENTRY}#/login`
-    );
     if (devTool.login) {
       this.loginWindow.webContents.openDevTools({ mode: "undocked" });
+    }
+    if (app.isPackaged) {
+      this.loginWindow.webContents.loadURL(env.FRAMEWORK_WEBPACK_ENTRY);
+      const listener = (event: Electron.IpcMainEvent) => {
+        if (event.sender === this.loginWindow.webContents) {
+          event.sender.send("onChangePath", "/login");
+          ipcMain.removeListener("appMounted", listener);
+        }
+        event.returnValue = void 0;
+      };
+      ipcMain.on("appMounted", listener);
+    } else {
+      this.loginWindow.webContents.loadURL(
+        `${env.FRAMEWORK_WEBPACK_ENTRY}/login`
+      );
     }
   }
 
@@ -99,7 +118,21 @@ export default class Framework {
     });
     this.menuView.setBackgroundColor(this.theme.backgroundColor);
     this.menuView.setBounds(this.getContentSize());
-    this.menuView.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}#/menu`);
+
+    if (app.isPackaged) {
+      this.menuView?.webContents.loadURL(env.FRAMEWORK_WEBPACK_ENTRY);
+      const listener = (event: Electron.IpcMainEvent) => {
+        if (event.sender === this.menuView?.webContents) {
+          event.sender.send("onChangePath", "/menu");
+          ipcMain.removeListener("appMounted", listener);
+        }
+        event.returnValue = void 0;
+      };
+      ipcMain.on("appMounted", listener);
+    } else {
+      this.menuView?.webContents.loadURL(`${env.FRAMEWORK_WEBPACK_ENTRY}/menu`);
+    }
+
     if (devTool.menu) {
       this.menuView.webContents.openDevTools();
     }
@@ -113,6 +146,7 @@ export default class Framework {
     loginMain({ framework: this });
     localMain({ framework: this });
     filesMain({ framework: this });
+    ElectronMain({ framework: this });
   }
 
   open(...arg: Parameters<RoutePreload["open"]>) {
@@ -138,9 +172,23 @@ export default class Framework {
   /** 登录成功之后, */
   loginSuccess() {
     this.loginWindow.destroy();
-    this.frameworkView.webContents.loadURL(
-      `${env.FRAMEWORK_WEBPACK_ENTRY}#/layout`
-    );
+
+    if (app.isPackaged) {
+      this.frameworkView.webContents.loadURL(env.FRAMEWORK_WEBPACK_ENTRY);
+      const listener = (event: Electron.IpcMainEvent) => {
+        if (event.sender === this.frameworkView.webContents) {
+          event.sender.send("onChangePath", "/layout");
+          ipcMain.removeListener("appMounted", listener);
+        }
+        event.returnValue = void 0;
+      };
+      ipcMain.on("appMounted", listener);
+    } else {
+      this.frameworkView.webContents.loadURL(
+        `${env.FRAMEWORK_WEBPACK_ENTRY}/layout`
+      );
+    }
+
     this.baseWindow.contentView.addChildView(this.frameworkView);
     this.baseWindow.show();
     this.open("/home", "首页");

@@ -41,13 +41,11 @@ declare namespace AMap {
       keyword: string,
       callback: (
         status: AMap.Geocoder.SearchStatus,
-        result: string | Record<string, any> | 0,
-      ) => void,
+        result: string | Record<string, any> | 0
+      ) => void
     ) => void;
   }
 }
-
-
 
 interface Window {
   _AMapSecurityConfig: {
@@ -58,7 +56,8 @@ interface Window {
     LoginPreload &
     RoutePreload &
     WindowPreload &
-    FilesPreload;
+    FilesPreload &
+    ElectronPreload;
 }
 
 type DisposeFunction = VoidFunction;
@@ -133,7 +132,6 @@ type BtnPower = Partial<{
   is_cancel_operate: 0 | 1;
 }>;
 
-
 type AddresssParams = {
   province?: string;
   city?: string;
@@ -141,5 +139,4 @@ type AddresssParams = {
   address?: string;
   longitude?: string;
   latitude?: string;
-}
-
+};
