@@ -4,7 +4,7 @@ const config = {
   // 展示 titlebar 的开发者工具
   frame: false,
   // 展示登录页面的开发者工具
-  login: true,
+  login: false,
   // 展示菜单页面的开发者工具
   menu: false,
   // 展示有tab页面的开发者工具

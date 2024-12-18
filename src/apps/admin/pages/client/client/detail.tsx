@@ -375,12 +375,8 @@ function Detail(props: StyledWrapComponents) {
 
       <Anchor
         className="anchor"
-        onClick={(e, link) => {
-          e.preventDefault();
-          document
-            .getElementById(`${link.title}`)
-            ?.scrollIntoView({ behavior: "smooth" });
-        }}
+        replace
+        // onClick={e => e.preventDefault()}
         items={[
           "基本信息",
           "联系人",
@@ -393,7 +389,7 @@ function Detail(props: StyledWrapComponents) {
         ].map((item) => ({
           key: item,
           title: item,
-          href: item,
+          href: `#${item}`,
         }))}
       />
     </PageWrapper>

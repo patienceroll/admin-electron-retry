@@ -1,7 +1,9 @@
-import { app, BrowserWindow, session } from "electron";
+import { app, BrowserWindow, crashReporter } from "electron";
 
 import Framework from "src/client/main/framework";
 import Update from "../update";
+
+crashReporter.start({ uploadToServer: false });
 
 let framework: Framework;
 

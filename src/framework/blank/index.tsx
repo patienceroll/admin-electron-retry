@@ -7,7 +7,7 @@ export default function () {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.preload.appMounted()
+    window.preload.appMounted();
     return window.preload.onChangePath(navigate);
   }, [navigate]);
 
