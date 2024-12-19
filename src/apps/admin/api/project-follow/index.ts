@@ -6,7 +6,7 @@ import fetch from "src/util/fetch";
 export function getProjectFollowList(
   params: ListParam & {
     project_id?: Project["id"];
-    business_opportunity_id?: BusinessOpportunityListItem["id"];
+    business_opportunity_id?: BusinessOpportunity["id"];
   }
 ) {
   return fetch.GET<List<ProjectFollowListItem>>(

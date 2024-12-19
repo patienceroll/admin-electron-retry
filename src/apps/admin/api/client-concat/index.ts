@@ -8,7 +8,7 @@ export function getClientContactList(
     client_id?: ClientListItem["id"];
   }
 ) {
-  return fetch.GET<List<ClientContaListItem>>(
+  return fetch.GET<List<ClientContact>>(
     fetch.base(`/api/client-contact/list`),
     params
   );
@@ -21,7 +21,7 @@ export function getClientContactOptions(
     client_id?: ClientListItem["id"];
   }
 ) {
-  return fetch.GET<Pick<ClientContaListItem, "id" | "name">[]>(
+  return fetch.GET<Pick<ClientContact, "id" | "name">[]>(
     fetch.base(`/api/client-contact/list`),
     params
   );
@@ -30,7 +30,7 @@ export function getClientContactOptions(
 /**
  * 客户联系人-详情
  */
-export function getClientContact(params: Pick<ClientContaListItem, "id">) {
+export function getClientContact(params: Pick<ClientContact, "id">) {
   return fetch.GET(fetch.base(`/api/client-contact/detail`), params);
 }
 
@@ -39,17 +39,14 @@ export function getClientContact(params: Pick<ClientContaListItem, "id">) {
  */
 export function addClientContact(
   params: Pick<
-    ClientContaListItem,
+    ClientContact,
     | "ID_card"
     | "name"
-    | "short_name"
-    | "type"
-    | "nature"
-    | "address"
-    | "is_sign"
     | "status"
     | "company_id"
     | "client_id"
+    | "wechat"
+    | "is_main"
   >
 ) {
   return fetch.POST(fetch.base(`/api/client-contact`), params);
@@ -65,7 +62,7 @@ export function editClientContact(params: any) {
 /**
  * 客户联系人-删除
  */
-export function deleteClientContact(params: Pick<ClientContaListItem, "id">) {
+export function deleteClientContact(params: Pick<ClientContact, "id">) {
   return fetch.DELETE(fetch.base(`/api/client-contact`), params);
 }
 

@@ -5,13 +5,16 @@ import React, {
   useRef,
   useState,
 } from "react";
-import AddressFormInput from "src/framework/component/address-form-input";
 
 import useWather from "src/hooks/use-wather";
 import {
   addBankAccount,
   editBankAccount,
 } from "src/apps/admin/api/bank-account";
+import Icon from "src/framework/component/icon";
+import PostionSVG from "src/assets/svg/定位.svg";
+
+import * as ChooseAddress from "src/framework/component/choose-address";
 
 type Ref = {
   create: () => Promise<void>;
@@ -32,6 +35,8 @@ export default forwardRef<Ref, Pick<ClientListItem, "id">>(function (
 
   const [form] = Form.useForm();
   const [item, setItem] = useState<BankAccount>();
+
+  const chooseAddressRef = ChooseAddress.createRef();
 
   const promiseResolver = useRef<{
     resolve: () => void;
@@ -95,30 +100,10 @@ export default forwardRef<Ref, Pick<ClientListItem, "id">>(function (
           reject,
           resolve,
         };
-        const { province, city, county, latitude, longitude, company_address } =
-          item;
+
         open.setTrue();
         setItem(item);
         form.setFieldsValue(item);
-        if (
-          province &&
-          city &&
-          county &&
-          latitude &&
-          longitude &&
-          company_address
-        ) {
-          form.setFieldValue("company_address", {
-            province,
-            city,
-            county,
-            latitude,
-            longitude,
-            address: company_address,
-          });
-        } else {
-          form.setFieldValue("company_address", undefined);
-        }
       });
     },
   }));
@@ -154,7 +139,20 @@ export default forwardRef<Ref, Pick<ClientListItem, "id">>(function (
           name="company_address"
           rules={[{ required: true }]}
         >
-          <AddressFormInput />
+          <Input
+            placeholder="请输入地址"
+            addonAfter={
+              <Icon
+                icon={PostionSVG}
+                style={{ cursor: "pointer" }}
+                onClick={function () {
+                  chooseAddressRef.current?.choose().then((res) => {
+                    form.setFieldValue("company_address", res.address);
+                  });
+                }}
+              />
+            }
+          />
         </Form.Item>
         <Form.Item label="联系人" name="linkman" rules={[{ required: true }]}>
           <Input placeholder="请输入联系人" />
@@ -181,6 +179,8 @@ export default forwardRef<Ref, Pick<ClientListItem, "id">>(function (
           </Radio.Group>
         </Form.Item>
       </Form>
+
+      <ChooseAddress.default ref={chooseAddressRef} />
     </Modal>
   );
 });

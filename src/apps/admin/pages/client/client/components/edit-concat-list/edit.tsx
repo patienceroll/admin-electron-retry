@@ -14,7 +14,7 @@ import useWather from "src/hooks/use-wather";
 
 type Ref = {
   create: () => Promise<void>;
-  edit: (item: ClientContaListItem) => Promise<void>;
+  edit: (item: ClientContact) => Promise<void>;
 };
 
 export function createRef() {
@@ -29,7 +29,7 @@ export default forwardRef<Ref, Pick<ClientListItem, "id">>(function (
   const [open] = useWather();
   const [loading] = useWather();
 
-  const [item, setItem] = useState<ClientContaListItem>();
+  const [item, setItem] = useState<ClientContact>();
 
   const promiseResolver = useRef<{
     resolve: () => void;
