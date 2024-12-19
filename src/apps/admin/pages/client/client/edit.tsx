@@ -6,9 +6,11 @@ import { Col, FloatButton, Form, Input, Radio, Row, Select } from "antd/es";
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
 import AddressFormInput from "src/framework/component/address-form-input";
-import { getClient } from "src/apps/admin/api/client";
+import { editClient, getClient } from "src/apps/admin/api/client";
 import Icon from "src/framework/component/icon";
 import SaveSvg from "src/assets/svg/保存.svg";
+import EditConcatList from "./components/edit-concat-list";
+import EditBankAccount from "./components/edit-bank-account";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -45,6 +47,27 @@ function Edit(props: StyledWrapComponents) {
         form.setFieldValue("address", undefined);
       }
     });
+  }
+
+  function submit() {
+    return form
+      .validateFields()
+      .then((store) => {
+        return editClient({
+          id,
+          ...store,
+          province: store.address.province,
+          city: store.address.city,
+          county: store.address.county,
+          latitude: store.address.lat,
+          longitude: store.address.lng,
+          address: store.address.address,
+        });
+      })
+      .then(() => {
+        window.parent.postMessage("success");
+        window.close();
+      });
   }
 
   useEffect(() => {
@@ -183,16 +206,20 @@ function Edit(props: StyledWrapComponents) {
       </Form>
 
       <Title style={{ marginTop: theme.margin }}>联系人</Title>
-      <Title style={{ marginTop: theme.margin }}>账户信息</Title>
+      <EditConcatList id={id} />
 
-      <FloatButton
-        icon={
-          <Icon icon={SaveSvg}  />
-        }
-        description="HELP INFO"
-        shape="square"
-        style={{ insetInlineEnd: 24 }}
-      />
+      <Title style={{ marginTop: theme.margin }}>账户信息</Title>
+      <EditBankAccount id={id} />
+
+      {detail && (
+        <FloatButton
+          icon={<Icon icon={SaveSvg} />}
+          description="保存"
+          shape="square"
+          style={{ insetInlineEnd: 24 }}
+          onClick={submit}
+        />
+      )}
     </PageWrapper>
   );
 }
