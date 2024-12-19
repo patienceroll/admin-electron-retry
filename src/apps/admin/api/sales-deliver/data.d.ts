@@ -1,23 +1,19 @@
-type SalesOrder = {
-    quality_ratio: string;
-    tax_rate: string;
-    file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
+type SalesDeliver = {
+    is_approve: 0 | 1;
     id: number;
     company_id: number;
     client_id: number;
     project_id: number;
     sales_contract_id: number;
+    sales_order_id: number;
     code: string;
-    bill_date: string;
-    delivery_date: string;
-    batch_no: string;
-    staff_id: number;
+    receive_man: string;
+    receive_tel: string;
+    receive_address: string;
     remark: string;
+    bill_date: string;
+    staff_id: number;
     amount: string;
-    no_tax_amount: string;
-    is_urgent: number;
-    is_delay: number;
-    is_approve: number;
     status: BillStatus;
     created_id: number;
     deleted_at: string;
@@ -28,10 +24,11 @@ type SalesOrder = {
     created_user: BlockCreateUser;
     company: BlockCompany;
     client: BlockClient;
-    advance_ratio: number;
     project: BlockProject | null;
-    sales_contract: BlockSalesContract | null;
-    staff: BlockStaff | null;
+    staff: BlockStaff;
+    sales_contract: BlockSalesContract;
+    file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
+    sales_order: BlockSalesOrder;
     detail:
       | {
           id: number;
@@ -46,27 +43,36 @@ type SalesOrder = {
         }[]
       | null;
   };
-  type SalesOrderMaterialSku = {
+  
+  type SalesDeliverMaterialSku = {
+    line_unit: LineUnit[];
+    batch_no: number;
+    project?: BlockProject;
+    sales_contract?: BlockSalesContract;
+    sales_order?: BlockSalesOrder;
+    num: number;
     id: number;
     company_id: number;
     material_id: number;
     name: string;
     code: string;
+    attr_snapshoot: AttrSnapshoot;
     status: number;
     created_id: number;
     deleted_at: string;
     updated_at: string;
     created_at: string;
     btn_power: BtnPower;
-    material_sku: BlockMaterialSku | null;
-    material: BlockMaterail;
+    material?: BlockMaterail;
+    picture?: string;
     picture_path?: string;
-    attr_snapshoot: AttrSnapshoot;
+    material_sku?: BlockMaterialSku;
+    warehouse?: Pick<Warehouse, "id" | "name">;
   };
   
-  /** 新增子合同需求单后返回的数据 */
-  type SalesOrderAddResponse = Pick<
-    SalesOrder,
+  /** 新增销售发货单后返回的数据 */
+  type SalesDeliverAddResponse = Pick<
+    SalesDeliver,
     | "company_id"
     | "client_id"
     | "project_id"
