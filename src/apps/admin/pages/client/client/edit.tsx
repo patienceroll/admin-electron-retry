@@ -11,6 +11,7 @@ import Icon from "src/framework/component/icon";
 import SaveSvg from "src/assets/svg/保存.svg";
 import EditConcatList from "./components/edit-concat-list";
 import EditBankAccount from "./components/edit-bank-account";
+import {Card} from "antd";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -76,7 +77,7 @@ function Edit(props: StyledWrapComponents) {
   return (
     <PageWrapper className={className}>
       <Title>基本信息</Title>
-
+      <Card>
       <Form
         form={form}
         layout="horizontal"
@@ -126,45 +127,14 @@ function Edit(props: StyledWrapComponents) {
               <Input placeholder="请输入单位性质" />
             </Form.Item>
           </Col>
-          <Col flex="350px">
-            <Form.Item label="主营产品或服务" name="main_business">
-              <Input placeholder="请输入主营产品或服务" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="公司规模" name="scale">
-              <Select
-                  options={[
-                    { label: "0-50人", value: "0-50人" },
-                    { label: "50-99人", value: "50-99人" },
-                    { label: "100-499人", value: "100-499人" },
-                    { label: "500-999人", value: "500-999人" },
-                    { label: "1000-9999人", value: "1000-9999人" },
-                    { label: "10000人以上", value: "10000人以上" },
-                  ]}
-                  allowClear
-                  placeholder="请选择公司规模"
-              />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
+          <Col flex="700px">
             <Form.Item label="地址" name="address" rules={[{ required: true }]}>
               <AddressFormInput />
             </Form.Item>
           </Col>
           <Col flex="350px">
-            <Form.Item label="法人" name="legal_person">
-              <Input placeholder="请输入法人" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="成立日期" name="establishment_date">
-              <Input placeholder="请输入成立日期" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="注册地址" name="registration_address">
-              <Input placeholder="请输入注册地址" />
+            <Form.Item label="联系电话" name="telephone">
+              <Input placeholder="请输入联系电话" />
             </Form.Item>
           </Col>
           <Col flex="350px">
@@ -175,16 +145,6 @@ function Edit(props: StyledWrapComponents) {
           <Col flex="350px">
             <Form.Item label="税务登记号" name="tax_registration_code">
               <Input placeholder="请输入税务登记号" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="年营业额" name="annual_turnover">
-              <Input placeholder="请输入年营业额" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="联系电话" name="telephone">
-              <Input placeholder="请输入联系电话" />
             </Form.Item>
           </Col>
           <Col flex="350px">
@@ -220,7 +180,89 @@ function Edit(props: StyledWrapComponents) {
           </Col>
         </Row>
       </Form>
-
+      </Card>
+      <Title>经营信息</Title>
+<Card>
+      <Form
+          form={form}
+          layout="horizontal"
+          style={{ marginTop: theme.margin }}
+          initialValues={{ type: 1, status: 1 }}
+      >
+        <Row gutter={[theme.padding, theme.padding]}>
+          <Col flex="350px">
+            <Form.Item label="公司规模" name="scale">
+              <Select
+                  options={[
+                    { label: "0-50人", value: "0-50人" },
+                    { label: "50-99人", value: "50-99人" },
+                    { label: "100-499人", value: "100-499人" },
+                    { label: "500-999人", value: "500-999人" },
+                    { label: "1000-9999人", value: "1000-9999人" },
+                    { label: "10000人以上", value: "10000人以上" },
+                  ]}
+                  allowClear
+                  placeholder="请选择公司规模"
+              />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
+            <Form.Item label="年营业额" name="annual_turnover">
+              <Input placeholder="请输入年营业额" />
+            </Form.Item>
+          </Col>
+          <Col flex="700px">
+            <Form.Item label="主营产品或服务" name="main_business">
+              <Input placeholder="请输入主营产品或服务" />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+</Card>
+      <Title>注册信息</Title>
+      <Card>
+      <Form
+          form={form}
+          layout="horizontal"
+          style={{ marginTop: theme.margin }}
+          initialValues={{ type: 1, status: 1 }}
+      >
+        <Row gutter={[theme.padding, theme.padding]}>
+        <Col flex="350px">
+          <Form.Item label="登记法人" name="legal_person">
+            <Input placeholder="请输入法人" />
+          </Form.Item>
+        </Col>
+        <Col flex="350px">
+          <Form.Item label="成立日期" name="establishment_date">
+            <Input placeholder="请输入成立日期" />
+          </Form.Item>
+        </Col>
+        <Col flex="700px">
+          <Form.Item label="注册地址" name="registration_address">
+            <Input placeholder="请输入注册地址" />
+          </Form.Item>
+        </Col>
+        </Row>
+      </Form>
+      </Card>
+      <Title>备注</Title>
+      <Card>
+      <Form
+          form={form}
+          layout="horizontal"
+          style={{ marginTop: theme.margin }}
+          initialValues={{ type: 1, status: 1 }}
+      >
+        <Row gutter={[theme.padding, theme.padding]}>
+          <Col flex="1">
+          <Form.Item name="remark">
+            <Input.TextArea allowClear placeholder="请输入"/>
+          </Form.Item>
+        </Col>
+        </Row>
+      </Form>
+      </Card>
       <Title style={{ marginTop: theme.margin }}>联系人</Title>
       <EditConcatList id={id} />
 
