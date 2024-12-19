@@ -228,7 +228,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
         onClick={() => {
           systemConfig.current?.open()
         }}
-        icon={<Icon width={theme.fontSize} height={theme.fontSize} fill={theme.colorBgBase} icon={systemSvg} />}
+        icon={<Icon  fill={theme.colorBgBase} icon={systemSvg} />}
       />
       <SystemConfig.default ref={systemConfig} />
     </PageWrapper>

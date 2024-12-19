@@ -110,7 +110,7 @@ function Company(props: StyledWrapComponents) {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建公司"
-          icon={<Icon width={theme.fontSize} height={theme.fontSize} icon={AddSvg} />}
+          icon={<Icon  icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(getCompany);
           }}

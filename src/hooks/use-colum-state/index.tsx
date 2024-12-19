@@ -13,6 +13,19 @@ export default function useTableColumnState<T>(
 ) {
   const [data, setData] = useState<DexiedColumnState>();
 
+  function generateDexiedColumnState() {
+    const newState: DexiedColumnState["data"] = {};
+    column.forEach((item) => {
+      if (typeof item.dataIndex === "string") {
+        newState[item.dataIndex] = {
+          width: typeof item.width === "number" ? item.width : undefined,
+          fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
+        };
+      }
+    });
+    return newState;
+  }
+
   useEffect(() => {
     db.columnStateTable
       .where("tableName")
@@ -21,15 +34,7 @@ export default function useTableColumnState<T>(
       .first()
       .then((result) => {
         if (!result) {
-          const newState: DexiedColumnState["data"] = {};
-          column.forEach((item) => {
-            if (typeof item.dataIndex === "string") {
-              newState[item.dataIndex] = {
-                width: typeof item.width === "number" ? item.width : undefined,
-                fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
-              };
-            }
-          });
+          const newState = generateDexiedColumnState();
           db.columnStateTable
             .add({ app, tableName, data: newState })
             .then((id) => {
@@ -107,7 +112,7 @@ export default function useTableColumnState<T>(
     tableHeaderCellRender,
     column: column.map((item) => {
       if (typeof item.dataIndex === "string" && data) {
-        const wid = data.data[item.dataIndex].width;
+        const wid = data.data[item.dataIndex]?.width;
         return { ...item, width: wid ? wid : item.width };
       } else {
         return item;

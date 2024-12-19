@@ -174,7 +174,7 @@ function Admin() {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建菜单"
-          icon={<Icon width={theme.fontSize} height={theme.fontSize} icon={AddSvg} />}
+          icon={<Icon  icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(function () {
               load();

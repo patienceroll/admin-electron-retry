@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router/dist";
 import styled, { useTheme } from "styled-components";
-import { Col, Form, Input, Radio, Row, Select } from "antd/es";
+import { Col, FloatButton, Form, Input, Radio, Row, Select } from "antd/es";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
 import AddressFormInput from "src/framework/component/address-form-input";
 import { getClient } from "src/apps/admin/api/client";
+import Icon from "src/framework/component/icon";
+import SaveSvg from "src/assets/svg/保存.svg";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -182,6 +184,15 @@ function Edit(props: StyledWrapComponents) {
 
       <Title style={{ marginTop: theme.margin }}>联系人</Title>
       <Title style={{ marginTop: theme.margin }}>账户信息</Title>
+
+      <FloatButton
+        icon={
+          <Icon icon={SaveSvg}  />
+        }
+        description="HELP INFO"
+        shape="square"
+        style={{ insetInlineEnd: 24 }}
+      />
     </PageWrapper>
   );
 }

@@ -55,7 +55,7 @@ function Client() {
           {record.name}
         </Typography.Link>
       ),
-        width: 260,
+      width: 260,
       ellipsis: true,
     },
     {
@@ -104,39 +104,39 @@ function Client() {
       dataIndex: "establishment_date",
       ellipsis: true,
     },
-      {
-          title: "信息完善度",
-          dataIndex: "perfect_ratio",
-          ellipsis: true,
-          valueType: 'progress',
-      },
+    {
+      title: "信息完善度",
+      dataIndex: "perfect_ratio",
+      ellipsis: true,
+      valueType: "progress",
+    },
     {
       title: "是否签约",
       dataIndex: "is_sign",
       valueEnum: watherMap,
       ellipsis: true,
     },
-      {
-          title: "负责人",
-          dataIndex: "staff",
-          renderText: (_, row) => row.staff?.name,
-      },
+    {
+      title: "负责人",
+      dataIndex: "staff",
+      renderText: (_, row) => row.staff?.name,
+    },
     {
       title: "状态",
       dataIndex: "status",
       valueEnum: StaffStatus,
       ellipsis: true,
     },
-      {
-          title: "创建时间",
-          dataIndex: "created_at",
-          ellipsis: true,
-      },
     {
-        dataIndex: "id",
-        title: "操作",
-        fixed: "right",
-        width: 160,
+      title: "创建时间",
+      dataIndex: "created_at",
+      ellipsis: true,
+    },
+    {
+      dataIndex: "id",
+      title: "操作",
+      fixed: "right",
+      width: 160,
       render(_, row) {
         return (
           <Space>
@@ -257,8 +257,7 @@ function Client() {
           tooltip="新建客户"
           icon={
             <Icon
-              width={theme.fontSize}
-              height={theme.fontSize}
+           
               icon={AddSvg}
             />
           }
@@ -288,8 +287,7 @@ function Client() {
           <FloatButton
             icon={
               <Icon
-                width={theme.fontSize}
-                height={theme.fontSize}
+             
                 icon={FollowSvg}
               />
             }
@@ -308,8 +306,7 @@ function Client() {
           <FloatButton
             icon={
               <Icon
-                width={theme.fontSize}
-                height={theme.fontSize}
+                
                 icon={ExportSvg}
               />
             }

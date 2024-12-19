@@ -153,7 +153,7 @@ function Department() {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新增部门"
-          icon={<Icon width={theme.fontSize} height={theme.fontSize} icon={AddSvg} />}
+          icon={<Icon  icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(() => {
               contextedMessage.message?.success("新增成功");
