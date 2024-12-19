@@ -1,4 +1,4 @@
-type SalesContractListItem = {
+type SalesContract = {
   /** 主键id */
   id: number;
 

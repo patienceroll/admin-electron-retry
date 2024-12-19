@@ -119,7 +119,11 @@ export function cancelOperate(params: Pick<SalesDeliver, "id">) {
 
 /** 销售发货-导出 */
 export function salesDeliverExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(fetch.base(`/api/sales-deliver/export`), params);
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(fetch.base(`/api/sales-deliver/export`), params);
 }
 
 /** 销售发货-操作记录 */

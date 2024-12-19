@@ -69,7 +69,7 @@ function Detail(props: StyledWrapComponents) {
   }, []);
 
   const column = tableColumn<
-    NonNullable<SalesContractListItem["detail"]>[number]
+    NonNullable<SalesContract["detail"]>[number]
   >([
     {
       title: "物资",

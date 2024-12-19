@@ -8,13 +8,13 @@ export function getSalesReturnList(
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
     statistics_id?: number | string;
-    client_id?:ClientListItem['id'],
-    is_show_detail?: 0|1
-  },
+    client_id?: ClientListItem["id"];
+    is_show_detail?: 0 | 1;
+  }
 ) {
   return fetch.GET<List<SalesReturn>>(
     fetch.base(`/api/sales-return/list`),
-    params,
+    params
   );
 }
 
@@ -29,10 +29,21 @@ export function getSalesReturn(params: Pick<SalesReturn, "id">) {
  * 销售退款-添加
  */
 export function addSalesReturn(params: any) {
-  return fetch.POST<SalesReturnAddResponse>(
-    fetch.base(`/api/sales-return`),
-    params,
-  );
+  return fetch.POST<
+    Pick<
+      SalesReturn,
+      | "company_id"
+      | "client_id"
+      | "project_id"
+      | "code"
+      | "status"
+      | "created_id"
+      | "created_at"
+      | "updated_at"
+      | "id"
+      | "status_show"
+    >
+  >(fetch.base(`/api/sales-return`), params);
 }
 
 /**
@@ -53,7 +64,7 @@ export function deleteSalesReturn(params: Pick<SalesReturn, "id">) {
  * 生成合同编号 */
 export const getSalesReturnCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/sales-return/code"),
+    fetch.base("/api/sales-return/code")
   );
 };
 
@@ -63,11 +74,11 @@ export const getSalesReturnMaterialSku = (
   params: ListParam & {
     id?: SalesReturn["id"];
     sales_deliver_id?: SalesReturn["sales_deliver_id"];
-  },
+  }
 ) => {
   return fetch.GET<List<SalesReturnMaterialSku>>(
     fetch.base("/api/sales-return/superior-detail"),
-    params,
+    params
   );
 };
 
@@ -99,7 +110,7 @@ export function approval(params: {
 export function getApprovalRecord(params: Pick<SalesReturn, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-return/approval-record`),
-    params,
+    params
   );
 }
 /** 销售退货-作废 */
@@ -114,13 +125,17 @@ export function cancelOperate(params: Pick<SalesReturn, "id">) {
 
 /** 销售退货-导出 */
 export function salesReturnExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(fetch.base(`/api/sales-return/export`), params);
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(fetch.base(`/api/sales-return/export`), params);
 }
 
 /** 销售退货-操作记录 */
 export function getOperateRecord(params: Pick<SalesReturn, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/sales-return/log`),
-    params,
+    params
   );
 }

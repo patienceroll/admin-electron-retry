@@ -6,7 +6,7 @@ import fetch from "src/util/fetch";
 export function getSalesOrderList(
   params: ListParam & {
     status?: BillStatus;
-    sales_contract_id?: SalesContractListItem["id"];
+    sales_contract_id?: SalesContract["id"];
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
     statistics_id?: number | string;
@@ -24,7 +24,7 @@ export function getSalesOrderList(
  * 销售订单选项 */
 export function getSalesOrderOption(params: {
   status?: BillStatus;
-  sales_contract_id?: SalesContractListItem["id"];
+  sales_contract_id?: SalesContract["id"];
   /** 1客户 2项目 3合同 4订单 */
   statistics_type?: 1 | 2 | 3 | 4;
   statistics_id?: number | string;
@@ -141,7 +141,11 @@ export function getApprovalRecord(params: Pick<SalesOrder, "id">) {
 
 /** 销售订单-导出 */
 export function salesOrderExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(fetch.base(`/api/sales-order/export`), params);
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(fetch.base(`/api/sales-order/export`), params);
 }
 
 /**
@@ -151,7 +155,7 @@ export const getMaterialSku = (
     id?: SalesOrder["id"];
   },
 ) => {
-  return fetch.GET<List<SalesContractListItemMaterialSku>>(
+  return fetch.GET<List<SalesContractMaterialSku>>(
     fetch.base("/api/sales-order/material-sku"),
     params,
   );

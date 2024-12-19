@@ -10,7 +10,7 @@ export function getSalesContractList(
     is_show_detail?: 0|1
   }
 ) {
-  return fetch.GET<List<SalesContractListItem>>(
+  return fetch.GET<List<SalesContract>>(
     fetch.base(`/api/sales-contract/list`),
     params
   );
@@ -24,7 +24,7 @@ export function getSalesContractOption(params: {
   client_id?:ClientListItem['id'],
   is_show_detail?: 0|1
 }) {
-  return fetch.GET<SalesContractListItem[]>(
+  return fetch.GET<SalesContract[]>(
     fetch.base(`/api/sales-contract/list`),
     params
   );
@@ -33,8 +33,8 @@ export function getSalesContractOption(params: {
 /**
  * 销售合同-详情
  */
-export function getSalesContract(params: Pick<SalesContractListItem, "id">) {
-  return fetch.GET<SalesContractListItem>(
+export function getSalesContract(params: Pick<SalesContract, "id">) {
+  return fetch.GET<SalesContract>(
     fetch.base(`/api/sales-contract/detail`),
     params
   );
@@ -60,7 +60,7 @@ export function editSalesContract(params: any) {
 /**
  * 销售合同-删除
  */
-export function deleteSalesContract(params: Pick<SalesContractListItem, "id">) {
+export function deleteSalesContract(params: Pick<SalesContract, "id">) {
   return fetch.DELETE(fetch.base(`/api/sales-contract`), params);
 }
 
@@ -76,7 +76,7 @@ export const getSalesContractCode = () => {
  * 物资.弹窗 */
 export const getMaterialSku = (
   params: ListParam & {
-    id?: SalesContractListItem["id"];
+    id?: SalesContract["id"];
   }
 ) => {
   return fetch.GET<List<SalesContractMaterialSku>>(
@@ -89,7 +89,7 @@ export const getMaterialSku = (
  * 物资.弹窗-保存
  */
 export const postMaterialSku = (data: {
-  id: SalesContractListItem["id"];
+  id: SalesContract["id"];
   ids: SalesContractMaterialSku["id"][];
   standard: string;
 }) => {
@@ -97,13 +97,13 @@ export const postMaterialSku = (data: {
 };
 
 /** 销售合同-发起审批 */
-export function startApproval(params: Pick<SalesContractListItem, "id">) {
+export function startApproval(params: Pick<SalesContract, "id">) {
   return fetch.POST(fetch.base(`/api/sales-contract/start-approval`), params);
 }
 
 /** 销售合同-审批 */
 export function approval(params: {
-  id: SalesContractListItem["id"];
+  id: SalesContract["id"];
   result: 1 | 2;
   remark: string;
 }) {
@@ -111,27 +111,27 @@ export function approval(params: {
 }
 
 /** 销售合同-作废 */
-export function billInvalid(params: Pick<SalesContractListItem, "id">) {
+export function billInvalid(params: Pick<SalesContract, "id">) {
   return fetch.POST(fetch.base(`/api/sales-contract/invalid`), params);
 }
 
 /** 销售合同-中止 */
-export function billSuspend(params: Pick<SalesContractListItem, "id">) {
+export function billSuspend(params: Pick<SalesContract, "id">) {
   return fetch.POST(fetch.base(`/api/sales-contract/suspend`), params);
 }
 
 /** 销售合同-完结 */
-export function billEnd(params: Pick<SalesContractListItem, "id">) {
+export function billEnd(params: Pick<SalesContract, "id">) {
   return fetch.POST(fetch.base(`/api/sales-contract/end`), params);
 }
 
 /** 销售合同-撤销 */
-export function cancelOperate(params: Pick<SalesContractListItem, "id">) {
+export function cancelOperate(params: Pick<SalesContract, "id">) {
   return fetch.POST(fetch.base(`/api/sales-contract/cancel-operate`), params);
 }
 
 /** 销售合同-审批记录 */
-export function getApprovalRecord(params: Pick<SalesContractListItem, "id">) {
+export function getApprovalRecord(params: Pick<SalesContract, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-contract/approval-record`),
     params
@@ -148,7 +148,7 @@ export function salesContractExport(params: Record<string, any>) {
 }
 
 /** 销售合同 操作记录 */
-export function getOperateRecord(params: Pick<SalesContractListItem, "id">) {
+export function getOperateRecord(params: Pick<SalesContract, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/sales-contract/log`),
     params
