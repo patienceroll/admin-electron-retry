@@ -87,7 +87,7 @@ type SalesContract = {
   created_id: number;
 
   /** 删除时间 */
-  deleted_at: number;
+  deleted_at: string;
 
   /** 更新时间 */
   updated_at: string;

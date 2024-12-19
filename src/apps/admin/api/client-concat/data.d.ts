@@ -39,13 +39,13 @@ type ClientContact = {
   created_id: number;
 
   /** 删除时间 */
-  deleted_at: number;
+  deleted_at: string;
 
   /** 更新时间 */
-  updated_at: number;
+  updated_at: string;
 
   /** 添加时间 */
-  created_at: number;
+  created_at: string;
 
   /** 权限控制
    * is_edit : 0|1;

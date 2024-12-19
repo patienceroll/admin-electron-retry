@@ -85,6 +85,20 @@ function Edit(props: StyledWrapComponents) {
       >
         <Row gutter={[theme.padding, theme.padding]}>
           <Col flex="350px">
+            <Form.Item label="客户" name="name" rules={[{ required: true }]}>
+              <Input placeholder="请输入客户" />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
+            <Form.Item
+                label="简称"
+                name="short_name"
+                rules={[{ required: true }]}
+            >
+              <Input placeholder="请输入简称" />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
             <Form.Item label="类型" name="type" rules={[{ required: true }]}>
               <Select
                 options={[
@@ -99,36 +113,48 @@ function Edit(props: StyledWrapComponents) {
             </Form.Item>
           </Col>
           <Col flex="350px">
-            <Form.Item label="客户" name="name" rules={[{ required: true }]}>
-              <Input placeholder="请输入客户" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item
-              label="简称"
-              name="short_name"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="请输入简称" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="法人" name="legal_person">
-              <Input placeholder="请输入法人" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
             <Form.Item label="客户级别" name="grade">
               <Input placeholder="请输入客户级别" />
             </Form.Item>
           </Col>
           <Col flex="350px">
             <Form.Item
-              label="单位性质"
-              name="nature"
-              rules={[{ required: true }]}
+                label="单位性质"
+                name="nature"
+                rules={[{ required: true }]}
             >
               <Input placeholder="请输入单位性质" />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
+            <Form.Item label="主营产品或服务" name="main_business">
+              <Input placeholder="请输入主营产品或服务" />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
+            <Form.Item label="公司规模" name="scale">
+              <Select
+                  options={[
+                    { label: "0-50人", value: "0-50人" },
+                    { label: "50-99人", value: "50-99人" },
+                    { label: "100-499人", value: "100-499人" },
+                    { label: "500-999人", value: "500-999人" },
+                    { label: "1000-9999人", value: "1000-9999人" },
+                    { label: "10000人以上", value: "10000人以上" },
+                  ]}
+                  allowClear
+                  placeholder="请选择公司规模"
+              />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
+            <Form.Item label="地址" name="address" rules={[{ required: true }]}>
+              <AddressFormInput />
+            </Form.Item>
+          </Col>
+          <Col flex="350px">
+            <Form.Item label="法人" name="legal_person">
+              <Input placeholder="请输入法人" />
             </Form.Item>
           </Col>
           <Col flex="350px">
@@ -152,18 +178,13 @@ function Edit(props: StyledWrapComponents) {
             </Form.Item>
           </Col>
           <Col flex="350px">
-            <Form.Item label="主营产品或服务" name="main_business">
-              <Input placeholder="请输入主营产品或服务" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
             <Form.Item label="年营业额" name="annual_turnover">
               <Input placeholder="请输入年营业额" />
             </Form.Item>
           </Col>
           <Col flex="350px">
-            <Form.Item label="电话号码" name="telephone">
-              <Input placeholder="请输入电话号码" />
+            <Form.Item label="联系电话" name="telephone">
+              <Input placeholder="请输入联系电话" />
             </Form.Item>
           </Col>
           <Col flex="350px">
@@ -179,11 +200,6 @@ function Edit(props: StyledWrapComponents) {
           <Col flex="350px">
             <Form.Item label="官方网站" name="official_website">
               <Input placeholder="请输入官方网站" />
-            </Form.Item>
-          </Col>
-          <Col flex="350px">
-            <Form.Item label="地址" name="address" rules={[{ required: true }]}>
-              <AddressFormInput />
             </Form.Item>
           </Col>
           <Col flex="350px">
