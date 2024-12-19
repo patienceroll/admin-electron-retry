@@ -77,7 +77,7 @@ const EditBankAccount = function (
               onClick={function () {
                 contextedModal.modal?.confirm({
                   title: "删除",
-                  content: `确定删除${entity.name}?`,
+                  content: `确定删除此账户?`,
                   onOk() {
                     return deleteBankAccount({ id: entity.id }).then(() => {
                       contextedMessage.message?.success("成功删除");
