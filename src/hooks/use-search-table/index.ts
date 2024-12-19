@@ -38,14 +38,14 @@ export default function <P extends Record<string | number, unknown>, Item>(
 
   const [loading] = useWather();
 
-  const page = useRef({ page: 1, pageSize: 15 });
+  const page = useRef({ page: 1, pageSize: 20 });
   const params = useRef({} as P);
   const extraParams = useRef({} as P);
   const listResponse = useRef<BaseResponse<List<Item>>>();
   const list = useRef<Item[]>([]);
   /** ProTable 的 Pagination 属性  */
   const pagination = useRef<TablePaginationConfig>({
-    pageSize: 15,
+    pageSize: 20,
     total: 0,
     showSizeChanger: true,
   });

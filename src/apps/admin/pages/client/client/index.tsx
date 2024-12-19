@@ -130,7 +130,6 @@ function Client() {
       {
           title: "创建时间",
           dataIndex: "created_at",
-          width: 140,
           ellipsis: true,
       },
     {

@@ -287,8 +287,8 @@ function Detail(props: StyledWrapComponents) {
         }}
       />
 
-      <Title style={{ marginTop: theme.margin }} id="子合同需求单">
-        子合同需求单
+      <Title style={{ marginTop: theme.margin }} id="销售订单">
+        销售订单
       </Title>
 
       <ProTable
@@ -302,11 +302,11 @@ function Detail(props: StyledWrapComponents) {
         onChange={saleOrder.onChange}
         columns={saleOrder.column([
           {
-            title: "子合同编号",
+            title: "销售订单编号",
             dataIndex: "code",
           },
           {
-            title: "子合同日期",
+            title: "销售订单日期",
             dataIndex: "bill_date",
           },
         ])}
@@ -348,11 +348,11 @@ function Detail(props: StyledWrapComponents) {
         onChange={saleDeliver.onChange}
         columns={saleDeliver.column([
           {
-            title: "子合同编号",
+            title: "销售订单编号",
             dataIndex: "code",
           },
           {
-            title: "子合同日期",
+            title: "销售订单日期",
             dataIndex: "bill_date",
           },
         ])}
@@ -394,11 +394,11 @@ function Detail(props: StyledWrapComponents) {
         onChange={saleReturn.onChange}
         columns={saleReturn.column([
           {
-            title: "子合同编号",
+            title: "销售订单编号",
             dataIndex: "code",
           },
           {
-            title: "子合同日期",
+            title: "销售订单日期",
             dataIndex: "bill_date",
           },
         ])}
@@ -460,7 +460,7 @@ function Detail(props: StyledWrapComponents) {
           "联系人",
           "账号信息",
           "销售合同",
-          "子合同需求单",
+          "销售订单",
           "销售发货",
           "销售退货",
           "系统信息",

@@ -1,7 +1,7 @@
 import fetch from "src/util/fetch";
 
 /**
- * 子合同需求单-列表
+ * 销售订单-列表
  */
 export function getSalesOrderList(
   params: ListParam & {
@@ -21,7 +21,7 @@ export function getSalesOrderList(
 }
 
 /**
- * 子合同需求单选项 */
+ * 销售订单选项 */
 export function getSalesOrderOption(params: {
   status?: BillStatus;
   sales_contract_id?: SalesContractListItem["id"];
@@ -35,14 +35,14 @@ export function getSalesOrderOption(params: {
 }
 
 /**
- * 子合同需求单-详情
+ * 销售订单-详情
  */
 export function getSalesOrder(params: Pick<SalesOrder, "id">) {
   return fetch.GET<SalesOrder>(fetch.base(`/api/sales-order/detail`), params);
 }
 
 /**
- * 子合同需求单-添加
+ * 销售订单-添加
  */
 export function addSalesOrder(params: any) {
   return fetch.POST<SalesOrderAddResponse>(
@@ -52,14 +52,14 @@ export function addSalesOrder(params: any) {
 }
 
 /**
- * 子合同需求单-编辑
+ * 销售订单-编辑
  */
 export function editSalesOrder(params: any) {
   return fetch.PUT(fetch.base(`/api/sales-order`), params);
 }
 
 /**
- * 子合同需求单-删除
+ * 销售订单-删除
  */
 export function deleteSalesOrder(params: Pick<SalesOrder, "id">) {
   return fetch.DELETE(fetch.base(`/api/sales-order`), params);
@@ -97,12 +97,12 @@ export const postSalesOrderMaterialSku = (data: {
   return fetch.POST(fetch.base("/api/sales-order/superior-detail"), data);
 };
 
-/** 子合同需求单-发起审批 */
+/** 销售订单-发起审批 */
 export function startApproval(params: Pick<SalesOrder, "id">) {
   return fetch.POST(fetch.base(`/api/sales-order/start-approval`), params);
 }
 
-/** 子合同需求单-审批 */
+/** 销售订单-审批 */
 export function approval(params: {
   id: SalesOrder["id"];
   result: 1 | 2;
@@ -111,27 +111,27 @@ export function approval(params: {
   return fetch.POST(fetch.base(`/api/sales-order/approval`), params);
 }
 
-/** 子合同需求单-作废 */
+/** 销售订单-作废 */
 export function billInvalid(params: Pick<SalesOrder, "id">) {
   return fetch.POST(fetch.base(`/api/sales-order/invalid`), params);
 }
 
-/** 子合同需求单-中止 */
+/** 销售订单-中止 */
 export function billSuspend(params: Pick<SalesOrder, "id">) {
   return fetch.POST(fetch.base(`/api/sales-order/suspend`), params);
 }
 
-/** 子合同需求单-完结 */
+/** 销售订单-完结 */
 export function billEnd(params: Pick<SalesOrder, "id">) {
   return fetch.POST(fetch.base(`/api/sales-order/end`), params);
 }
 
-/** 子合同需求单-撤销 */
+/** 销售订单-撤销 */
 export function cancelOperate(params: Pick<SalesOrder, "id">) {
   return fetch.POST(fetch.base(`/api/sales-order/cancel-operate`), params);
 }
 
-/** 子合同需求单-审批记录 */
+/** 销售订单-审批记录 */
 export function getApprovalRecord(params: Pick<SalesOrder, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-order/approval-record`),
@@ -139,7 +139,7 @@ export function getApprovalRecord(params: Pick<SalesOrder, "id">) {
   );
 }
 
-/** 子合同需求单-导出 */
+/** 销售订单-导出 */
 export function salesOrderExport(params: Record<string, any>) {
   return fetch.GET<ExportRes>(fetch.base(`/api/sales-order/export`), params);
 }
