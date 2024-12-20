@@ -45,7 +45,19 @@ export function getClientOption(params: {
   project_id?: Project["id"];
   business_opportunity_id?: BusinessOpportunity["id"];
 }) {
-  return fetch.GET<ClientListItem[]>(fetch.base(`/api/client/list`), params);
+  return fetch.GET<
+    Pick<
+      ClientListItem,
+      | "id"
+      | "short_name"
+      | "name"
+      | "is_sign"
+      | "type_show"
+      | "is_sign_show"
+      | "name_show"
+      | "status"
+    >[]
+  >(fetch.base(`/api/client/list`), params);
 }
 
 /**

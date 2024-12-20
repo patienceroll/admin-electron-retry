@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Affix, Button, Card, FloatButton, Space, Typography } from "antd";
+import {
+  Affix,
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Typography,
+} from "antd";
 import styled, { useTheme } from "styled-components";
 import {
   ProFormSelect,
   ProFormText,
   ProTable,
-  QueryFilter,
 } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -28,6 +36,8 @@ import openWindow from "src/util/open-window";
 import contextedModal from "src/framework/component/contexted-modal";
 import * as Follow from "./components/batch-follow";
 import useColumnState from "src/hooks/use-colum-state";
+import Search from "src/framework/component/search";
+import SearchAction from "src/framework/component/search/search-action";
 
 function Client() {
   const table = useSearchTable(getClientList);
@@ -196,27 +206,32 @@ function Client() {
     <PageWrapper>
       <Affix offsetTop={theme.padding}>
         <Card bordered>
-          <QueryFilter
-            defaultCollapsed
-            split
-            searchGutter={8}
-            style={{ padding: 0, rowGap: 0 }}
-            loading={table.loading}
-            onReset={table.onReset}
-            onFinish={table.onFinish}
-          >
-            <ProFormText
-              label="关键词"
-              name="keyword"
-              placeholder="按客户搜索"
-            />
-            <ProFormSelect
-              label="客户类型"
-              name="type"
-              options={Array.from(projectTypeMap.values())}
-              fieldProps={{ fieldNames: { label: "text", value: "value" } }}
-            />
-          </QueryFilter>
+          <Search>
+            <Row gutter={[theme.padding, theme.padding]}>
+              <Col flex="300px">
+                <ProFormText
+                  label="关键词"
+                  name="keyword"
+                  placeholder="按客户搜索"
+                />
+              </Col>
+              <Col flex="300px">
+                <ProFormSelect
+                  label="客户类型"
+                  name="type"
+                  options={Array.from(projectTypeMap.values())}
+                  fieldProps={{ fieldNames: { label: "text", value: "value" } }}
+                />
+              </Col>
+              <Col flex="300px">
+                <SearchAction
+                  loading={table.loading}
+                  onReset={table.onReset}
+                  onFinish={table.onFinish}
+                />
+              </Col>
+            </Row>
+          </Search>
         </Card>
       </Affix>
 
@@ -230,7 +245,6 @@ function Client() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        size={"small"}
         scroll={{ x: table.measureColumnWidth(column) }}
         columnsState={{
           value: columnState.data?.data,
@@ -255,12 +269,7 @@ function Client() {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建客户"
-          icon={
-            <Icon
-           
-              icon={AddSvg}
-            />
-          }
+          icon={<Icon icon={AddSvg} />}
           onClick={() => {
             create.current?.create().then((result) => {
               contextedMessage.message?.success("新增成功");
@@ -285,12 +294,7 @@ function Client() {
         />
         {select.length !== 0 && (
           <FloatButton
-            icon={
-              <Icon
-             
-                icon={FollowSvg}
-              />
-            }
+            icon={<Icon icon={FollowSvg} />}
             tooltip="批量跟进"
             onClick={function () {
               follow.current?.follow(select).then(() => {
@@ -304,12 +308,7 @@ function Client() {
           "export"
         ) && (
           <FloatButton
-            icon={
-              <Icon
-                
-                icon={ExportSvg}
-              />
-            }
+            icon={<Icon icon={ExportSvg} />}
             tooltip="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");

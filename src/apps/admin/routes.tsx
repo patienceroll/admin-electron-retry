@@ -32,6 +32,7 @@ const VisualizationArchitecture = lazy(
 const Client = lazy(() => import("./pages/client/client"));
 const ClientDetail = lazy(() => import("./pages/client/client/detail"));
 const ClientEdit = lazy(() => import("./pages/client/client/edit"));
+const ClientContant = lazy(() => import("./pages/client/client-contact"))
 
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -76,6 +77,7 @@ export default function () {
         <Route path="/client/client" element={<Client />} />
         <Route path="/client/client/detail" element={<ClientDetail />} />
         <Route path="/client/client/edit" element={<ClientEdit />} />
+        <Route path="/client/client-contact" element={<ClientContant />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
