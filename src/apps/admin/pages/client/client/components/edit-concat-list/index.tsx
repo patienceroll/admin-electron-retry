@@ -2,7 +2,7 @@ import ProTable from "@ant-design/pro-table/es";
 import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 
-import { Button, Space } from "antd/es";
+import { Button, Space } from "antd";
 
 import useSearchTable from "src/hooks/use-search-table";
 import {

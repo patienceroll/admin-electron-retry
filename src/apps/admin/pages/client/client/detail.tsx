@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Anchor, Col, Row } from "antd/es";
-import { useLocation } from "react-router/dist";
+import { Anchor, Col, Row } from "antd";
+import { useLocation } from "react-router";
 import styled, { useTheme } from "styled-components";
 import { ProTable } from "@ant-design/pro-components/es";
 

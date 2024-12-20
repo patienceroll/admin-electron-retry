@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 
 import useSearchTable from "src/hooks/use-search-table";
-import { Button, Space } from "antd/es";
+import { Button, Space } from "antd";
 import {
   deleteBankAccount,
   getBankAccountList,

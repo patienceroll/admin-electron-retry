@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Descriptions, Drawer, Radio } from "antd/es";
+import { Descriptions, Drawer, Radio } from "antd";
 import styled from "styled-components";
 
 import useWather from "src/hooks/use-wather";
