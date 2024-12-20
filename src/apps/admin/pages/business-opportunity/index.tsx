@@ -3,7 +3,7 @@ import styled from "styled-components";
 import React from "react";
 
 function BusinessOpportunity() {
-  return <PageWrapper></PageWrapper>;
+  return <PageWrapper>BusinessOpportunity</PageWrapper>;
 }
 
 export default styled(BusinessOpportunity)``;
