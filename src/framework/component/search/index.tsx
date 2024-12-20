@@ -1,4 +1,4 @@
-import { Form, FormInstance } from "antd";
+import { Form, FormInstance, ConfigProvider } from "antd";
 import React, { createContext, PropsWithChildren } from "react";
 
 type SearchContext<T = any> = {
@@ -11,8 +11,18 @@ export default function (props: PropsWithChildren) {
   const { children } = props;
   const [form] = Form.useForm();
   return (
-    <searchContext.Provider value={{ form }}>
-      <Form form={form}>{children}</Form>
-    </searchContext.Provider>
+    <ConfigProvider
+      theme={{
+        components: {
+          Form: {
+            itemMarginBottom: 0,
+          },
+        },
+      }}
+    >
+      <searchContext.Provider value={{ form }}>
+        <Form form={form}>{children}</Form>
+      </searchContext.Provider>
+    </ConfigProvider>
   );
 }

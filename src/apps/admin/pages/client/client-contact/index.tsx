@@ -6,11 +6,13 @@ import {
   ProFormText,
   ProTable,
 } from "@ant-design/pro-components";
-import { Affix, Card, Col, Row } from "antd";
+import { Affix, Button, Card, Col, FloatButton, Row, Space } from "antd";
 
 import useSearchTable from "src/hooks/use-search-table";
 import {
+  clientContactExport,
   ClientContactStatus,
+  deleteClientContact,
   getClientContactList,
 } from "src/apps/admin/api/client-concat";
 import useOption from "src/hooks/use-option";
@@ -18,10 +20,17 @@ import { getClientOption } from "src/apps/admin/api/client";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import useColumnState from "src/hooks/use-colum-state";
+import * as Modify from "./components/modify";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
 
 function ClientContact() {
   const table = useSearchTable(getClientContactList);
   const theme = useTheme();
+  const modify = Modify.createRef();
 
   const [client] = useOption(getClientOption);
 
@@ -63,6 +72,45 @@ function ClientContact() {
       dataIndex: "status",
       key: "statuses",
       valueEnum: ClientContactStatus,
+    },
+    {
+      title: "操作",
+      dataIndex: "action",
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                modify.current?.edit(row).then(() => {
+                  table.reload();
+                  contextedMessage.message?.success("成功编辑");
+                });
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.name}?`,
+                  onOk() {
+                    return deleteClientContact({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("成功删除");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -128,6 +176,39 @@ function ClientContact() {
           },
         }}
       />
+
+      <FloatButton.Group shape="square">
+        <FloatButton
+          tooltip="新建联系人"
+          icon={<Icon icon={AddSvg} />}
+          onClick={() => {
+            modify.current?.create().then((result) => {
+              contextedMessage.message?.success("新增成功");
+              table.reload();
+            });
+          }}
+        />
+
+        {window.preload.getLocalUserHasPermission(
+          "/client/client",
+          "export"
+        ) && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              clientContactExport({
+                ...table.params.current,
+                ...table.extraParams.current,
+              }).then((res) => {
+                window.preload.previewFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
+      <Modify.default ref={modify} />
     </PageWrapper>
   );
 }

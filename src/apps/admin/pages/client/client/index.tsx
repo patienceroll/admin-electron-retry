@@ -312,11 +312,12 @@ function Client() {
             tooltip="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
-              clientExport({ ...table.params, ...table.extraParams }).then(
-                (res) => {
-                  window.preload.previewFile(res.data.file_path);
-                }
-              );
+              clientExport({
+                ...table.params.current,
+                ...table.extraParams.current,
+              }).then((res) => {
+                window.preload.previewFile(res.data.file_path);
+              });
             }}
           />
         )}
