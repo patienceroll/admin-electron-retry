@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import styled, { useTheme } from "styled-components";
-import {
-  Col,
-  FloatButton,
-  Form,
-  Input,
-  Radio,
-  Row,
-  Select,
-  Card,
-} from "antd";
+import { Col, FloatButton, Form, Input, Radio, Row, Select, Card } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
@@ -82,16 +73,16 @@ function Edit(props: StyledWrapComponents) {
   useEffect(() => {
     getDetail();
   }, []);
+
   return (
     <PageWrapper className={className}>
       <Title>基本信息</Title>
-      <Card>
-        <Form
-          form={form}
-          layout="horizontal"
-          style={{ marginTop: theme.margin }}
-          initialValues={{ type: 1, status: 1 }}
-        >
+      <Form
+        form={form}
+        layout="horizontal"
+        initialValues={{ type: 1, status: 1 }}
+      >
+        <Card style={{ marginTop: theme.margin }}>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="350px">
               <Form.Item label="客户" name="name" rules={[{ required: true }]}>
@@ -195,16 +186,9 @@ function Edit(props: StyledWrapComponents) {
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-      </Card>
-      <Title>经营信息</Title>
-      <Card>
-        <Form
-          form={form}
-          layout="horizontal"
-          style={{ marginTop: theme.margin }}
-          initialValues={{ type: 1, status: 1 }}
-        >
+        </Card>
+        <Title style={{ marginTop: theme.margin }}>经营信息</Title>
+        <Card style={{ marginTop: theme.margin }}>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="350px">
               <Form.Item label="公司规模" name="scale">
@@ -233,16 +217,9 @@ function Edit(props: StyledWrapComponents) {
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-      </Card>
-      <Title>注册信息</Title>
-      <Card>
-        <Form
-          form={form}
-          layout="horizontal"
-          style={{ marginTop: theme.margin }}
-          initialValues={{ type: 1, status: 1 }}
-        >
+        </Card>
+        <Title style={{ marginTop: theme.margin }}>注册信息</Title>
+        <Card style={{ marginTop: theme.margin }}>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="350px">
               <Form.Item label="登记法人" name="legal_person">
@@ -260,16 +237,9 @@ function Edit(props: StyledWrapComponents) {
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-      </Card>
-      <Title>备注</Title>
-      <Card>
-        <Form
-          form={form}
-          layout="horizontal"
-          style={{ marginTop: theme.margin }}
-          initialValues={{ type: 1, status: 1 }}
-        >
+        </Card>
+        <Title style={{ marginTop: theme.margin }}>备注</Title>
+        <Card style={{ marginTop: theme.margin }}>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="1">
               <Form.Item name="remark">
@@ -277,8 +247,8 @@ function Edit(props: StyledWrapComponents) {
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-      </Card>
+        </Card>
+      </Form>
       <Title style={{ marginTop: theme.margin }}>联系人</Title>
       <EditConcatList id={id} />
 
