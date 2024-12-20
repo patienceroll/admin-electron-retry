@@ -1,6 +1,6 @@
 import { ProTable } from "@ant-design/pro-components";
 import React, { useCallback, useEffect, useState } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { Button, FloatButton, Space, Tag } from "antd";
 
 import useWather from "src/hooks/use-wather";
@@ -16,14 +16,14 @@ import * as Edit from "./components/edit";
 import * as Permission from "./components/permission";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
+import { watherMap } from "src/apps/admin/api/general";
 
 type Data = Omit<Menu, "child"> & { children?: Data[] };
 
 function Admin() {
   const [loading] = useWather();
   const [dataSource, setDataSource] = useState<Data[]>([]);
-  const theme = useTheme();
-  
+
   const ref = Edit.createRef();
   const permission = Permission.createRef();
 
@@ -100,10 +100,7 @@ function Admin() {
     {
       title: "强制显示",
       dataIndex: "is_force",
-      valueEnum: new Map([
-        [0, { value: 0, color: "rgba(0, 0, 0, 0.25)", text: "否" }],
-        [1, { value: 1, color: "green", text: "是" }],
-      ]),
+      valueEnum: watherMap,
     },
     {
       title: "操作",
@@ -174,7 +171,7 @@ function Admin() {
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建菜单"
-          icon={<Icon  icon={AddSvg} />}
+          icon={<Icon icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(function () {
               load();

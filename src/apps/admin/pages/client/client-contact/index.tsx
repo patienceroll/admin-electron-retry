@@ -19,7 +19,7 @@ import useOption from "src/hooks/use-option";
 import { getClientOption } from "src/apps/admin/api/client";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
-import useColumnState from "src/hooks/use-colum-state";
+import useColumnState from "src/hooks/use-column-state";
 import * as Modify from "./components/modify";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -182,7 +182,7 @@ function ClientContact() {
           tooltip="新建联系人"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
-            modify.current?.create().then((result) => {
+            modify.current?.create().then(() => {
               contextedMessage.message?.success("新增成功");
               table.reload();
             });
@@ -190,7 +190,7 @@ function ClientContact() {
         />
 
         {window.preload.getLocalUserHasPermission(
-          "/client/client",
+          "/client/client-contact",
           "export"
         ) && (
           <FloatButton

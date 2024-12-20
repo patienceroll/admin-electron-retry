@@ -1,4 +1,16 @@
 import fetch from "src/util/fetch";
+
+export const BusinessOpportunityStatus = new Map<
+  BusinessOpportunity["status"],
+  EnumValue<BusinessOpportunity["status"]>
+>([
+  [0, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [1, { value: 1, color: "#cfc922", text: "机会" }],
+  [2, { value: 2, color: "#6a8fc3", text: "已立项" }],
+  [3, { value: 3, color: "#4ff7cf", text: "已成交" }],
+  [4, { value: 4, color: "rgb(156,156,148)", text: "已作废" }],
+]);
+
 /**
  * 项目-列表
  * */
@@ -40,20 +52,10 @@ export function getProjectStatusText() {
  * 项目-添加
  * */
 export function addBusinessOpportunity(params: any) {
-  return fetch.POST<
-    Pick<
-      BusinessOpportunity,
-      | "company_id"
-      | "name"
-      | "code"
-      | "status"
-      | "created_id"
-      | "created_at"
-      | "updated_at"
-      | "id"
-      | "status_show"
-    >
-  >(fetch.base(`/api/business-opportunity`), params);
+  return fetch.POST<BusinessOpportunityAddResponse>(
+    fetch.base(`/api/business-opportunity`),
+    params
+  );
 }
 
 /**

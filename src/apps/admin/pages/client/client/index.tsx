@@ -35,7 +35,7 @@ import contextedMessage from "src/framework/component/contexted-message";
 import openWindow from "src/util/open-window";
 import contextedModal from "src/framework/component/contexted-modal";
 import * as Follow from "./components/batch-follow";
-import useColumnState from "src/hooks/use-colum-state";
+import useColumnState from "src/hooks/use-column-state";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 

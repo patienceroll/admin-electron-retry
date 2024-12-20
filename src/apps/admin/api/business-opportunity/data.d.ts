@@ -20,6 +20,7 @@ type BusinessOpportunity = {
   /** 建设内容 */
   build_content: string;
 
+  area?: Area;
   /** 区域id */
   area_id: number;
 
@@ -183,3 +184,20 @@ type BusinessOpportunity = {
     avatar_path: string;
   } | null;
 };
+
+
+/** 新增项目后返回的数据 */
+type BusinessOpportunityAddResponse = Pick<
+  BusinessOpportunity,
+  | "company_id"
+  | "client_id"
+  | "project_id"
+  | "name"
+  | "code"
+  | "status"
+  | "created_id"
+  | "created_at"
+  | "updated_at"
+  | "id"
+  | "status_show"
+>;
