@@ -58,7 +58,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户详情 - " + record.name_show
+              "客户详情 - " + record.name_show,
             );
           }}
         >
@@ -66,65 +66,54 @@ function Client() {
         </Typography.Link>
       ),
       width: 260,
-      ellipsis: true,
     },
     {
       title: "简称",
       dataIndex: "short_name",
-      ellipsis: true,
     },
     {
       title: "类型",
       dataIndex: "type",
       valueEnum: projectTypeMap,
-      ellipsis: true,
     },
     {
       title: "性质",
       dataIndex: "nature",
-      ellipsis: true,
     },
     {
       title: "等级",
       dataIndex: "grade",
-      ellipsis: true,
     },
     {
       title: "规模",
       dataIndex: "scale",
-      ellipsis: true,
     },
     {
       title: "省",
       dataIndex: "province",
-      ellipsis: true,
     },
     {
       title: "市",
       dataIndex: "city",
-      ellipsis: true,
     },
     {
       title: "区",
       dataIndex: "county",
-      ellipsis: true,
     },
     {
       title: "成立日期",
       dataIndex: "establishment_date",
-      ellipsis: true,
     },
     {
       title: "信息完善度",
       dataIndex: "perfect_ratio",
-      ellipsis: true,
+
       valueType: "progress",
     },
     {
       title: "是否签约",
       dataIndex: "is_sign",
       valueEnum: watherMap,
-      ellipsis: true,
     },
     {
       title: "负责人",
@@ -135,12 +124,10 @@ function Client() {
       title: "状态",
       dataIndex: "status",
       valueEnum: StaffStatus,
-      ellipsis: true,
     },
     {
       title: "创建时间",
       dataIndex: "created_at",
-      ellipsis: true,
     },
     {
       dataIndex: "id",
@@ -155,7 +142,7 @@ function Client() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/client/client/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -276,7 +263,7 @@ function Client() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户"
+                "编辑新创建的客户",
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -305,7 +292,7 @@ function Client() {
         )}
         {window.preload.getLocalUserHasPermission(
           "/client/client",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
