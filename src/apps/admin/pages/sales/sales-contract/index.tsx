@@ -23,14 +23,24 @@ import { watherMap } from "src/apps/admin/api/general";
 import styled, { useTheme } from "styled-components";
 
 //主体接口
-import { getSalesContractList } from "src/apps/admin/api/sales-contract";
+import {
+  getSalesContractList,
+  salesContractType,
+} from "src/apps/admin/api/sales-contract";
 //关联接口
-import { StaffStatus } from "src/apps/admin/api/client";
+import { getClientOption, StaffStatus } from "src/apps/admin/api/client";
 import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
+import useOption from "src/hooks/use-option";
+import { getAreaList } from "src/apps/admin/api/sales-territory";
+import { getProjectOption } from "src/apps/admin/api/project";
 
 function SalesContract() {
   const table = useSearchTable(getSalesContractList);
   const theme = useTheme();
+
+  const [area] = useOption(getAreaList);
+  const [project] = useOption(getProjectOption);
+  const [client] = useOption(getClientOption);
 
   const column = table.column([
     {
@@ -152,6 +162,9 @@ function SalesContract() {
 
   useEffect(() => {
     table.reload();
+    area.loadOption();
+    project.loadOption();
+    client.loadOption();
   }, []);
 
   return (
@@ -171,14 +184,14 @@ function SalesContract() {
                 <ProFormSelect<Area>
                   label="区域"
                   name="area_ids"
-                  // options={area.list}
-                  // fieldProps={{
-                  //   fieldNames: { label: "name", value: "id" },
-                  //   showSearch: true,
-                  //   filterOption: true,
-                  //   optionFilterProp: "name",
-                  //   mode: "multiple",
-                  // }}
+                  options={area.list}
+                  fieldProps={{
+                    fieldNames: { label: "name", value: "id" },
+                    showSearch: true,
+                    filterOption: true,
+                    optionFilterProp: "name",
+                    mode: "multiple",
+                  }}
                 />
               </Col>
               <Col flex="330px">
@@ -187,26 +200,26 @@ function SalesContract() {
                   name="project_ids"
                   mode="multiple"
                   showSearch
-                  // options={projectOption.list}
-                  // fieldProps={{
-                  //   loading: projectOption.loading,
-                  //   optionFilterProp: "name_show",
-                  //   fieldNames: { label: "name_show", value: "id" },
-                  // }}
+                  options={project.list}
+                  fieldProps={{
+                    loading: project.loading,
+                    optionFilterProp: "name_show",
+                    fieldNames: { label: "name_show", value: "id" },
+                  }}
                 />
               </Col>
               <Col flex="330px">
-                <ProFormSelect<Client>
+                <ProFormSelect<typeof client.list>
                   label="客户"
                   name="client_ids"
-                  mode="multiple"
-                  showSearch
-                  // options={clientOption.list}
-                  // fieldProps={{
-                  //   loading: clientOption.loading,
-                  //   optionFilterProp: "name_show",
-                  //   fieldNames: { label: "name_show", value: "id" },
-                  // }}
+                  options={client.list}
+                  fieldProps={{
+                    fieldNames: { label: "name_show", value: "id" },
+                    showSearch: true,
+                    filterOption: true,
+                    optionFilterProp: "name_show",
+                    mode: "multiple",
+                  }}
                 />
               </Col>
               <Col flex="220px">
@@ -215,13 +228,13 @@ function SalesContract() {
                   name="types"
                   mode="multiple"
                   showSearch
-                  // options={salesContractType}
-                  // fieldProps={{
-                  //   fieldNames: {
-                  //     label: "text",
-                  //     value: "value",
-                  //   },
-                  // }}
+                  options={Array.from(salesContractType.values())}
+                  fieldProps={{
+                    fieldNames: {
+                      label: "text",
+                      value: "value",
+                    },
+                  }}
                 />
               </Col>
               <Col flex="200px">

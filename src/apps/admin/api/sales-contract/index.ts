@@ -1,4 +1,12 @@
 import fetch from "src/util/fetch";
+
+export const salesContractType = new Map<
+  SalesContract["type"],
+  EnumValue<SalesContract["type"]>
+>([
+  [1, { value: 1, color: "gold", text: "主合同" }],
+  [2, { value: 2, color: "green", text: "补充协议" }],
+]);
 /**
  * 销售合同-列表
  */
@@ -6,8 +14,8 @@ export function getSalesContractList(
   params: ListParam & {
     status?: BillStatus;
     project_id?: Project["id"];
-    client_id?:ClientListItem['id'],
-    is_show_detail?: 0|1
+    client_id?: ClientListItem["id"];
+    is_show_detail?: 0 | 1;
   }
 ) {
   return fetch.GET<List<SalesContract>>(
@@ -21,8 +29,8 @@ export function getSalesContractList(
 export function getSalesContractOption(params: {
   status?: BillStatus;
   project_id?: Project["id"];
-  client_id?:ClientListItem['id'],
-  is_show_detail?: 0|1
+  client_id?: ClientListItem["id"];
+  is_show_detail?: 0 | 1;
 }) {
   return fetch.GET<SalesContract[]>(
     fetch.base(`/api/sales-contract/list`),
