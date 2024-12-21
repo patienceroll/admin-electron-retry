@@ -36,6 +36,18 @@ const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
 
+/**
+ * 销售管理模块
+ */
+//销售合同
+const SalesContract = lazy(() => import("./pages/sales/sales-contract"));
+//销售订单
+const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
+//销售发货
+const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
+//销售退货
+const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
+
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
   const routes = (
@@ -85,6 +97,11 @@ export default function () {
           path="/business-opportunity/business-opportunity"
           element={<BusinessOpportunity />}
         />
+
+        <Route path="/sales/sales-contract" element={<SalesContract />} />
+        <Route path="/sales/sales-order" element={<SalesOrder />} />
+        <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
+        <Route path="/sales/sales-return" element={<SalesReturn />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
