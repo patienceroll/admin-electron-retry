@@ -51,13 +51,11 @@ function SalesContract() {
         </Typography.Link>
       ),
       width: 260,
-      ellipsis: true,
     },
     {
       title: "编号",
       dataIndex: "code",
       fixed: "left",
-      ellipsis: true,
     },
     {
       title: "项目",
@@ -65,7 +63,6 @@ function SalesContract() {
       renderText(_, row) {
         return row.project?.name_show;
       },
-      ellipsis: true,
     },
     {
       title: "客户",
@@ -73,7 +70,6 @@ function SalesContract() {
       renderText(_, row) {
         return row.client?.name_show;
       },
-      ellipsis: true,
     },
     {
       title: "税率（%）",
@@ -88,11 +84,7 @@ function SalesContract() {
       title: "签约日期",
       dataIndex: "sign_date",
       valueType: "dateRange",
-      ellipsis: true,
-      sorter: (a, b) => {
-        return Date.parse(a.created_at) - Date.parse(b.created_at);
-      },
-      render: (_, row) => row.sign_date,
+      renderText: (_, row) => row.sign_date,
     },
     {
       title: "备注",
@@ -106,13 +98,11 @@ function SalesContract() {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      ellipsis: true,
     },
     {
       title: "状态",
       dataIndex: "status",
       valueEnum: StaffStatus,
-      ellipsis: true,
     },
     {
       dataIndex: "id",
@@ -258,7 +248,7 @@ function SalesContract() {
                   }}
                 />
               </Col>
-              <Col flex="440px">
+              <Col flex="500px">
                 <ProForm.Item
                   label="行政区"
                   name="region"
@@ -271,7 +261,7 @@ function SalesContract() {
                   <AddressFormSearch />
                 </ProForm.Item>
               </Col>
-              <Col flex="300px">
+              <Col flex="330px">
                 <ProFormDateRangePicker
                   name="sign_date"
                   transform={(value) => ({
