@@ -11,11 +11,11 @@ import {
   Typography,
 } from "antd";
 import {
-  ProFormText,
-  ProFormSelect,
-  ProTable,
-  ProFormCheckbox,
   ProForm,
+  ProFormCheckbox,
+  ProFormSelect,
+  ProFormText,
+  ProTable,
 } from "@ant-design/pro-components/es";
 
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -53,14 +53,14 @@ function BusinessOpportunity() {
     {
       title: "业务机会",
       dataIndex: "name_show",
-      ellipsis: true,
+
       fixed: "left",
       render: (_, record) => (
         <Typography.Link
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show
+              "业务机会详情 - " + record.name_show,
             );
           }}
         >
@@ -71,7 +71,7 @@ function BusinessOpportunity() {
     {
       title: "编号",
       dataIndex: "code",
-      ellipsis: true,
+
       fixed: "left",
       copyable: true,
     },
@@ -79,23 +79,19 @@ function BusinessOpportunity() {
     {
       title: "类别",
       dataIndex: "category",
-      ellipsis: true,
     },
     {
       title: "行业",
       dataIndex: "trade",
-      ellipsis: true,
     },
     {
       title: "建设内容",
       dataIndex: "build_content",
       width: 200,
-      ellipsis: true,
     },
     {
       title: "地址",
       dataIndex: "address",
-      ellipsis: true,
     },
     {
       title: "区域",
@@ -108,44 +104,37 @@ function BusinessOpportunity() {
       title: "总投资金额",
       dataIndex: "investment_amount",
       valueType: "money",
-      ellipsis: true,
     },
     {
       title: "中标金额",
       dataIndex: "win_bid_amount",
       valueType: "money",
-      ellipsis: true,
     },
     {
       title: "机会价值",
       dataIndex: "estimated_amount",
       valueType: "money",
-      ellipsis: true,
     },
     {
       title: "挂网时间",
       dataIndex: "hang_time",
-      ellipsis: true,
     },
     {
       title: "开标时间",
       dataIndex: "bid_open_time",
-      ellipsis: true,
     },
     {
       title: "采购时间",
       dataIndex: "purchase_date",
-      ellipsis: true,
     },
     {
       title: "项目状态",
       dataIndex: "project_status",
-      ellipsis: true,
     },
     {
       title: "状态",
       dataIndex: "status",
-      ellipsis: true,
+
       valueEnum: BusinessOpportunityStatus,
     },
     {
@@ -164,7 +153,6 @@ function BusinessOpportunity() {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      ellipsis: true,
     },
     {
       title: "操作",
@@ -179,7 +167,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -208,7 +196,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      }
+                      },
                     );
                   },
                 });
@@ -337,14 +325,16 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会"
+                "编辑业务机会",
               );
+
               function listener(event: MessageEvent<"success">) {
                 if (event.data === "success") {
                   table.reload();
                   contextedMessage.message?.success("编辑成功");
                 }
               }
+
               if (window) {
                 window.addEventListener("message", listener);
               }
@@ -354,7 +344,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
