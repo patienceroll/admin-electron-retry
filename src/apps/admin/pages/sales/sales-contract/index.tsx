@@ -10,20 +10,22 @@ import {
   ProTable,
 } from "@ant-design/pro-components";
 
+import Search from "src/framework/component/search";
 import PageWrapper from "src/framework/component/page-wrapper";
-import useSearchTable from "src/hooks/use-search-table";
+import SearchAction from "src/framework/component/search/search-action";
+import AddressFormSearch from "src/framework/component/adress-form-search";
+import openWindow from "src/util/open-window";
+import { watherMap } from "src/apps/admin/api/general";
+import styled, { useTheme } from "styled-components";
 
+//hooks
+import useSearchTable from "src/hooks/use-search-table";
+import useColumnState from "src/hooks/use-column-state";
+//主体接口
 import { getSalesContractList } from "src/apps/admin/api/sales-contract";
 //关联接口
 import { StaffStatus } from "src/apps/admin/api/client";
-import styled, { useTheme } from "styled-components";
-import useColumnState from "src/hooks/use-column-state";
-import openWindow from "src/util/open-window";
-import Search from "src/framework/component/search";
-import { watherMap } from "src/apps/admin/api/general";
 import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
-import AddressFormSearch from "src/framework/component/adress-form-search";
-import SearchAction from "src/framework/component/search/search-action";
 
 function SalesContract() {
   const table = useSearchTable(getSalesContractList);
