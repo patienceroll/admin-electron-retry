@@ -32,7 +32,7 @@ import { deleteProject, getProjectList } from "../../api/project";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 
-export default function index() {
+export default function () {
   const table = useSearchTable(getProjectList);
   const theme = useTheme();
 
@@ -47,7 +47,7 @@ export default function index() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show,
+              "业务机会详情 - " + record.name_show
             );
           }}
         >
@@ -127,7 +127,7 @@ export default function index() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/project/project/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
