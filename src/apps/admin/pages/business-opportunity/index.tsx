@@ -36,8 +36,10 @@ import usePageTableHeight from "src/hooks/use-page-table-height";
 function BusinessOpportunity() {
   const table = useSearchTable(getBusinessOpportunityList);
   const theme = useTheme();
-  const card = useRef<HTMLDivElement>(null);
-  const { addAElement, height } = usePageTableHeight(theme.padding * 2 + theme.margin);
+
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
 
   const create = Create.createRef();
 
@@ -211,15 +213,14 @@ function BusinessOpportunity() {
     area.loadOption();
   }, []);
 
-  useEffect(() => {
-    if (card.current) {
-      addAElement(card.current);
-    }
-  }, [addAElement]);
-
   return (
     <PageWrapper>
-      <Card bordered ref={card}>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="300px">
