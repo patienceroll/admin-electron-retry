@@ -167,20 +167,20 @@ function SalesContract() {
 
   return (
     <PageWrapper>
-      <Row>
-        <Col flex="400px">
+      <Row gutter={5} style={{ flexWrap: "nowrap" }}>
+        <Col flex="300px">
           {/*<Affix offsetTop={theme.padding}>*/}
           <Card bordered>
             <Search>
               <Row gutter={[theme.padding, theme.padding]}>
-                <Col flex="220px">
+                <Col flex="300px">
                   <ProFormText
                     label="关键词"
                     name="keyword"
                     placeholder="合同名称/编号搜索"
                   />
                 </Col>
-                <Col flex="260px">
+                <Col flex="300px">
                   <ProFormSelect<Area>
                     label="区域"
                     name="area_ids"
@@ -191,11 +191,10 @@ function SalesContract() {
                       filterOption: true,
                       optionFilterProp: "name",
                       mode: "multiple",
-                      maxTagCount: 1,
                     }}
                   />
                 </Col>
-                <Col flex="330px">
+                <Col flex="300px">
                   <ProFormSelect<Project>
                     label="项目"
                     name="project_ids"
@@ -206,11 +205,10 @@ function SalesContract() {
                       loading: project.loading,
                       optionFilterProp: "name_show",
                       fieldNames: { label: "name_show", value: "id" },
-                      maxTagCount: 1,
                     }}
                   />
                 </Col>
-                <Col flex="330px">
+                <Col flex="300px">
                   <ProFormSelect<typeof client.list>
                     label="客户"
                     name="client_ids"
@@ -221,11 +219,10 @@ function SalesContract() {
                       filterOption: true,
                       optionFilterProp: "name_show",
                       mode: "multiple",
-                      maxTagCount: 1,
                     }}
                   />
                 </Col>
-                <Col flex="220px">
+                <Col flex="300px">
                   <ProFormSelect
                     label="类型"
                     name="types"
@@ -240,7 +237,7 @@ function SalesContract() {
                     }}
                   />
                 </Col>
-                <Col flex="200px">
+                <Col flex="300px">
                   <ProFormCheckbox.Group
                     name="is_importance"
                     label="是否重点"
@@ -250,7 +247,7 @@ function SalesContract() {
                     }))}
                   />
                 </Col>
-                <Col flex="220px">
+                <Col flex="300px">
                   <ProFormSelect<Area>
                     label="状态"
                     name="statuses"
@@ -268,6 +265,7 @@ function SalesContract() {
                 {/*  <ProForm.Item*/}
                 {/*    label="行政区"*/}
                 {/*    name="region"*/}
+                {/*    layout="vertical"*/}
                 {/*    transform={({ province, city, county }) => ({*/}
                 {/*      province,*/}
                 {/*      city,*/}
@@ -277,7 +275,7 @@ function SalesContract() {
                 {/*    <AddressFormSearch />*/}
                 {/*  </ProForm.Item>*/}
                 {/*</Col>*/}
-                <Col flex="330px">
+                <Col flex="300px">
                   <ProFormDateRangePicker
                     name="sign_date"
                     transform={(value) => ({
@@ -287,7 +285,7 @@ function SalesContract() {
                     label="签约日期"
                   />
                 </Col>
-                <Col flex="220px">
+                <Col flex="300px">
                   <ProFormTreeSelect
                     label="负责人"
                     name="staff_ids"
@@ -295,7 +293,7 @@ function SalesContract() {
                     // fieldProps={{ treeData: staffTreeData, multiple: true }}
                   />
                 </Col>
-                <Col flex="220px">
+                <Col flex="300px">
                   <SearchAction
                     loading={table.loading}
                     onReset={table.onReset}
