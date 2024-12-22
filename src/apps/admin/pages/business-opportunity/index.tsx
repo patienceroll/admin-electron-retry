@@ -21,7 +21,7 @@ import useColumnState from "src/hooks/use-column-state";
 import SearchAction from "src/framework/component/search/search-action";
 import Search from "src/framework/component/search";
 import useOption from "src/hooks/use-option";
-import { getAreaList } from "src/apps/admin/api/sales-territory";
+import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { watherMap } from "src/apps/admin/api/general";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import Icon from "src/framework/component/icon";
@@ -43,7 +43,7 @@ function BusinessOpportunity() {
 
   const create = Create.createRef();
 
-  const [area] = useOption(getAreaList);
+  const [area] = useOption(getAreaOption);
 
   const column = table.column([
     {
@@ -56,7 +56,7 @@ function BusinessOpportunity() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show
+              "业务机会详情 - " + record.name_show,
             );
           }}
         >
@@ -163,7 +163,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -192,7 +192,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      }
+                      },
                     );
                   },
                 });
@@ -324,7 +324,7 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会"
+                "编辑业务机会",
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -343,7 +343,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
