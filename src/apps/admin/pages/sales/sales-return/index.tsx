@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { Affix, Card, Col, Row } from "antd";
+import { Card, Col, Row } from "antd";
 import {
-  ProForm,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
@@ -12,21 +11,36 @@ import {
 import Search from "src/framework/component/search";
 import PageWrapper from "src/framework/component/page-wrapper";
 import SearchAction from "src/framework/component/search/search-action";
-import AddressFormSearch from "src/framework/component/adress-form-search";
 
 import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
+import useOption from "src/hooks/use-option";
 import styled, { useTheme } from "styled-components";
 
 //主体接口
-import { getSalesReturnList } from "src/apps/admin/api/sales-return";
+import {
+  getSalesReturnList,
+  salesReturnStatus,
+} from "src/apps/admin/api/sales-return";
 //关联接口
-import { StaffStatus } from "src/apps/admin/api/client";
+import { getClientOption } from "src/apps/admin/api/client";
 import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
+import { getAreaOption } from "src/apps/admin/api/sales-territory";
+import { getProjectOption } from "src/apps/admin/api/project";
+import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
+import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
+import { getSalesDeliverOption } from "src/apps/admin/api/sales-deliver";
 
 function SalesReturn() {
   const table = useSearchTable(getSalesReturnList);
   const theme = useTheme();
+
+  const [areaOption] = useOption(getAreaOption);
+  const [projectOption] = useOption(getProjectOption);
+  const [clientOption] = useOption(getClientOption);
+  const [salesContractOption] = useOption(getSalesContractOption);
+  const [salesOrderOption] = useOption(getSalesOrderOption);
+  const [salesDeliverOption] = useOption(getSalesDeliverOption);
 
   const column = table.column([
     // {
@@ -122,7 +136,7 @@ function SalesReturn() {
     {
       title: "状态",
       dataIndex: "status",
-      valueEnum: StaffStatus,
+      valueEnum: salesReturnStatus,
     },
     {
       dataIndex: "id",
@@ -168,225 +182,256 @@ function SalesReturn() {
     },
   ]);
 
-  const columnState = useColumnState("salesReturnlist", column);
+  const columnState = useColumnState("salesReturnList", column);
 
   useEffect(() => {
     table.reload();
+    areaOption.loadOption();
+    projectOption.loadOption();
+    clientOption.loadOption();
+    salesContractOption.loadOption();
+    salesOrderOption.loadOption();
+    salesDeliverOption.loadOption();
   }, []);
 
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <Search>
-            <Row gutter={[theme.padding, theme.padding]}>
-              <Col flex="220px">
-                <ProFormText
-                  label="关键词"
-                  name="keyword"
-                  placeholder="合同名称/编号搜索"
-                />
-              </Col>
-              <Col flex="220px">
-                <ProFormSelect<Area>
-                  label="区域"
-                  name="area_ids"
-                  // options={area.list}
-                  // fieldProps={{
-                  //   fieldNames: { label: "name", value: "id" },
-                  //   showSearch: true,
-                  //   filterOption: true,
-                  //   optionFilterProp: "name",
-                  //   mode: "multiple",
-                  // }}
-                />
-              </Col>
-              <Col flex="330px">
-                <ProFormSelect<Project>
-                  label="项目"
-                  name="project_ids"
-                  mode="multiple"
-                  showSearch
-                  // options={projectOption.list}
-                  // fieldProps={{
-                  //   loading: projectOption.loading,
-                  //   optionFilterProp: "name_show",
-                  //   fieldNames: { label: "name_show", value: "id" },
-                  // }}
-                />
-              </Col>
-              <Col flex="330px">
-                <ProFormSelect<Client>
-                  label="客户"
-                  name="client_ids"
-                  mode="multiple"
-                  showSearch
-                  // options={clientOption.list}
-                  // fieldProps={{
-                  //   loading: clientOption.loading,
-                  //   optionFilterProp: "name_show",
-                  //   fieldNames: { label: "name_show", value: "id" },
-                  // }}
-                />
-              </Col>
-              <Col flex="330px">
-                <ProFormSelect<SalesContract>
-                  label="销售合同"
-                  name="client_ids"
-                  mode="multiple"
-                  showSearch
-                  // options={salesContractOption.list}
-                  // fieldProps={{
-                  //   loading: salesContractOption.loading,
-                  //   optionFilterProp: "name",
-                  //   fieldNames: { label: "name", value: "id" },
-                  // }}
-                />
-              </Col>
-              <Col flex="220px">
-                <ProFormSelect<SalesContract>
-                  label="销售订单"
-                  name="client_ids"
-                  mode="multiple"
-                  showSearch
-                  // options={salesContractOption.list}
-                  // fieldProps={{
-                  //   loading: salesContractOption.loading,
-                  //   optionFilterProp: "name",
-                  //   fieldNames: { label: "name", value: "id" },
-                  // }}
-                />
-              </Col>
-              <Col flex="220px">
-                <ProFormSelect<Area>
-                  label="状态"
-                  name="statuses"
-                  options={Array.from(BusinessOpportunityStatus.values())}
-                  fieldProps={{
-                    fieldNames: { label: "text", value: "value" },
-                    showSearch: true,
-                    filterOption: true,
-                    optionFilterProp: "name",
-                    mode: "multiple",
-                  }}
-                />
-              </Col>
-              <Col flex="500px">
-                <ProForm.Item
-                  label="行政区"
-                  name="region"
-                  transform={({ province, city, county }) => ({
-                    province,
-                    city,
-                    county,
-                  })}
-                >
-                  <AddressFormSearch />
-                </ProForm.Item>
-              </Col>
-              <Col flex="330px">
-                <ProFormDateRangePicker
-                  name="sign_date"
-                  transform={(value) => ({
-                    start_time: value[0],
-                    end_time: value[1],
-                  })}
-                  label="签约日期"
-                />
-              </Col>
-              <Col flex="220px">
-                <ProFormTreeSelect
-                  label="负责人"
-                  name="staff_ids"
-                  placeholder="请选择负责人"
-                  // fieldProps={{ treeData: staffTreeData, multiple: true }}
-                />
-              </Col>
-              <Col flex="220px">
-                <SearchAction
-                  loading={table.loading}
-                  onReset={table.onReset}
-                  onFinish={table.onFinish}
-                />
-              </Col>
-            </Row>
-          </Search>
-        </Card>
-      </Affix>
-      <ProTable
-        rowKey="id"
-        style={{ marginTop: theme.margin }}
-        search={false}
-        loading={table.loading}
-        options={table.options}
-        dataSource={table.dataSource}
-        pagination={table.pagination}
-        onChange={table.onChange}
-        columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
-        columnsState={{
-          value: columnState.data?.data,
-          onChange: columnState.onChange,
-        }}
-        components={{
-          header: {
-            cell: columnState.tableHeaderCellRender,
-          },
-        }}
-        // headerTitle={
-        //     <Tabs
-        //         items={[{value: -1, text: "全部"}, ...billStatus].map((i) => ({
-        //             key: `${i.value}`,
-        //             label: i.text,
-        //         }))}
-        //         onChange={(e) => {
-        //             const status = e === `-1` ? undefined : (e as any);
-        //             extraParams.current.status = status;
-        //             onChange(
-        //                 {current: 1},
-        //                 {},
-        //                 {},
-        //                 {action: "paginate", currentDataSource: dataSource},
-        //             );
-        //         }}
-        //     />
-        // }
-        // toolBarRender={() => [
-        //     <Button
-        //         hidden={!menu.getPermission()}
-        //         key={1}
-        //         onClick={() => {
-        //             modify.current?.create().then((result) => {
-        //                 message.success("新增成功");
-        //                 history.push({
-        //                     pathname: `/sales/sales-return/edit/${result.id}`,
-        //                 });
-        //             });
-        //         }}
-        //     >
-        //         新增
-        //     </Button>,
-        //     <Button
-        //         key="export"
-        //         hidden={!menu.getPermission({key: "export"})}
-        //         loading={exporting.whether}
-        //         onClick={async () => {
-        //             try {
-        //                 exporting.setTrue();
-        //                 const data = await salesReturnExport({
-        //                     ...params,
-        //                     ...extraParams.current,
-        //                 });
-        //                 window.open(data.data.file_path);
-        //             } finally {
-        //                 exporting.setFalse();
-        //             }
-        //         }}
-        //     >
-        //         导出
-        //     </Button>,
-        // ]}
-      />
+      <Row gutter={5} style={{ flexWrap: "nowrap" }}>
+        <Col flex="330px">
+          {/*<Affix offsetTop={theme.padding}>*/}
+          <Card bordered>
+            <Search>
+              <Row gutter={[theme.padding, theme.padding]}>
+                <Col flex="330px">
+                  <ProFormText
+                    label="关键词"
+                    name="keyword"
+                    placeholder="合同名称/编号搜索"
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<Area>
+                    label="区域"
+                    name="area_ids"
+                    options={areaOption.list}
+                    style={{ height: "60px" }}
+                    fieldProps={{
+                      fieldNames: { label: "name", value: "id" },
+                      showSearch: true,
+                      filterOption: true,
+                      optionFilterProp: "name",
+                      mode: "multiple",
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<Project>
+                    label="项目"
+                    name="project_ids"
+                    mode="multiple"
+                    showSearch
+                    options={projectOption.list}
+                    style={{ height: "60px" }}
+                    fieldProps={{
+                      loading: projectOption.loading,
+                      optionFilterProp: "name_show",
+                      fieldNames: { label: "name_show", value: "id" },
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<Client>
+                    label="客户"
+                    name="client_ids"
+                    mode="multiple"
+                    showSearch
+                    options={clientOption.list}
+                    style={{ height: "60px" }}
+                    fieldProps={{
+                      loading: clientOption.loading,
+                      optionFilterProp: "name_show",
+                      fieldNames: { label: "name_show", value: "id" },
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<SalesContract>
+                    label="合同"
+                    name="sales_contract_ids"
+                    mode="multiple"
+                    showSearch
+                    options={salesContractOption.list}
+                    style={{ height: "60px" }}
+                    fieldProps={{
+                      loading: salesContractOption.loading,
+                      optionFilterProp: "name",
+                      fieldNames: { label: "name", value: "id" },
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<SalesOrder>
+                    label="订单"
+                    name="sales_order_ids"
+                    mode="multiple"
+                    showSearch
+                    options={salesOrderOption.list}
+                    style={{ height: "60px" }}
+                    fieldProps={{
+                      loading: salesOrderOption.loading,
+                      optionFilterProp: "code",
+                      fieldNames: { label: "code", value: "id" },
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<SalesDeliver>
+                    label="发货单"
+                    name="sales_deliver_ids"
+                    mode="multiple"
+                    showSearch
+                    options={salesDeliverOption.list}
+                    fieldProps={{
+                      loading: salesDeliverOption.loading,
+                      optionFilterProp: "code",
+                      fieldNames: { label: "code", value: "id" },
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormSelect<Area>
+                    label="状态"
+                    name="statuses"
+                    options={Array.from(BusinessOpportunityStatus.values())}
+                    fieldProps={{
+                      fieldNames: { label: "text", value: "value" },
+                      showSearch: true,
+                      filterOption: true,
+                      optionFilterProp: "name",
+                      mode: "multiple",
+                    }}
+                  />
+                </Col>
+                {/*<Col flex="330px">*/}
+                {/*  <ProForm.Item*/}
+                {/*    label="行政区"*/}
+                {/*    name="region"*/}
+                {/*    transform={({ province, city, county }) => ({*/}
+                {/*      province,*/}
+                {/*      city,*/}
+                {/*      county,*/}
+                {/*    })}*/}
+                {/*  >*/}
+                {/*    <AddressFormSearch />*/}
+                {/*  </ProForm.Item>*/}
+                {/*</Col>*/}
+                <Col flex="330px">
+                  <ProFormDateRangePicker
+                    name="sign_date"
+                    transform={(value) => ({
+                      start_time: value[0],
+                      end_time: value[1],
+                    })}
+                    label="退货日期"
+                  />
+                </Col>
+                <Col flex="330px">
+                  <ProFormTreeSelect
+                    label="负责人"
+                    name="staff_ids"
+                    placeholder="请选择负责人"
+                    // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                  />
+                </Col>
+                <Col flex="330px">
+                  <SearchAction
+                    loading={table.loading}
+                    onReset={table.onReset}
+                    onFinish={table.onFinish}
+                  />
+                </Col>
+              </Row>
+            </Search>
+          </Card>
+          {/*</Affix>*/}
+        </Col>
+        <Col flex={1}>
+          <ProTable
+            rowKey="id"
+            // style={{ marginTop: theme.margin }}
+            search={false}
+            loading={table.loading}
+            options={table.options}
+            dataSource={table.dataSource}
+            pagination={table.pagination}
+            onChange={table.onChange}
+            columns={columnState.column}
+            scroll={{ x: table.measureColumnWidth(column) }}
+            columnsState={{
+              value: columnState.data?.data,
+              onChange: columnState.onChange,
+            }}
+            components={{
+              header: {
+                cell: columnState.tableHeaderCellRender,
+              },
+            }}
+            // headerTitle={
+            //     <Tabs
+            //         items={[{value: -1, text: "全部"}, ...billStatus].map((i) => ({
+            //             key: `${i.value}`,
+            //             label: i.text,
+            //         }))}
+            //         onChange={(e) => {
+            //             const status = e === `-1` ? undefined : (e as any);
+            //             extraParams.current.status = status;
+            //             onChange(
+            //                 {current: 1},
+            //                 {},
+            //                 {},
+            //                 {action: "paginate", currentDataSource: dataSource},
+            //             );
+            //         }}
+            //     />
+            // }
+            // toolBarRender={() => [
+            //     <Button
+            //         hidden={!menu.getPermission()}
+            //         key={1}
+            //         onClick={() => {
+            //             modify.current?.create().then((result) => {
+            //                 message.success("新增成功");
+            //                 history.push({
+            //                     pathname: `/sales/sales-return/edit/${result.id}`,
+            //                 });
+            //             });
+            //         }}
+            //     >
+            //         新增
+            //     </Button>,
+            //     <Button
+            //         key="export"
+            //         hidden={!menu.getPermission({key: "export"})}
+            //         loading={exporting.whether}
+            //         onClick={async () => {
+            //             try {
+            //                 exporting.setTrue();
+            //                 const data = await salesReturnExport({
+            //                     ...params,
+            //                     ...extraParams.current,
+            //                 });
+            //                 window.open(data.data.file_path);
+            //             } finally {
+            //                 exporting.setFalse();
+            //             }
+            //         }}
+            //     >
+            //         导出
+            //     </Button>,
+            // ]}
+          />
+        </Col>
+      </Row>
     </PageWrapper>
   );
 }

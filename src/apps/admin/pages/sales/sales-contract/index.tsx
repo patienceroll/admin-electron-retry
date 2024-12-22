@@ -15,6 +15,7 @@ import SearchAction from "src/framework/component/search/search-action";
 
 import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
+import useOption from "src/hooks/use-option";
 
 import openWindow from "src/util/open-window";
 import { watherMap } from "src/apps/admin/api/general";
@@ -23,22 +24,21 @@ import styled, { useTheme } from "styled-components";
 //主体接口
 import {
   getSalesContractList,
+  salesContractStatus,
   salesContractType,
 } from "src/apps/admin/api/sales-contract";
 //关联接口
-import { getClientOption, StaffStatus } from "src/apps/admin/api/client";
-import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
-import useOption from "src/hooks/use-option";
-import { getAreaList } from "src/apps/admin/api/sales-territory";
+import { getClientOption } from "src/apps/admin/api/client";
+import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 
 function SalesContract() {
   const table = useSearchTable(getSalesContractList);
   const theme = useTheme();
 
-  const [area] = useOption(getAreaList);
-  const [project] = useOption(getProjectOption);
-  const [client] = useOption(getClientOption);
+  const [areaOption] = useOption(getAreaOption);
+  const [projectOption] = useOption(getProjectOption);
+  const [clientOption] = useOption(getClientOption);
 
   const column = table.column([
     {
@@ -110,7 +110,7 @@ function SalesContract() {
     {
       title: "状态",
       dataIndex: "status",
-      valueEnum: StaffStatus,
+      valueEnum: salesContractStatus,
     },
     {
       dataIndex: "id",
@@ -156,35 +156,36 @@ function SalesContract() {
     },
   ]);
 
-  const columnState = useColumnState("salesContractlist", column);
+  const columnState = useColumnState("salesContractList", column);
 
   useEffect(() => {
     table.reload();
-    area.loadOption();
-    project.loadOption();
-    client.loadOption();
+    areaOption.loadOption();
+    projectOption.loadOption();
+    clientOption.loadOption();
   }, []);
 
   return (
     <PageWrapper>
       <Row gutter={5} style={{ flexWrap: "nowrap" }}>
-        <Col flex="300px">
+        <Col flex="330px">
           {/*<Affix offsetTop={theme.padding}>*/}
           <Card bordered>
             <Search>
               <Row gutter={[theme.padding, theme.padding]}>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormText
                     label="关键词"
                     name="keyword"
                     placeholder="合同名称/编号搜索"
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormSelect<Area>
                     label="区域"
                     name="area_ids"
-                    options={area.list}
+                    options={areaOption.list}
+                    style={{ height: "60px" }}
                     fieldProps={{
                       fieldNames: { label: "name", value: "id" },
                       showSearch: true,
@@ -194,25 +195,27 @@ function SalesContract() {
                     }}
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormSelect<Project>
                     label="项目"
                     name="project_ids"
                     mode="multiple"
                     showSearch
-                    options={project.list}
+                    options={projectOption.list}
+                    style={{ height: "60px" }}
                     fieldProps={{
-                      loading: project.loading,
+                      loading: projectOption.loading,
                       optionFilterProp: "name_show",
                       fieldNames: { label: "name_show", value: "id" },
                     }}
                   />
                 </Col>
-                <Col flex="300px">
-                  <ProFormSelect<typeof client.list>
+                <Col flex="330px">
+                  <ProFormSelect<typeof clientOption.list>
                     label="客户"
                     name="client_ids"
-                    options={client.list}
+                    options={clientOption.list}
+                    style={{ height: "60px" }}
                     fieldProps={{
                       fieldNames: { label: "name_show", value: "id" },
                       showSearch: true,
@@ -222,7 +225,7 @@ function SalesContract() {
                     }}
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormSelect
                     label="类型"
                     name="types"
@@ -237,7 +240,7 @@ function SalesContract() {
                     }}
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormCheckbox.Group
                     name="is_importance"
                     label="是否重点"
@@ -247,11 +250,11 @@ function SalesContract() {
                     }))}
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormSelect<Area>
                     label="状态"
                     name="statuses"
-                    options={Array.from(BusinessOpportunityStatus.values())}
+                    options={Array.from(salesContractStatus.values())}
                     fieldProps={{
                       fieldNames: { label: "text", value: "value" },
                       showSearch: true,
@@ -275,7 +278,7 @@ function SalesContract() {
                 {/*    <AddressFormSearch />*/}
                 {/*  </ProForm.Item>*/}
                 {/*</Col>*/}
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormDateRangePicker
                     name="sign_date"
                     transform={(value) => ({
@@ -285,7 +288,7 @@ function SalesContract() {
                     label="签约日期"
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <ProFormTreeSelect
                     label="负责人"
                     name="staff_ids"
@@ -293,7 +296,7 @@ function SalesContract() {
                     // fieldProps={{ treeData: staffTreeData, multiple: true }}
                   />
                 </Col>
-                <Col flex="300px">
+                <Col flex="330px">
                   <SearchAction
                     loading={table.loading}
                     onReset={table.onReset}
