@@ -48,6 +48,9 @@ const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
 //销售退货
 const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
 
+const Project = lazy(() => import("./pages/project"));
+const ProjectEdit = lazy(() => import("./pages/project/edit"));
+
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
   const routes = (
@@ -102,6 +105,9 @@ export default function () {
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
+
+        <Route path="/project/project" element={<Project />} />
+        <Route path="/project/project/edit" element={<ProjectEdit />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>

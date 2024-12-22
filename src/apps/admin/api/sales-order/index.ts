@@ -1,5 +1,17 @@
 import fetch from "src/util/fetch";
 
+export const salesOrderStatus = new Map<
+  SalesContract["type"],
+  EnumValue<SalesContract["type"]>
+>([
+  [1, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [2, { value: 1, color: "#4ff7cf", text: "待执行" }],
+  [3, { value: 2, color: "#d46b08", text: "执行中" }],
+  [4, { value: 3, color: "#7cb305", text: "已完结" }],
+  [5, { value: 4, color: "#cfc922", text: "已中止" }],
+  [6, { value: 5, color: "rgb(156,156,148)", text: "已作废" }],
+]);
+
 /**
  * 销售订单-列表
  */
@@ -10,8 +22,8 @@ export function getSalesOrderList(
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
     statistics_id?: number | string;
-    client_id?:ClientListItem['id'],
-    is_show_detail?: 0|1
+    client_id?: ClientListItem["id"];
+    is_show_detail?: 0 | 1;
   },
 ) {
   return fetch.GET<List<SalesOrder>>(
@@ -28,8 +40,8 @@ export function getSalesOrderOption(params: {
   /** 1客户 2项目 3合同 4订单 */
   statistics_type?: 1 | 2 | 3 | 4;
   statistics_id?: number | string;
-  client_id?:ClientListItem['id'],
-  is_show_detail?: 0|1
+  client_id?: ClientListItem["id"];
+  is_show_detail?: 0 | 1;
 }) {
   return fetch.GET<SalesOrder[]>(fetch.base(`/api/sales-order/list`), params);
 }
