@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  FloatButton,
-  Row,
-  Space,
-  Typography,
-} from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
 import {
   ProFormSelect,
@@ -38,10 +29,13 @@ import * as Follow from "./components/batch-follow";
 import useColumnState from "src/hooks/use-column-state";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
+import usePageTableHeight from "src/hooks/use-page-table-height";
 
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
+  const card = useRef<HTMLDivElement>(null);
+  const { addAElement } = usePageTableHeight();
 
   const create = Create.createRef();
   const follow = Follow.createRef();
@@ -58,7 +52,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户详情 - " + record.name_show,
+              "客户详情 - " + record.name_show
             );
           }}
         >
@@ -142,7 +136,7 @@ function Client() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/client/client/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -189,38 +183,42 @@ function Client() {
     table.reload();
   }, []);
 
+  useEffect(() => {
+    if (card.current) {
+      addAElement(card.current);
+    }
+  }, [addAElement]);
+
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <Search>
-            <Row gutter={[theme.padding, theme.padding]}>
-              <Col flex="300px">
-                <ProFormText
-                  label="关键词"
-                  name="keyword"
-                  placeholder="按客户搜索"
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect
-                  label="客户类型"
-                  name="type"
-                  options={Array.from(projectTypeMap.values())}
-                  fieldProps={{ fieldNames: { label: "text", value: "value" } }}
-                />
-              </Col>
-              <Col flex="300px">
-                <SearchAction
-                  loading={table.loading}
-                  onReset={table.onReset}
-                  onFinish={table.onFinish}
-                />
-              </Col>
-            </Row>
-          </Search>
-        </Card>
-      </Affix>
+      <Card bordered ref={card}>
+        <Search>
+          <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="300px">
+              <ProFormText
+                label="关键词"
+                name="keyword"
+                placeholder="按客户搜索"
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect
+                label="客户类型"
+                name="type"
+                options={Array.from(projectTypeMap.values())}
+                fieldProps={{ fieldNames: { label: "text", value: "value" } }}
+              />
+            </Col>
+            <Col flex="300px">
+              <SearchAction
+                loading={table.loading}
+                onReset={table.onReset}
+                onFinish={table.onFinish}
+              />
+            </Col>
+          </Row>
+        </Search>
+      </Card>
 
       <ProTable
         rowKey="id"
@@ -263,7 +261,7 @@ function Client() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户",
+                "编辑新创建的客户"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -292,7 +290,7 @@ function Client() {
         )}
         {window.preload.getLocalUserHasPermission(
           "/client/client",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
