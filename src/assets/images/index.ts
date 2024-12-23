@@ -6,6 +6,7 @@ import replenish from "./replenish.png";
 import urgent from "./urgent.png";
 import overdue from "./overdue.png";
 import dispatch from "./dispatch.png";
+import contract from "./contract.png";
 
 export default {
   login,
@@ -16,4 +17,5 @@ export default {
   urgent,
   overdue,
   dispatch,
+  contract,
 };

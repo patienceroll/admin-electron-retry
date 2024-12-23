@@ -64,7 +64,7 @@ function SalesContract() {
     {
       title: "标识",
       dataIndex: "mark_icon",
-      width: 200,
+      width: 300,
       render: (_, record) => (
         <Space>
           {record.is_approve === 1 && (
@@ -82,6 +82,9 @@ function SalesContract() {
           )}
           {record.is_factory_dispatch === 1 && (
             <img src={images.overdue} alt="逾期" />
+          )}
+          {record.is_factory_dispatch === 1 && (
+            <img src={images.contract} alt="合同" />
           )}
         </Space>
       ),
