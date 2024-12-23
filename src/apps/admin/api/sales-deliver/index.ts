@@ -41,7 +41,7 @@ export function getSalesDeliverOption(params: {
   client_id?: ClientListItem["id"];
   is_show_detail?: 0 | 1;
 }) {
-  return fetch.GET<List<SalesDeliver>>(
+  return fetch.GET<SalesDeliver[]>(
     fetch.base(`/api/sales-deliver/list`),
     params,
   );

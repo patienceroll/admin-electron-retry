@@ -9,15 +9,15 @@ export const salesContractType = new Map<
 ]);
 
 export const salesContractStatus = new Map<
-  SalesContract["type"],
-  EnumValue<SalesContract["type"]>
+  SalesContract["status"],
+  EnumValue<SalesContract["status"]>
 >([
-  [1, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
-  [2, { value: 1, color: "#4ff7cf", text: "待执行" }],
-  [3, { value: 2, color: "#d46b08", text: "执行中" }],
-  [4, { value: 3, color: "#7cb305", text: "已完结" }],
-  [5, { value: 4, color: "#cfc922", text: "已中止" }],
-  [6, { value: 5, color: "rgb(156,156,148)", text: "已作废" }],
+  [0, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [1, { value: 1, color: "#4ff7cf", text: "待执行" }],
+  [2, { value: 2, color: "#d46b08", text: "执行中" }],
+  [3, { value: 3, color: "#7cb305", text: "已完结" }],
+  [4, { value: 4, color: "#cfc922", text: "已中止" }],
+  [5, { value: 5, color: "rgb(156,156,148)", text: "已作废" }],
 ]);
 
 /**

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Typography } from "antd";
+import { Card, Col, Row, Space, Typography } from "antd";
 import {
   ProFormCheckbox,
   ProFormDateRangePicker,
@@ -31,6 +31,7 @@ import {
 import { getClientOption } from "src/apps/admin/api/client";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
+import images from "src/assets/images";
 
 function SalesContract() {
   const table = useSearchTable(getSalesContractList);
@@ -113,6 +114,22 @@ function SalesContract() {
       valueEnum: salesContractStatus,
     },
     {
+      title: "标识",
+      width: 80,
+      fixed: "right",
+      render: (_, record) => (
+        <Space>
+          {record.is_approve === 1 && (
+            <img src={images.approval} alt="审批中" />
+          )}
+          {/*{record.is_factory_dispatch === 1 && (*/}
+          {/*  <img src={images.p24} alt="厂家配送" />*/}
+          {/*)}*/}
+          {/*{record.type === 2 && <img src={images.p25} alt="补充协议" />}*/}
+        </Space>
+      ),
+    },
+    {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
@@ -170,7 +187,7 @@ function SalesContract() {
       <Row gutter={5} style={{ flexWrap: "nowrap" }}>
         <Col flex="330px">
           {/*<Affix offsetTop={theme.padding}>*/}
-          <Card bordered>
+          <Card bordered style={{ height: "calc(100vh - 60px)" }}>
             <Search>
               <Row gutter={[theme.padding, theme.padding]}>
                 <Col flex="330px">
@@ -181,11 +198,25 @@ function SalesContract() {
                   />
                 </Col>
                 <Col flex="330px">
+                  <ProFormSelect
+                    label="类型"
+                    name="types"
+                    mode="multiple"
+                    showSearch
+                    options={Array.from(salesContractType.values())}
+                    fieldProps={{
+                      fieldNames: {
+                        label: "text",
+                        value: "value",
+                      },
+                    }}
+                  />
+                </Col>
+                <Col flex="330px">
                   <ProFormSelect<Area>
                     label="区域"
                     name="area_ids"
                     options={areaOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       fieldNames: { label: "name", value: "id" },
                       showSearch: true,
@@ -202,7 +233,6 @@ function SalesContract() {
                     mode="multiple"
                     showSearch
                     options={projectOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       loading: projectOption.loading,
                       optionFilterProp: "name_show",
@@ -215,28 +245,12 @@ function SalesContract() {
                     label="客户"
                     name="client_ids"
                     options={clientOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       fieldNames: { label: "name_show", value: "id" },
                       showSearch: true,
                       filterOption: true,
                       optionFilterProp: "name_show",
                       mode: "multiple",
-                    }}
-                  />
-                </Col>
-                <Col flex="330px">
-                  <ProFormSelect
-                    label="类型"
-                    name="types"
-                    mode="multiple"
-                    showSearch
-                    options={Array.from(salesContractType.values())}
-                    fieldProps={{
-                      fieldNames: {
-                        label: "text",
-                        value: "value",
-                      },
                     }}
                   />
                 </Col>

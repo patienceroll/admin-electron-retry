@@ -7,8 +7,8 @@ function PageWrapper(props: StyledWrapComponents<PropsWithChildren>) {
   return (
     <Watermark
       className={props.className}
-      content={user?.name}
-      font={{ fontSize: 10, color: `rgba(0,0,0,0.05)` }}
+      // content={user?.name}
+      font={{ fontSize: 10, color: `rgba(0, 0, 0, 0.05)` }}
     >
       {props.children}
     </Watermark>

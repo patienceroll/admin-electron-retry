@@ -81,7 +81,7 @@ type SalesContract = {
   is_approve: number;
 
   /** 状态 */
-  status: string;
+  status: number;
 
   /** 创建者id */
   created_id: number;

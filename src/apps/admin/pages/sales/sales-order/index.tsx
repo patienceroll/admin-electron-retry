@@ -200,7 +200,6 @@ function SalesOrderList() {
                     label="区域"
                     name="area_ids"
                     options={areaOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       fieldNames: { label: "name", value: "id" },
                       showSearch: true,
@@ -217,7 +216,6 @@ function SalesOrderList() {
                     mode="multiple"
                     showSearch
                     options={projectOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       loading: projectOption.loading,
                       optionFilterProp: "name_show",
@@ -232,7 +230,6 @@ function SalesOrderList() {
                     mode="multiple"
                     showSearch
                     options={clientOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       loading: clientOption.loading,
                       optionFilterProp: "name_show",
@@ -247,7 +244,6 @@ function SalesOrderList() {
                     mode="multiple"
                     showSearch
                     options={salesContractOption.list}
-                    style={{ height: "60px" }}
                     fieldProps={{
                       loading: salesContractOption.loading,
                       optionFilterProp: "name",
