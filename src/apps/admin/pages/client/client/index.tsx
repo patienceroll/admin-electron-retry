@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
 import {
@@ -34,7 +34,9 @@ import { StaffStatus } from "src/apps/admin/api/staff";
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
-  const { addAElement, height } = usePageTableHeight(theme.padding * 2 + theme.margin);
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin,
+  );
 
   const create = Create.createRef();
   const follow = Follow.createRef();
@@ -51,7 +53,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户详情 - " + record.name_show
+              "客户详情 - " + record.name_show,
             );
           }}
         >
@@ -135,7 +137,7 @@ function Client() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/client/client/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -207,7 +209,7 @@ function Client() {
                 fieldProps={{ fieldNames: { label: "text", value: "value" } }}
               />
             </Col>
-            <Col flex="300px">
+            <Col flex="80px">
               <SearchAction
                 loading={table.loading}
                 onReset={table.onReset}
@@ -259,7 +261,7 @@ function Client() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户"
+                "编辑新创建的客户",
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -288,7 +290,7 @@ function Client() {
         )}
         {window.preload.getLocalUserHasPermission(
           "/client/client",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}

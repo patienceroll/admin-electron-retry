@@ -252,10 +252,10 @@ function BusinessOpportunity() {
               />
             </Col>
 
-            <Col flex="200px">
+            <Col flex="160px">
               <ProFormCheckbox.Group
                 name="is_importance"
-                label="是否重点"
+                label="重点"
                 options={Array.from(watherMap.values()).map((item) => ({
                   label: item.text,
                   value: item.value,
@@ -289,7 +289,7 @@ function BusinessOpportunity() {
                 <AddressFormSearch />
               </ProForm.Item>
             </Col>
-            <Col flex="300px">
+            <Col flex="80px">
               <SearchAction
                 loading={table.loading}
                 onReset={table.onReset}

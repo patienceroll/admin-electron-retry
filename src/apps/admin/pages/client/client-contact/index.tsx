@@ -6,7 +6,7 @@ import {
   ProFormText,
   ProTable,
 } from "@ant-design/pro-components";
-import {  Button, Card, Col, FloatButton, Row, Space } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space } from "antd";
 
 import useSearchTable from "src/hooks/use-search-table";
 import {
@@ -36,7 +36,7 @@ function ClientContact() {
   const [client] = useOption(getClientOption);
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin
+    theme.padding * 2 + theme.margin,
   );
 
   useEffect(() => {
@@ -150,7 +150,7 @@ function ClientContact() {
                 }}
               />
             </Col>
-            <Col flex="300px">
+            <Col flex="80px">
               <SearchAction
                 loading={table.loading}
                 onReset={table.onReset}
@@ -197,7 +197,7 @@ function ClientContact() {
 
         {window.preload.getLocalUserHasPermission(
           "/client/client-contact",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
