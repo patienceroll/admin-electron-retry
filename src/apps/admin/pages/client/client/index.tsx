@@ -13,7 +13,6 @@ import {
   clientExport,
   deleteClient,
   getClientList,
-  StaffStatus,
 } from "src/apps/admin/api/client";
 import { projectTypeMap } from "src/apps/admin/api/project";
 import { watherMap } from "src/apps/admin/api/general";
@@ -30,12 +29,12 @@ import useColumnState from "src/hooks/use-column-state";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import usePageTableHeight from "src/hooks/use-page-table-height";
+import { StaffStatus } from "src/apps/admin/api/staff";
 
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
-  const card = useRef<HTMLDivElement>(null);
-  const { addAElement } = usePageTableHeight();
+  const { addAElement, height } = usePageTableHeight(theme.padding * 2 + theme.margin);
 
   const create = Create.createRef();
   const follow = Follow.createRef();
@@ -183,15 +182,14 @@ function Client() {
     table.reload();
   }, []);
 
-  useEffect(() => {
-    if (card.current) {
-      addAElement(card.current);
-    }
-  }, [addAElement]);
-
   return (
     <PageWrapper>
-      <Card bordered ref={card}>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="300px">
@@ -230,7 +228,7 @@ function Client() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,

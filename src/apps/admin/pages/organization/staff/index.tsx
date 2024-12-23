@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Affix, Button, Card, FloatButton, Space } from "antd";
+import { Button, Card, FloatButton, Space } from "antd";
 import {
   ProFormSelect,
   ProFormText,
@@ -23,11 +23,17 @@ import contextedModal from "src/framework/component/contexted-modal";
 import EditPermission, { createRef } from "./components/edit-permission";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import useColumnState from "src/hooks/use-column-state";
 
 function Staff() {
   const table = useSearchTable(getStaffList);
   const theme = useTheme();
   const permissionRef = createRef();
+
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
 
   const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
 
@@ -160,6 +166,8 @@ function Staff() {
     },
   ]);
 
+  const columnState = useColumnState("staffList", column);
+
   useEffect(() => {
     table.getData();
     getTree();
@@ -167,57 +175,60 @@ function Staff() {
 
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <QueryFilter
-            defaultCollapsed
-            split
-            style={{ padding: 0, rowGap: 0 }}
-            loading={table.loading}
-            onReset={table.onReset}
-            onFinish={table.onFinish}
-          >
-            <ProFormTreeSelect
-              label="部门"
-              name="department_id"
-              placeholder="搜索该部门下的员工"
-              fieldProps={{
-                treeData: deparmentTree,
-                showSearch: true,
-                treeNodeFilterProp: "name",
-                fieldNames: {
-                  children: "child",
-                  label: "name",
-                  value: "id",
-                },
-              }}
-            />
-            <ProFormText
-              name="keyword"
-              label="关键词"
-              placeholder="搜索姓名/工号"
-            />
-            <ProFormSelect
-              name="status"
-              label="状态"
-              options={Array.from(StaffStatus.values()).map((item) => ({
-                label: item.text,
-                value: item.value,
-              }))}
-            />
-            <ProFormSelect
-              name="statuses"
-              label="性别"
-              mode="multiple"
-              options={[
-                { label: "未知", value: 0 },
-                { label: "男", value: 1 },
-                { label: "女", value: 2 },
-              ]}
-            />
-          </QueryFilter>
-        </Card>
-      </Affix>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
+        <QueryFilter
+          defaultCollapsed
+          split
+          style={{ padding: 0, rowGap: 0 }}
+          loading={table.loading}
+          onReset={table.onReset}
+          onFinish={table.onFinish}
+        >
+          <ProFormTreeSelect
+            label="部门"
+            name="department_id"
+            placeholder="搜索该部门下的员工"
+            fieldProps={{
+              treeData: deparmentTree,
+              showSearch: true,
+              treeNodeFilterProp: "name",
+              fieldNames: {
+                children: "child",
+                label: "name",
+                value: "id",
+              },
+            }}
+          />
+          <ProFormText
+            name="keyword"
+            label="关键词"
+            placeholder="搜索姓名/工号"
+          />
+          <ProFormSelect
+            name="status"
+            label="状态"
+            options={Array.from(StaffStatus.values()).map((item) => ({
+              label: item.text,
+              value: item.value,
+            }))}
+          />
+          <ProFormSelect
+            name="statuses"
+            label="性别"
+            mode="multiple"
+            options={[
+              { label: "未知", value: 0 },
+              { label: "男", value: 1 },
+              { label: "女", value: 2 },
+            ]}
+          />
+        </QueryFilter>
+      </Card>
 
       <ProTable
         rowKey="id"
@@ -228,13 +239,22 @@ function Staff() {
         dataSource={table.dataSource}
         pagination={table.pagination}
         onChange={table.onChange}
-        columns={column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        columns={columnState.column}
+        columnsState={{
+          value: columnState.data?.data,
+          onChange: columnState.onChange,
+        }}
+        components={{
+          header: {
+            cell: columnState.tableHeaderCellRender,
+          },
+        }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
       />
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新建员工"
-          icon={<Icon  icon={AddSvg} />}
+          icon={<Icon icon={AddSvg} />}
           onClick={() => {
             const window = openWindow.openCurrentAppWindow(
               "/organization/staff/create",
