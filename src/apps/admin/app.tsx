@@ -92,8 +92,8 @@ export default function () {
             titleMarginTop: 0,
           },
           Form: {
-            itemMarginBottom: designToken.padding / 2
-          }
+            itemMarginBottom: designToken.padding / 2,
+          },
         },
       })}
     >

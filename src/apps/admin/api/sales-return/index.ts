@@ -1,4 +1,16 @@
 import fetch from "src/util/fetch";
+
+export const salesReturnStatus = new Map<
+  SalesDeliver["status"],
+  EnumValue<SalesDeliver["status"]>
+>([
+  [1, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [2, { value: 1, color: "#4ff7cf", text: "待退货" }],
+  [3, { value: 2, color: "#d46b08", text: "退货中" }],
+  [4, { value: 3, color: "#3a50b9", text: "已退货" }],
+  [5, { value: 4, color: "rgb(156,156,148)", text: "已作废" }],
+]);
+
 /**
  * 销售退款-列表
  */
@@ -10,11 +22,11 @@ export function getSalesReturnList(
     statistics_id?: number | string;
     client_id?: ClientListItem["id"];
     is_show_detail?: 0 | 1;
-  }
+  },
 ) {
   return fetch.GET<List<SalesReturn>>(
     fetch.base(`/api/sales-return/list`),
-    params
+    params,
   );
 }
 
@@ -64,7 +76,7 @@ export function deleteSalesReturn(params: Pick<SalesReturn, "id">) {
  * 生成合同编号 */
 export const getSalesReturnCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/sales-return/code")
+    fetch.base("/api/sales-return/code"),
   );
 };
 
@@ -74,11 +86,11 @@ export const getSalesReturnMaterialSku = (
   params: ListParam & {
     id?: SalesReturn["id"];
     sales_deliver_id?: SalesReturn["sales_deliver_id"];
-  }
+  },
 ) => {
   return fetch.GET<List<SalesReturnMaterialSku>>(
     fetch.base("/api/sales-return/superior-detail"),
-    params
+    params,
   );
 };
 
@@ -110,9 +122,10 @@ export function approval(params: {
 export function getApprovalRecord(params: Pick<SalesReturn, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-return/approval-record`),
-    params
+    params,
   );
 }
+
 /** 销售退货-作废 */
 export function billInvalid(params: Pick<SalesReturn, "id">) {
   return fetch.POST(fetch.base(`/api/sales-return/invalid`), params);
@@ -136,6 +149,6 @@ export function salesReturnExport(params: Record<string, any>) {
 export function getOperateRecord(params: Pick<SalesReturn, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/sales-return/log`),
-    params
+    params,
   );
 }

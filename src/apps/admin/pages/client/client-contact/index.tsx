@@ -48,8 +48,6 @@ function ClientContact() {
         return row.client?.name_show;
       },
       key: "client_ids",
-
-      ellipsis: true,
     },
     {
       title: "姓名",
@@ -191,7 +189,7 @@ function ClientContact() {
 
         {window.preload.getLocalUserHasPermission(
           "/client/client-contact",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -212,4 +210,5 @@ function ClientContact() {
     </PageWrapper>
   );
 }
+
 export default styled(ClientContact)``;

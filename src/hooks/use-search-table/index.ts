@@ -14,16 +14,17 @@ export function tableColumn<T>(column: ProColumns<T>[]): ProColumns<T>[] {
     Object.assign<ProColumns<T>, ProColumns<T>>(
       {
         width: 120,
+        ellipsis: true,
         // align: "center",
         onHeaderCell(row) {
           return Object.assign<any, any>(
             { columnData: row },
-            item.onHeaderCell?.(row) || {}
+            item.onHeaderCell?.(row) || {},
           );
         },
       },
-      item
-    )
+      item,
+    ),
   );
 }
 
@@ -32,7 +33,7 @@ export function tableMeasureColumnWidth<T>(column: ProColumns<T>[]) {
 }
 
 export default function <P extends Record<string | number, unknown>, Item>(
-  api: Api<P, Item>
+  api: Api<P, Item>,
 ) {
   const [update] = useUpdate();
 
@@ -55,14 +56,14 @@ export default function <P extends Record<string | number, unknown>, Item>(
       const p = Object.assign(
         params.current,
         page.current,
-        extraParams.current
+        extraParams.current,
       ) as P;
       return api(p).then((res) => {
         listResponse.current = res;
         return res;
       });
     },
-    [api]
+    [api],
   );
 
   const getData = useCallback(
@@ -80,7 +81,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
         })
         .finally(loading.setFalse);
     },
-    [_api, loading, update]
+    [_api, loading, update],
   );
 
   const options: ProTableProps<Item, P>["options"] = useMemo(
@@ -88,7 +89,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
       reload: getData,
       density: false,
     }),
-    [getData]
+    [getData],
   );
 
   const onChange = useCallback<NonNullable<TableProps<Item>["onChange"]>>(
@@ -107,7 +108,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
       //   }
       getData();
     },
-    [getData]
+    [getData],
   );
 
   const onReset = useCallback(() => {
@@ -122,7 +123,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
       params.current = store;
       return getData();
     },
-    [getData]
+    [getData],
   );
 
   const column: (column: ProColumns<Item>[]) => ProColumns<Item>[] =
@@ -155,6 +156,6 @@ export default function <P extends Record<string | number, unknown>, Item>(
       onFinish,
       column,
       measureColumnWidth,
-    ]
+    ],
   );
 }

@@ -10,12 +10,12 @@ type Value = {
 
 const areaStore = useCascaderAreaData();
 const city = new Map(
-  areaStore.map((province) => [province.text, province.children])
+  areaStore.map((province) => [province.text, province.children]),
 );
 const area = new Map(
   Array.from(city.values())
     .flat(1)
-    .map((city) => [city?.text, city?.children])
+    .map((city) => [city?.text, city?.children]),
 );
 
 export default function AddressFormSearch(props: {
@@ -45,6 +45,7 @@ export default function AddressFormSearch(props: {
         onChange={(value) => {
           onChange({ province: value });
         }}
+        style={{ width: 125 }}
       />
       <Select
         value={value.city}
@@ -55,6 +56,7 @@ export default function AddressFormSearch(props: {
         onChange={(city) => {
           onChange({ province: value.province, city });
         }}
+        style={{ width: 125 }}
       />
       <Select
         value={value.county}
@@ -65,6 +67,7 @@ export default function AddressFormSearch(props: {
         onChange={(county) => {
           onChange({ province: value.province, city: value.city, county });
         }}
+        style={{ width: 125 }}
       />
     </Space>
   );

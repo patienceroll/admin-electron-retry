@@ -42,6 +42,21 @@ const BusinessOpportunityEdit = lazy(
   () => import("./pages/business-opportunity/edit")
 );
 
+/**
+ * 销售管理模块
+ */
+//销售合同
+const SalesContract = lazy(() => import("./pages/sales/sales-contract"));
+//销售订单
+const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
+//销售发货
+const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
+//销售退货
+const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
+
+const Project = lazy(() => import("./pages/project"));
+const ProjectEdit = lazy(() => import("./pages/project/edit"));
+
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
   const routes = (
@@ -99,6 +114,14 @@ export default function () {
           path="/business-opportunity/business-opportunity/edit"
           element={<BusinessOpportunityEdit />}
         />
+
+        <Route path="/sales/sales-contract" element={<SalesContract />} />
+        <Route path="/sales/sales-order" element={<SalesOrder />} />
+        <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
+        <Route path="/sales/sales-return" element={<SalesReturn />} />
+
+        <Route path="/project/project" element={<Project />} />
+        <Route path="/project/project/edit" element={<ProjectEdit />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>

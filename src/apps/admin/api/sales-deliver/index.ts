@@ -1,5 +1,16 @@
 import fetch from "src/util/fetch";
 
+export const salesDeliverStatus = new Map<
+  SalesDeliver["status"],
+  EnumValue<SalesDeliver["status"]>
+>([
+  [1, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [1, { value: 1, color: "#4ff7cf", text: "待发货" }],
+  [1, { value: 2, color: "#d46b08", text: "发货中" }],
+  [1, { value: 3, color: "#3a50b9", text: "已发货" }],
+  [1, { value: 4, color: "rgb(156,156,148)", text: "已作废" }],
+]);
+
 /**
  * 销售发货-列表
  */
@@ -9,11 +20,28 @@ export function getSalesDeliverList(
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
     statistics_id?: number | string;
-    client_id?:ClientListItem['id'],
-    is_show_detail?: 0|1
+    client_id?: ClientListItem["id"];
+    is_show_detail?: 0 | 1;
   },
 ) {
   return fetch.GET<List<SalesDeliver>>(
+    fetch.base(`/api/sales-deliver/list`),
+    params,
+  );
+}
+
+/**
+ * 销售发货-选项
+ */
+export function getSalesDeliverOption(params: {
+  status?: BillStatus;
+  /** 1客户 2项目 3合同 4订单 */
+  statistics_type?: 1 | 2 | 3 | 4;
+  statistics_id?: number | string;
+  client_id?: ClientListItem["id"];
+  is_show_detail?: 0 | 1;
+}) {
+  return fetch.GET<SalesDeliver[]>(
     fetch.base(`/api/sales-deliver/list`),
     params,
   );

@@ -1,21 +1,12 @@
 import styled, { useTheme } from "styled-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  FloatButton,
-  Row,
-  Space,
-  Typography,
-} from "antd";
-import {
-  ProFormText,
-  ProFormSelect,
-  ProTable,
-  ProFormCheckbox,
   ProForm,
+  ProFormCheckbox,
+  ProFormSelect,
+  ProFormText,
+  ProTable,
 } from "@ant-design/pro-components/es";
 
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -30,7 +21,7 @@ import useColumnState from "src/hooks/use-column-state";
 import SearchAction from "src/framework/component/search/search-action";
 import Search from "src/framework/component/search";
 import useOption from "src/hooks/use-option";
-import { getAreaList } from "src/apps/admin/api/sales-territory";
+import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { watherMap } from "src/apps/admin/api/general";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import Icon from "src/framework/component/icon";
@@ -40,27 +31,32 @@ import contextedMessage from "src/framework/component/contexted-message";
 import openWindow from "src/util/open-window";
 import contextedModal from "src/framework/component/contexted-modal";
 import * as Create from "./components/create";
+import usePageTableHeight from "src/hooks/use-page-table-height";
 
 function BusinessOpportunity() {
   const table = useSearchTable(getBusinessOpportunityList);
   const theme = useTheme();
 
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
+
   const create = Create.createRef();
 
-  const [area] = useOption(getAreaList);
+  const [area] = useOption(getAreaOption);
 
   const column = table.column([
     {
       title: "业务机会",
       dataIndex: "name_show",
-      ellipsis: true,
+
       fixed: "left",
       render: (_, record) => (
         <Typography.Link
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show
+              "业务机会详情 - " + record.name_show,
             );
           }}
         >
@@ -71,7 +67,7 @@ function BusinessOpportunity() {
     {
       title: "编号",
       dataIndex: "code",
-      ellipsis: true,
+
       fixed: "left",
       copyable: true,
     },
@@ -79,23 +75,19 @@ function BusinessOpportunity() {
     {
       title: "类别",
       dataIndex: "category",
-      ellipsis: true,
     },
     {
       title: "行业",
       dataIndex: "trade",
-      ellipsis: true,
     },
     {
       title: "建设内容",
       dataIndex: "build_content",
       width: 200,
-      ellipsis: true,
     },
     {
       title: "地址",
       dataIndex: "address",
-      ellipsis: true,
     },
     {
       title: "区域",
@@ -108,44 +100,37 @@ function BusinessOpportunity() {
       title: "总投资金额",
       dataIndex: "investment_amount",
       valueType: "money",
-      ellipsis: true,
     },
     {
       title: "中标金额",
       dataIndex: "win_bid_amount",
       valueType: "money",
-      ellipsis: true,
     },
     {
       title: "机会价值",
       dataIndex: "estimated_amount",
       valueType: "money",
-      ellipsis: true,
     },
     {
       title: "挂网时间",
       dataIndex: "hang_time",
-      ellipsis: true,
     },
     {
       title: "开标时间",
       dataIndex: "bid_open_time",
-      ellipsis: true,
     },
     {
       title: "采购时间",
       dataIndex: "purchase_date",
-      ellipsis: true,
     },
     {
       title: "项目状态",
       dataIndex: "project_status",
-      ellipsis: true,
     },
     {
       title: "状态",
       dataIndex: "status",
-      ellipsis: true,
+
       valueEnum: BusinessOpportunityStatus,
     },
     {
@@ -164,7 +149,6 @@ function BusinessOpportunity() {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      ellipsis: true,
     },
     {
       title: "操作",
@@ -179,7 +163,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -208,7 +192,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      }
+                      },
                     );
                   },
                 });
@@ -231,80 +215,83 @@ function BusinessOpportunity() {
 
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <Search>
-            <Row gutter={[theme.padding, theme.padding]}>
-              <Col flex="300px">
-                <ProFormText
-                  label="关键词"
-                  name="keyword"
-                  placeholder="按业务机会/编号搜索"
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect<Area>
-                  label="区域"
-                  name="area_ids"
-                  options={area.list}
-                  fieldProps={{
-                    fieldNames: { label: "name", value: "id" },
-                    showSearch: true,
-                    filterOption: true,
-                    optionFilterProp: "name",
-                    mode: "multiple",
-                  }}
-                />
-              </Col>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
+        <Search>
+          <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="300px">
+              <ProFormText
+                label="关键词"
+                name="keyword"
+                placeholder="按业务机会/编号搜索"
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect<Area>
+                label="区域"
+                name="area_ids"
+                options={area.list}
+                fieldProps={{
+                  fieldNames: { label: "name", value: "id" },
+                  showSearch: true,
+                  filterOption: true,
+                  optionFilterProp: "name",
+                  mode: "multiple",
+                }}
+              />
+            </Col>
 
-              <Col flex="200px">
-                <ProFormCheckbox.Group
-                  name="is_importance"
-                  label="是否重点"
-                  options={Array.from(watherMap.values()).map((item) => ({
-                    label: item.text,
-                    value: item.value,
-                  }))}
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect<Area>
-                  label="状态"
-                  name="statuses"
-                  options={Array.from(BusinessOpportunityStatus.values())}
-                  fieldProps={{
-                    fieldNames: { label: "text", value: "value" },
-                    showSearch: true,
-                    filterOption: true,
-                    optionFilterProp: "name",
-                    mode: "multiple",
-                  }}
-                />
-              </Col>
-              <Col flex="450px">
-                <ProForm.Item
-                  label="行政区"
-                  name="region"
-                  transform={({ province, city, county }) => ({
-                    province,
-                    city,
-                    county,
-                  })}
-                >
-                  <AddressFormSearch />
-                </ProForm.Item>
-              </Col>
-              <Col flex="300px">
-                <SearchAction
-                  loading={table.loading}
-                  onReset={table.onReset}
-                  onFinish={table.onFinish}
-                />
-              </Col>
-            </Row>
-          </Search>
-        </Card>
-      </Affix>
+            <Col flex="200px">
+              <ProFormCheckbox.Group
+                name="is_importance"
+                label="是否重点"
+                options={Array.from(watherMap.values()).map((item) => ({
+                  label: item.text,
+                  value: item.value,
+                }))}
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect<Area>
+                label="状态"
+                name="statuses"
+                options={Array.from(BusinessOpportunityStatus.values())}
+                fieldProps={{
+                  fieldNames: { label: "text", value: "value" },
+                  showSearch: true,
+                  filterOption: true,
+                  optionFilterProp: "name",
+                  mode: "multiple",
+                }}
+              />
+            </Col>
+            <Col flex="450px">
+              <ProForm.Item
+                label="行政区"
+                name="region"
+                transform={({ province, city, county }) => ({
+                  province,
+                  city,
+                  county,
+                })}
+              >
+                <AddressFormSearch />
+              </ProForm.Item>
+            </Col>
+            <Col flex="300px">
+              <SearchAction
+                loading={table.loading}
+                onReset={table.onReset}
+                onFinish={table.onFinish}
+              />
+            </Col>
+          </Row>
+        </Search>
+      </Card>
       <ProTable
         rowKey="id"
         style={{ marginTop: theme.margin }}
@@ -315,7 +302,7 @@ function BusinessOpportunity() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -337,14 +324,16 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会"
+                "编辑业务机会",
               );
+
               function listener(event: MessageEvent<"success">) {
                 if (event.data === "success") {
                   table.reload();
                   contextedMessage.message?.success("编辑成功");
                 }
               }
+
               if (window) {
                 window.addEventListener("message", listener);
               }
@@ -354,7 +343,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}

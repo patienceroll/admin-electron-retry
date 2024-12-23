@@ -1,7 +1,17 @@
 import fetch from "src/util/fetch";
-/** 区域列表 */
-export function getAreaList() {
-  return fetch.GET<Area[]>(fetch.base(`/api/area/list`));
+
+/**
+ * 区域-列表
+ */
+export function getAreaList(params: ListParam & {}) {
+  return fetch.GET<List<Area>>(fetch.base(`/api/area/list`), params);
+}
+
+/**
+ * 区域-选项
+ */
+export function getAreaOption(params: {}) {
+  return fetch.GET<Area[]>(fetch.base(`/api/area/list`), params);
 }
 
 /** 新增区域 */

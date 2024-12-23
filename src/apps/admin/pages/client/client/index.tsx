@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  FloatButton,
-  Row,
-  Space,
-  Typography,
-} from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
 import {
   ProFormSelect,
@@ -38,10 +29,13 @@ import * as Follow from "./components/batch-follow";
 import useColumnState from "src/hooks/use-column-state";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
+import usePageTableHeight from "src/hooks/use-page-table-height";
 
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
+  const card = useRef<HTMLDivElement>(null);
+  const { addAElement } = usePageTableHeight();
 
   const create = Create.createRef();
   const follow = Follow.createRef();
@@ -66,65 +60,54 @@ function Client() {
         </Typography.Link>
       ),
       width: 260,
-      ellipsis: true,
     },
     {
       title: "简称",
       dataIndex: "short_name",
-      ellipsis: true,
     },
     {
       title: "类型",
       dataIndex: "type",
       valueEnum: projectTypeMap,
-      ellipsis: true,
     },
     {
       title: "性质",
       dataIndex: "nature",
-      ellipsis: true,
     },
     {
       title: "等级",
       dataIndex: "grade",
-      ellipsis: true,
     },
     {
       title: "规模",
       dataIndex: "scale",
-      ellipsis: true,
     },
     {
       title: "省",
       dataIndex: "province",
-      ellipsis: true,
     },
     {
       title: "市",
       dataIndex: "city",
-      ellipsis: true,
     },
     {
       title: "区",
       dataIndex: "county",
-      ellipsis: true,
     },
     {
       title: "成立日期",
       dataIndex: "establishment_date",
-      ellipsis: true,
     },
     {
       title: "信息完善度",
       dataIndex: "perfect_ratio",
-      ellipsis: true,
+
       valueType: "progress",
     },
     {
       title: "是否签约",
       dataIndex: "is_sign",
       valueEnum: watherMap,
-      ellipsis: true,
     },
     {
       title: "负责人",
@@ -135,12 +118,10 @@ function Client() {
       title: "状态",
       dataIndex: "status",
       valueEnum: StaffStatus,
-      ellipsis: true,
     },
     {
       title: "创建时间",
       dataIndex: "created_at",
-      ellipsis: true,
     },
     {
       dataIndex: "id",
@@ -202,38 +183,42 @@ function Client() {
     table.reload();
   }, []);
 
+  useEffect(() => {
+    if (card.current) {
+      addAElement(card.current);
+    }
+  }, [addAElement]);
+
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <Search>
-            <Row gutter={[theme.padding, theme.padding]}>
-              <Col flex="300px">
-                <ProFormText
-                  label="关键词"
-                  name="keyword"
-                  placeholder="按客户搜索"
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect
-                  label="客户类型"
-                  name="type"
-                  options={Array.from(projectTypeMap.values())}
-                  fieldProps={{ fieldNames: { label: "text", value: "value" } }}
-                />
-              </Col>
-              <Col flex="300px">
-                <SearchAction
-                  loading={table.loading}
-                  onReset={table.onReset}
-                  onFinish={table.onFinish}
-                />
-              </Col>
-            </Row>
-          </Search>
-        </Card>
-      </Affix>
+      <Card bordered ref={card}>
+        <Search>
+          <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="300px">
+              <ProFormText
+                label="关键词"
+                name="keyword"
+                placeholder="按客户搜索"
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect
+                label="客户类型"
+                name="type"
+                options={Array.from(projectTypeMap.values())}
+                fieldProps={{ fieldNames: { label: "text", value: "value" } }}
+              />
+            </Col>
+            <Col flex="300px">
+              <SearchAction
+                loading={table.loading}
+                onReset={table.onReset}
+                onFinish={table.onFinish}
+              />
+            </Col>
+          </Row>
+        </Search>
+      </Card>
 
       <ProTable
         rowKey="id"

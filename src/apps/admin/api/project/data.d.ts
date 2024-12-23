@@ -3,73 +3,190 @@
 type ProjectStatus = 0 | 1 | 2 | 3 | 4 | 5;
 
 type Project = {
+  /** 主键id */
   id: number;
-  name: string;
-  short_name: string;
-};
 
-type ProjectListItem = {
-  trade: string;
-  file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
-  id: number;
+  /** 公司id */
   company_id: number;
-  department_id: number;
-  name: string;
+
+  /** 编号 */
   code: string;
-  status: ProjectStatus;
-  created_id: number;
-  deleted_at: string;
-  updated_at: string;
-  created_at: string;
-  investment_amount: string;
-  estimated_amount: string;
-  capital_source: string;
-  staff: Staff;
-  btn_power: BtnPower;
-  created_user: CreateUser;
-  company: Company;
-  project_status: string;
-  department: Department[];
-  category: string;
-  client: Client | null;
-  build_content: string;
-  staff_id: number;
-  relation: string;
-  work_unit: string;
-  phone: string;
-  type: number;
-  table: string;
-  table_id: number;
-  company_name: string;
-  company_address: string;
-  linkman: string;
-  bank_name: string;
-  bank_address: string;
-  tax_code: string;
-  hang_time: string;
-  bid_open_time: string;
-  purchase_date: string;
-  win_bid_amount: string;
-  is_importance: number;
-  is_abandon: number;
-  is_approve: 0 | 1;
-  abandon_time: string;
-  abandon_remark: string;
-  remark: string;
-  account: string;
-  type_show: string;
-  project_id: number;
+
+  /** 项目名称 */
+  name: string;
+
+  /** 简称 */
   short_name: string;
-  nature: string;
-  province: string;
+
+  /** 机会id */
+  business_opportunity_id: number;
+
+  /** 项目类别 */
+  category: string;
+
+  /** 建设内容 */
+  build_content: string;
+
+  /** 区域id */
+  area_id: number;
+
+  /** 市 */
   city: string;
+
+  /** 省 */
+  province: string;
+
+  /** 区 */
   county: string;
+
+  /** 详细地址 */
   address: string;
+
+  /** 经度 */
   longitude: string;
+
+  /** 纬度 */
   latitude: string;
-  is_sign: number;
-  is_sign_show: string;
-  status_show: string;
-  project: Project;
+
+  /** 项目总投资金额 */
+  investment_amount: number;
+
+  /** 工程预估价值(万) */
+  estimated_amount: number;
+
+  /** 资金来源 */
+  capital_source: string;
+
+  /** 挂网时间 */
+  hang_time: number;
+
+  /** 开标时间 */
+  bid_open_time: number;
+
+  /** 采购时间 */
+  purchase_date: number;
+
+  /** 中标金额 */
+  win_bid_amount: number;
+
+  /** 重点项目;0:否,1:是 */
+  is_importance: number;
+
+  /** 行业 */
+  trade: string;
+
+  /** 项目状态 */
+  project_status: string;
+
+  /** 是否放弃;0:否,1:是 */
+  is_abandon: number;
+
+  /** 放弃备注 */
+  abandon_remark: string;
+
+  /** 放弃时间 */
+  abandon_time: number;
+
+  /** 负责人id */
+  staff_id: number;
+
+  /** 信息完善度 */
+  perfect_ratio: number;
+
+  /** 备注 */
+  remark: string;
+
+  /** 是否审批中;0:否,1:是 */
+  is_approve: number;
+
+  /** 状态;0:草稿,1:待签约,2:履约中,3:已完结,4:已中止,5:已放弃 */
+  status: ProjectStatus;
+
+  /** 创建者id */
+  created_id: number;
+
+  /** 删除时间 */
+  deleted_at: string;
+
+  /** 更新时间 */
+  updated_at: string;
+
+  /** 创建时间 */
+  created_at: string;
+
+  /** 权限控制
+   * is_edit : 0|1;
+   * is_delete : 0|1;
+   * is_move : 0|1;
+   */
+  btn_power: { is_edit: 0 | 1; is_delete: 0 | 1; is_move: 0 | 1 };
+
+  /** 扩展字段 1 */
+  is_importance_show: string;
+
+  /** 扩展字段 2 */
   name_show: string;
+
+  /** 扩展字段 3 */
+  status_show: string;
+
+  /**
+   *  创建人员
+   */
+  created_user: {
+    /**  */
+    id: number;
+
+    /** 类型 */
+    type: string;
+
+    /** 用户名 */
+    name: string;
+
+    /** 手机号 */
+    phone: string;
+
+    /** 照片 */
+    avatar: string;
+
+    /** 扩展字段 1 */
+    avatar_path: string;
+  } | null;
+
+  /**
+   *  所属公司
+   */
+  company: {
+    /** 主键id */
+    id: number;
+
+    /** 名称 */
+    name: string;
+
+    /** 简称 */
+    short_name: string;
+  } | null;
+
+  /**
+   *  area
+   */
+  /**
+   *  员工信息
+   */
+  staff: {
+    /** 主键id */
+    id: number;
+
+    /** 用户名 */
+    name: string;
+
+    /** 手机号 */
+    phone: string;
+
+    /** 照片 */
+    avatar: string;
+
+    /** 扩展字段 1 */
+    avatar_path: string;
+  } | null;
 };

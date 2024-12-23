@@ -1,8 +1,8 @@
 import fetch from "src/util/fetch";
 
-export const StaffStatus = new Map<
-  StaffListItem["status"],
-  EnumValue<StaffListItem["status"]>
+export const ClientStatus = new Map<
+  ClientListItem["status"],
+  EnumValue<ClientListItem["status"]>
 >([
   [0, { value: 0, color: "rgba(0, 0, 0, 0.25)", text: "草稿" }],
   [1, { value: 1, color: "green", text: "启用" }],
@@ -15,11 +15,11 @@ export const StaffStatus = new Map<
 export function getClientContactDetailList(
   params: ListParam & {
     client_id?: ClientListItem["id"];
-  }
+  },
 ) {
   return fetch.GET<List<ClientListItem>>(
     fetch.base(`/api/client-contact/list`),
-    params
+    params,
   );
 }
 
@@ -31,11 +31,11 @@ export function getClientList(
     is_sign?: ClientListItem["is_sign"];
     project_id?: Project["id"];
     business_opportunity_id?: BusinessOpportunity["id"];
-  }
+  },
 ) {
   return fetch.GET<List<ClientListItem>>(
     fetch.base(`/api/client/list`),
-    params
+    params,
   );
 }
 
@@ -77,7 +77,7 @@ export function addClient(
       "name" | "short_name" | "type" | "nature" | "address" | "is_sign"
     >
   > &
-    AddresssParams & { project_id?: Project["id"] }
+    AddresssParams & { project_id?: Project["id"] },
 ) {
   return fetch.POST<ClientAddResponse>(fetch.base(`/api/client`), params);
 }
