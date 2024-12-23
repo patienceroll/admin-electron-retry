@@ -35,6 +35,12 @@ const ClientEdit = lazy(() => import("./pages/client/client/edit"));
 const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
+const BusinessOpportunityDetail = lazy(
+  () => import("./pages/business-opportunity/detail")
+);
+const BusinessOpportunityEdit = lazy(
+  () => import("./pages/business-opportunity/edit")
+);
 
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -84,6 +90,14 @@ export default function () {
         <Route
           path="/business-opportunity/business-opportunity"
           element={<BusinessOpportunity />}
+        />
+        <Route
+          path="/business-opportunity/business-opportunity/detail"
+          element={<BusinessOpportunityDetail />}
+        />
+        <Route
+          path="/business-opportunity/business-opportunity/edit"
+          element={<BusinessOpportunityEdit />}
         />
 
         <Route path="*" element={<Page404 />} />
