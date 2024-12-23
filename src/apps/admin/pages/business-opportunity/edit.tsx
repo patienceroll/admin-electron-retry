@@ -13,11 +13,14 @@ import {
   Select,
   Tag,
   TreeSelect,
+  Upload,
 } from "antd";
+import { UploadRequestOption } from "rc-upload/lib/interface";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
   BusinessOpportunityStatus,
+  deleteBusinessOpportunity,
   editBusinessOpportunity,
   getBusinessOpportunity,
   getProjectStatusText,
@@ -34,6 +37,12 @@ import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import SaveSvg from "src/assets/svg/保存.svg";
 import dayjs from "dayjs";
+import contextedModal from "src/framework/component/contexted-modal";
+import EditClientList from "./components/edit-client-list";
+import contextedNotify from "src/framework/component/contexted-notify";
+import { bindBusinessFile, postFile } from "src/apps/admin/api/business-file";
+import { onPrgress } from "src/util/file/upload";
+import qiniu from "src/util/qiniu";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -301,6 +310,75 @@ function Edit(props: StyledWrapComponents) {
           </Row>
         </Card>
       </Form>
+
+      <Title style={{ marginTop: theme.margin }}>单位及联系人</Title>
+      <EditClientList id={id} />
+
+      <Title style={{ marginTop: theme.margin }}>附件</Title>
+
+      {detail && (
+        <Card style={{ marginTop: theme.margin }}>
+          <Upload
+            listType="picture-card"
+            defaultFileList={detail.file["业务机会附件"]?.map((item) => ({
+              uid: String(item.file_id),
+              url: item.path,
+              name: item.name,
+              fileName: item.name,
+              thumbUrl: item.full_path,
+              status: "done",
+              response: {
+                url: item.full_path,
+              },
+            }))}
+            onPreview={(file) =>
+              window.preload.previewFile(file.response!.url).catch((err) => {
+                contextedNotify.notification?.error({
+                  message: "文件预览失败",
+                  description: err.message,
+                });
+              })
+            }
+            customRequest={function (option) {
+              const file = option.file as File;
+              const cancel = onPrgress(option.onProgress);
+              qiniu
+                .upload(file)
+                .then((res) => {
+                  return postFile({
+                    path: res.key,
+                    name: res.hash,
+                    extend: {
+                      file_size: file.size,
+                      file_type: file.type,
+                    },
+                  });
+                })
+                .then((res) => {
+                  return new Promise<{ url: string }>((resolve, reject) => {
+                    bindBusinessFile({
+                      service: "business-opportunity",
+                      identify: "业务机会附件",
+                      is_cover: 1,
+                      file_ids: [res.data.id],
+                      table_id: id,
+                    })
+                      .then(() => {
+                        resolve({ url: res.data.full_path });
+                      })
+                      .catch(reject);
+                  });
+                })
+                .then(option.onSuccess)
+                .catch(option.onError)
+                .finally(cancel);
+            }}
+          >
+            上传
+          </Upload>
+        </Card>
+      )}
+
       <ChooseAddress.default ref={chooseAddressRef} />
 
       {detail && (
@@ -313,7 +391,20 @@ function Edit(props: StyledWrapComponents) {
           <FloatButton
             icon={<Icon icon={DeleteSvg} fill={theme.colorError} />}
             description="删除"
-            onClick={submit}
+            onClick={function () {
+              contextedModal.modal?.confirm({
+                title: "删除",
+                content: `确定删除${detail.name}?`,
+                onOk() {
+                  return deleteBusinessOpportunity({
+                    id: detail.id,
+                  }).then(() => {
+                    window.parent.postMessage("delete");
+                    window.close();
+                  });
+                },
+              });
+            }}
           />
         </FloatButton.Group>
       )}

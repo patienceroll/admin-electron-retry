@@ -13,29 +13,24 @@ import {
 import useWather from "src/hooks/use-wather";
 
 type Ref = {
-  create: () => Promise<void>;
-  edit: (item: ClientContact) => Promise<void>;
+  edit: (item: NonNullable<Client["contact"]>[number]) => Promise<void>;
+  create: (id: Client["id"]) => Promise<void>;
 };
 
 export function createRef() {
   return useRef<Ref>(null);
 }
 
-export default forwardRef<Ref, Pick<Client, "id">>(function (
-  props,
-  ref
-) {
-  const { id } = props;
-  const [open] = useWather();
-  const [loading] = useWather();
-
-  const [item, setItem] = useState<ClientContact>();
-
+export default forwardRef<Ref>(function (props, ref) {
   const promiseResolver = useRef<{
     resolve: () => void;
     reject: (reason?: unknown) => void;
   }>({ resolve() {}, reject() {} });
 
+  const [open] = useWather();
+  const [loading] = useWather();
+  const [item, setItem] = useState<NonNullable<Client["contact"]>[number]>();
+  const [id, setId] = useState<Client["id"]>();
   const [form] = Form.useForm();
 
   function submit() {
@@ -43,10 +38,18 @@ export default forwardRef<Ref, Pick<Client, "id">>(function (
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        if (item) {
-          return editClientContact({ ...store, id: item.id });
+
+        if (item)
+          return editClientContact({
+            ...store,
+            id: item.id,
+          });
+        if (id) {
+          return addClientContact({
+            ...store,
+            client_id: id,
+          });
         }
-        return addClientContact({ ...store, client_id: id });
       })
       .then(() => {
         loading.setTrue();
@@ -58,13 +61,15 @@ export default forwardRef<Ref, Pick<Client, "id">>(function (
   }
 
   useImperativeHandle(ref, () => ({
-    create() {
+    create(id) {
       return new Promise((resolve, reject) => {
         promiseResolver.current = {
           reject,
           resolve,
         };
         open.setTrue();
+        setId(id);
+        setItem(undefined);
         form.resetFields();
       });
     },
@@ -74,8 +79,10 @@ export default forwardRef<Ref, Pick<Client, "id">>(function (
           reject,
           resolve,
         };
+
         open.setTrue();
         setItem(item);
+        setId(undefined);
         form.setFieldsValue(item);
       });
     },
@@ -101,9 +108,11 @@ export default forwardRef<Ref, Pick<Client, "id">>(function (
     >
       <Form
         form={form}
-        autoComplete="off"
-        labelCol={{ span: 6 }}
-        initialValues={{ is_main: 0 }}
+        labelCol={{ span: 4 }}
+        initialValues={{
+          is_main: 0,
+          status: 1,
+        }}
       >
         <Form.Item label="姓名" name="name" rules={[{ required: true }]}>
           <Input placeholder="请输入姓名" />
@@ -120,7 +129,7 @@ export default forwardRef<Ref, Pick<Client, "id">>(function (
         <Form.Item label="身份证" name="ID_card">
           <Input placeholder="请输入身份证" />
         </Form.Item>
-        <Form.Item label="是否重要联系人" name="is_main">
+        <Form.Item label="重要联系人" name="is_main">
           <Radio.Group>
             <Radio value={0}>否</Radio>
             <Radio value={1}>是</Radio>

@@ -25,7 +25,7 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-export default forwardRef<Ref, Pick<ClientListItem, "id">>(function (
+export default forwardRef<Ref, Pick<Client, "id">>(function (
   props,
   ref
 ) {

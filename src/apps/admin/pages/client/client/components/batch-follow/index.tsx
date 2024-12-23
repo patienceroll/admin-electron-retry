@@ -15,7 +15,7 @@ import { projectFollowBatchFollow } from "src/apps/admin/api/project-follow";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 
 type Ref = {
-  follow: (items: ClientListItem[]) => Promise<void>;
+  follow: (items: Client[]) => Promise<void>;
 };
 
 export function createRef() {
@@ -31,14 +31,14 @@ const BatchFollow = forwardRef<Ref>(function (props, ref) {
 
   const map = useRef(
     new Map<
-      ClientListItem["id"],
+      Client["id"],
       { validate: () => Promise<Record<string, any>> } | null
     >()
   );
 
   const [open] = useWather();
   const [loading] = useWather();
-  const [items, setItems] = useState<ClientListItem[]>([]);
+  const [items, setItems] = useState<Client[]>([]);
 
   const { options, treeOptions } = useStaffTree();
 

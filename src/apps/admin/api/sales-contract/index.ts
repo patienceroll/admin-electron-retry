@@ -27,7 +27,7 @@ export function getSalesContractList(
   params: ListParam & {
     status?: BillStatus;
     project_id?: Project["id"];
-    client_id?: ClientListItem["id"];
+    client_id?: Client["id"];
     is_show_detail?: 0 | 1;
   },
 ) {
@@ -43,7 +43,7 @@ export function getSalesContractList(
 export function getSalesContractOption(params: {
   status?: BillStatus;
   project_id?: Project["id"];
-  client_id?: ClientListItem["id"];
+  client_id?: Client["id"];
   is_show_detail?: 0 | 1;
 }) {
   return fetch.GET<SalesContract[]>(

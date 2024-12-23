@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
 import {
@@ -11,10 +11,10 @@ import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
 import {
   clientExport,
+  clientTypeMap,
   deleteClient,
   getClientList,
 } from "src/apps/admin/api/client";
-import { projectTypeMap } from "src/apps/admin/api/project";
 import { watherMap } from "src/apps/admin/api/general";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
@@ -34,12 +34,14 @@ import { StaffStatus } from "src/apps/admin/api/staff";
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
-  const { addAElement, height } = usePageTableHeight(theme.padding * 2 + theme.margin);
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
 
   const create = Create.createRef();
   const follow = Follow.createRef();
 
-  const [select, setSelect] = useState<ClientListItem[]>([]);
+  const [select, setSelect] = useState<Client[]>([]);
 
   const column = table.column([
     {
@@ -67,7 +69,7 @@ function Client() {
     {
       title: "类型",
       dataIndex: "type",
-      valueEnum: projectTypeMap,
+      valueEnum: clientTypeMap,
     },
     {
       title: "性质",
@@ -203,7 +205,7 @@ function Client() {
               <ProFormSelect
                 label="客户类型"
                 name="type"
-                options={Array.from(projectTypeMap.values())}
+                options={Array.from(clientTypeMap.values())}
                 fieldProps={{ fieldNames: { label: "text", value: "value" } }}
               />
             </Col>

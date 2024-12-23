@@ -1,12 +1,5 @@
 import fetch from "src/util/fetch";
 
-export const projectTypeMap = new Map<ProjectStatus, EnumValue<ProjectStatus>>([
-  [1, { value: 1, color: "blue", text: "施工单位" }],
-  [2, { value: 2, color: "#cfc922", text: "业主单位" }],
-  [3, { value: 3, color: "green", text: "设计院" }],
-  [4, { value: 4, color: "rgba(0, 0, 0, 0.25)", text: "其他单位" }],
-]);
-
 /**
  * 项目-列表
  */
@@ -193,4 +186,9 @@ export function projectExport(params: Record<string, any>) {
 /** 项目 操作记录 */
 export function getOperateRecord(params: Pick<Project, "id">) {
   return fetch.GET<OperateRecord[]>(fetch.base(`/api/project/log`), params);
+}
+
+/** 项目  - 删除单位 */
+export function deleteProjectClient(params: Pick<Client, "id">) {
+  return fetch.DELETE(fetch.base(`/api/project/client`), params);
 }

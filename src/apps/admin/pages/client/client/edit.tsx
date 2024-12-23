@@ -16,9 +16,9 @@ function Edit(props: StyledWrapComponents) {
   const { className } = props;
   const params = useLocation();
   const search = new URLSearchParams(params.search);
-  const id = search.get("id")! as unknown as ClientListItem["id"];
+  const id = search.get("id")! as unknown as Client["id"];
 
-  const [detail, setDetail] = useState<ClientListItem>();
+  const [detail, setDetail] = useState<Client>();
 
   const [form] = Form.useForm();
 

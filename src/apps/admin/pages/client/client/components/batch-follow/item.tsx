@@ -26,7 +26,7 @@ type OptionsUseForTreeSelect = {
 
 export default forwardRef<
   Ref,
-  { detail: ClientListItem; staffList: OptionsUseForTreeSelect[], onDelete: VoidFunction }
+  { detail: Client; staffList: OptionsUseForTreeSelect[], onDelete: VoidFunction }
 >(function (props, ref) {
   const { detail, staffList, onDelete } = props;
 

@@ -5,8 +5,7 @@ import styled, { useTheme } from "styled-components";
 import { ProTable } from "@ant-design/pro-components/es";
 
 import PageWrapper from "src/framework/component/page-wrapper";
-import { getClient } from "src/apps/admin/api/client";
-import { projectTypeMap } from "src/apps/admin/api/project";
+import { clientTypeMap, getClient } from "src/apps/admin/api/client";
 import InfoItem from "src/framework/component/info-item";
 
 import Title from "src/framework/component/title";
@@ -35,7 +34,7 @@ function Detail(props: StyledWrapComponents) {
   const saleDeliver = useSearchTable(getSalesDeliverList);
   const saleReturn = useSearchTable(getSalesReturnList)
 
-  const [detail, setDetail] = useState<ClientListItem>();
+  const [detail, setDetail] = useState<Client>();
 
   const getDetail = useCallback(
     function () {
@@ -139,7 +138,7 @@ function Detail(props: StyledWrapComponents) {
           </Col>
           <Col flex="300px">
             <InfoItem label="类型">
-              {projectTypeMap.get(detail.type)?.text}
+              {clientTypeMap.get(detail.type)?.text}
             </InfoItem>
           </Col>
           <Col flex="300px">

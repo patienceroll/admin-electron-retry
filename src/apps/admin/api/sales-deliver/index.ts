@@ -20,7 +20,7 @@ export function getSalesDeliverList(
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
     statistics_id?: number | string;
-    client_id?: ClientListItem["id"];
+    client_id?: Client["id"];
     is_show_detail?: 0 | 1;
   },
 ) {
@@ -38,7 +38,7 @@ export function getSalesDeliverOption(params: {
   /** 1客户 2项目 3合同 4订单 */
   statistics_type?: 1 | 2 | 3 | 4;
   statistics_id?: number | string;
-  client_id?: ClientListItem["id"];
+  client_id?: Client["id"];
   is_show_detail?: 0 | 1;
 }) {
   return fetch.GET<SalesDeliver[]>(

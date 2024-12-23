@@ -1,12 +1,24 @@
 import fetch from "src/util/fetch";
 
 export const ClientStatus = new Map<
-  ClientListItem["status"],
-  EnumValue<ClientListItem["status"]>
+  Client["status"],
+  EnumValue<Client["status"]>
 >([
   [0, { value: 0, color: "rgba(0, 0, 0, 0.25)", text: "草稿" }],
   [1, { value: 1, color: "green", text: "启用" }],
   [2, { value: 2, color: "rgb(156,156,148)", text: "停用" }],
+]);
+
+export const clientNature = ["民营企业", "国有企业", "事业单位", "其他单位"];
+
+export const clientTypeMap = new Map<
+  Client["type"],
+  EnumValue<Client["type"]>
+>([
+  [1, { value: 1, color: "blue", text: "施工单位" }],
+  [2, { value: 2, color: "#cfc922", text: "业主单位" }],
+  [3, { value: 3, color: "green", text: "设计院" }],
+  [4, { value: 4, color: "rgba(0, 0, 0, 0.25)", text: "其他单位" }],
 ]);
 
 /**
@@ -14,12 +26,12 @@ export const ClientStatus = new Map<
  */
 export function getClientContactDetailList(
   params: ListParam & {
-    client_id?: ClientListItem["id"];
-  },
+    client_id?: Client["id"];
+  }
 ) {
-  return fetch.GET<List<ClientListItem>>(
+  return fetch.GET<List<Client>>(
     fetch.base(`/api/client-contact/list`),
-    params,
+    params
   );
 }
 
@@ -28,26 +40,26 @@ export function getClientContactDetailList(
  */
 export function getClientList(
   params: ListParam & {
-    is_sign?: ClientListItem["is_sign"];
+    is_sign?: Client["is_sign"];
     project_id?: Project["id"];
     business_opportunity_id?: BusinessOpportunity["id"];
-  },
+  }
 ) {
-  return fetch.GET<List<ClientListItem>>(
+  return fetch.GET<List<Client>>(
     fetch.base(`/api/client/list`),
-    params,
+    params
   );
 }
 
 /** 客户选项 */
 export function getClientOption(params: {
-  is_sign?: ClientListItem["is_sign"];
+  is_sign?: Client["is_sign"];
   project_id?: Project["id"];
   business_opportunity_id?: BusinessOpportunity["id"];
 }) {
   return fetch.GET<
     Pick<
-      ClientListItem,
+      Client,
       | "id"
       | "short_name"
       | "name"
@@ -63,8 +75,8 @@ export function getClientOption(params: {
 /**
  * 客户-详情
  */
-export function getClient(params: Pick<ClientListItem, "id">) {
-  return fetch.GET<ClientListItem>(fetch.base(`/api/client/detail`), params);
+export function getClient(params: Pick<Client, "id">) {
+  return fetch.GET<Client>(fetch.base(`/api/client/detail`), params);
 }
 
 /**
@@ -73,11 +85,11 @@ export function getClient(params: Pick<ClientListItem, "id">) {
 export function addClient(
   params: Partial<
     Pick<
-      ClientListItem,
+      Client,
       "name" | "short_name" | "type" | "nature" | "address" | "is_sign"
     >
   > &
-    AddresssParams & { project_id?: Project["id"] },
+    AddresssParams & { project_id?: Project["id"] }
 ) {
   return fetch.POST<ClientAddResponse>(fetch.base(`/api/client`), params);
 }
@@ -92,7 +104,7 @@ export function editClient(params: any) {
 /**
  * 客户-删除
  */
-export function deleteClient(params: Pick<ClientListItem, "id">) {
+export function deleteClient(params: Pick<Client, "id">) {
   return fetch.DELETE(fetch.base(`/api/client`), params);
 }
 
@@ -104,3 +116,5 @@ export function clientExport(params: Record<string, any>) {
     remote_path: string;
   }>(fetch.base(`/api/client/export`), params);
 }
+
+

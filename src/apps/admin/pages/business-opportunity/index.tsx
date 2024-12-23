@@ -166,10 +166,14 @@ function BusinessOpportunity() {
                   `编辑 - ${row.name_show}`
                 );
 
-                function listener(event: MessageEvent<"success">) {
+                function listener(event: MessageEvent<"success" | "delete">) {
                   if (event.data === "success") {
                     table.reload();
                     contextedMessage.message?.success("编辑成功");
+                  }
+                  if (event.data === "delete") {
+                    table.reload();
+                    contextedMessage.message?.success("删除成功");
                   }
                 }
 

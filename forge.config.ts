@@ -21,6 +21,7 @@ const devContentSecurityPolicy = buildCSP({
     "http://118.89.67.217:9638",
     "*.qiniu.com",
     "*.amap.com",
+    "*.qiniup.com"
   ],
   fontSrc: ["'self'", "data:"],
   imgSrc: ["*", "data:", "blob:"],

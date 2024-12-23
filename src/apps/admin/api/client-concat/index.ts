@@ -14,7 +14,7 @@ export const ClientContactStatus = new Map<
  */
 export function getClientContactList(
   params: ListParam & {
-    client_id?: ClientListItem["id"];
+    client_id?: Client["id"];
   }
 ) {
   return fetch.GET<List<ClientContact>>(
@@ -27,7 +27,7 @@ export function getClientContactList(
  */
 export function getClientContactOptions(
   params: ListParam & {
-    client_id?: ClientListItem["id"];
+    client_id?: Client["id"];
   }
 ) {
   return fetch.GET<Pick<ClientContact, "id" | "name">[]>(

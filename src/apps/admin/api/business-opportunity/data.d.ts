@@ -183,6 +183,7 @@ type BusinessOpportunity = {
     /** 扩展字段 1 */
     avatar_path: string;
   } | null;
+  file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
 };
 
 
