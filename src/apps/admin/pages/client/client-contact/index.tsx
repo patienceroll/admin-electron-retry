@@ -6,7 +6,7 @@ import {
   ProFormText,
   ProTable,
 } from "@ant-design/pro-components";
-import { Affix, Button, Card, Col, FloatButton, Row, Space } from "antd";
+import {  Button, Card, Col, FloatButton, Row, Space } from "antd";
 
 import useSearchTable from "src/hooks/use-search-table";
 import {

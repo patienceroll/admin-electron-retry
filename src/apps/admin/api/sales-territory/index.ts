@@ -10,8 +10,8 @@ export function getAreaList(params: ListParam & {}) {
 /**
  * 区域-选项
  */
-export function getAreaOption(params: {}) {
-  return fetch.GET<Area[]>(fetch.base(`/api/area/list`), params);
+export function getAreaOption() {
+  return fetch.GET<Area[]>(fetch.base(`/api/area/list`));
 }
 
 /** 新增区域 */
