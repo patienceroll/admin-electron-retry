@@ -5,6 +5,7 @@ import {
   Card,
   Col,
   DatePicker,
+  FloatButton,
   Form,
   Input,
   Radio,
@@ -17,6 +18,7 @@ import {
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
   BusinessOpportunityStatus,
+  editBusinessOpportunity,
   getBusinessOpportunity,
   getProjectStatusText,
 } from "src/apps/admin/api/business-opportunity";
@@ -26,9 +28,12 @@ import TextSelectInput from "src/framework/component/text-select-input";
 import * as ChooseAddress from "src/framework/component/choose-address";
 import Icon from "src/framework/component/icon";
 import PostionSVG from "src/assets/svg/定位.svg";
+import DeleteSvg from "src/assets/svg/delete.svg";
 import MoneyInput from "src/framework/component/money-input";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import useStaffTree from "src/b-hooks/use-staff-tree";
+import SaveSvg from "src/assets/svg/保存.svg";
+import dayjs from "dayjs";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -49,25 +54,49 @@ function Edit(props: StyledWrapComponents) {
   function getDetail() {
     getBusinessOpportunity({ id }).then((res) => {
       setDetail(res.data);
-      const { staff_id, province, city, county, latitude, longitude, address } =
-        res.data;
+      const {
+        hang_time,
+        bid_open_time,
+        purchase_date,
+        staff_id,
+        area_id,
+        investment_amount,
+        win_bid_amount,
+        estimated_amount,
+      } = res.data;
 
-      // form.setFieldsValue({
-      //   ...res.data,
-      //   staff_id: staff_id === 0 ? undefined : staff_id,
-      // });
-      // if (province && city && county && latitude && longitude && address) {
-      //   form.setFieldValue("address", {
-      //     province,
-      //     city,
-      //     county,
-      //     latitude,
-      //     longitude,
-      //     address,
-      //   });
-      // } else {
-      //   form.setFieldValue("address", undefined);
-      // }
+      form.setFieldsValue({
+        ...res.data,
+        company_name: res.data.company?.name,
+        staff_id: staff_id === 0 ? undefined : staff_id,
+        area_id: area_id === 0 ? undefined : area_id,
+        hang_time: hang_time ? dayjs(hang_time) : null,
+        bid_open_time: bid_open_time ? dayjs(bid_open_time) : null,
+        purchase_date: purchase_date ? dayjs(purchase_date) : null,
+        investment_amount:
+          investment_amount === "0.00" ? undefined : investment_amount,
+        win_bid_amount: win_bid_amount === "0.00" ? undefined : win_bid_amount,
+        estimated_amount:
+          estimated_amount === "0.00" ? undefined : estimated_amount,
+      });
+    });
+  }
+
+  function submit() {
+    return form.validateFields().then((store) => {
+      editBusinessOpportunity({
+        id,
+        ...store,
+        hang_time: store.hang_time?.format("YYYY-MM-DD"),
+        bid_open_time: store.bid_open_time?.format("YYYY-MM-DD"),
+        purchase_date: store.purchase_date?.format("YYYY-MM-DD"),
+        investment_amount: store.investment_amount || 0,
+        win_bid_amount: store.win_bid_amount || 0,
+        estimated_amount: store.estimated_amount || 0,
+      }).then(() => {
+        window.parent.postMessage("success");
+        window.close();
+      });
     });
   }
 
@@ -214,7 +243,11 @@ function Edit(props: StyledWrapComponents) {
             </Col>
             <Col flex="350px">
               <Form.Item label="挂网时间" name="hang_time">
-                <DatePicker format="YYYY-MM-DD" allowClear style={{width:'100%'}} />
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  allowClear
+                  style={{ width: "100%" }}
+                />
               </Form.Item>
             </Col>
             <Col flex="350px">
@@ -257,7 +290,7 @@ function Edit(props: StyledWrapComponents) {
               </Form.Item>
             </Col>
             <Col flex="100%">
-              <Form.Item label="备注" name="remark">
+              <Form.Item label={<span>备&emsp;&emsp;注</span>} name="remark">
                 <Input.TextArea
                   style={{ height: 200 }}
                   allowClear
@@ -269,6 +302,21 @@ function Edit(props: StyledWrapComponents) {
         </Card>
       </Form>
       <ChooseAddress.default ref={chooseAddressRef} />
+
+      {detail && (
+        <FloatButton.Group shape="square">
+          <FloatButton
+            icon={<Icon icon={SaveSvg} />}
+            description="保存"
+            onClick={submit}
+          />
+          <FloatButton
+            icon={<Icon icon={DeleteSvg} fill={theme.colorError} />}
+            description="删除"
+            onClick={submit}
+          />
+        </FloatButton.Group>
+      )}
     </PageWrapper>
   );
 }

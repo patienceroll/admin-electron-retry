@@ -2,6 +2,7 @@ import useOption from "src/hooks/use-option";
 import { useMemo } from "react";
 
 import { staffTreeOptions } from "src/apps/admin/api/staff";
+import key from "src/util/key";
 
 type OptionsUseForTreeSelect = {
   title?: React.ReactNode;
@@ -27,7 +28,7 @@ export default function () {
 
         return {
           title: item.name,
-          value: item.id,
+          value: key.randomString(),
           selectable: false,
           disabled: true,
           children: children.concat(childPartment),
