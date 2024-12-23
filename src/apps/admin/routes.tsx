@@ -35,6 +35,12 @@ const ClientEdit = lazy(() => import("./pages/client/client/edit"));
 const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
+const BusinessOpportunityDetail = lazy(
+  () => import("./pages/business-opportunity/detail")
+);
+const BusinessOpportunityEdit = lazy(
+  () => import("./pages/business-opportunity/edit")
+);
 
 /**
  * 销售管理模块
@@ -99,6 +105,14 @@ export default function () {
         <Route
           path="/business-opportunity/business-opportunity"
           element={<BusinessOpportunity />}
+        />
+        <Route
+          path="/business-opportunity/business-opportunity/detail"
+          element={<BusinessOpportunityDetail />}
+        />
+        <Route
+          path="/business-opportunity/business-opportunity/edit"
+          element={<BusinessOpportunityEdit />}
         />
 
         <Route path="/sales/sales-contract" element={<SalesContract />} />

@@ -6,7 +6,7 @@ import {
 } from "@ant-design/pro-components";
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Affix, Button, Card, FloatButton, Space } from "antd";
+import { Button, Card, FloatButton, Space } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
@@ -21,6 +21,8 @@ import contextedModal from "src/framework/component/contexted-modal";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import contextedMessage from "src/framework/component/contexted-message";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import useColumnState from "src/hooks/use-column-state";
 
 function Department() {
   const table = useSearchTable(getDepartmentList);
@@ -28,6 +30,9 @@ function Department() {
   const ref = createRef();
 
   const [deparmentTree, setDeparmentTree] = useState<DepartmentTreeItem[]>([]);
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
 
   function getTree() {
     getDepartmentTree().then((res) => {
@@ -102,6 +107,8 @@ function Department() {
     },
   ]);
 
+  const columnState = useColumnState("departmentList", column);
+
   useEffect(() => {
     table.getData();
     getTree();
@@ -109,34 +116,37 @@ function Department() {
 
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <QueryFilter
-            defaultCollapsed
-            split
-            style={{ padding: 0, rowGap: 0 }}
-            loading={table.loading}
-            onReset={table.onReset}
-            onFinish={table.onFinish}
-          >
-            <ProFormTreeSelect
-              label="部门"
-              name="department_id"
-              fieldProps={{
-                treeData: deparmentTree,
-                showSearch: true,
-                treeNodeFilterProp: "name",
-                fieldNames: {
-                  children: "child",
-                  label: "name",
-                  value: "id",
-                },
-              }}
-            />
-            <ProFormText name="keyword" label="关键词" />
-          </QueryFilter>
-        </Card>
-      </Affix>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
+        <QueryFilter
+          defaultCollapsed
+          split
+          style={{ padding: 0, rowGap: 0 }}
+          loading={table.loading}
+          onReset={table.onReset}
+          onFinish={table.onFinish}
+        >
+          <ProFormTreeSelect
+            label="部门"
+            name="department_id"
+            fieldProps={{
+              treeData: deparmentTree,
+              showSearch: true,
+              treeNodeFilterProp: "name",
+              fieldNames: {
+                children: "child",
+                label: "name",
+                value: "id",
+              },
+            }}
+          />
+          <ProFormText name="keyword" label="关键词" />
+        </QueryFilter>
+      </Card>
       <ProTable
         rowKey="id"
         style={{ marginTop: theme.margin }}
@@ -146,14 +156,23 @@ function Department() {
         dataSource={table.dataSource}
         pagination={table.pagination}
         onChange={table.onChange}
-        columns={column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        columns={columnState.column}
+        columnsState={{
+          value: columnState.data?.data,
+          onChange: columnState.onChange,
+        }}
+        components={{
+          header: {
+            cell: columnState.tableHeaderCellRender,
+          },
+        }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
       />
 
       <FloatButton.Group shape="square">
         <FloatButton
           tooltip="新增部门"
-          icon={<Icon  icon={AddSvg} />}
+          icon={<Icon icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(() => {
               contextedMessage.message?.success("新增成功");

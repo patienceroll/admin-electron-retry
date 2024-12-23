@@ -6,7 +6,7 @@ import {
   ProFormText,
   ProTable,
 } from "@ant-design/pro-components";
-import { Affix, Button, Card, Col, FloatButton, Row, Space } from "antd";
+import {  Button, Card, Col, FloatButton, Row, Space } from "antd";
 
 import useSearchTable from "src/hooks/use-search-table";
 import {
@@ -26,6 +26,7 @@ import contextedModal from "src/framework/component/contexted-modal";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
+import usePageTableHeight from "src/hooks/use-page-table-height";
 
 function ClientContact() {
   const table = useSearchTable(getClientContactList);
@@ -33,6 +34,10 @@ function ClientContact() {
   const modify = Modify.createRef();
 
   const [client] = useOption(getClientOption);
+
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
 
   useEffect(() => {
     table.reload();
@@ -116,42 +121,45 @@ function ClientContact() {
 
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <Search>
-            <Row gutter={[theme.padding, theme.padding]}>
-              <Col flex="300px">
-                <ProFormText
-                  label="关键词"
-                  name="keyword"
-                  placeholder="按姓名搜索"
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect<typeof client.list>
-                  label="客户"
-                  name="client_ids"
-                  options={client.list}
-                  fieldProps={{
-                    fieldNames: { label: "name_show", value: "id" },
-                    showSearch: true,
-                    filterOption: true,
-                    optionFilterProp: "name_show",
-                    mode: "multiple",
-                  }}
-                />
-              </Col>
-              <Col flex="300px">
-                <SearchAction
-                  loading={table.loading}
-                  onReset={table.onReset}
-                  onFinish={table.onFinish}
-                />
-              </Col>
-            </Row>
-          </Search>
-        </Card>
-      </Affix>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
+        <Search>
+          <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="300px">
+              <ProFormText
+                label="关键词"
+                name="keyword"
+                placeholder="按姓名搜索"
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect<typeof client.list>
+                label="客户"
+                name="client_ids"
+                options={client.list}
+                fieldProps={{
+                  fieldNames: { label: "name_show", value: "id" },
+                  showSearch: true,
+                  filterOption: true,
+                  optionFilterProp: "name_show",
+                  mode: "multiple",
+                }}
+              />
+            </Col>
+            <Col flex="300px">
+              <SearchAction
+                loading={table.loading}
+                onReset={table.onReset}
+                onFinish={table.onFinish}
+              />
+            </Col>
+          </Row>
+        </Search>
+      </Card>
 
       <ProTable
         rowKey="id"
@@ -163,7 +171,7 @@ function ClientContact() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -189,7 +197,7 @@ function ClientContact() {
 
         {window.preload.getLocalUserHasPermission(
           "/client/client-contact",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}

@@ -2,8 +2,7 @@ import { Button, Form, Input, Modal, Space } from "antd";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 
 import useWather from "src/hooks/use-wather";
-import { getClientOption } from "src/apps/admin/api/client";
-import useOption from "src/hooks/use-option";
+
 import { addBusinessOpportunity } from "src/apps/admin/api/business-opportunity";
 
 type Ref = {
@@ -27,8 +26,6 @@ export default forwardRef<Ref>(function (props, ref) {
   const [open] = useWather();
   const [loading] = useWather();
   const [form] = Form.useForm();
-
-  const [client] = useOption(getClientOption);
 
   function submit() {
     form
@@ -55,7 +52,6 @@ export default forwardRef<Ref>(function (props, ref) {
         };
         open.setTrue();
         form.resetFields();
-        client.loadOption();
       });
     },
   }));

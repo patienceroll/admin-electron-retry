@@ -2,7 +2,6 @@ import { Form, Modal, TreeSelect } from "antd";
 import React, {
   forwardRef,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -10,18 +9,11 @@ import useWather from "src/hooks/use-wather";
 import styled from "styled-components";
 
 import { setMenuStaff } from "src/apps/admin/api/menu";
-import { staffTreeOptions } from "src/apps/admin/api/staff";
-import useOption from "src/hooks/use-option";
+
+import useStaffTree from "src/b-hooks/use-staff-tree";
 
 type Ref = {
   edit: (item: Menu) => Promise<void>;
-};
-
-type OptionsUseForTreeSelect = {
-  title?: React.ReactNode;
-  value?: string | number;
-  children?: OptionsUseForTreeSelect[];
-  selectable?: boolean;
 };
 
 export function createRef() {
@@ -35,36 +27,11 @@ const Department = forwardRef<Ref>(function (props, ref) {
   }>({ resolve() {}, reject() {} });
 
   const [item, setItem] = useState<Menu>();
-  const [options] = useOption(staffTreeOptions);
+  const { options, treeOptions } = useStaffTree();
 
   const [open] = useWather();
   const [loading] = useWather();
   const [form] = Form.useForm();
-
-  const treeOptions = useMemo(() => {
-    function recusion(data: StaffTreeOption[]): OptionsUseForTreeSelect[] {
-      return data.map((item) => {
-        const children: OptionsUseForTreeSelect[] = [];
-        if (item.employee instanceof Array) {
-          item.employee.forEach((emp) => {
-            children.push({ title: emp.name, value: emp.id });
-          });
-        }
-
-        const childPartment = recusion(item.child || []);
-
-        return {
-          title: item.name,
-          value: `${Math.random()}`,
-          selectable: false,
-          disabled: true,
-          children: children.concat(childPartment),
-        };
-      });
-    }
-
-    return recusion(options.list);
-  }, [options.list]);
 
   useImperativeHandle(ref, () => ({
     edit(item) {

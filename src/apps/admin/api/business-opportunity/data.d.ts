@@ -43,10 +43,10 @@ type BusinessOpportunity = {
   latitude: string;
 
   /** 项目总投资金额 */
-  investment_amount: number;
+  investment_amount: string;
 
   /** 工程预估价值(万) */
-  estimated_amount: number;
+  estimated_amount: string;
 
   /** 资金来源 */
   capital_source: string;
@@ -61,7 +61,7 @@ type BusinessOpportunity = {
   purchase_date: number;
 
   /** 中标金额 */
-  win_bid_amount: number;
+  win_bid_amount: string;
 
   /** 重点项目;0:否,1:是 */
   is_importance: number;

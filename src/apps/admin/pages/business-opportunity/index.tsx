@@ -1,5 +1,5 @@
 import styled, { useTheme } from "styled-components";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import {
   ProForm,
@@ -56,7 +56,7 @@ function BusinessOpportunity() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show,
+              "业务机会详情 - " + record.name_show
             );
           }}
         >
@@ -163,7 +163,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -192,7 +192,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      },
+                      }
                     );
                   },
                 });
@@ -324,7 +324,7 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会",
+                "编辑业务机会"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -343,7 +343,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
