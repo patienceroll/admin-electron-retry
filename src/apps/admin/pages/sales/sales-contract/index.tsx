@@ -62,9 +62,24 @@ function SalesContract() {
       width: 260,
     },
     {
+      title: "标识",
+      width: 80,
+      render: (_, record) => (
+        <Space>
+          {record.is_approve === 1 && (
+            <img src={images.approval} alt="审批中" />
+          )}
+          {/*{record.is_factory_dispatch === 1 && (*/}
+          {/*  <img src={images.p24} alt="厂家配送" />*/}
+          {/*)}*/}
+          {/*{record.type === 2 && <img src={images.p25} alt="补充协议" />}*/}
+        </Space>
+      ),
+    },
+    {
       title: "编号",
       dataIndex: "code",
-      fixed: "left",
+      copyable: true,
     },
     {
       title: "项目",
@@ -112,22 +127,6 @@ function SalesContract() {
       title: "状态",
       dataIndex: "status",
       valueEnum: salesContractStatus,
-    },
-    {
-      title: "标识",
-      width: 80,
-      fixed: "right",
-      render: (_, record) => (
-        <Space>
-          {record.is_approve === 1 && (
-            <img src={images.approval} alt="审批中" />
-          )}
-          {/*{record.is_factory_dispatch === 1 && (*/}
-          {/*  <img src={images.p24} alt="厂家配送" />*/}
-          {/*)}*/}
-          {/*{record.type === 2 && <img src={images.p25} alt="补充协议" />}*/}
-        </Space>
-      ),
     },
     {
       dataIndex: "id",
