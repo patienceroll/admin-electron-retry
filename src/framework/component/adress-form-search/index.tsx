@@ -45,7 +45,7 @@ export default function AddressFormSearch(props: {
         onChange={(value) => {
           onChange({ province: value });
         }}
-        style={{ width: 125 }}
+        style={{ width: 140 }}
       />
       <Select
         value={value.city}
@@ -56,7 +56,7 @@ export default function AddressFormSearch(props: {
         onChange={(city) => {
           onChange({ province: value.province, city });
         }}
-        style={{ width: 125 }}
+        style={{ width: 140 }}
       />
       <Select
         value={value.county}
@@ -67,7 +67,7 @@ export default function AddressFormSearch(props: {
         onChange={(county) => {
           onChange({ province: value.province, city: value.city, county });
         }}
-        style={{ width: 125 }}
+        style={{ width: 140 }}
       />
     </Space>
   );
