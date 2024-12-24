@@ -453,7 +453,6 @@ function Detail(props: StyledWrapComponents) {
       <Anchor
         className="anchor"
         replace
-        // onClick={e => e.preventDefault()}
         items={[
           "基本信息",
           "联系人",
