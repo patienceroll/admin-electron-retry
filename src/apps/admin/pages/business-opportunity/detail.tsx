@@ -1,7 +1,7 @@
 import styled, { useTheme } from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Col, Row, Tag, Typography } from "antd";
+import { Col, Row, Tag, Typography, Anchor } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
@@ -10,6 +10,7 @@ import {
   getBusinessOpportunity,
 } from "src/apps/admin/api/business-opportunity";
 import InfoItem from "src/framework/component/info-item";
+import Money from "src/util/money";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -36,7 +37,7 @@ function Detail(props: StyledWrapComponents) {
 
   return (
     <PageWrapper className={className}>
-      <Title>基本信息</Title>
+      <Title id="基本信息">基本信息</Title>
       {detail && (
         <Row
           style={{ marginTop: theme.margin }}
@@ -97,9 +98,60 @@ function Detail(props: StyledWrapComponents) {
         </Row>
       )}
 
-      <Title style={{ marginTop: theme.margin }}>详细信息</Title>
+      <Title style={{ marginTop: theme.margin }} id="详细信息">
+        详细信息
+      </Title>
+
+      {detail && (
+        <Row
+          style={{ marginTop: theme.margin }}
+          gutter={[theme.padding, theme.padding]}
+        >
+          <Col flex="400px">
+            <InfoItem label="挂网时间"> {detail.hang_time}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="总投资">
+              {new Money(detail.investment_amount).toCNY()}
+            </InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="开标时间">{detail.bid_open_time}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="中标金额">
+              {new Money(detail.win_bid_amount).toCNY()}
+            </InfoItem>
+          </Col>
+          <Col flex="100%">
+            <InfoItem label="建设内容">{detail.build_content}</InfoItem>
+          </Col>
+        </Row>
+      )}
+
+      <Title style={{ marginTop: theme.margin }} id="关键信息">
+        关键信息
+      </Title>
+      <Anchor
+        className="anchor"
+        replace
+        items={["基本信息", "详细信息", "关键信息"].map((item) => ({
+          key: item,
+          title: item,
+          href: `#${item}`,
+        }))}
+      />
     </PageWrapper>
   );
 }
 
-export default styled(Detail)``;
+export default styled(Detail)`
+  padding-right: 200px;
+
+  .anchor {
+    position: fixed;
+    top: 50%;
+    right: 50px;
+    transform: translateY(-50%);
+  }
+`;

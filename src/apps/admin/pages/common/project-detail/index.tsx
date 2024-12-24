@@ -17,7 +17,7 @@ export function createRef() {
     return useRef<Ref>(null);
 }
 
-const ProjectDetail = forwardRef<Ref, StyledWrapComponents>(function (props, ref) {
+const ProjectDetail = forwardRef<Ref, StyledWrapComponents<{id:Company['id']}>>(function (props, ref) {
     const { className } = props;
     const [open] = useWather();
     const [loading] = useWather();

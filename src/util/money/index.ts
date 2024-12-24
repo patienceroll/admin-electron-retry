@@ -12,12 +12,12 @@ export default class Money {
    * - showSymbol = true  10000000 --> ¥100,000,000.00
    * - showSymbol = false 10000000 --> 100,000,000.00
    */
-  toCNY(
+   toCNY(
     options: {
       showSymbol: boolean;
     } = {
       showSymbol: true,
-    },
+    }
   ) {
     const { showSymbol } = options;
     const text = Number(this.current).toLocaleString("zh-CN", {
@@ -29,14 +29,14 @@ export default class Money {
   }
 
   /** 转换为人名币大写 */
-  toUpcaseCNY() {
+  get toUpcaseCNY() {
     return nzhcn.cn.toMoney(this.current);
   }
 
   /** 转换为 xx.xx 万,保留两位小数
    * - 111101 --> 11.11
    */
-  toTenThousand() {
+  get toTenThousand() {
     const value = Math.abs(Number(this.current));
     const isAbs = Number(this.current) >= 0;
     const tenThousand = Math.floor(value / 10000);
@@ -46,7 +46,7 @@ export default class Money {
   }
 
   /** 先转换为万,然后转换为 三位数的分割 */
-  toTenThousandCNY() {
-    return new Money(this.toTenThousand()).toCNY();
+  get toTenThousandCNY() {
+    return new Money(this.toTenThousand).toCNY();
   }
 }

@@ -25,10 +25,7 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-export default forwardRef<Ref, Pick<Client, "id">>(function (
-  props,
-  ref
-) {
+export default forwardRef<Ref, Pick<Client, "id">>(function (props, ref) {
   const { id } = props;
   const [open] = useWather();
   const [loading] = useWather();
@@ -173,7 +170,7 @@ export default forwardRef<Ref, Pick<Client, "id">>(function (
           <Input placeholder="请输入账号" />
         </Form.Item>
         <Form.Item label="状态" name="status">
-          <Radio.Group defaultValue={1}>
+          <Radio.Group>
             <Radio value={1}>有效</Radio>
             <Radio value={0}>停用</Radio>
           </Radio.Group>
