@@ -297,15 +297,17 @@ const ChooseAddress = forwardRef<Ref, StyledWrapComponents>(function (
                 onChange={function (_, option) {
                   if (!(option instanceof Array)) {
                     setCurrentAddress(option);
-                    const ln = new AMap.LngLat(
-                      Number(option.lng),
-                      Number(option.lat)
-                    );
-                    const marker = new AMap.Marker({ position: ln });
-                    map.clearMap();
-                    map.add(marker);
-                    map.setCenter(ln);
-                    map.setZoom(14);
+                    if (option) {
+                      const ln = new AMap.LngLat(
+                        Number(option.lng),
+                        Number(option.lat)
+                      );
+                      const marker = new AMap.Marker({ position: ln });
+                      map.clearMap();
+                      map.add(marker);
+                      map.setCenter(ln);
+                      map.setZoom(14);
+                    }
                   }
                 }}
               />
