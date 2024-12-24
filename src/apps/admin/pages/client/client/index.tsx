@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
 import {
+  ProForm,
   ProFormSelect,
   ProFormText,
+  ProFormTreeSelect,
   ProTable,
 } from "@ant-design/pro-components";
 
@@ -30,6 +32,8 @@ import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import { StaffStatus } from "src/apps/admin/api/staff";
+import images from "src/assets/images";
+import AddressFormSearch from "src/framework/component/adress-form-search";
 
 function Client() {
   const table = useSearchTable(getClientList);
@@ -61,6 +65,18 @@ function Client() {
         </Typography.Link>
       ),
       width: 260,
+    },
+    {
+      title: "标识",
+      dataIndex: "mark_icon",
+      render: (_, record) => (
+        <Space>
+          {record?.is_importance === 1 && (
+            <img src={images.red_star} alt="重点" />
+          )}
+          {record.is_sign === 1 && <img src={images.contract} alt="合同" />}
+        </Space>
+      ),
     },
     {
       title: "简称",
@@ -102,7 +118,6 @@ function Client() {
     {
       title: "信息完善度",
       dataIndex: "perfect_ratio",
-
       valueType: "progress",
     },
     {
@@ -194,19 +209,40 @@ function Client() {
       >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="300px">
+            <Col flex="240px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="按客户搜索"
               />
             </Col>
-            <Col flex="300px">
+            <Col flex="240px">
               <ProFormSelect
                 label="客户类型"
                 name="type"
                 options={Array.from(projectTypeMap.values())}
                 fieldProps={{ fieldNames: { label: "text", value: "value" } }}
+              />
+            </Col>
+            <Col flex="500px">
+              <ProForm.Item
+                label="行政区"
+                name="region"
+                transform={({ province, city, county }) => ({
+                  province,
+                  city,
+                  county,
+                })}
+              >
+                <AddressFormSearch />
+              </ProForm.Item>
+            </Col>
+            <Col flex="240px">
+              <ProFormTreeSelect
+                label="负责人"
+                name="staff_ids"
+                placeholder="请选择负责人"
+                // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
             <Col flex="80px">

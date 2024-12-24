@@ -64,28 +64,15 @@ function SalesContract() {
     {
       title: "标识",
       dataIndex: "mark_icon",
-      width: 300,
       render: (_, record) => (
         <Space>
+          {record.is_factory_dispatch === 1 && (
+            <img src={images.dispatch} alt="厂家配送" />
+          )}
           {record.is_approve === 1 && (
             <img src={images.approval} alt="审批中" />
           )}
           {record.type === 2 && <img src={images.replenish} alt="补充协议" />}
-          {record.is_factory_dispatch === 1 && (
-            <img src={images.dispatch} alt="厂家配送" />
-          )}
-          {record?.is_factory_dispatch === 1 && (
-            <img src={images.red_star} alt="重点" />
-          )}
-          {record.is_factory_dispatch === 1 && (
-            <img src={images.urgent} alt="加急" />
-          )}
-          {record.is_factory_dispatch === 1 && (
-            <img src={images.overdue} alt="逾期" />
-          )}
-          {record.is_factory_dispatch === 1 && (
-            <img src={images.contract} alt="合同" />
-          )}
         </Space>
       ),
     },
@@ -196,9 +183,6 @@ function SalesContract() {
 
   return (
     <PageWrapper>
-      {/*<Row gutter={5} style={{ flexWrap: "nowrap" }}>*/}
-      {/*  <Col flex="330px">*/}
-      {/*<Affix offsetTop={theme.padding}>*/}
       <Card bordered>
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
@@ -224,7 +208,7 @@ function SalesContract() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="240px">
               <ProFormSelect<Area>
                 label="区域"
                 name="area_ids"
@@ -289,7 +273,7 @@ function SalesContract() {
                 label="签约日期"
               />
             </Col>
-            <Col flex="250px">
+            <Col flex="240px">
               <ProFormTreeSelect
                 label="负责人"
                 name="staff_ids"
@@ -297,7 +281,7 @@ function SalesContract() {
                 // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
-            <Col flex="220px">
+            <Col flex="240px">
               <ProFormSelect<Area>
                 label="状态"
                 name="statuses"
@@ -321,12 +305,10 @@ function SalesContract() {
           </Row>
         </Search>
       </Card>
-      {/*</Affix>*/}
-      {/*</Col>*/}
-      {/*<Col flex={1}>*/}
       <ProTable
         rowKey="id"
-        style={{ marginTop: theme.margin }}
+        // style={{ marginTop: theme.margin }}
+        style={{ marginTop: "6px" }}
         search={false}
         loading={table.loading}
         options={table.options}
@@ -398,8 +380,6 @@ function SalesContract() {
         //     </Button>,
         // ]}
       />
-      {/*</Col>*/}
-      {/*</Row>*/}
     </PageWrapper>
   );
 }

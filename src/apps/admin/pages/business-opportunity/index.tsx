@@ -137,6 +137,11 @@ function BusinessOpportunity() {
       dataIndex: "purchase_date",
     },
     {
+      title: "信息完善度",
+      dataIndex: "perfect_ratio",
+      valueType: "progress",
+    },
+    {
       title: "项目状态",
       dataIndex: "project_status",
     },
@@ -230,14 +235,14 @@ function BusinessOpportunity() {
       >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="300px">
+            <Col flex="240px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="按业务机会/编号搜索"
               />
             </Col>
-            <Col flex="300px">
+            <Col flex="330px">
               <ProFormSelect<Area>
                 label="区域"
                 name="area_ids"
@@ -251,7 +256,19 @@ function BusinessOpportunity() {
                 }}
               />
             </Col>
-
+            <Col flex="500px">
+              <ProForm.Item
+                label="行政区"
+                name="region"
+                transform={({ province, city, county }) => ({
+                  province,
+                  city,
+                  county,
+                })}
+              >
+                <AddressFormSearch />
+              </ProForm.Item>
+            </Col>
             <Col flex="160px">
               <ProFormCheckbox.Group
                 name="is_importance"
@@ -262,7 +279,7 @@ function BusinessOpportunity() {
                 }))}
               />
             </Col>
-            <Col flex="300px">
+            <Col flex="240px">
               <ProFormSelect<Area>
                 label="状态"
                 name="statuses"
@@ -275,19 +292,6 @@ function BusinessOpportunity() {
                   mode: "multiple",
                 }}
               />
-            </Col>
-            <Col flex="450px">
-              <ProForm.Item
-                label="行政区"
-                name="region"
-                transform={({ province, city, county }) => ({
-                  province,
-                  city,
-                  county,
-                })}
-              >
-                <AddressFormSearch />
-              </ProForm.Item>
             </Col>
             <Col flex="80px">
               <SearchAction
