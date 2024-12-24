@@ -32,7 +32,7 @@
     "qiniu-js": "3.4.2",
     "react": "18.3.1",
     "react-dom": "^18.3.1",
-    "react-resizable": "^3.0.5",
+    "react-resizable": "3.0.4",
     "react-router-dom": "^6.26.0",
     "styled-components": "^6.1.13",
     "swiper": "^11.1.14"

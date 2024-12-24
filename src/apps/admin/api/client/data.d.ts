@@ -143,6 +143,8 @@ type Client = {
 
     /** 扩展字段 1 */
     avatar_path: string;
+    created_at: string;
+    updated_at: string;
   } | null;
 
   /**

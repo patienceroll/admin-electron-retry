@@ -74,7 +74,10 @@ export default function useTableColumnState<T>(
     const { columnData, ...rest } = props;
     const start = useRef(0);
     const th = useRef<HTMLTableCellElement>(null);
+
+    
     return (
+      /** @ts-ignore */
       <Resizable
         axis="x"
         width={100}

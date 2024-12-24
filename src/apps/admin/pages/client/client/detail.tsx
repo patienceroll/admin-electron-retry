@@ -326,7 +326,7 @@ function Detail(props: StyledWrapComponents) {
                 search={false}
                 options={false}
                 pagination={false}
-                dataSource={row.detail}
+                dataSource={[]}
                 columns={column}
               />
             );
@@ -372,7 +372,7 @@ function Detail(props: StyledWrapComponents) {
                 search={false}
                 options={false}
                 pagination={false}
-                dataSource={row.detail}
+                dataSource={[]}
                 columns={column}
               />
             );
@@ -418,7 +418,7 @@ function Detail(props: StyledWrapComponents) {
                 search={false}
                 options={false}
                 pagination={false}
-                dataSource={row.detail}
+                dataSource={[]}
                 columns={column}
               />
             );
