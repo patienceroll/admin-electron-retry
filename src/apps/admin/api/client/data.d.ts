@@ -162,6 +162,22 @@ type Client = {
   /**
    *  员工信息
    */
+  staff: {
+    /** 主键id */
+    id: number;
+
+    /** 用户名 */
+    name: string;
+
+    /** 手机号 */
+    phone: string;
+
+    /** 照片 */
+    avatar: string;
+
+    /** 扩展字段 1 */
+    avatar_path: string;
+  } | null;
   /**
    *  contact
    */

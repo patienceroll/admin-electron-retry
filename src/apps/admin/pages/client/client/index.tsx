@@ -71,9 +71,6 @@ function Client() {
       dataIndex: "mark_icon",
       render: (_, record) => (
         <Space>
-          {record?.is_importance === 1 && (
-            <img src={images.red_star} alt="重点" />
-          )}
           {record.is_sign === 1 && <img src={images.contract} alt="合同" />}
         </Space>
       ),
@@ -119,11 +116,6 @@ function Client() {
       title: "信息完善度",
       dataIndex: "perfect_ratio",
       valueType: "progress",
-    },
-    {
-      title: "是否签约",
-      dataIndex: "is_sign",
-      valueEnum: watherMap,
     },
     {
       title: "负责人",
