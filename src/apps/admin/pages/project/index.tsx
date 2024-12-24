@@ -30,12 +30,18 @@ import { getAreaOption } from "../../api/sales-territory";
 import { watherMap } from "../../api/general";
 import { deleteProject, getProjectList } from "../../api/project";
 import contextedMessage from "src/framework/component/contexted-message";
+import * as ProjectDetail from "../common/project-detail/index";
 import contextedModal from "src/framework/component/contexted-modal";
+import usePageTableHeight from "src/hooks/use-page-table-height";
 
 export default function () {
+   const projectRef = ProjectDetail.createRef();
   const table = useSearchTable(getProjectList);
   const theme = useTheme();
 
+   const { addAElement, height } = usePageTableHeight(
+      theme.padding * 2 + theme.margin
+    );
   const [area] = useOption(getAreaOption);
   const column = table.column([
     {
@@ -162,6 +168,15 @@ export default function () {
             >
               删除
             </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                projectRef.current?.show()
+              }}
+            >
+              简介
+            </Button>
           </Space>
         );
       },
@@ -175,8 +190,11 @@ export default function () {
   }, []);
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
+       <Card bordered
+       ref={(div) => {
+        if (div) addAElement(div);
+      }}
+       >
           <Search>
             <Row gutter={[theme.padding, theme.padding]}>
               <Col flex="300px">
@@ -248,7 +266,6 @@ export default function () {
             </Row>
           </Search>
         </Card>
-      </Affix>
       <ProTable
         rowKey="id"
         style={{ marginTop: theme.margin }}
@@ -259,7 +276,7 @@ export default function () {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -270,6 +287,7 @@ export default function () {
           },
         }}
       />
+       <ProjectDetail.default ref={projectRef} />
     </PageWrapper>
   );
 }
