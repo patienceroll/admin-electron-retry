@@ -34,7 +34,6 @@ const ProjectDetail = forwardRef<Ref, StyledWrapComponents>(function (props, ref
     }));
     const getDetail = async(id:Company['id']) => {
         await getProjectDetail({id}).then((res)=>{
-            console.log(res,'res');
             setDetail(res.data);
             open.setTrue();
         })
