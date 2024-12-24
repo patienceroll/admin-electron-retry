@@ -39,7 +39,7 @@ function BusinessOpportunity() {
   const theme = useTheme();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin
   );
 
   const create = Create.createRef();
@@ -57,7 +57,7 @@ function BusinessOpportunity() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show,
+              "业务机会详情 - " + record.name_show
             );
           }}
         >
@@ -70,7 +70,7 @@ function BusinessOpportunity() {
       dataIndex: "mark_icon",
       render: (_, record) => (
         <Space>
-          {record?.is_importance === 1 && (
+          {record.is_importance === 1 && (
             <img src={images.red_star} alt="重点" />
           )}
           {record.is_approve === 1 && (
@@ -170,7 +170,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success" | "delete">) {
@@ -203,7 +203,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      },
+                      }
                     );
                   },
                 });
@@ -335,7 +335,7 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会",
+                "编辑业务机会"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -354,7 +354,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
