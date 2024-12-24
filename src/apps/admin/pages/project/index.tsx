@@ -30,8 +30,9 @@ import { getAreaOption } from "../../api/sales-territory";
 import { watherMap } from "../../api/general";
 import { deleteProject, getProjectList } from "../../api/project";
 import contextedMessage from "src/framework/component/contexted-message";
-import * as ProjectDetail from "../common/project-detail/index";
 import contextedModal from "src/framework/component/contexted-modal";
+import * as ProjectDetail from "./components/project-detail";
+
 import usePageTableHeight from "src/hooks/use-page-table-height";
 
 export default function () {

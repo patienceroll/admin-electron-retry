@@ -14,7 +14,7 @@ import { postStaffRole } from "src/apps/admin/api/staff";
 import { getProjectDetail } from "src/apps/admin/api/project";
 
 type Ref = {
-    show: (item?: any) => void;
+    show: (id: Company['id']) => void;
 };
 
 export function createRef() {
@@ -22,22 +22,18 @@ export function createRef() {
 }
 
 const ProjectDetail = forwardRef<Ref, StyledWrapComponents>(function (props, ref) {
-    const { className } = props;
+    const { className ,} = props;
     const [open] = useWather();
     const [loading] = useWather();
     const [detail, setDetail] = useState<any>()
     useImperativeHandle(ref, () => ({
-        show(item) {
-            if(item){
-                setDetail(item);
-                return
-            }
-            getDetail();
+        show(id) {
+            getDetail(id);
             
         },
     }));
-    const getDetail = async() => {
-        await getProjectDetail({id:21,_fetchId:'64_1734918627666'}).then((res)=>{
+    const getDetail = async(id:Company['id']) => {
+        await getProjectDetail({id}).then((res)=>{
             console.log(res,'res');
             setDetail(res.data);
             open.setTrue();
