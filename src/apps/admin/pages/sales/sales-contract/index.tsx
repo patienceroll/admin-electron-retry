@@ -63,16 +63,29 @@ function SalesContract() {
     },
     {
       title: "标识",
-      width: 80,
+      dataIndex: "mark_icon",
+      width: 300,
       render: (_, record) => (
         <Space>
           {record.is_approve === 1 && (
             <img src={images.approval} alt="审批中" />
           )}
-          {/*{record.is_factory_dispatch === 1 && (*/}
-          {/*  <img src={images.p24} alt="厂家配送" />*/}
-          {/*)}*/}
-          {/*{record.type === 2 && <img src={images.p25} alt="补充协议" />}*/}
+          {record.type === 2 && <img src={images.replenish} alt="补充协议" />}
+          {record.is_factory_dispatch === 1 && (
+            <img src={images.dispatch} alt="厂家配送" />
+          )}
+          {record?.is_factory_dispatch === 1 && (
+            <img src={images.red_star} alt="重点" />
+          )}
+          {record.is_factory_dispatch === 1 && (
+            <img src={images.urgent} alt="加急" />
+          )}
+          {record.is_factory_dispatch === 1 && (
+            <img src={images.overdue} alt="逾期" />
+          )}
+          {record.is_factory_dispatch === 1 && (
+            <img src={images.contract} alt="合同" />
+          )}
         </Space>
       ),
     },

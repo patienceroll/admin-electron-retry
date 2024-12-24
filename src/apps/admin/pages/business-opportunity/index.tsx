@@ -32,13 +32,14 @@ import openWindow from "src/util/open-window";
 import contextedModal from "src/framework/component/contexted-modal";
 import * as Create from "./components/create";
 import usePageTableHeight from "src/hooks/use-page-table-height";
+import images from "src/assets/images";
 
 function BusinessOpportunity() {
   const table = useSearchTable(getBusinessOpportunityList);
   const theme = useTheme();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin
+    theme.padding * 2 + theme.margin,
   );
 
   const create = Create.createRef();
@@ -56,7 +57,7 @@ function BusinessOpportunity() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show
+              "业务机会详情 - " + record.name_show,
             );
           }}
         >
@@ -65,13 +66,25 @@ function BusinessOpportunity() {
       ),
     },
     {
+      title: "标识",
+      dataIndex: "mark_icon",
+      render: (_, record) => (
+        <Space>
+          {record?.is_importance === 1 && (
+            <img src={images.red_star} alt="重点" />
+          )}
+          {record.is_approve === 1 && (
+            <img src={images.approval} alt="审批中" />
+          )}
+        </Space>
+      ),
+    },
+    {
       title: "编号",
       dataIndex: "code",
-
       fixed: "left",
       copyable: true,
     },
-    { title: "审批中", dataIndex: "is_approve", valueEnum: watherMap },
     {
       title: "类别",
       dataIndex: "category",
@@ -134,12 +147,6 @@ function BusinessOpportunity() {
       valueEnum: BusinessOpportunityStatus,
     },
     {
-      title: "是否重点",
-      dataIndex: "is_importance",
-      valueEnum: watherMap,
-    },
-
-    {
       title: "负责人",
       dataIndex: "staff",
       renderText(_, row) {
@@ -163,7 +170,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success" | "delete">) {
@@ -196,7 +203,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      }
+                      },
                     );
                   },
                 });
@@ -328,7 +335,7 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会"
+                "编辑业务机会",
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -347,7 +354,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
