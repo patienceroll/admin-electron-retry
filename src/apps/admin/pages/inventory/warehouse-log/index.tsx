@@ -20,9 +20,9 @@ import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
-  getSalesDeliverList,
-  salesDeliverStatus,
-} from "src/apps/admin/api/sales-deliver";
+  getWarehouseLogList,
+  recordTypeMap,
+} from "src/apps/admin/api/warehouse-log";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
@@ -32,7 +32,7 @@ import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 
 function SalesDeliver() {
-  const table = useSearchTable(getSalesDeliverList);
+  const table = useSearchTable(getWarehouseLogList);
   const theme = useTheme();
 
   const [areaOption] = useOption(getAreaOption);
@@ -42,43 +42,32 @@ function SalesDeliver() {
   const [salesOrderOption] = useOption(getSalesOrderOption);
 
   const column = table.column([
-    // {
-    //     title: "合同",
-    //     dataIndex: "name",
-    //     fixed: "left",
-    //     render: (_, record) => (
-    //         <Typography.Link
-    //             onClick={() => {
-    //                 openWindow
-    //                     .openCurrentAppWindow
-    //                     // `/sales/sales-deliver/detail?id=${record.id}`,
-    //                     // "销售合同详情 - " + record.name
-    //                     ();
-    //             }}
-    //         >
-    //             {record.name}
-    //         </Typography.Link>
-    //     ),
-    //     width: 260,
-    // },
     {
-      title: "发货单",
-      dataIndex: "code",
+      title: "类型",
+      dataIndex: "type",
+      valueEnum: recordTypeMap,
+    },
+    {
+      title: "业务",
+      dataIndex: "target",
+    },
+    {
+      title: "业务编号",
+      dataIndex: "target_code",
       copyable: true,
-      fixed: "left",
+    },
+    {
+      title: "仓库",
+      dataIndex: "warehouse",
+      renderText(_, row) {
+        return row.warehouse?.name;
+      },
     },
     {
       title: "项目",
       dataIndex: "project",
       renderText(_, row) {
         return row.project?.name_show;
-      },
-    },
-    {
-      title: "客户",
-      dataIndex: "client",
-      renderText(_, row) {
-        return row.client?.name_show;
       },
     },
     {
@@ -96,81 +85,78 @@ function SalesDeliver() {
       },
     },
     {
-      title: "金额",
-      dataIndex: "amount",
-      valueType: "money",
+      title: "物资",
+      renderText: (_, row) => row.material?.name,
     },
     {
-      title: "收货人",
-      dataIndex: "receive_man",
+      title: "外径",
+      key: "o_diameter",
+      renderText: (_, row) => row.material_sku?.o_diameter,
     },
     {
-      title: "收货电话",
-      dataIndex: "receive_tel",
+      title: "壁厚",
+      key: "wall_thickness",
+      renderText: (_, row) => row.material_sku?.wall_thickness,
     },
     {
-      title: "收货地址",
-      dataIndex: "receive_address",
+      title: "内涂层厚度",
+      key: "i_coat_thickness",
+      renderText: (_, row) => row.material_sku?.i_coat_thickness,
     },
     {
-      title: "备注",
-      dataIndex: "remark",
+      title: "外涂层厚度",
+      key: "o_coat_thickness",
+      renderText: (_, row) => row.material_sku?.o_coat_thickness,
     },
     {
-      title: "负责人",
-      dataIndex: "staff",
-      renderText: (_, row) => row.staff?.name,
+      title: "长度",
+      key: "length",
+      renderText: (_, row) => row.material_sku?.length,
     },
     {
-      title: "创建时间",
+      title: "连接方式",
+      key: "connection_type",
+      renderText: (_, row) => row.material_sku?.connection_type,
+    },
+    {
+      title: "钢卷类型",
+      key: "steel_type",
+      renderText: (_, row) => row.material_sku?.steel_type,
+    },
+    {
+      title: "材质",
+      key: "texture",
+      renderText: (_, row) => row.material_sku?.texture,
+    },
+    {
+      title: "内涂层颜色",
+      key: "i_coat_color",
+      renderText: (_, row) => row.material_sku?.i_coat_color,
+    },
+    {
+      title: "外涂层颜色",
+      key: "o_coat_color",
+      renderText: (_, row) => row.material_sku?.o_coat_color,
+    },
+    {
+      title: "数量",
+      dataIndex: "num",
+    },
+    {
+      title: "实时库存",
+      dataIndex: "now_num",
+    },
+    {
+      title: "单位",
+      dataIndex: "unit",
+    },
+    {
+      title: "批次",
+      dataIndex: "batch_no",
+    },
+    {
+      title: "发生时间",
       dataIndex: "created_at",
-    },
-    {
-      title: "状态",
-      dataIndex: "status",
-      valueEnum: salesDeliverStatus,
-    },
-    {
-      dataIndex: "id",
-      title: "操作",
-      fixed: "right",
-      width: 160,
-      // render: action<SalesDeliver>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/sales-deliver/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deleteSalesDeliver({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
     },
   ]);
 
@@ -299,20 +285,6 @@ function SalesDeliver() {
                 // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
-            <Col flex="240px">
-              <ProFormSelect<Area>
-                label="状态"
-                name="statuses"
-                options={Array.from(salesDeliverStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
             <Col flex="80px">
               <SearchAction
                 loading={table.loading}
@@ -364,20 +336,6 @@ function SalesDeliver() {
         //     />
         // }
         // toolBarRender={() => [
-        //     <Button
-        //         hidden={!menu.getPermission()}
-        //         key={1}
-        //         onClick={() => {
-        //             modify.current?.create().then((result) => {
-        //                 message.success("新增成功");
-        //                 history.push({
-        //                     pathname: `/sales/sales-deliver/edit/${result.id}`,
-        //                 });
-        //             });
-        //         }}
-        //     >
-        //         新增
-        //     </Button>,
         //     <Button
         //         key="export"
         //         hidden={!menu.getPermission({key: "export"})}

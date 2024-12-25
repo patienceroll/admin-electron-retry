@@ -101,16 +101,16 @@ function SalesDeliver() {
       valueType: "money",
     },
     {
+      title: "收货公司",
+      dataIndex: "company_name",
+    },
+    {
       title: "收货人",
-      dataIndex: "receive_man",
+      dataIndex: "linkman",
     },
     {
       title: "收货电话",
-      dataIndex: "receive_tel",
-    },
-    {
-      title: "收货地址",
-      dataIndex: "receive_address",
+      dataIndex: "phone",
     },
     {
       title: "备注",
@@ -283,7 +283,7 @@ function SalesDeliver() {
             </Col>
             <Col flex="330px">
               <ProFormDateRangePicker
-                name="bill_date"
+                name="sign_date"
                 transform={(value) => ({
                   start_time: value[0],
                   end_time: value[1],

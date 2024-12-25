@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Card, Col, Row } from "antd";
 import {
-  ProForm,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
@@ -19,20 +18,16 @@ import useOption from "src/hooks/use-option";
 import styled, { useTheme } from "styled-components";
 
 //主体接口
-import {
-  getSalesDeliverList,
-  salesDeliverStatus,
-} from "src/apps/admin/api/sales-deliver";
+import { getOutStockList, outStockStatus } from "src/apps/admin/api/out-stock";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
-import AddressFormSearch from "src/framework/component/adress-form-search";
 
-function SalesDeliver() {
-  const table = useSearchTable(getSalesDeliverList);
+function OutStock() {
+  const table = useSearchTable(getOutStockList);
   const theme = useTheme();
 
   const [areaOption] = useOption(getAreaOption);
@@ -62,10 +57,24 @@ function SalesDeliver() {
     //     width: 260,
     // },
     {
-      title: "发货单",
+      title: "出库单",
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+    },
+    {
+      title: "仓库",
+      dataIndex: "warehouse",
+      renderText(_, row) {
+        return row.warehouse?.name;
+      },
+    },
+    {
+      title: "仓库",
+      dataIndex: "warehouse",
+      renderText(_, row) {
+        return row.warehouse?.name;
+      },
     },
     {
       title: "项目",
@@ -75,14 +84,7 @@ function SalesDeliver() {
       },
     },
     {
-      title: "客户",
-      dataIndex: "client",
-      renderText(_, row) {
-        return row.client?.name_show;
-      },
-    },
-    {
-      title: "合同",
+      title: "销售合同",
       dataIndex: "sales_contract_name",
       renderText(_, row) {
         return row.sales_contract?.name;
@@ -96,21 +98,19 @@ function SalesDeliver() {
       },
     },
     {
-      title: "金额",
-      dataIndex: "amount",
-      valueType: "money",
+      title: "业务",
+      dataIndex: "target",
+      width: 120,
     },
     {
-      title: "收货人",
-      dataIndex: "receive_man",
+      title: "业务编号",
+      dataIndex: "target_code",
+      width: 120,
     },
     {
-      title: "收货电话",
-      dataIndex: "receive_tel",
-    },
-    {
-      title: "收货地址",
-      dataIndex: "receive_address",
+      title: "日期",
+      dataIndex: "bill_date",
+      valueType: "dateTime",
     },
     {
       title: "备注",
@@ -128,14 +128,14 @@ function SalesDeliver() {
     {
       title: "状态",
       dataIndex: "status",
-      valueEnum: salesDeliverStatus,
+      valueEnum: outStockStatus,
     },
     {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
       width: 160,
-      // render: action<SalesDeliver>([
+      // render: action<OutStock>([
       //     {
       //         text: "打印",
       //         async onClick({ entity }) {
@@ -162,7 +162,7 @@ function SalesDeliver() {
       //                 title: "删除",
       //                 content: `确定删除${entity.name}?`,
       //                 submitting() {
-      //                     return deleteSalesDeliver({ id: entity.id }).then(() => {
+      //                     return deleteOutStock({ id: entity.id }).then(() => {
       //                         message.success("删除成功");
       //                         reload();
       //                     });
@@ -174,7 +174,7 @@ function SalesDeliver() {
     },
   ]);
 
-  const columnState = useColumnState("salesDeliverList", column);
+  const columnState = useColumnState("outStockList", column);
 
   useEffect(() => {
     table.reload();
@@ -268,19 +268,6 @@ function SalesDeliver() {
                 }}
               />
             </Col>
-            <Col flex="500px">
-              <ProForm.Item
-                label="行政区"
-                name="region"
-                transform={({ province, city, county }) => ({
-                  province,
-                  city,
-                  county,
-                })}
-              >
-                <AddressFormSearch />
-              </ProForm.Item>
-            </Col>
             <Col flex="330px">
               <ProFormDateRangePicker
                 name="bill_date"
@@ -288,7 +275,7 @@ function SalesDeliver() {
                   start_time: value[0],
                   end_time: value[1],
                 })}
-                label="发货日期"
+                label="入库日期"
               />
             </Col>
             <Col flex="240px">
@@ -303,7 +290,7 @@ function SalesDeliver() {
               <ProFormSelect<Area>
                 label="状态"
                 name="statuses"
-                options={Array.from(salesDeliverStatus.values())}
+                options={Array.from(outStockStatus.values())}
                 fieldProps={{
                   fieldNames: { label: "text", value: "value" },
                   showSearch: true,
@@ -346,61 +333,66 @@ function SalesDeliver() {
           },
         }}
         // headerTitle={
-        //     <Tabs
-        //         items={[{value: -1, text: "全部"}, ...billStatus].map((i) => ({
+        //   <Tabs
+        //       items={[{ value: -1, text: "全部" }, ...outStockStatus].map(
+        //           (i) => ({
         //             key: `${i.value}`,
         //             label: i.text,
-        //         }))}
-        //         onChange={(e) => {
-        //             const status = e === `-1` ? undefined : (e as any);
-        //             extraParams.current.status = status;
-        //             onChange(
-        //                 {current: 1},
-        //                 {},
-        //                 {},
-        //                 {action: "paginate", currentDataSource: dataSource},
-        //             );
-        //         }}
-        //     />
+        //           }),
+        //       )}
+        //       onChange={(e) => {
+        //         const status = e === `-1` ? undefined : (e as any);
+        //         extraParams.current.main_status = status;
+        //         onChange(
+        //             { current: 1 },
+        //             {},
+        //             {},
+        //             { action: "paginate", currentDataSource: dataSource },
+        //         );
+        //       }}
+        //   />
         // }
+        // form={{
+        //   layout: "inline",
+        // }}
         // toolBarRender={() => [
-        //     <Button
-        //         hidden={!menu.getPermission()}
-        //         key={1}
-        //         onClick={() => {
-        //             modify.current?.create().then((result) => {
-        //                 message.success("新增成功");
-        //                 history.push({
-        //                     pathname: `/sales/sales-deliver/edit/${result.id}`,
-        //                 });
-        //             });
-        //         }}
-        //     >
-        //         新增
-        //     </Button>,
-        //     <Button
-        //         key="export"
-        //         hidden={!menu.getPermission({key: "export"})}
-        //         loading={exporting.whether}
-        //         onClick={async () => {
-        //             try {
-        //                 exporting.setTrue();
-        //                 const data = await salesDeliverExport({
-        //                     ...params,
-        //                     ...extraParams.current,
-        //                 });
-        //                 window.open(data.data.file_path);
-        //             } finally {
-        //                 exporting.setFalse();
-        //             }
-        //         }}
-        //     >
-        //         导出
-        //     </Button>,
+        //   <Button
+        //       hidden={!menu.getPermission()}
+        //       key={1}
+        //       onClick={() => {
+        //         modify.current?.create().then((result) => {
+        //           message.success("新增成功");
+        //           history.push({
+        //             pathname: `/inventory/out-stock/edit/${result.id}`,
+        //           });
+        //         });
+        //       }}
+        //   >
+        //     新增
+        //   </Button>,
+        //   <Button
+        //       key="export"
+        //       hidden={!menu.getPermission({ key: "export" })}
+        //       loading={exporting.whether}
+        //       onClick={async () => {
+        //         try {
+        //           exporting.setTrue();
+        //           const data = await outStockExport({
+        //             ...params,
+        //             ...extraParams.current,
+        //           });
+        //           window.open(data.data.file_path);
+        //         } finally {
+        //           exporting.setFalse();
+        //         }
+        //       }}
+        //   >
+        //     导出
+        //   </Button>,
         // ]}
       />
     </PageWrapper>
   );
 }
 
-export default styled(SalesDeliver)``;
+export default styled(OutStock)``;

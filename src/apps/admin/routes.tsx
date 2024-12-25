@@ -1,4 +1,4 @@
-import { Route, BrowserRouter, MemoryRouter, Routes } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import React, { lazy, Suspense, useState } from "react";
 
 const Home = lazy(() => import("./pages/home"));
@@ -6,14 +6,14 @@ const Blank = lazy(() => import("src/framework/blank"));
 const UserInfo = lazy(() => import("./pages/user-info"));
 const OrganizationCompany = lazy(() => import("./pages/organization/company"));
 const OrganizationDepartment = lazy(
-  () => import("./pages/organization/department")
+  () => import("./pages/organization/department"),
 );
 const OrganizationStaff = lazy(() => import("./pages/organization/staff"));
 const OrganizationStaffCreate = lazy(
-  () => import("./pages/organization/staff/create")
+  () => import("./pages/organization/staff/create"),
 );
 const OrganizationStaffEdit = lazy(
-  () => import("./pages/organization/staff/edit")
+  () => import("./pages/organization/staff/edit"),
 );
 const OrganizationJob = lazy(() => import("./pages/organization/job"));
 const Page404 = lazy(() => import("src/framework/404"));
@@ -27,7 +27,7 @@ const CommonRoleEdit = lazy(() => import("./pages/common/role/detail"));
 const CommonMenu = lazy(() => import("./pages/common/menu"));
 const CommonMenuStaff = lazy(() => import("./pages/common/menu-staff"));
 const VisualizationArchitecture = lazy(
-  () => import("./pages/visualization/architecture")
+  () => import("./pages/visualization/architecture"),
 );
 const Client = lazy(() => import("./pages/client/client"));
 const ClientDetail = lazy(() => import("./pages/client/client/detail"));
@@ -36,10 +36,10 @@ const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
 const BusinessOpportunityDetail = lazy(
-  () => import("./pages/business-opportunity/detail")
+  () => import("./pages/business-opportunity/detail"),
 );
 const BusinessOpportunityEdit = lazy(
-  () => import("./pages/business-opportunity/edit")
+  () => import("./pages/business-opportunity/edit"),
 );
 
 /**
@@ -53,6 +53,20 @@ const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
 const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
 //销售退货
 const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
+
+/**
+ * 库存管理模块
+ */
+//入库单
+const InStock = lazy(() => import("./pages/inventory/in-stock"));
+//出库单
+const OutStock = lazy(() => import("./pages/inventory/out-stock"));
+//发货单
+const DeliverOrder = lazy(() => import("./pages/inventory/deliver-order"));
+//收货单
+const ReceiveOrder = lazy(() => import("./pages/inventory/receive-order"));
+//收货单
+const WarehouseLog = lazy(() => import("./pages/inventory/warehouse-log"));
 
 const Project = lazy(() => import("./pages/project"));
 const ProjectEdit = lazy(() => import("./pages/project/edit"));
@@ -119,6 +133,12 @@ export default function () {
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
+
+        <Route path="/inventory/in-stock" element={<InStock />} />
+        <Route path="/inventory/out-stock" element={<OutStock />} />
+        <Route path="/inventory/deliver-order" element={<DeliverOrder />} />
+        <Route path="/inventory/receive-order" element={<ReceiveOrder />} />
+        <Route path="/inventory/warehouse-log" element={<WarehouseLog />} />
 
         <Route path="/project/project" element={<Project />} />
         <Route path="/project/project/edit" element={<ProjectEdit />} />

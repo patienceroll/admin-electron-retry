@@ -20,9 +20,9 @@ import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
-  getSalesDeliverList,
-  salesDeliverStatus,
-} from "src/apps/admin/api/sales-deliver";
+  getReceiveOrderList,
+  receiveOrderStatus,
+} from "src/apps/admin/api/receive-order";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
@@ -31,8 +31,8 @@ import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 
-function SalesDeliver() {
-  const table = useSearchTable(getSalesDeliverList);
+function ReceiveOrder() {
+  const table = useSearchTable(getReceiveOrderList);
   const theme = useTheme();
 
   const [areaOption] = useOption(getAreaOption);
@@ -128,14 +128,14 @@ function SalesDeliver() {
     {
       title: "状态",
       dataIndex: "status",
-      valueEnum: salesDeliverStatus,
+      valueEnum: receiveOrderStatus,
     },
     {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
       width: 160,
-      // render: action<SalesDeliver>([
+      // render: action<ReceiveOrder>([
       //     {
       //         text: "打印",
       //         async onClick({ entity }) {
@@ -162,7 +162,7 @@ function SalesDeliver() {
       //                 title: "删除",
       //                 content: `确定删除${entity.name}?`,
       //                 submitting() {
-      //                     return deleteSalesDeliver({ id: entity.id }).then(() => {
+      //                     return deleteReceiveOrder({ id: entity.id }).then(() => {
       //                         message.success("删除成功");
       //                         reload();
       //                     });
@@ -174,7 +174,7 @@ function SalesDeliver() {
     },
   ]);
 
-  const columnState = useColumnState("salesDeliverList", column);
+  const columnState = useColumnState("receiveOrderList", column);
 
   useEffect(() => {
     table.reload();
@@ -303,7 +303,7 @@ function SalesDeliver() {
               <ProFormSelect<Area>
                 label="状态"
                 name="statuses"
-                options={Array.from(salesDeliverStatus.values())}
+                options={Array.from(receiveOrderStatus.values())}
                 fieldProps={{
                   fieldNames: { label: "text", value: "value" },
                   showSearch: true,
@@ -385,7 +385,7 @@ function SalesDeliver() {
         //         onClick={async () => {
         //             try {
         //                 exporting.setTrue();
-        //                 const data = await salesDeliverExport({
+        //                 const data = await receiveOrderExport({
         //                     ...params,
         //                     ...extraParams.current,
         //                 });
@@ -403,4 +403,4 @@ function SalesDeliver() {
   );
 }
 
-export default styled(SalesDeliver)``;
+export default styled(ReceiveOrder)``;
