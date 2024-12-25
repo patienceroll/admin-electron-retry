@@ -7,16 +7,7 @@ import {
   ProTable,
 } from "@ant-design/pro-components/es";
 import { useTheme } from "styled-components";
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  message,
-  Row,
-  Space,
-  Typography,
-} from "antd";
+import { Button, Card, Col, message, Row, Space, Typography } from "antd";
 import useSearchTable from "src/hooks/use-search-table";
 import PageWrapper from "src/framework/component/page-wrapper";
 import { BusinessOpportunityStatus } from "../../api/business-opportunity";
@@ -31,18 +22,18 @@ import { watherMap } from "../../api/general";
 import { deleteProject, getProjectList } from "../../api/project";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
-import * as ProjectDetail from "./components/project-detail";
+import * as ProjectIntroduction from "./components/introduction";
 
 import usePageTableHeight from "src/hooks/use-page-table-height";
 
 export default function () {
-   const projectRef = ProjectDetail.createRef();
+  const projectRef = ProjectIntroduction.createRef();
   const table = useSearchTable(getProjectList);
   const theme = useTheme();
 
-   const { addAElement, height } = usePageTableHeight(
-      theme.padding * 2 + theme.margin
-    );
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin,
+  );
   const [area] = useOption(getAreaOption);
   const column = table.column([
     {
@@ -54,7 +45,7 @@ export default function () {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show
+              "业务机会详情 - " + record.name_show,
             );
           }}
         >
@@ -125,7 +116,7 @@ export default function () {
       title: "操作",
       dataIndex: "action",
       fixed: "right",
-      width: 160,
+      width: 400,
       render(_, row) {
         return (
           <Space>
@@ -134,7 +125,7 @@ export default function () {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/project/project/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -173,7 +164,7 @@ export default function () {
               type="text"
               danger
               onClick={function () {
-                projectRef.current?.show()
+                projectRef.current?.show(row.id);
               }}
             >
               简介
@@ -191,82 +182,83 @@ export default function () {
   }, []);
   return (
     <PageWrapper>
-       <Card bordered
-       ref={(div) => {
-        if (div) addAElement(div);
-      }}
-       >
-          <Search>
-            <Row gutter={[theme.padding, theme.padding]}>
-              <Col flex="300px">
-                <ProFormText
-                  label="关键词"
-                  name="keyword"
-                  placeholder="按业务机会/编号搜索"
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect<Area>
-                  label="区域"
-                  name="area_ids"
-                  options={area.list}
-                  fieldProps={{
-                    fieldNames: { label: "name", value: "id" },
-                    showSearch: true,
-                    filterOption: true,
-                    optionFilterProp: "name",
-                    mode: "multiple",
-                  }}
-                />
-              </Col>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
+        <Search>
+          <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="300px">
+              <ProFormText
+                label="关键词"
+                name="keyword"
+                placeholder="按业务机会/编号搜索"
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect<Area>
+                label="区域"
+                name="area_ids"
+                options={area.list}
+                fieldProps={{
+                  fieldNames: { label: "name", value: "id" },
+                  showSearch: true,
+                  filterOption: true,
+                  optionFilterProp: "name",
+                  mode: "multiple",
+                }}
+              />
+            </Col>
 
-              <Col flex="200px">
-                <ProFormCheckbox.Group
-                  name="is_importance"
-                  label="是否重点"
-                  options={Array.from(watherMap.values()).map((item) => ({
-                    label: item.text,
-                    value: item.value,
-                  }))}
-                />
-              </Col>
-              <Col flex="300px">
-                <ProFormSelect<Area>
-                  label="状态"
-                  name="statuses"
-                  options={Array.from(BusinessOpportunityStatus.values())}
-                  fieldProps={{
-                    fieldNames: { label: "text", value: "value" },
-                    showSearch: true,
-                    filterOption: true,
-                    optionFilterProp: "name",
-                    mode: "multiple",
-                  }}
-                />
-              </Col>
-              <Col flex="450px">
-                <ProForm.Item
-                  label="行政区"
-                  name="region"
-                  transform={({ province, city, county }) => ({
-                    province,
-                    city,
-                    county,
-                  })}
-                >
-                  <AddressFormSearch />
-                </ProForm.Item>
-              </Col>
-              <Col flex="300px">
-                <SearchAction
-                  loading={table.loading}
-                  onReset={table.onReset}
-                  onFinish={table.onFinish}
-                />
-              </Col>
-            </Row>
-          </Search>
-        </Card>
+            <Col flex="200px">
+              <ProFormCheckbox.Group
+                name="is_importance"
+                label="是否重点"
+                options={Array.from(watherMap.values()).map((item) => ({
+                  label: item.text,
+                  value: item.value,
+                }))}
+              />
+            </Col>
+            <Col flex="300px">
+              <ProFormSelect<Area>
+                label="状态"
+                name="statuses"
+                options={Array.from(BusinessOpportunityStatus.values())}
+                fieldProps={{
+                  fieldNames: { label: "text", value: "value" },
+                  showSearch: true,
+                  filterOption: true,
+                  optionFilterProp: "name",
+                  mode: "multiple",
+                }}
+              />
+            </Col>
+            <Col flex="450px">
+              <ProForm.Item
+                label="行政区"
+                name="region"
+                transform={({ province, city, county }) => ({
+                  province,
+                  city,
+                  county,
+                })}
+              >
+                <AddressFormSearch />
+              </ProForm.Item>
+            </Col>
+            <Col flex="300px">
+              <SearchAction
+                loading={table.loading}
+                onReset={table.onReset}
+                onFinish={table.onFinish}
+              />
+            </Col>
+          </Row>
+        </Search>
+      </Card>
       <ProTable
         rowKey="id"
         style={{ marginTop: theme.margin }}
@@ -288,7 +280,7 @@ export default function () {
           },
         }}
       />
-       <ProjectDetail.default ref={projectRef} />
+      <ProjectIntroduction.default ref={projectRef} />
     </PageWrapper>
   );
 }
