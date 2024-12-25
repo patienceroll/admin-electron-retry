@@ -15,9 +15,9 @@ import Icon from "src/framework/component/icon";
 import closeSvg from "src/assets/svg/close.svg";
 
 import {
-  login as loginApi,
   getUser,
   getUsersMenu,
+  login as loginApi,
 } from "src/apps/admin/api/login";
 
 import images from "src/assets/images";
@@ -139,7 +139,7 @@ function Login(props: StyledWrapComponents) {
 
       <Modal
         open={open.whether}
-        title="请选择入职公司"
+        title="请选择任职公司"
         closable={false}
         footer={null}
       >
@@ -181,6 +181,7 @@ export default styled(Login)`
     flex: 1;
     height: 100%;
     position: relative;
+
     img {
       width: 100%;
       height: 100%;
@@ -204,6 +205,7 @@ export default styled(Login)`
     right: ${(props) => props.theme.padding}px;
     top: ${(props) => props.theme.padding}px;
     cursor: pointer;
+
     &:hover {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
     }

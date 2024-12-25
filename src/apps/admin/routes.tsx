@@ -67,6 +67,10 @@ const DeliverOrder = lazy(() => import("./pages/inventory/deliver-order"));
 const ReceiveOrder = lazy(() => import("./pages/inventory/receive-order"));
 //收货单
 const WarehouseLog = lazy(() => import("./pages/inventory/warehouse-log"));
+//盘点单
+const StockCheck = lazy(() => import("./pages/inventory/stock-check"));
+//调拨单
+const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
 
 const Project = lazy(() => import("./pages/project"));
 const ProjectEdit = lazy(() => import("./pages/project/edit"));
@@ -139,6 +143,8 @@ export default function () {
         <Route path="/inventory/deliver-order" element={<DeliverOrder />} />
         <Route path="/inventory/receive-order" element={<ReceiveOrder />} />
         <Route path="/inventory/warehouse-log" element={<WarehouseLog />} />
+        <Route path="/inventory/stock-check" element={<StockCheck />} />
+        <Route path="/inventory/stock-allot" element={<StockAllot />} />
 
         <Route path="/project/project" element={<Project />} />
         <Route path="/project/project/edit" element={<ProjectEdit />} />
