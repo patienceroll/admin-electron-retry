@@ -75,7 +75,7 @@ export default function useTableColumnState<T>(
     const start = useRef(0);
     const th = useRef<HTMLTableCellElement>(null);
 
-    if(!columnData) return null
+    if (!columnData) return <th {...rest} ref={th} />;
 
     return (
       /** @ts-ignore */
@@ -109,7 +109,6 @@ export default function useTableColumnState<T>(
       </Resizable>
     );
   }
-
 
   return {
     onChange,

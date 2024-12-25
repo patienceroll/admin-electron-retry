@@ -64,7 +64,7 @@ type BusinessOpportunity = {
   win_bid_amount: string;
 
   /** 重点项目;0:否,1:是 */
-  is_importance: number;
+  is_importance: 0|1;
 
   /** 行业 */
   trade: string;
@@ -145,6 +145,8 @@ type BusinessOpportunity = {
 
     /** 扩展字段 1 */
     avatar_path: string;
+    created_at: string;
+    updated_at: string;
   } | null;
 
   /**

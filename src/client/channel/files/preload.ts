@@ -6,5 +6,8 @@ export default function filesPreload(): FilesPreload {
     previewFile(url) {
       return ipcRenderer.invoke("previewFile", url);
     },
+    downloadFile(url) {
+      return ipcRenderer.invoke("downloadFile", url);
+    },
   };
 }

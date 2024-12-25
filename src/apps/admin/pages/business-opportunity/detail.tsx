@@ -1,7 +1,8 @@
 import styled, { useTheme } from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Col, Row, Tag, Typography, Anchor } from "antd";
+import { Col, Row, Tag, Typography, Anchor, Timeline, Rate } from "antd";
+import { ProTable } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
@@ -11,6 +12,15 @@ import {
 } from "src/apps/admin/api/business-opportunity";
 import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
+import { watherMap } from "src/apps/admin/api/general";
+import useSearchTable, { tableColumn } from "src/hooks/use-search-table";
+import { clientTypeMap, getClientList } from "src/apps/admin/api/client";
+import useOption from "src/hooks/use-option";
+import {
+  getProjectFollowOption,
+  projectFollowStatus,
+} from "src/apps/admin/api/project-follow";
+import File from "./components/file";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -21,6 +31,50 @@ function Detail(props: StyledWrapComponents) {
   const [detail, setDetail] = useState<BusinessOpportunity>();
 
   const theme = useTheme();
+  const table = useSearchTable(getClientList);
+  const [projectFollow] = useOption(getProjectFollowOption);
+  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
+
+  const column = table.column([
+    {
+      title: "单位",
+      dataIndex: "name",
+    },
+    {
+      title: "类型",
+      dataIndex: "type",
+      valueEnum: clientTypeMap,
+    },
+    {
+      title: "性质",
+      dataIndex: "nature",
+    },
+    {
+      title: "地址",
+      dataIndex: "address",
+      ellipsis: true,
+    },
+  ]);
+
+  const expandColumn = tableColumn<NonNullable<Client["contact"]>[number]>([
+    { title: "联系人", dataIndex: "name" },
+    {
+      title: "职位",
+      dataIndex: "job_title",
+    },
+    {
+      title: "手机",
+      dataIndex: "phone",
+    },
+    {
+      title: "微信",
+      dataIndex: "wechat",
+    },
+    {
+      title: "身份证",
+      dataIndex: "ID_card",
+    },
+  ]);
 
   const getDetail = useCallback(
     function () {
@@ -34,6 +88,14 @@ function Detail(props: StyledWrapComponents) {
   useEffect(() => {
     getDetail();
   }, [getDetail]);
+
+  useEffect(() => {
+    table.extraParams.current.business_opportunity_id = id;
+    table.reload();
+
+    projectFollow.params.business_opportunity_id = id;
+    projectFollow.loadOption();
+  }, []);
 
   return (
     <PageWrapper className={className}>
@@ -132,10 +194,165 @@ function Detail(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }} id="关键信息">
         关键信息
       </Title>
+
+      {detail && (
+        <Row
+          style={{ margin: theme.margin }}
+          gutter={[theme.padding, theme.padding]}
+        >
+          <Col flex="400px">
+            <InfoItem label="采预计购时间">{detail.purchase_date}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="机会价值">
+              {new Money(detail.estimated_amount).toCNY()}
+            </InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="是否重点">
+              <Tag color={watherMap.get(detail.is_importance)?.color}>
+                {watherMap.get(detail.is_importance)?.text}
+              </Tag>
+            </InfoItem>
+          </Col>
+        </Row>
+      )}
+
+      <Title style={{ marginTop: theme.margin }} id="附件信息">
+        附件信息
+      </Title>
+
+      {detail && (
+        <div style={{ marginTop: theme.margin }}>
+          <File id={id} files={detail["file"]["业务机会附件"]} />
+        </div>
+      )}
+
+      <Title style={{ marginTop: theme.margin }} id="跟进记录">
+        跟进记录
+      </Title>
+
+      {projectFollow.list.map((i) => (
+        <Timeline
+          key={i.id}
+          items={[
+            {
+              children: (
+                <>
+                  <p style={{ marginBottom: "0.5em" }}>
+                    跟进人：{i.staff?.name}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Tag color={projectFollowStatus.get(i.status)?.color}>
+                      {projectFollowStatus.get(i.status)?.text}
+                    </Tag>
+                  </p>
+                  <p style={{ marginBottom: "0.5em" }}>
+                    计划时间：{i.plan_start_time} ~ {i.plan_finish_time}
+                  </p>
+                  <p style={{ marginBottom: "0.5em" }}>内容：{i.content}</p>
+                  <p style={{ marginBottom: "0.5em" }}>
+                    跟进时间：{i.start_time} ~ {i.finish_time}
+                  </p>
+                  <p style={{ marginBottom: "0.5em" }}>成果：{i.result}</p>
+                  <p style={{ marginBottom: "0.5em" }}>问题反馈：{i.problem}</p>
+                  <p style={{ marginBottom: "0.5em" }}>
+                    点评人：{i.lead_staff?.name}
+                    &nbsp;&nbsp;&nbsp;&nbsp; 评分：
+                    <Rate disabled value={i.score} />
+                  </p>
+                  <p style={{ marginBottom: "0.5em" }}>
+                    点评内容：{i.evaluate}
+                  </p>
+                </>
+              ),
+            },
+          ]}
+        />
+      ))}
+
+      <Title style={{ marginTop: theme.margin }} id="单位及联系人">
+        单位及联系人
+      </Title>
+
+      <ProTable
+        rowKey="id"
+        style={{ marginTop: theme.margin }}
+        search={false}
+        loading={table.loading}
+        options={table.options}
+        dataSource={table.dataSource}
+        pagination={table.pagination}
+        onChange={table.onChange}
+        columns={column}
+        scroll={{
+          x: Math.max(
+            table.measureColumnWidth(expandColumn),
+            table.measureColumnWidth(column)
+          ),
+          y: "60vh",
+        }}
+        expandable={{
+          expandedRowKeys: expandedKeys,
+          onExpandedRowsChange(expandedKeys) {
+            setExpandedKeys([...expandedKeys]);
+          },
+          rowExpandable(row) {
+            return !!row.contact;
+          },
+          expandedRowRender(row) {
+            if (!row.contact) return null;
+            return (
+              <ProTable
+                search={false}
+                pagination={false}
+                options={false}
+                dataSource={row.contact}
+                columns={expandColumn}
+              />
+            );
+          },
+        }}
+      />
+
+      <Title style={{ marginTop: theme.margin }} id="系统信息">
+        系统信息
+      </Title>
+      {detail && (
+        <Row
+          style={{ marginTop: theme.margin }}
+          gutter={[theme.padding, theme.padding]}
+        >
+          <Col flex="400px">
+            <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="负责人"> {detail.staff?.name}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="创建时间">
+              {detail.created_user?.created_at}
+            </InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="更新时间">
+              {detail.created_user?.updated_at}
+            </InfoItem>
+          </Col>
+        </Row>
+      )}
+
       <Anchor
         className="anchor"
         replace
-        items={["基本信息", "详细信息", "关键信息"].map((item) => ({
+        items={[
+          "基本信息",
+          "详细信息",
+          "关键信息",
+          "附件信息",
+          "跟进记录",
+          "单位及联系人",
+          "系统信息",
+        ].map((item) => ({
           key: item,
           title: item,
           href: `#${item}`,

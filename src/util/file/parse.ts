@@ -1,4 +1,6 @@
-/** 解析url */
+/** 解析url
+ * filename 是包含后缀的,请注意
+ */
 export function parseUrlFile(url: string) {
   // 使用 URL 构造函数解析 URL
   const parsedUrl = new URL(url);
