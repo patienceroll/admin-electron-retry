@@ -90,12 +90,18 @@ const ProjectIntroduction = forwardRef<Ref, StyledWrapComponents>(
               <div>{info?.address}</div>
             </div>
             <div className="introduction-list-item">
+              <div>负责部门:</div>
+              <div>{info?.staff?.department?.name}</div>
+            </div>
+            <div className="introduction-list-item">
               <div>业务员:</div>
-              <div>{info?.staff?.name}</div>
+              <div>
+                {info?.staff?.name} {info?.staff?.phone}
+              </div>
             </div>
           </div>
         </div>
-        <div className="content">建筑内容：{info?.name}</div>
+        <div className="content">建筑内容：{info?.build_content}</div>
       </Modal>
     );
   },
