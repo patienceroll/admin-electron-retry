@@ -68,14 +68,15 @@ export default function useTableColumnState<T>(
 
   function tableHeaderCellRender(
     props: React.HtmlHTMLAttributes<HTMLTableCellElement> & {
-      columnData: ProColumns<any>;
+      columnData?: ProColumns<any>;
     }
   ) {
     const { columnData, ...rest } = props;
     const start = useRef(0);
     const th = useRef<HTMLTableCellElement>(null);
 
-    
+    if(!columnData) return null
+
     return (
       /** @ts-ignore */
       <Resizable
@@ -108,6 +109,7 @@ export default function useTableColumnState<T>(
       </Resizable>
     );
   }
+
 
   return {
     onChange,

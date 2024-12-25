@@ -224,6 +224,8 @@ function BusinessOpportunity() {
 
   const columnState = useColumnState("businessOpportunityList", column);
 
+
+
   useEffect(() => {
     table.reload();
     area.loadOption();
