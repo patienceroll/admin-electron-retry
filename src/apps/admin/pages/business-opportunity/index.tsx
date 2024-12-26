@@ -55,10 +55,29 @@ function BusinessOpportunity() {
       render: (_, record) => (
         <Typography.Link
           onClick={() => {
-            openWindow.openCurrentAppWindow(
+            const window = openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
               "业务机会详情 - " + record.name_show
             );
+
+            function listener(
+              event: MessageEvent<keyof BusinessOpportunity["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_approve",
+                  "is_submit",
+                  "is_invalid",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
           }}
         >
           {record.name}
@@ -223,8 +242,6 @@ function BusinessOpportunity() {
   ]);
 
   const columnState = useColumnState("businessOpportunityList", column);
-
-
 
   useEffect(() => {
     table.reload();

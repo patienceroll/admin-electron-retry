@@ -1,7 +1,11 @@
-import { getQiniuToken } from "src/apps/admin/api/qiniu-yun";
 import * as qiniu from "qiniu-js";
 import dayjs from "dayjs";
+import { UploadRequestOption } from "rc-upload/lib/interface";
+
 import contextedNotify from "src/framework/component/contexted-notify";
+import { getQiniuToken } from "src/apps/admin/api/qiniu-yun";
+import { onPrgress } from "src/util/file/upload";
+import { postFile } from "src/apps/admin/api/business-file";
 
 class QiniuYun {
   tokenProvider() {

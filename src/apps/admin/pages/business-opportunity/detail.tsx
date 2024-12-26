@@ -1,14 +1,33 @@
 import styled, { useTheme } from "styled-components";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
-import { Col, Row, Tag, Typography, Anchor, Timeline, Rate } from "antd";
+import {
+  Col,
+  Row,
+  Tag,
+  Typography,
+  Anchor,
+  Timeline,
+  Rate,
+  FloatButton,
+  Collapse,
+  Steps,
+  StepsProps,
+  Space,
+  Avatar,
+} from "antd";
 import { ProTable } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import Title from "src/framework/component/title";
 import {
+  approval,
+  billInvalid,
   BusinessOpportunityStatus,
+  cancelOperate,
   getBusinessOpportunity,
+  getOperateRecord,
+  startApproval,
 } from "src/apps/admin/api/business-opportunity";
 import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
@@ -17,10 +36,21 @@ import useSearchTable, { tableColumn } from "src/hooks/use-search-table";
 import { clientTypeMap, getClientList } from "src/apps/admin/api/client";
 import useOption from "src/hooks/use-option";
 import {
+  getApprovalRecord,
   getProjectFollowOption,
   projectFollowStatus,
 } from "src/apps/admin/api/project-follow";
 import File from "./components/file";
+import Icon from "src/framework/component/icon";
+import ApprovalSvg from "src/assets/svg/审批.svg";
+import LixiangSvg from "src/assets/svg/立项.svg";
+import ZuofeiSvg from "src/assets/svg/作废.svg";
+import CancelSvg from "src/assets/svg/撤销.svg";
+import getApproval from "src/b-hooks/get-approval";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import DefaultAvatar from "src/assets/svg/默认头像.svg";
+import OperateRecord from "src/b-components/operate-record";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -29,6 +59,9 @@ function Detail(props: StyledWrapComponents) {
   const id = search.get("id")! as unknown as BusinessOpportunity["id"];
 
   const [detail, setDetail] = useState<BusinessOpportunity>();
+
+  const [approvalData, setApprovalData] = useState<ApprovalRecord[]>([]);
+  const [activeKes, setActiveKeys] = useState<(string | number)[]>([]);
 
   const theme = useTheme();
   const table = useSearchTable(getClientList);
@@ -85,6 +118,13 @@ function Detail(props: StyledWrapComponents) {
     [id]
   );
 
+  const _getApprovalRecord = useCallback(
+    function () {
+      getApprovalRecord({ id }).then((res) => setApprovalData(res.data));
+    },
+    [id]
+  );
+
   useEffect(() => {
     getDetail();
   }, [getDetail]);
@@ -95,11 +135,13 @@ function Detail(props: StyledWrapComponents) {
 
     projectFollow.params.business_opportunity_id = id;
     projectFollow.loadOption();
+    _getApprovalRecord();
   }, []);
 
   return (
     <PageWrapper className={className}>
       <Title id="基本信息">基本信息</Title>
+
       {detail && (
         <Row
           style={{ marginTop: theme.margin }}
@@ -140,6 +182,13 @@ function Detail(props: StyledWrapComponents) {
           </Col>
           <Col flex="400px">
             <InfoItem label="资金来源"> {detail.capital_source}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="审批中">
+              <Tag color={watherMap.get(detail.is_importance)?.color}>
+                {watherMap.get(detail.is_importance)?.text}
+              </Tag>
+            </InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="状态">
@@ -314,6 +363,106 @@ function Detail(props: StyledWrapComponents) {
         }}
       />
 
+      <Title style={{ marginTop: theme.margin }} id="审批记录">
+        审批记录
+      </Title>
+
+      <Collapse
+        activeKey={activeKes}
+        style={{ marginTop: theme.margin }}
+        onChange={(keys) => {
+          if (keys instanceof Array) setActiveKeys(keys);
+        }}
+        items={approvalData.map((i) => ({
+          key: i.id,
+          label: i.approval?.name,
+          extra: {
+            0: <Tag color="warning">待审批</Tag>,
+            1: <Tag color="processing">审批中</Tag>,
+            2: <Tag color="success">已通过</Tag>,
+            3: <Tag color="error">未通过</Tag>,
+          }[i.status],
+          children: (
+            <Steps
+              direction="vertical"
+              items={i.record.map((record) => ({
+                status: {
+                  0: "finish",
+                  1: "wait",
+                  2: "process",
+                  3: "finish",
+                  4: "error",
+                  5: "wait",
+                  6: "wait",
+                }[record.status] as StepsProps["status"],
+                title: (
+                  <Space>
+                    <Avatar
+                      src={
+                        record.staff?.avatar_path || (
+                          <Icon
+                            width={theme.Avatar?.containerSize}
+                            height={theme.Avatar?.containerSize}
+                            icon={DefaultAvatar}
+                          />
+                        )
+                      }
+                    />
+                    <span>{record.staff?.name}</span>
+                  </Space>
+                ),
+                subTitle: record.staff?.job?.name,
+                description: (
+                  <>
+                    <Space style={{ marginTop: theme.padding / 2 }}>
+                      {
+                        {
+                          0: <Tag color="pink">发起</Tag>,
+                          1: (
+                            <Tag color="rgba(141, 126, 126, 0.45)">未审批</Tag>
+                          ),
+                          2: <Tag color="processing">待审批</Tag>,
+                          3: <Tag color="success">已通过</Tag>,
+                          4: <Tag color="error">未通过</Tag>,
+                          5: <Tag color="rgba(0, 0, 0, 0.45)">无效</Tag>,
+                          6: <Tag color="rgba(0, 0, 0, 0.45)">撤销</Tag>,
+                        }[record.status]
+                      }
+                      <span>{record.happen_time}</span>
+                    </Space>
+                    <div>{record.remark}</div>
+                    {record.file.map((file) => (
+                      <Space key={file.id}>
+                        <Typography.Link
+                          key={file.id}
+                          onClick={() => {
+                            window.preload.previewFile(file.full_path);
+                          }}
+                        >
+                          {file.name}
+                        </Typography.Link>
+                        <Typography.Link
+                          onClick={() => {
+                            window.preload.downloadFile(file.full_path);
+                          }}
+                        >
+                          下载
+                        </Typography.Link>
+                      </Space>
+                    ))}
+                  </>
+                ),
+              }))}
+            />
+          ),
+        }))}
+      />
+
+      <Title style={{ marginTop: theme.margin }} id="操作记录">
+        操作记录
+      </Title>
+
+      <OperateRecord id={id} recordApi={getOperateRecord} />
       <Title style={{ marginTop: theme.margin }} id="系统信息">
         系统信息
       </Title>
@@ -341,9 +490,94 @@ function Detail(props: StyledWrapComponents) {
         </Row>
       )}
 
+      {detail && (
+        <FloatButton.Group shape="square">
+          {detail.btn_power.is_approve && (
+            <FloatButton
+              tooltip="审批"
+              icon={<Icon icon={ApprovalSvg} />}
+              description="审批"
+              onClick={() => {
+                getApproval()
+                  .then((result) => approval({ ...result, id }))
+                  .then(() => {
+                    contextedMessage.message?.success("成功审批");
+                    getDetail();
+                    window.parent.postMessage("is_approve");
+                    _getApprovalRecord();
+                  });
+              }}
+            />
+          )}
+
+          {detail.btn_power.is_submit && (
+            <FloatButton
+              tooltip="立项"
+              icon={<Icon icon={LixiangSvg} />}
+              description="立项"
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "立项",
+                  content: "发起立项审批后将无法修改，确认提交吗?",
+                  onOk() {
+                    return startApproval({ id }).then(() => {
+                      contextedMessage.message?.success("成功发起立项申请");
+                      getDetail();
+                      window.parent.postMessage("is_submit");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+
+          {detail.btn_power.is_invalid && (
+            <FloatButton
+              tooltip="作废"
+              icon={<Icon icon={ZuofeiSvg} fill={theme.colorError} />}
+              description="作废"
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "作废",
+                  content: "此业务机会将会作废，你确定要作废吗？",
+                  onOk() {
+                    return billInvalid({ id }).then(() => {
+                      contextedMessage.message?.success("成功作废");
+                      getDetail();
+                      window.parent.postMessage("is_invalid");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_cancel_operate && (
+            <FloatButton
+              tooltip="撤销"
+              icon={<Icon icon={CancelSvg} fill={theme.colorWarning} />}
+              description="撤销"
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "撤销",
+                  content: "撤销后将回到原状态，确认提交吗?",
+                  onOk() {
+                    return cancelOperate({ id }).then(() => {
+                      contextedMessage.message?.success("成功撤销");
+                      getDetail();
+                      window.parent.postMessage("is_cancel_operate");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+        </FloatButton.Group>
+      )}
+
       <Anchor
         className="anchor"
         replace
+        offsetTop={theme.padding}
         items={[
           "基本信息",
           "详细信息",
@@ -351,6 +585,8 @@ function Detail(props: StyledWrapComponents) {
           "附件信息",
           "跟进记录",
           "单位及联系人",
+          "审批记录",
+          "操作记录",
           "系统信息",
         ].map((item) => ({
           key: item,
@@ -367,7 +603,7 @@ export default styled(Detail)`
 
   .anchor {
     position: fixed;
-    top: 50%;
+    top: 20%;
     right: 50px;
     transform: translateY(-50%);
   }

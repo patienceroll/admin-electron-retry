@@ -24,7 +24,7 @@ function Detail(props: StyledWrapComponents) {
   const { className } = props;
   const params = useLocation();
   const search = new URLSearchParams(params.search);
-  const id = search.get("id")!;
+  const id = search.get("id")! as unknown as Client["id"];
 
   const theme = useTheme();
   const concat = useSearchTable(getClientContactList);
@@ -32,7 +32,7 @@ function Detail(props: StyledWrapComponents) {
   const saleContact = useSearchTable(getSalesContractList);
   const saleOrder = useSearchTable(getSalesOrderList);
   const saleDeliver = useSearchTable(getSalesDeliverList);
-  const saleReturn = useSearchTable(getSalesReturnList)
+  const saleReturn = useSearchTable(getSalesReturnList);
 
   const [detail, setDetail] = useState<Client>();
 
@@ -67,9 +67,7 @@ function Detail(props: StyledWrapComponents) {
     saleReturn.reload();
   }, []);
 
-  const column = tableColumn<
-    NonNullable<SalesContract["detail"]>[number]
-  >([
+  const column = tableColumn<NonNullable<SalesContract["detail"]>[number]>([
     {
       title: "物资",
       dataIndex: "material",
@@ -453,6 +451,7 @@ function Detail(props: StyledWrapComponents) {
       <Anchor
         className="anchor"
         replace
+        offsetTop={theme.padding}
         items={[
           "基本信息",
           "联系人",

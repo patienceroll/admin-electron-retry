@@ -64,7 +64,7 @@ type BusinessOpportunity = {
   win_bid_amount: string;
 
   /** 重点项目;0:否,1:是 */
-  is_importance: 0|1;
+  is_importance: 0 | 1;
 
   /** 行业 */
   trade: string;
@@ -113,7 +113,16 @@ type BusinessOpportunity = {
    * is_delete : 0|1;
    * is_move : 0|1;
    */
-  btn_power: { is_edit: 0 | 1; is_delete: 0 | 1; is_move: 0 | 1 };
+  btn_power: {
+    is_edit: 0 | 1;
+    is_delete: 0 | 1;
+    is_enable: 0 | 1;
+    is_submit: 0 | 1;
+    is_approve: 0 | 1;
+    is_move: 0 | 1;
+    is_invalid: 0 | 1;
+    is_cancel_operate: 0 | 1;
+  };
 
   /** 扩展字段 1 */
   is_importance_show: string;
@@ -187,7 +196,6 @@ type BusinessOpportunity = {
   } | null;
   file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
 };
-
 
 /** 新增项目后返回的数据 */
 type BusinessOpportunityAddResponse = Pick<
