@@ -300,7 +300,7 @@ function ReceiveOrder() {
               />
             </Col>
             <Col flex="240px">
-              <ProFormSelect<Area>
+              <ProFormSelect
                 label="状态"
                 name="statuses"
                 options={Array.from(receiveOrderStatus.values())}

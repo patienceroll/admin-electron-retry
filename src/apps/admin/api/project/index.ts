@@ -1,9 +1,21 @@
 import fetch from "src/util/fetch";
 
+export const ProjectStatusMap = new Map<
+  ProjectStatus,
+  EnumValue<ProjectStatus>
+>([
+  [0, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [1, { value: 1, color: "#faad14", text: "待签约" }],
+  [2, { value: 2, color: "#4ff7cf", text: "履约中" }],
+  [3, { value: 3, color: "#52c41a", text: "已完结" }],
+  [4, { value: 4, color: "#001529", text: "已中止" }],
+  [5, { value: 5, color: "rgb(156,156,148)", text: "已放弃" }],
+]);
+
 /**
  * 项目-列表
  */
-export function getProjectList(params: ListParam & {}) {
+export function getProjectList(params: ListParam & { status?: ProjectStatus }) {
   return fetch.GET<List<Project>>(fetch.base(`/api/project/list`), params);
 }
 
@@ -74,7 +86,7 @@ export function getProjectStatistics() {
  * 生成合同编号 */
 export const getProjectCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/project/code"),
+    fetch.base("/api/project/code")
   );
 };
 
@@ -84,7 +96,7 @@ export const getProjectCode = () => {
 export function addProjectUnit(params: any) {
   return fetch.POST<ProjectUnitAddResponse>(
     fetch.base(`/api/project-unit`),
-    params,
+    params
   );
 }
 
@@ -101,11 +113,11 @@ export function editProjectUnit(params: any) {
 export function getProjectUnitList(
   params: ListParam & {
     id: Project["id"];
-  },
+  }
 ) {
   return fetch.GET<List<ProjectUnit>>(
     fetch.base(`/api/project-unit/list`),
-    params,
+    params
   );
 }
 
@@ -145,7 +157,7 @@ export function cancel(params: Pick<Project, "id">) {
 export function getApprovalRecord(params: Pick<Project, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/project/approval-record`),
-    params,
+    params
   );
 }
 

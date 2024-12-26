@@ -20,7 +20,7 @@ import AddressFormInput from "src/framework/component/address-form-input";
 import { editProject, getProject } from "src/apps/admin/api/project";
 import Icon from "src/framework/component/icon";
 import SaveSvg from "src/assets/svg/保存.svg";
-import { getProjectStatusText } from "../../api/business-opportunity";
+import { getProjectStatusText } from "src/apps/admin/api/business-opportunity";
 import TextSelectInput from "src/framework/component/text-select-input";
 import EditConcatList from "../client/client/components/edit-concat-list";
 import useStaffTree from "src/b-hooks/use-staff-tree";

@@ -7,19 +7,23 @@ import {
   ProTable,
 } from "@ant-design/pro-components/es";
 import { useTheme } from "styled-components";
-import { Button, Card, Col, message, Row, Space, Typography } from "antd";
+import { Button, Card, Col, message, Row, Space, Tabs, Typography } from "antd";
+
 import useSearchTable from "src/hooks/use-search-table";
 import PageWrapper from "src/framework/component/page-wrapper";
-import { BusinessOpportunityStatus } from "../../api/business-opportunity";
 import useColumnState from "src/hooks/use-column-state";
 import openWindow from "src/util/open-window";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import useOption from "src/hooks/use-option";
-import { getAreaOption } from "../../api/sales-territory";
-import { watherMap } from "../../api/general";
-import { deleteProject, getProjectList } from "../../api/project";
+import { getAreaOption } from "src/apps/admin/api/sales-territory";
+import { watherMap } from "src/apps/admin/api/general";
+import {
+  deleteProject,
+  getProjectList,
+  ProjectStatusMap,
+} from "src/apps/admin/api/project";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 import * as ProjectIntroduction from "./components/introduction";
@@ -31,8 +35,9 @@ export default function () {
   const table = useSearchTable(getProjectList);
   const theme = useTheme();
 
+  // 14 是加了tab之后高度有变化
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin + 14
   );
   const [area] = useOption(getAreaOption);
   const column = table.column([
@@ -44,8 +49,8 @@ export default function () {
         <Typography.Link
           onClick={() => {
             openWindow.openCurrentAppWindow(
-              `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show,
+              `/project/project/detail?id=${record.id}`,
+              "项目详情 - " + record.name_show
             );
           }}
         >
@@ -125,7 +130,7 @@ export default function () {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/project/project/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -222,21 +227,8 @@ export default function () {
                 }))}
               />
             </Col>
-            <Col flex="300px">
-              <ProFormSelect<Area>
-                label="状态"
-                name="statuses"
-                options={Array.from(BusinessOpportunityStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
-            <Col flex="450px">
+
+            <Col flex="550px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -279,6 +271,23 @@ export default function () {
             cell: columnState.tableHeaderCellRender,
           },
         }}
+        headerTitle={
+          <Tabs
+            items={[{ value: -1, text: "全部" }]
+              .concat(Array.from(ProjectStatusMap.values()))
+              .map((i) => ({
+                key: `${i.value}`,
+                label: i.text,
+              }))}
+            onChange={(e) => {
+              const status =
+                e === `-1` ? undefined : (e as unknown as ProjectStatus);
+              table.extraParams.current.status = status;
+              table.params.current.page = 1;
+              table.reload();
+            }}
+          />
+        }
       />
       <ProjectIntroduction.default ref={projectRef} />
     </PageWrapper>
