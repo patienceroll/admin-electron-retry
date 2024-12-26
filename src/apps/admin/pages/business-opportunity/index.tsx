@@ -1,6 +1,15 @@
 import styled, { useTheme } from "styled-components";
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProForm,
   ProFormCheckbox,
@@ -39,7 +48,7 @@ function BusinessOpportunity() {
   const theme = useTheme();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin
+    theme.padding * 2 + theme.margin + 14
   );
 
   const create = Create.createRef();
@@ -302,20 +311,7 @@ function BusinessOpportunity() {
                 }))}
               />
             </Col>
-            <Col flex="240px">
-              <ProFormSelect
-                label="状态"
-                name="statuses"
-                options={Array.from(BusinessOpportunityStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
+
             <Col flex="80px">
               <SearchAction
                 loading={table.loading}
@@ -346,6 +342,25 @@ function BusinessOpportunity() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
+        headerTitle={
+          <Tabs
+            items={[{ value: -1, text: "全部" }]
+              .concat(Array.from(BusinessOpportunityStatus.values()))
+              .map((i) => ({
+                key: `${i.value}`,
+                label: i.text,
+              }))}
+            onChange={(e) => {
+              const status =
+                e === `-1`
+                  ? undefined
+                  : (e as unknown as BusinessOpportunity["status"]);
+              table.extraParams.current.status = status;
+              table.params.current.page = 1;
+              table.reload();
+            }}
+          />
+        }
       />
 
       <FloatButton.Group shape="square">

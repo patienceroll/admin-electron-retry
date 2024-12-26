@@ -14,7 +14,9 @@ export const BusinessOpportunityStatus = new Map<
 /**
  * 项目-列表
  * */
-export function getBusinessOpportunityList(params: ListParam & {}) {
+export function getBusinessOpportunityList(
+  params: ListParam & { status?: BusinessOpportunity["status"] }
+) {
   return fetch.GET<List<BusinessOpportunity>>(
     fetch.base(`/api/business-opportunity/list`),
     params
