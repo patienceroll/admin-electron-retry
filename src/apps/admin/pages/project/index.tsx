@@ -26,12 +26,11 @@ import {
 } from "src/apps/admin/api/project";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
-import * as ProjectIntroduction from "./components/introduction";
 
 import usePageTableHeight from "src/hooks/use-page-table-height";
+import ProjectIntroduction from "src/b-components/project-introduction";
 
 export default function () {
-  const projectRef = ProjectIntroduction.createRef();
   const table = useSearchTable(getProjectList);
   const theme = useTheme();
 
@@ -57,6 +56,23 @@ export default function () {
           {record.name}
         </Typography.Link>
       ),
+    },
+    {
+      title: "简介",
+      dataIndex: "intro",
+      render(dom, entity) {
+        return <ProjectIntroduction id={entity.id}>简介</ProjectIntroduction>;
+      },
+    },
+    {
+      title: "重点项目",
+      dataIndex: "is_importance",
+      valueEnum: watherMap,
+    },
+    {
+      title: "审批中",
+      dataIndex: "is_approve",
+      valueEnum: watherMap,
     },
     {
       title: "类别",
@@ -121,7 +137,7 @@ export default function () {
       title: "操作",
       dataIndex: "action",
       fixed: "right",
-      width: 400,
+      width: 200,
       render(_, row) {
         return (
           <Space>
@@ -165,21 +181,12 @@ export default function () {
             >
               删除
             </Button>
-            <Button
-              type="text"
-              danger
-              onClick={function () {
-                projectRef.current?.show(row.id);
-              }}
-            >
-              简介
-            </Button>
           </Space>
         );
       },
     },
   ]);
-  const columnState = useColumnState("businessOpportunityList", column);
+  const columnState = useColumnState("projectList", column);
 
   useEffect(() => {
     table.reload();
@@ -289,7 +296,6 @@ export default function () {
           />
         }
       />
-      <ProjectIntroduction.default ref={projectRef} />
     </PageWrapper>
   );
 }

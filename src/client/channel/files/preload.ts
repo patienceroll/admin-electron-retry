@@ -9,5 +9,8 @@ export default function filesPreload(): FilesPreload {
     downloadFile(url) {
       return ipcRenderer.invoke("downloadFile", url);
     },
+    printFile(url) {
+      return ipcRenderer.invoke("printFile", url);
+    },
   };
 }

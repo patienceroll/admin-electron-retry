@@ -210,7 +210,7 @@ function SalesReturn() {
               />
             </Col>
             <Col flex="240px">
-              <ProFormSelect
+              <ProFormSelect<Area>
                 label="区域"
                 name="area_ids"
                 options={areaOption.list}

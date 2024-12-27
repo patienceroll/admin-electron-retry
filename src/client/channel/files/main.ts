@@ -6,6 +6,7 @@ import path from "path";
 
 import Framework from "src/client/main/framework";
 import { formatFileSize, parseUrlFile } from "src/util/file/parse";
+import { exec } from "child_process";
 
 function get(url: string) {
   return new Promise<http.IncomingMessage>((resolve, reject) => {
@@ -108,6 +109,30 @@ export default function filesMain(options: { framework: Framework }) {
       await promisifyStream(fileStream);
     } catch (err: any) {
       throw new Error(err.message);
+    }
+  });
+
+  ipcMain.handle("printFile", async function (event, url: string) {
+    const { filename } = parseUrlFile(url);
+    const tempPath = path.resolve(app.getPath("temp"), app.getName());
+    if (!fs.existsSync(tempPath)) {
+      fs.mkdirSync(tempPath);
+    }
+    const tempFileName = path.resolve(tempPath, `${filename}`);
+
+    const response = await get(url);
+    const fileStream = fs.createWriteStream(tempFileName);
+    response.pipe(fileStream);
+    // 等待文件流完成
+    await promisifyStream(fileStream);
+
+    const printers = await event.sender.getPrintersAsync();
+    const printer = printers[3];
+    debugger;
+    if (printer) {
+      exec(`print /d:"${printer.name}" "${tempFileName}"`,function (err,std,stderr){
+        debugger;
+      } );
     }
   });
 }

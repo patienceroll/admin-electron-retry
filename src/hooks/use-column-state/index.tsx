@@ -13,14 +13,22 @@ export default function useTableColumnState<T>(
 ) {
   const [data, setData] = useState<DexiedColumnState>();
 
-  function generateDexiedColumnState() {
+  function generateDexiedColumnState(oldState?: DexiedColumnState) {
     const newState: DexiedColumnState["data"] = {};
+    const oldData = oldState?.data || {};
     column.forEach((item) => {
       if (typeof item.dataIndex === "string") {
-        newState[item.dataIndex] = {
-          width: typeof item.width === "number" ? item.width : undefined,
-          fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
-        };
+        const oldItem = oldData[item.dataIndex];
+        if (oldItem) {
+          newState[item.dataIndex] = {
+            ...oldItem,
+          };
+        } else {
+          newState[item.dataIndex] = {
+            width: typeof item.width === "number" ? item.width : undefined,
+            fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
+          };
+        }
       }
     });
     return newState;
@@ -33,15 +41,19 @@ export default function useTableColumnState<T>(
       .and((item) => item.app === app)
       .first()
       .then((result) => {
+        const newState = generateDexiedColumnState(result);
         if (!result) {
-          const newState = generateDexiedColumnState();
           db.columnStateTable
             .add({ app, tableName, data: newState })
             .then((id) => {
               setData({ id, data: newState, app, tableName });
             });
         } else {
-          setData(result);
+          db.columnStateTable
+            .update(result.id, { data: newState })
+            .then(() => {
+              setData({ ...result, data: newState });
+            });
         }
       });
   }, [app, tableName]);

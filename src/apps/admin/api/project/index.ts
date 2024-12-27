@@ -30,10 +30,10 @@ export function getProjectOption(params: {}) {
  * 项目-详情
  */
 export function getProject(params: Pick<SalesContract, "id">) {
-  return fetch.GET<Project>(fetch.base(`/api/project/detail`), params);
+  return fetch.GET<ProjectDetail>(fetch.base(`/api/project/detail`), params);
 }
 
-export function getProjectIntroduction(params: any) {
+export function getProjectIntroduction(params: { id: Project["id"] }) {
   return fetch.GET<Project>(fetch.base(`/api/project/introduction`), params);
 }
 

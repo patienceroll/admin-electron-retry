@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import styled, { useTheme } from "styled-components";
 import {
@@ -11,6 +11,7 @@ import {
   Card,
   DatePicker,
   TreeSelect,
+  Descriptions,
 } from "antd";
 import dayjs from "dayjs";
 
@@ -24,6 +25,7 @@ import { getProjectStatusText } from "src/apps/admin/api/business-opportunity";
 import TextSelectInput from "src/framework/component/text-select-input";
 import EditConcatList from "../client/client/components/edit-concat-list";
 import useStaffTree from "src/b-hooks/use-staff-tree";
+import File from "./components/file";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -31,7 +33,7 @@ function Edit(props: StyledWrapComponents) {
   const search = new URLSearchParams(params.search);
   const id = search.get("id")! as unknown as Client["id"];
 
-  const [detail, setDetail] = useState<Project>();
+  const [detail, setDetail] = useState<ProjectDetail>();
   const [statusSelectList, setStatusSelectList] = useState<string[]>([]);
   const { options, treeOptions } = useStaffTree();
   const [form] = Form.useForm();
@@ -274,6 +276,16 @@ function Edit(props: StyledWrapComponents) {
       </Form>
       <Title style={{ marginTop: theme.margin }}>联系人</Title>
       <EditConcatList id={id} />
+
+      <Title style={{ marginTop: theme.margin }}>相关信息</Title>
+
+      {detail && (
+        <Descriptions>
+          <Descriptions.Item label="工程概览">
+            <File identify="工程概览" id={id} files={detail.file["工程概览"]} />
+          </Descriptions.Item>
+        </Descriptions>
+      )}
 
       {detail && (
         <FloatButton

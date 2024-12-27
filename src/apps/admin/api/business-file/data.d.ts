@@ -47,7 +47,7 @@ type BusinessFileIdentify =
   | "库存出库"
   | "附件"
   | "图片"
-  | "项目附件";
+  | "项目附件" |"工程概览";
 
 type FileResponse = {
   created_at: string;

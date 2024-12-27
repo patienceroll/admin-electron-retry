@@ -29,7 +29,7 @@ function ProgressBar(props: StyledWrapComponents) {
   const [show] = useWather();
 
   const style = useSpring({
-    height: 3,
+    height: 2.5,
     width: `${width.current}%`,
     config: {
       tension: 250,

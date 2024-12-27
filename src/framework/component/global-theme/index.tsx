@@ -11,19 +11,19 @@ const GlobalStyle = createGlobalStyle`
 
  * {
     &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: ${(props) => props.theme.padding / 2}px;
+      height: ${(props) => props.theme.padding / 2}px;
     }
 
     &::-webkit-scrollbar-thumb {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
-      border-radius: 4px;
+      border-radius:  ${(props) => props.theme.padding / 4}px;
       opacity: 0.3;
     }
 
     &::-webkit-scrollbar-track {
       background-color: ${(props) => props.theme.colorPrimaryBg};
-      border-radius: 4px;
+      border-radius:  ${(props) => props.theme.padding / 4}px;
     }
 
     &::-webkit-scrollbar-button {
