@@ -127,12 +127,14 @@ export default function filesMain(options: { framework: Framework }) {
     await promisifyStream(fileStream);
 
     const printers = await event.sender.getPrintersAsync();
-    const printer = printers[3];
-    debugger;
+    const printer = printers[2];
+  
     if (printer) {
-      exec(`print /d:"${printer.name}" "${tempFileName}"`,function (err,std,stderr){
-        debugger;
-      } );
+      const cmd = `print /d:"${printer.name}" "${tempFileName}"`;
+      console.log(cmd);
+      // exec(cmd, function (err, std, stderr) {
+      //   console.log(std)
+      // });
     }
   });
 }
