@@ -128,7 +128,7 @@ export default function filesMain(options: { framework: Framework }) {
 
     const printers = await event.sender.getPrintersAsync();
     const printer = printers[2];
-  
+
     if (printer) {
       const cmd = `print /d:"${printer.name}" "${tempFileName}"`;
       console.log(cmd);

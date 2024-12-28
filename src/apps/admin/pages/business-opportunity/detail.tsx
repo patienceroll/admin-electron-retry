@@ -496,7 +496,6 @@ function Detail(props: StyledWrapComponents) {
             <FloatButton
               tooltip="审批"
               icon={<Icon icon={ApprovalSvg} />}
-              description="审批"
               onClick={() => {
                 getApproval()
                   .then((result) => approval({ ...result, id }))
@@ -514,7 +513,6 @@ function Detail(props: StyledWrapComponents) {
             <FloatButton
               tooltip="立项"
               icon={<Icon icon={LixiangSvg} />}
-              description="立项"
               onClick={() => {
                 contextedModal.modal?.confirm({
                   title: "立项",
@@ -535,7 +533,6 @@ function Detail(props: StyledWrapComponents) {
             <FloatButton
               tooltip="作废"
               icon={<Icon icon={ZuofeiSvg} fill={theme.colorError} />}
-              description="作废"
               onClick={() => {
                 contextedModal.modal?.confirm({
                   title: "作废",
@@ -555,7 +552,6 @@ function Detail(props: StyledWrapComponents) {
             <FloatButton
               tooltip="撤销"
               icon={<Icon icon={CancelSvg} fill={theme.colorWarning} />}
-              description="撤销"
               onClick={() => {
                 contextedModal.modal?.confirm({
                   title: "撤销",
