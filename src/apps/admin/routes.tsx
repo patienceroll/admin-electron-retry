@@ -74,6 +74,7 @@ const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
 
 const Project = lazy(() => import("./pages/project/project"));
 const ProjectEdit = lazy(() => import("./pages/project/project/edit"));
+const ProjectDetail = lazy(() => import("./pages/project/project/detail"));
 
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -148,6 +149,7 @@ export default function () {
 
         <Route path="/project/project" element={<Project />} />
         <Route path="/project/project/edit" element={<ProjectEdit />} />
+        <Route path="/project/project/detail" element={<ProjectDetail />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>

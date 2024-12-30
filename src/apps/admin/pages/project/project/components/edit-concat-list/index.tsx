@@ -47,7 +47,7 @@ const EditConcatList = function (
       title: "操作",
       dataIndex: "id",
       fixed: "right",
-      width: 150,
+      width: 250,
       render(dom, entity) {
         return (
           <Space>
