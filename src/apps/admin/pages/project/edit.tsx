@@ -25,7 +25,7 @@ import { getProjectStatusText } from "src/apps/admin/api/business-opportunity";
 import TextSelectInput from "src/framework/component/text-select-input";
 import EditConcatList from "../client/client/components/edit-concat-list";
 import useStaffTree from "src/b-hooks/use-staff-tree";
-import File from "./components/file";
+import File from "../../../../b-components/business-file";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -280,9 +280,33 @@ function Edit(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }}>相关信息</Title>
 
       {detail && (
-        <Descriptions>
+        <Descriptions style={{marginTop: theme.margin}}>
           <Descriptions.Item label="工程概览">
-            <File identify="工程概览" id={id} files={detail.file["工程概览"]} />
+            <File
+              identify="工程概览"
+              service="project"
+              isCover={0}
+              id={id}
+              files={detail.file["工程概览"]}
+            />
+          </Descriptions.Item>
+          <Descriptions.Item label="现场照片">
+            <File
+              identify="现场照片"
+              service="project"
+              isCover={0}
+              id={id}
+              files={detail.file["现场照片"]}
+            />
+          </Descriptions.Item>
+          <Descriptions.Item label="其他附件">
+            <File
+              identify="项目附件"
+              service="project"
+              isCover={0}
+              id={id}
+              files={detail.file["项目附件"]}
+            />
           </Descriptions.Item>
         </Descriptions>
       )}

@@ -2,18 +2,26 @@ import { Upload } from "antd";
 import React from "react";
 
 import contextedNotify from "src/framework/component/contexted-notify";
-import { bindBusinessFile, postFile } from "src/apps/admin/api/business-file";
+import {
+  bindBusinessFile,
+  deleteBusinessFile,
+  postFile,
+} from "src/apps/admin/api/business-file";
 import { onPrgress } from "src/util/file/upload";
 import qiniu from "src/util/qiniu";
 
-export default function (props: {
-  id: Project["id"];
-  identify: BusinessFileIdentify, 
-  files: ProjectDetail["file"][keyof ProjectDetail["file"]];
+type UploadResponse = { url: string; id: FileResponse["id"] };
+
+export default function <Id extends string | number = number>(props: {
+  id: Id;
+  identify: BusinessFileIdentify;
+  service: BusinessParams["service"];
+  isCover: BusinessParams["is_cover"];
+  files?: BusinessFile[];
 }) {
-  const { id, files } = props;
+  const { id, files, identify, service, isCover } = props;
   return (
-    <Upload
+    <Upload<UploadResponse>
       listType="picture-card"
       defaultFileList={files?.map((item) => ({
         uid: String(item.file_id),
@@ -24,12 +32,13 @@ export default function (props: {
         status: "done",
         response: {
           url: item.full_path,
+          id: item.file_id,
         },
       }))}
       showUploadList={{
         showDownloadIcon: (file) => file.status === "done",
         showPreviewIcon: (file) => file.status === "done",
-        showRemoveIcon: () => false,
+        showRemoveIcon: (file) => file.status === "done",
       }}
       onPreview={(file) =>
         window.preload.previewFile(file.response!.url).catch((err) => {
@@ -45,6 +54,13 @@ export default function (props: {
             message: "文件下载失败",
             description: err.message,
           });
+        });
+      }}
+      onRemove={(file) => {
+        return new Promise<boolean>((resolve, reject) => {
+          deleteBusinessFile({ file_id: file!.response!.id })
+            .then(() => resolve(true))
+            .catch(reject);
         });
       }}
       customRequest={function (option) {
@@ -63,16 +79,16 @@ export default function (props: {
             });
           })
           .then((res) => {
-            return new Promise<{ url: string }>((resolve, reject) => {
+            return new Promise<UploadResponse>((resolve, reject) => {
               bindBusinessFile({
-                service: "business-opportunity",
-                identify: "业务机会附件",
-                is_cover: 1,
+                service,
+                identify,
+                is_cover: isCover,
                 file_ids: [res.data.id],
                 table_id: id,
               })
-                .then(() => {
-                  resolve({ url: res.data.full_path });
+                .then((file) => {
+                  resolve({ url: res.data.full_path, id: file.data.id });
                 })
                 .catch(reject);
             });

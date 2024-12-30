@@ -4,7 +4,22 @@ import fetch from "src/util/fetch";
  * 上传(绑定)业务文件
  */
 export function bindBusinessFile(data: BusinessParams) {
-  return fetch.POST(fetch.base("/api/business-file/bind"), data);
+  return fetch.POST<FileResponse>(fetch.base("/api/business-file/bind"), data);
+}
+
+/**
+ * 业务文件-删除 */
+export function deleteBusinessFile(params: {
+  /**
+   * @deprecated 暂时未使用
+   */
+  id?: string | number;
+  file_id?: BusinessFile["file_id"];
+}) {
+  return fetch.DELETE(fetch.base(`/api/business-file`), {
+    file_id: params.file_id,
+    id: params.id,
+  });
 }
 
 /** 上传文件到文件夹 */
@@ -47,8 +62,6 @@ export function putFolder(params: Pick<Folder, "is_secret" | "id" | "name">) {
 export function deleteFolder(params: Pick<Folder, "id">) {
   return fetch.DELETE(fetch.base("/api/file-dir"), params);
 }
-
-
 
 /** 删除文件  */
 export function deleteFile(params: Pick<FolderFile, "id">) {

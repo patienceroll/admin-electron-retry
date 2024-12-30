@@ -25,8 +25,22 @@ type BusinessParams = {
     | "material-sku";
   identify: BusinessFileIdentify;
   is_cover: 1 | 0;
-  table_id: number;
+  table_id: number | string;
   file_ids: number[];
+};
+
+type BusinessFile = {
+  business_file_id: number;
+  created_at: string;
+  created_id: number;
+  extend: FileResponse["extend"];
+  file_id: number;
+  full_path: string;
+  identify: string;
+  laravel_through_key: number;
+  name: string;
+  path: string;
+  service_name: string;
 };
 
 type BusinessFileIdentify =
@@ -47,7 +61,9 @@ type BusinessFileIdentify =
   | "库存出库"
   | "附件"
   | "图片"
-  | "项目附件" |"工程概览";
+  | "项目附件"
+  | "工程概览"
+  | "现场照片";
 
 type FileResponse = {
   created_at: string;
