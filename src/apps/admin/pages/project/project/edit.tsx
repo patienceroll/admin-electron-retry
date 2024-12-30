@@ -23,9 +23,9 @@ import Icon from "src/framework/component/icon";
 import SaveSvg from "src/assets/svg/保存.svg";
 import { getProjectStatusText } from "src/apps/admin/api/business-opportunity";
 import TextSelectInput from "src/framework/component/text-select-input";
-import EditConcatList from "../client/client/components/edit-concat-list";
+import EditConcatList from "./components/edit-concat-list";
 import useStaffTree from "src/b-hooks/use-staff-tree";
-import File from "../../../../b-components/business-file";
+import File from "src/b-components/business-file";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -280,7 +280,7 @@ function Edit(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }}>相关信息</Title>
 
       {detail && (
-        <Descriptions style={{marginTop: theme.margin}}>
+        <Descriptions style={{ marginTop: theme.margin }}>
           <Descriptions.Item label="工程概览">
             <File
               identify="工程概览"

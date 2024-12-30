@@ -6,14 +6,14 @@ const Blank = lazy(() => import("src/framework/blank"));
 const UserInfo = lazy(() => import("./pages/user-info"));
 const OrganizationCompany = lazy(() => import("./pages/organization/company"));
 const OrganizationDepartment = lazy(
-  () => import("./pages/organization/department"),
+  () => import("./pages/organization/department")
 );
 const OrganizationStaff = lazy(() => import("./pages/organization/staff"));
 const OrganizationStaffCreate = lazy(
-  () => import("./pages/organization/staff/create"),
+  () => import("./pages/organization/staff/create")
 );
 const OrganizationStaffEdit = lazy(
-  () => import("./pages/organization/staff/edit"),
+  () => import("./pages/organization/staff/edit")
 );
 const OrganizationJob = lazy(() => import("./pages/organization/job"));
 const Page404 = lazy(() => import("src/framework/404"));
@@ -27,7 +27,7 @@ const CommonRoleEdit = lazy(() => import("./pages/common/role/detail"));
 const CommonMenu = lazy(() => import("./pages/common/menu"));
 const CommonMenuStaff = lazy(() => import("./pages/common/menu-staff"));
 const VisualizationArchitecture = lazy(
-  () => import("./pages/visualization/architecture"),
+  () => import("./pages/visualization/architecture")
 );
 const Client = lazy(() => import("./pages/client/client"));
 const ClientDetail = lazy(() => import("./pages/client/client/detail"));
@@ -36,10 +36,10 @@ const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
 const BusinessOpportunityDetail = lazy(
-  () => import("./pages/business-opportunity/detail"),
+  () => import("./pages/business-opportunity/detail")
 );
 const BusinessOpportunityEdit = lazy(
-  () => import("./pages/business-opportunity/edit"),
+  () => import("./pages/business-opportunity/edit")
 );
 
 /**
@@ -72,8 +72,8 @@ const StockCheck = lazy(() => import("./pages/inventory/stock-check"));
 //调拨单
 const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
 
-const Project = lazy(() => import("./pages/project"));
-const ProjectEdit = lazy(() => import("./pages/project/edit"));
+const Project = lazy(() => import("./pages/project/project"));
+const ProjectEdit = lazy(() => import("./pages/project/project/edit"));
 
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
