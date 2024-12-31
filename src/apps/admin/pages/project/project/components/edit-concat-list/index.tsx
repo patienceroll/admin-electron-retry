@@ -176,10 +176,7 @@ const EditConcatList = function (
         onChange={table.onChange}
         columns={column}
         scroll={{
-          x: Math.max(
-            table.measureColumnWidth(expandColumn),
-            table.measureColumnWidth(column)
-          ),
+          x: table.measureColumnWidth(column) + theme.padding,
           y: "60vh",
         }}
         toolBarRender={() => [
@@ -212,6 +209,7 @@ const EditConcatList = function (
                 options={false}
                 dataSource={row.contact}
                 columns={expandColumn}
+                scroll={{ x: table.measureColumnWidth(expandColumn) }}
               />
             );
           },

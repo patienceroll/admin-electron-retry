@@ -1,5 +1,5 @@
 import styled, { useTheme } from "styled-components";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import {
   Col,
@@ -334,10 +334,7 @@ function Detail(props: StyledWrapComponents) {
         onChange={table.onChange}
         columns={column}
         scroll={{
-          x: Math.max(
-            table.measureColumnWidth(expandColumn),
-            table.measureColumnWidth(column)
-          ),
+          x: table.measureColumnWidth(column) + theme.padding,
           y: "60vh",
         }}
         expandable={{
@@ -357,6 +354,7 @@ function Detail(props: StyledWrapComponents) {
                 options={false}
                 dataSource={row.contact}
                 columns={expandColumn}
+                scroll={{ x: table.measureColumnWidth(expandColumn) }}
               />
             );
           },

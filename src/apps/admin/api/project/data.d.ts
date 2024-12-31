@@ -259,7 +259,7 @@ type ProjectDetail = {
   win_bid_amount: string;
 
   /** 重点项目;0:否,1:是 */
-  is_importance: number;
+  is_importance: 0|1;
 
   /** 行业 */
   trade: string;
@@ -289,7 +289,7 @@ type ProjectDetail = {
   is_approve: number;
 
   /** 状态;0:草稿,1:待签约,2:履约中,3:已完结,4:已中止,5:已放弃 */
-  status: number;
+  status: ProjectStatus;
 
   /** 创建者id */
   created_id: number;

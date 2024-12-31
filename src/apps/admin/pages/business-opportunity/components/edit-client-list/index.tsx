@@ -176,11 +176,8 @@ function EditClientList(
         onChange={table.onChange}
         columns={column}
         scroll={{
-          x: Math.max(
-            table.measureColumnWidth(expandColumn),
-            table.measureColumnWidth(column)
-          ),
-          y: "60vh"
+          x: table.measureColumnWidth(column) + theme.padding,
+          y: "60vh",
         }}
         toolBarRender={() => [
           <Button
@@ -212,6 +209,7 @@ function EditClientList(
                 options={false}
                 dataSource={row.contact}
                 columns={expandColumn}
+                scroll={{ x: table.measureColumnWidth(expandColumn) }}
               />
             );
           },
