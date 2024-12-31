@@ -1,28 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { useLocation } from "react-router";
-import {
-  Col,
-  Row,
-  Tag,
-  Typography,
-  Anchor,
-  Timeline,
-  Rate,
-  FloatButton,
-  Collapse,
-  Steps,
-  StepsProps,
-  Space,
-  Avatar,
-  Descriptions,
-} from "antd";
+import { Col, Row, Tag, Anchor, Descriptions, FloatButton } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
+  approval,
+  billSuspend,
+  cancel,
+  getApprovalRecord,
   getOperateRecord,
   getProject,
   ProjectStatusMap,
+  startApproval,
 } from "src/apps/admin/api/project";
 import Title from "src/framework/component/title";
 import InfoItem from "src/framework/component/info-item";
@@ -37,6 +27,15 @@ import DetailSaleOrder from "./components/detail-sale-order";
 import DetailSaleDeliver from "./components/detail-sale-deliver";
 import DetailSaleReturn from "./components/detail-sale-return";
 import OperateRecord from "src/b-components/operate-record";
+import ApprovalRecord from "src/b-components/approval-record";
+import Icon from "src/framework/component/icon";
+import ApprovalSvg from "src/assets/svg/审批.svg";
+import SubmitSvg from "src/assets/svg/提审.svg";
+import GiveUpSvg from "src/assets/svg/放弃.svg";
+import StopSvg from "src/assets/svg/终止.svg";
+import getApproval from "src/b-hooks/get-approval";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -236,6 +235,11 @@ function Detail(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }} id="审批记录">
         审批记录
       </Title>
+      <ApprovalRecord
+        style={{ marginTop: theme.margin }}
+        id={id}
+        recordApi={getApprovalRecord}
+      />
 
       <Title style={{ marginTop: theme.margin }} id="操作记录">
         操作记录
@@ -272,6 +276,103 @@ function Detail(props: StyledWrapComponents) {
           </Col>
         </Row>
       )}
+
+      {detail && (
+        <FloatButton.Group shape="square">
+          {detail.btn_power.is_approve && (
+            <FloatButton
+              tooltip="审批"
+              icon={<Icon icon={ApprovalSvg} />}
+              onClick={() => {
+                getApproval()
+                  .then((result) => approval({ ...result, id }))
+                  .then(() => {
+                    contextedMessage.message?.success("成功审批");
+                    getDetail();
+                    window.parent.postMessage("is_approve");
+                  });
+              }}
+            />
+          )}
+          {detail.btn_power.is_submit && (
+            <FloatButton
+              tooltip="提审"
+              icon={<Icon icon={SubmitSvg} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "提审",
+                  content: "提交审批后将无法修改，确认提交吗?",
+                  onOk() {
+                    return startApproval({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_submit");
+                      contextedMessage.message?.success("成功提审");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_cancel && (
+            <FloatButton
+              tooltip="放弃"
+              icon={<Icon icon={GiveUpSvg} fill={theme.colorWarning} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "申请放弃",
+                  content: "确认申请放弃吗？",
+                  onOk() {
+                    return cancel({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_cancel");
+                      contextedMessage.message?.success("成功发起取消申请");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_suspend && (
+            <FloatButton
+              tooltip="中止"
+              icon={<Icon icon={StopSvg} fill={theme.colorwa} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "中止",
+                  content: "你确定要中止该项目吗？",
+                  onOk() {
+                    return billSuspend({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_suspend");
+                      contextedMessage.message?.success("成功中止");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_suspend && (
+            <FloatButton
+              tooltip="中止"
+              icon={<Icon icon={StopSvg} fill={theme.colorError} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "中止",
+                  content: "你确定要中止该项目吗？",
+                  onOk() {
+                    return billSuspend({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_suspend");
+                      contextedMessage.message?.success("成功中止");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+        </FloatButton.Group>
+      )}
+
       <Anchor
         className="anchor"
         replace
@@ -287,7 +388,7 @@ function Detail(props: StyledWrapComponents) {
           "销售退货",
           "审批记录",
           "操作记录",
-          "系统信息"
+          "系统信息",
         ].map((item) => ({
           key: item,
           title: item,
@@ -303,8 +404,7 @@ export default styled(Detail)`
 
   .anchor {
     position: fixed;
-    top: 20%;
+    top: ${(props) => props.theme.margin}px;
     right: 50px;
-    transform: translateY(-50%);
   }
 `;

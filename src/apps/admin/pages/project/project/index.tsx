@@ -47,10 +47,32 @@ export default function () {
       render: (_, record) => (
         <Typography.Link
           onClick={() => {
-            openWindow.openCurrentAppWindow(
+            const window = openWindow.openCurrentAppWindow(
               `/project/project/detail?id=${record.id}`,
               "项目详情 - " + record.name_show
             );
+
+            function listener(
+              event: MessageEvent<keyof BusinessOpportunity["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_approve",
+                  "is_submit",
+                  "is_cancel",
+                  "is_suspend",
+                  "is_invalid",
+                  "is_end",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
           }}
         >
           {record.name}

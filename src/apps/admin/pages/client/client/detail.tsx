@@ -476,8 +476,7 @@ export default styled(Detail)`
 
   .anchor {
     position: fixed;
-    top: 50%;
+    top: ${props => props.theme.margin}px;
     right: 50px;
-    transform: translateY(-50%);
   }
 `;
