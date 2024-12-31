@@ -19,7 +19,11 @@ import {
 } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
-import { getProject, ProjectStatusMap } from "src/apps/admin/api/project";
+import {
+  getOperateRecord,
+  getProject,
+  ProjectStatusMap,
+} from "src/apps/admin/api/project";
 import Title from "src/framework/component/title";
 import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
@@ -29,6 +33,10 @@ import { getClientList } from "src/apps/admin/api/client";
 import DetailConcatList from "./components/detail-concat-list";
 import BusinessFile from "src/b-components/business-file";
 import DetailSaleContract from "./components/detail-sale-contract";
+import DetailSaleOrder from "./components/detail-sale-order";
+import DetailSaleDeliver from "./components/detail-sale-deliver";
+import DetailSaleReturn from "./components/detail-sale-return";
+import OperateRecord from "src/b-components/operate-record";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -208,9 +216,62 @@ function Detail(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }} id="销售合同">
         销售合同
       </Title>
-
       <DetailSaleContract id={id} />
 
+      <Title style={{ marginTop: theme.margin }} id="销售订单">
+        销售订单
+      </Title>
+      <DetailSaleOrder id={id} />
+
+      <Title style={{ marginTop: theme.margin }} id="销售发货">
+        销售发货
+      </Title>
+      <DetailSaleDeliver id={id} />
+
+      <Title style={{ marginTop: theme.margin }} id="销售退货">
+        销售退货
+      </Title>
+      <DetailSaleReturn id={id} />
+
+      <Title style={{ marginTop: theme.margin }} id="审批记录">
+        审批记录
+      </Title>
+
+      <Title style={{ marginTop: theme.margin }} id="操作记录">
+        操作记录
+      </Title>
+      <OperateRecord
+        id={id}
+        style={{ marginTop: theme.margin }}
+        recordApi={getOperateRecord}
+      />
+
+      <Title style={{ marginTop: theme.margin }} id="系统信息">
+        系统信息
+      </Title>
+      {detail && (
+        <Row
+          style={{ marginTop: theme.margin }}
+          gutter={[theme.padding, theme.padding]}
+        >
+          <Col flex="400px">
+            <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="负责人"> {detail.staff?.name}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="创建时间">
+              {detail.created_user?.created_at}
+            </InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="更新时间">
+              {detail.created_user?.updated_at}
+            </InfoItem>
+          </Col>
+        </Row>
+      )}
       <Anchor
         className="anchor"
         replace
@@ -221,7 +282,12 @@ function Detail(props: StyledWrapComponents) {
           "关键信息",
           "单位及联系人",
           "相关信息",
-          "销售合同"
+          "销售合同",
+          "销售订单",
+          "销售退货",
+          "审批记录",
+          "操作记录",
+          "系统信息"
         ].map((item) => ({
           key: item,
           title: item,

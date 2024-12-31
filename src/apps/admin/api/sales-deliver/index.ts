@@ -4,11 +4,11 @@ export const salesDeliverStatus = new Map<
   SalesDeliver["status"],
   EnumValue<SalesDeliver["status"]>
 >([
-  [1, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [0, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
   [1, { value: 1, color: "#4ff7cf", text: "待发货" }],
-  [1, { value: 2, color: "#d46b08", text: "发货中" }],
-  [1, { value: 3, color: "#3a50b9", text: "已发货" }],
-  [1, { value: 4, color: "rgb(156,156,148)", text: "已作废" }],
+  [2, { value: 2, color: "#d46b08", text: "发货中" }],
+  [3, { value: 3, color: "#3a50b9", text: "已发货" }],
+  [4, { value: 4, color: "rgb(156,156,148)", text: "已作废" }],
 ]);
 
 /**
@@ -22,6 +22,7 @@ export function getSalesDeliverList(
     statistics_id?: number | string;
     client_id?: Client["id"];
     is_show_detail?: 0 | 1;
+    project_id?: Project['id']
   },
 ) {
   return fetch.GET<List<SalesDeliver>>(

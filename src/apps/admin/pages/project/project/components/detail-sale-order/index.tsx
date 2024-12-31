@@ -2,30 +2,26 @@ import ProTable from "@ant-design/pro-table";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 
-import {
-  getSalesContractList,
-  salesContractStatus,
-} from "src/apps/admin/api/sales-contract";
 import useSearchTable, {
   tableColumn,
   tableMeasureColumnWidth,
 } from "src/hooks/use-search-table";
+import {
+  getSalesOrderList,
+  salesOrderStatus,
+} from "src/apps/admin/api/sales-order";
 
 export default function (props: Pick<Project, "id">) {
   const { id } = props;
   const theme = useTheme();
-  const table = useSearchTable(getSalesContractList);
+  const table = useSearchTable(getSalesOrderList);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
 
   const column = table.column([
     {
-      title: "合同名称",
-      dataIndex: "name",
-    },
-    {
-      title: "合同编号",
+      title: "订单编号",
       dataIndex: "code",
-      copyable: true
+      copyable: true,
     },
     {
       title: "签约日期",
@@ -34,13 +30,11 @@ export default function (props: Pick<Project, "id">) {
     {
       title: "状态",
       dataIndex: "status",
-      valueEnum: salesContractStatus,
+      valueEnum: salesOrderStatus,
     },
   ]);
 
-  const detailColumn = tableColumn<
-    NonNullable<SalesContract["detail"]>[number]
-  >([
+  const detailColumn = tableColumn<NonNullable<SalesOrder["detail"]>[number]>([
     {
       title: "产品",
       fixed: "left",
@@ -111,7 +105,7 @@ export default function (props: Pick<Project, "id">) {
       //   },
     },
     {
-      title: "合同明细",
+      title: "订单明细",
       dataIndex: "id",
       //   render: (_, row) => {
       //     return row.line_unit.map((i) => (

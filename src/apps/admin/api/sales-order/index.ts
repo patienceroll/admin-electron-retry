@@ -4,12 +4,12 @@ export const salesOrderStatus = new Map<
   SalesContract["type"],
   EnumValue<SalesContract["type"]>
 >([
-  [1, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
-  [2, { value: 1, color: "#4ff7cf", text: "待执行" }],
-  [3, { value: 2, color: "#d46b08", text: "执行中" }],
-  [4, { value: 3, color: "#7cb305", text: "已完结" }],
-  [5, { value: 4, color: "#cfc922", text: "已中止" }],
-  [6, { value: 5, color: "rgb(156,156,148)", text: "已作废" }],
+  [0, { value: 0, color: "rgb(64,124,72)", text: "草稿" }],
+  [1, { value: 1, color: "#4ff7cf", text: "待执行" }],
+  [2, { value: 2, color: "#d46b08", text: "执行中" }],
+  [3, { value: 3, color: "#7cb305", text: "已完结" }],
+  [4, { value: 4, color: "#cfc922", text: "已中止" }],
+  [5, { value: 5, color: "rgb(156,156,148)", text: "已作废" }],
 ]);
 
 /**
@@ -24,11 +24,12 @@ export function getSalesOrderList(
     statistics_id?: number | string;
     client_id?: Client["id"];
     is_show_detail?: 0 | 1;
-  },
+    project_id?: Project["id"];
+  }
 ) {
   return fetch.GET<List<SalesOrder>>(
     fetch.base(`/api/sales-order/list`),
-    params,
+    params
   );
 }
 
@@ -59,7 +60,7 @@ export function getSalesOrder(params: Pick<SalesOrder, "id">) {
 export function addSalesOrder(params: any) {
   return fetch.POST<SalesOrderAddResponse>(
     fetch.base(`/api/sales-order`),
-    params,
+    params
   );
 }
 
@@ -81,7 +82,7 @@ export function deleteSalesOrder(params: Pick<SalesOrder, "id">) {
  * 生成合同编号 */
 export const getSalesOrderCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/sales-order/code"),
+    fetch.base("/api/sales-order/code")
   );
 };
 
@@ -91,11 +92,11 @@ export const getSalesOrderMaterialSku = (
   params: ListParam & {
     sales_contract_id?: SalesOrder["sales_contract_id"];
     id?: SalesOrder["id"];
-  },
+  }
 ) => {
   return fetch.GET<List<SalesOrderMaterialSku>>(
     fetch.base("/api/sales-order/superior-detail"),
-    params,
+    params
   );
 };
 
@@ -147,7 +148,7 @@ export function cancelOperate(params: Pick<SalesOrder, "id">) {
 export function getApprovalRecord(params: Pick<SalesOrder, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-order/approval-record`),
-    params,
+    params
   );
 }
 
@@ -165,11 +166,11 @@ export function salesOrderExport(params: Record<string, any>) {
 export const getMaterialSku = (
   params: ListParam & {
     id?: SalesOrder["id"];
-  },
+  }
 ) => {
   return fetch.GET<List<SalesContractMaterialSku>>(
     fetch.base("/api/sales-order/material-sku"),
-    params,
+    params
   );
 };
 

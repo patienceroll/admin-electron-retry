@@ -460,7 +460,11 @@ function Detail(props: StyledWrapComponents) {
         操作记录
       </Title>
 
-      <OperateRecord id={id} recordApi={getOperateRecord} />
+      <OperateRecord
+        style={{ marginTop: theme.margin }}
+        id={id}
+        recordApi={getOperateRecord}
+      />
       <Title style={{ marginTop: theme.margin }} id="系统信息">
         系统信息
       </Title>
