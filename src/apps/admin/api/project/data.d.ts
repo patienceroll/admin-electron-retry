@@ -322,6 +322,8 @@ type ProjectDetail = {
     is_cancel: 0 | 1;
     is_suspend: 0 | 1;
     is_end: 0 | 1;
+    is_invalid: 0 | 1;
+    is_cancel_operate: 0 | 1;
   };
 
   /** 扩展字段 1 */

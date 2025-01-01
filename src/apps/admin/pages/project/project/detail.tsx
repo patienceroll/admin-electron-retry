@@ -6,8 +6,11 @@ import { Col, Row, Tag, Anchor, Descriptions, FloatButton } from "antd";
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
   approval,
+  billEnd,
+  billInvalid,
   billSuspend,
   cancel,
+  cancelOperate,
   getApprovalRecord,
   getOperateRecord,
   getProject,
@@ -33,6 +36,7 @@ import ApprovalSvg from "src/assets/svg/审批.svg";
 import SubmitSvg from "src/assets/svg/提审.svg";
 import GiveUpSvg from "src/assets/svg/放弃.svg";
 import StopSvg from "src/assets/svg/终止.svg";
+import FinishSvg from "src/assets/svg/完结.svg";
 import getApproval from "src/b-hooks/get-approval";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -335,7 +339,7 @@ function Detail(props: StyledWrapComponents) {
           {detail.btn_power.is_suspend && (
             <FloatButton
               tooltip="中止"
-              icon={<Icon icon={StopSvg} fill={theme.colorwa} />}
+              icon={<Icon icon={StopSvg} fill={theme.colorError} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
                   title: "中止",
@@ -351,19 +355,57 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_suspend && (
+          {detail.btn_power.is_invalid && (
             <FloatButton
-              tooltip="中止"
+              tooltip="作废"
               icon={<Icon icon={StopSvg} fill={theme.colorError} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
-                  title: "中止",
-                  content: "你确定要中止该项目吗？",
+                  title: "作废",
+                  content: "此项目将会作废，你确定要作废吗？",
                   onOk() {
-                    return billSuspend({ id }).then(() => {
+                    return billInvalid({ id }).then(() => {
                       getDetail();
-                      window.parent.postMessage("is_suspend");
-                      contextedMessage.message?.success("成功中止");
+                      window.parent.postMessage("is_invalid");
+                      contextedMessage.message?.success("成功作废");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_end && (
+            <FloatButton
+              tooltip="完结"
+              icon={<Icon icon={FinishSvg} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "完结",
+                  content: "你确定要完结该项目吗？",
+                  onOk() {
+                    return billEnd({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_end");
+                      contextedMessage.message?.success("成功完结");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_cancel_operate && (
+            <FloatButton
+              tooltip="撤销"
+              icon={<Icon icon={FinishSvg} fill={theme.colorWarning} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "撤销",
+                  content: "撤销后将回到原状态，确认提交吗?",
+                  onOk() {
+                    return cancelOperate({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_cancel_operate");
+                      contextedMessage.message?.success("成功撤销");
                     });
                   },
                 });
