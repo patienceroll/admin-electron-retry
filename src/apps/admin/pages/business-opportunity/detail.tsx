@@ -243,6 +243,7 @@ function Detail(props: StyledWrapComponents) {
           </Col>
           <Col flex="400px">
             <InfoItem label="是否重点">
+              &nbsp;
               <Tag color={watherMap.get(detail.is_importance)?.color}>
                 {watherMap.get(detail.is_importance)?.text}
               </Tag>

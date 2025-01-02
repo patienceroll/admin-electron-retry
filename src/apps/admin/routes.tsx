@@ -47,6 +47,7 @@ const BusinessOpportunityEdit = lazy(
  */
 //销售合同
 const SalesContract = lazy(() => import("./pages/sales/sales-contract"));
+const SalesContractDetail = lazy(() => import("./pages/sales/sales-contract/detail"));
 //销售订单
 const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
 //销售发货
@@ -135,6 +136,7 @@ export default function () {
         />
 
         <Route path="/sales/sales-contract" element={<SalesContract />} />
+        <Route path="/sales/sales-contract/detail" element={<SalesContractDetail />} />
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
