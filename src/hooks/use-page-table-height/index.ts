@@ -15,7 +15,8 @@ export default function (gap = 0) {
     margin,
     Pagination = { itemSize: 24, itemSizeSM: 21 },
   } = useTheme();
-  const layout = window.preload.getTheme().layout === "normal";
+  const isCompact = window.preload.getTheme().layout === "compact";
+
   const store = useRef<
     Map<HTMLElement, { element: HTMLElement; observe: ResizeObserver }>
   >(new Map());
@@ -29,13 +30,13 @@ export default function (gap = 0) {
 
     // 分页的高度
     const pagenationHeight =
-      margin + (layout ? Pagination.itemSize : Pagination.itemSizeSM);
+      margin + (!isCompact ? Pagination.itemSize : Pagination.itemSizeSM);
 
     // thead高度
-    const theadHeight = layout ? 48 : 38;
+    const theadHeight = !isCompact ? 48 : 38;
 
     return tableBottom + toolbarHeight + pagenationHeight + theadHeight;
-  }, [Pagination?.itemSize, Pagination?.itemSizeSM, layout, margin, padding]);
+  }, [Pagination.itemSize, Pagination.itemSizeSM, isCompact, margin, padding]);
 
   const addAElement = useCallback(
     (element: HTMLElement) => {

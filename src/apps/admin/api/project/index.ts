@@ -22,7 +22,7 @@ export function getProjectList(params: ListParam & { status?: ProjectStatus }) {
 /**
  * 项目-选项
  */
-export function getProjectOption(params: {}) {
+export function getProjectOption(params: { statuses?: Project["status"][] }) {
   return fetch.GET<Project[]>(fetch.base(`/api/project/list`), params);
 }
 

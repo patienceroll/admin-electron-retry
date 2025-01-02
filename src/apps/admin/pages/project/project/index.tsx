@@ -33,10 +33,11 @@ import ProjectIntroduction from "src/b-components/project-introduction";
 export default function () {
   const table = useSearchTable(getProjectList);
   const theme = useTheme();
+  const isCompact = window.preload.getTheme().layout === "compact";
 
   // 14 是加了tab之后高度有变化
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + 14
+    theme.padding * 2 + theme.margin +  (isCompact ? 0 : 8)
   );
   const [area] = useOption(getAreaOption);
   const column = table.column([

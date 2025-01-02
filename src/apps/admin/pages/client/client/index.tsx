@@ -17,7 +17,6 @@ import {
   deleteClient,
   getClientList,
 } from "src/apps/admin/api/client";
-import { watherMap } from "src/apps/admin/api/general";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import FollowSvg from "src/assets/svg/线索跟进.svg";
@@ -39,7 +38,7 @@ function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin
   );
 
   const create = Create.createRef();
@@ -57,7 +56,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户详情 - " + record.name_show,
+              "客户详情 - " + record.name_show
             );
           }}
         >
@@ -144,7 +143,7 @@ function Client() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/client/client/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -289,7 +288,7 @@ function Client() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户",
+                "编辑新创建的客户"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -318,18 +317,21 @@ function Client() {
         )}
         {window.preload.getLocalUserHasPermission(
           "/client/client",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
-              clientExport({
-                ...table.params.current,
-                ...table.extraParams.current,
-              }).then((res) => {
-                window.preload.previewFile(res.data.file_path);
+              clientExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
               });
             }}
           />

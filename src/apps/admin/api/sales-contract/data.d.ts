@@ -27,7 +27,7 @@ type SalesContract = {
   tax_rate: number;
 
   /** 金额 */
-  amount: number;
+  amount: string;
 
   /** 签约日期 */
   sign_date: number;
@@ -63,7 +63,7 @@ type SalesContract = {
   quality_ratio: number;
 
   /** 账户余额 */
-  balance_amount: number;
+  balance_amount: string;
 
   /** 收款账户id */
   collect_bank_account_id: number;
@@ -98,8 +98,23 @@ type SalesContract = {
   /** 权限控制
    * is_edit : 0|1;
    * is_delete : 0|1;
+   * is_submit : 0|1;
+   * is_approve : 0|1;
+   * is_invalid : 0|1;
+   * is_suspend : 0|1;
+   * is_end : 0|1;
+   * is_cancel_operate : 0|1;
    */
-  btn_power: { is_edit: 0 | 1; is_delete: 0 | 1 };
+  btn_power: {
+    is_edit: 0 | 1;
+    is_delete: 0 | 1;
+    is_submit: 0 | 1;
+    is_approve: 0 | 1;
+    is_invalid: 0 | 1;
+    is_suspend: 0 | 1;
+    is_end: 0 | 1;
+    is_cancel_operate: 0 | 1;
+  };
 
   /** 扩展字段 1 */
   status_show: string;
@@ -226,178 +241,113 @@ type SalesContract = {
   } | null;
 
   /**
-   *  明细信息
+   *  signStaff
    */
-  detail:
+  sign_staff: {
+    /** 主键id */
+    id: number;
+
+    /** 用户id */
+    user_id: number;
+
+    /** 用户名 */
+    name: string;
+
+    /** 工号 */
+    code: string;
+
+    /** 手机号 */
+    phone: string;
+
+    /** 照片 */
+    avatar: string;
+
+    /** 身份证号 */
+    ID_card: string;
+
+    /** 微信号 */
+    wechat: string;
+
+    /** 扩展字段 1 */
+    avatar_path: string;
+  } | null;
+
+  /**
+   *  settleStaff
+   */
+  settle_staff: {
+    /** 主键id */
+    id: number;
+
+    /** 用户id */
+    user_id: number;
+
+    /** 用户名 */
+    name: string;
+
+    /** 工号 */
+    code: string;
+
+    /** 手机号 */
+    phone: string;
+
+    /** 照片 */
+    avatar: string;
+
+    /** 身份证号 */
+    ID_card: string;
+
+    /** 微信号 */
+    wechat: string;
+
+    /** 扩展字段 1 */
+    avatar_path: string;
+  } | null;
+
+  /**
+   *  clientContact
+   */
+  /**
+   *  settleClientContact
+   */
+  /**
+   *  collectBankAccount
+   */
+  /**
+   *  invoiceBankAccount
+   */
+  /**
+   *  附件信息
+   */
+  file:
     | {
-        /** 主键id */
-        id: number;
+        /** 服务 */
+        service_name: string;
 
-        /** 销售合同id */
-        sales_contract_id: number;
+        /** 标识 */
+        identify: string;
 
-        /** 产品ID */
-        material_id: string;
+        /** 名称 */
+        name: string;
 
-        /** 物料SKU */
-        material_sku_id: string;
+        /** 路径 */
+        path: string;
 
-        /** 属性快照 */
-        attr_snapshoot: Record<string, string>;
+        /** 拓展 */
+        extend: string;
 
-        /** 数量 */
-        num: number;
+        /** 创建者id */
+        created_id: number;
 
-        /** 单位 */
-        unit: string;
+        /** 添加时间 */
+        created_at: string;
 
-        /** 价格 */
-        price: number;
-
-        /** 金额 */
-        amount: number;
-
-        /** 备注 */
-        remark: string;
-
-        /**
-         *  物料信息
-         */
-        material: {
-          /** ID */
-          id: string;
-
-          /** 物料分类id */
-          material_classify_id: number;
-
-          /** 名称 */
-          name: string;
-
-          /** 编号 */
-          code: string;
-
-          /** 品牌 */
-          brand: string;
-
-          /** 型号 */
-          model: string;
-
-          /** 单位 */
-          unit: string;
-
-          /** 照片 */
-          picture: string;
-
-          /** 扩展字段 1 */
-          picture_path: string;
-
-          /**
-           *  类别
-           */
-          classify: {
-            /** 主键id */
-            id: number;
-
-            /** 名称 */
-            name: string;
-
-            /** 编号 */
-            code: string;
-          } | null;
-        } | null;
-
-        /**
-         *  物料属性信息
-         */
-        material_sku: {
-          /** 主键id */
-          id: number;
-
-          /** 名称 */
-          name: string;
-
-          /** 编号 */
-          code: string;
-
-          /** 属性明细快照 */
-          attr_snapshoot: Record<string, string>;
-
-          /** 图片 */
-          picture: string;
-
-          /** 外径 */
-          o_diameter: number;
-
-          /** 壁厚 */
-          wall_thickness: number;
-
-          /** 内涂层厚度 */
-          i_coat_thickness: string;
-
-          /** 外涂层厚度 */
-          o_coat_thickness: string;
-
-          /** 长度 */
-          length: number;
-
-          /** 连接方式 */
-          connection_type: string;
-
-          /** 钢卷类型 */
-          steel_type: string;
-
-          /** 材质 */
-          texture: string;
-
-          /** 内涂层颜色 */
-          i_coat_color: string;
-
-          /** 外涂层颜色 */
-          o_coat_color: string;
-
-          /** 扩展字段 1 */
-          picture_path: string;
-        } | null;
-
-        /**
-         *  组合单位信息
-         */
-        line_unit:
-          | {
-              /** 主键id */
-              id: number;
-
-              /** 表 */
-              table: string;
-
-              /** 表id */
-              table_id: number;
-
-              /** 类型 */
-              type: number;
-
-              /** 物料单位id */
-              material_unit_id: number;
-
-              /** 数量 */
-              num: number;
-
-              /** 价格 */
-              price: number;
-
-              /** 单位 */
-              unit: string;
-
-              /** 单位别名 */
-              alias: string;
-
-              /** 是否执行单位;0:否,1:是 */
-              is_execute: number;
-            }[]
-          | null;
+        /** 扩展字段 1 */
+        full_path: string;
       }[]
     | null;
 };
+
 
 type SalesContractMaterialSku = {
   id: number;

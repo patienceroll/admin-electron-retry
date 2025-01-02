@@ -36,7 +36,7 @@ function ClientContact() {
   const [client] = useOption(getClientOption);
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin
   );
 
   useEffect(() => {
@@ -197,18 +197,21 @@ function ClientContact() {
 
         {window.preload.getLocalUserHasPermission(
           "/client/client-contact",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
-              clientContactExport({
-                ...table.params.current,
-                ...table.extraParams.current,
-              }).then((res) => {
-                window.preload.previewFile(res.data.file_path);
+              clientContactExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
               });
             }}
           />

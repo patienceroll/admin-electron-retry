@@ -46,9 +46,10 @@ import images from "src/assets/images";
 function BusinessOpportunity() {
   const table = useSearchTable(getBusinessOpportunityList);
   const theme = useTheme();
+  const isCompact = window.preload.getTheme().layout === "compact";
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + 14
+    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8)
   );
 
   const create = Create.createRef();
@@ -399,11 +400,14 @@ function BusinessOpportunity() {
             tooltip="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
-              businessOpportunityExport({
-                ...table.params.current,
-                ...table.extraParams.current,
-              }).then((res) => {
-                window.preload.previewFile(res.data.file_path);
+              businessOpportunityExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
               });
             }}
           />

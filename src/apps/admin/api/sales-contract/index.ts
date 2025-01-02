@@ -25,15 +25,15 @@ export const salesContractStatus = new Map<
  */
 export function getSalesContractList(
   params: ListParam & {
-    status?: BillStatus;
+    status?: SalesContract["status"];
     project_id?: Project["id"];
     client_id?: Client["id"];
     is_show_detail?: 0 | 1;
-  },
+  }
 ) {
   return fetch.GET<List<SalesContract>>(
     fetch.base(`/api/sales-contract/list`),
-    params,
+    params
   );
 }
 
@@ -42,13 +42,14 @@ export function getSalesContractList(
  */
 export function getSalesContractOption(params: {
   status?: BillStatus;
+  statuses?: SalesContract["status"][];
   project_id?: Project["id"];
   client_id?: Client["id"];
   is_show_detail?: 0 | 1;
 }) {
   return fetch.GET<SalesContract[]>(
     fetch.base(`/api/sales-contract/list`),
-    params,
+    params
   );
 }
 
@@ -58,7 +59,7 @@ export function getSalesContractOption(params: {
 export function getSalesContract(params: Pick<SalesContract, "id">) {
   return fetch.GET<SalesContract>(
     fetch.base(`/api/sales-contract/detail`),
-    params,
+    params
   );
 }
 
@@ -68,7 +69,7 @@ export function getSalesContract(params: Pick<SalesContract, "id">) {
 export function addSalesContract(params: any) {
   return fetch.POST<SalesContractAddResponse>(
     fetch.base(`/api/sales-contract`),
-    params,
+    params
   );
 }
 
@@ -90,7 +91,7 @@ export function deleteSalesContract(params: Pick<SalesContract, "id">) {
  * 生成合同编号 */
 export const getSalesContractCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/sales-contract/code"),
+    fetch.base("/api/sales-contract/code")
   );
 };
 
@@ -99,11 +100,11 @@ export const getSalesContractCode = () => {
 export const getMaterialSku = (
   params: ListParam & {
     id?: SalesContract["id"];
-  },
+  }
 ) => {
   return fetch.GET<List<SalesContractMaterialSku>>(
     fetch.base("/api/sales-contract/material-sku"),
-    params,
+    params
   );
 };
 
@@ -156,7 +157,7 @@ export function cancelOperate(params: Pick<SalesContract, "id">) {
 export function getApprovalRecord(params: Pick<SalesContract, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-contract/approval-record`),
-    params,
+    params
   );
 }
 
@@ -173,6 +174,6 @@ export function salesContractExport(params: Record<string, any>) {
 export function getOperateRecord(params: Pick<SalesContract, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/sales-contract/log`),
-    params,
+    params
   );
 }
