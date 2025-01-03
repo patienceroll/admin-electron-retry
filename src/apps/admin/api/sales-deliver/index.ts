@@ -22,7 +22,8 @@ export function getSalesDeliverList(
     statistics_id?: number | string;
     client_id?: Client["id"];
     is_show_detail?: 0 | 1;
-    project_id?: Project['id']
+    project_id?: Project['id'],
+    sales_contract_id?: SalesContract["id"];
   },
 ) {
   return fetch.GET<List<SalesDeliver>>(

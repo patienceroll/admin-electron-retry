@@ -349,6 +349,215 @@ type SalesContract = {
 };
 
 
+type SalesContractDetail = {
+  file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
+  /** 主键id */
+  id: number;
+
+  /** 公司id */
+  company_id: number;
+
+  /** 客户id */
+  client_id: number;
+
+  /** 项目id */
+  project_id: number;
+
+  /** 类型;1:主合同,2:补充协议 */
+  type: number;
+
+  /** 主合同id */
+  pid: number;
+
+  /** 名称 */
+  name: string;
+
+  /** 编号 */
+  code: string;
+
+  /** 税率 */
+  tax_rate: number;
+
+  /** 金额 */
+  amount: string;
+
+  /** 签约日期 */
+  sign_date: number;
+
+  /** 签约地点 */
+  sign_address: string;
+
+  /** 负责人id */
+  staff_id: number;
+
+  /** 签约人id */
+  sign_staff_id: number;
+
+  /** 乙方结算人员 */
+  settle_staff_id: number;
+
+  /** 甲方负责人 */
+  client_contact_id: number;
+
+  /** 甲方结算人员 */
+  settle_client_contact_id: number;
+
+  /** 结算方式 */
+  settle_type: string;
+
+  /** 付款方式;1:先货后款,2:先款后货 */
+  payment_type: number;
+
+  /** 预付款比例 */
+  advance_ratio: number;
+
+  /** 质保金比例 */
+  quality_ratio: number;
+
+  /** 账户余额 */
+  balance_amount: string;
+
+  /** 收款账户id */
+  collect_bank_account_id: number;
+
+  /** 开票账户id */
+  invoice_bank_account_id: number;
+
+  /** 备注 */
+  remark: string;
+
+  /** 厂家配送;0:否,1:是 */
+  is_factory_dispatch: number;
+
+  /** 是否审批中;0:否,1:是 */
+  is_approve: number;
+
+  /** 状态 */
+  status: string;
+
+  /** 创建者id */
+  created_id: number;
+
+  /** 删除时间 */
+  deleted_at: string;
+
+  /** 更新时间 */
+  updated_at: string;
+
+  /** 创建时间 */
+  created_at: string;
+
+  /** 权限控制
+   * is_edit : 0|1;
+   * is_delete : 0|1;
+   */
+  btn_power: { is_edit: 0 | 1; is_delete: 0 | 1 };
+
+  /** 扩展字段 1 */
+  status_show: string;
+
+  /**
+   *  创建人员
+   */
+  /**
+   *  所属公司
+   */
+  company: {
+    /** 主键id */
+    id: number;
+
+    /** 名称 */
+    name: string;
+
+    /** 简称 */
+    short_name: string;
+  } | null;
+
+  /**
+   *  客户信息
+   */
+  client: {
+    /** 主键id */
+    id: number;
+
+    /** 公司 */
+    name: string;
+
+    /** 简称 */
+    short_name: string;
+
+    /** 扩展字段 1 */
+    type_show: string;
+
+    /** 扩展字段 2 */
+    is_sign_show: string;
+
+    /** 扩展字段 3 */
+    name_show: string;
+
+    /** 扩展字段 4 */
+    status_show: string;
+  } | null;
+
+  /**
+   *  员工信息
+   */
+  staff: {
+    /** 主键id */
+    id: number;
+
+    /** 用户id */
+    user_id: number;
+
+    /** 用户名 */
+    name: string;
+
+    /** 工号 */
+    code: string;
+
+    /** 手机号 */
+    phone: string;
+
+    /** 照片 */
+    avatar: string;
+
+    /** 身份证号 */
+    ID_card: string;
+
+    /** 微信号 */
+    wechat: string;
+
+    /** 扩展字段 1 */
+    avatar_path: string;
+  } | null;
+
+  /**
+   *  项目信息
+   */
+  project: {
+    /** 主键id */
+    id: number;
+
+    /** 项目名称 */
+    name: string;
+
+    /** 简称 */
+    short_name: string;
+
+    /** 状态;0:草稿,1:待签约,2:履约中,3:已完结,4:已中止,5:已放弃 */
+    status: number;
+
+    /** 扩展字段 1 */
+    is_importance_show: string;
+
+    /** 扩展字段 2 */
+    name_show: string;
+
+    /** 扩展字段 3 */
+    status_show: string;
+  } | null;
+}
+
 type SalesContractMaterialSku = {
   id: number;
   company_id: number;

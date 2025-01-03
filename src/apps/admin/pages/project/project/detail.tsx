@@ -427,6 +427,7 @@ function Detail(props: StyledWrapComponents) {
           "相关信息",
           "销售合同",
           "销售订单",
+          "销售发货",
           "销售退货",
           "审批记录",
           "操作记录",

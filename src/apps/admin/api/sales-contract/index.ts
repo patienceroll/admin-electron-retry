@@ -57,7 +57,7 @@ export function getSalesContractOption(params: {
  * 销售合同-详情
  */
 export function getSalesContract(params: Pick<SalesContract, "id">) {
-  return fetch.GET<SalesContract>(
+  return fetch.GET<SalesContractDetail>(
     fetch.base(`/api/sales-contract/detail`),
     params
   );
