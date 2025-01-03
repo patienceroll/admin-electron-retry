@@ -1,24 +1,20 @@
 import styled, { useTheme } from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import {
-  Col,
-  Row,
-  Tag,
-  Typography,
-  Anchor,
-  Timeline,
-  Rate,
-  FloatButton,
-} from "antd";
-import { ProTable } from "@ant-design/pro-components";
+import { Col, Row, Tag, Typography, Anchor, FloatButton } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
+  approval,
+  billEnd,
+  billInvalid,
+  billSuspend,
+  cancelOperate,
   getApprovalRecord,
   getOperateRecord,
   getSalesContract,
   salesContractType,
+  startApproval,
 } from "src/apps/admin/api/sales-contract";
 import Title from "src/framework/component/title";
 import InfoItem from "src/framework/component/info-item";
@@ -30,6 +26,14 @@ import DetailSaleDeliver from "./components/detail-sale-deliver";
 import DetailSaleReturn from "./components/detail-sale-return";
 import ApprovalRecord from "src/b-components/approval-record";
 import OperateRecord from "src/b-components/operate-record";
+import contextedModal from "src/framework/component/contexted-modal";
+import contextedMessage from "src/framework/component/contexted-message";
+import Icon from "src/framework/component/icon";
+import ApprovalSvg from "src/assets/svg/审批.svg";
+import SubmitSvg from "src/assets/svg/提审.svg";
+import StopSvg from "src/assets/svg/终止.svg";
+import FinishSvg from "src/assets/svg/完结.svg";
+import getApproval from "src/b-hooks/get-approval";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -209,6 +213,122 @@ function Detail(props: StyledWrapComponents) {
           </Col>
         </Row>
       )}
+
+      {detail && (
+        <FloatButton.Group shape="square">
+          {detail.btn_power.is_submit && (
+            <FloatButton
+              tooltip="提审"
+              icon={<Icon icon={SubmitSvg} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "提审",
+                  content: "提交审批后将无法修改，确认提交吗?",
+                  onOk() {
+                    return startApproval({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_submit");
+                      contextedMessage.message?.success("成功提审");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_approve && (
+            <FloatButton
+              tooltip="审批"
+              icon={<Icon icon={ApprovalSvg} />}
+              onClick={() => {
+                getApproval()
+                  .then((result) => approval({ ...result, id }))
+                  .then(() => {
+                    contextedMessage.message?.success("成功审批");
+                    getDetail();
+                    window.parent.postMessage("is_approve");
+                  });
+              }}
+            />
+          )}
+          {detail.btn_power.is_invalid && (
+            <FloatButton
+              tooltip="作废"
+              icon={<Icon icon={StopSvg} fill={theme.colorError} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "作废",
+                  content: "此合同将会作废，你确定要作废吗？",
+                  onOk() {
+                    return billInvalid({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_invalid");
+                      contextedMessage.message?.success("成功作废");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_suspend && (
+            <FloatButton
+              tooltip="中止"
+              icon={<Icon icon={StopSvg} fill={theme.colorError} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "中止",
+                  content: "你确定要中止该合同吗？",
+                  onOk() {
+                    return billSuspend({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_suspend");
+                      contextedMessage.message?.success("成功中止");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_end && (
+            <FloatButton
+              tooltip="完结"
+              icon={<Icon icon={FinishSvg} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "完结",
+                  content: "你确定要完结该合同吗？",
+                  onOk() {
+                    return billEnd({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_end");
+                      contextedMessage.message?.success("成功完结");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+          {detail.btn_power.is_cancel_operate && (
+            <FloatButton
+              tooltip="撤销"
+              icon={<Icon icon={FinishSvg} fill={theme.colorWarning} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "撤销",
+                  content: "撤销后将回到原状态，确认提交吗?",
+                  onOk() {
+                    return cancelOperate({ id }).then(() => {
+                      getDetail();
+                      window.parent.postMessage("is_cancel_operate");
+                      contextedMessage.message?.success("成功撤销");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+        </FloatButton.Group>
+      )}
+
       <Anchor
         className="anchor"
         replace

@@ -348,7 +348,6 @@ type SalesContract = {
     | null;
 };
 
-
 type SalesContractDetail = {
   file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
   /** 主键id */
@@ -451,7 +450,16 @@ type SalesContractDetail = {
    * is_edit : 0|1;
    * is_delete : 0|1;
    */
-  btn_power: { is_edit: 0 | 1; is_delete: 0 | 1 };
+  btn_power: {
+    is_edit: 0 | 1;
+    is_delete: 0 | 1;
+    is_submit: 0 | 1;
+    is_approve: 0 | 1;
+    is_invalid: 0 | 1;
+    is_suspend: 0 | 1;
+    is_end: 0 | 1;
+    is_cancel_operate: 0 | 1;
+  };
 
   /** 扩展字段 1 */
   status_show: string;
@@ -556,7 +564,7 @@ type SalesContractDetail = {
     /** 扩展字段 3 */
     status_show: string;
   } | null;
-}
+};
 
 type SalesContractMaterialSku = {
   id: number;

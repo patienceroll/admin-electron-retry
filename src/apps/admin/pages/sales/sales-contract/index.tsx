@@ -87,7 +87,10 @@ function SalesContract() {
                 [
                   "is_approve",
                   "is_submit",
+                  "is_cancel",
+                  "is_suspend",
                   "is_invalid",
+                  "is_end",
                   "is_cancel_operate",
                 ].includes(event.data)
               ) {
