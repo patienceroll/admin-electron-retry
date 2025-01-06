@@ -75,9 +75,6 @@ function Edit(props: StyledWrapComponents) {
         form.setFieldValue("address", undefined);
       }
     });
-    getProjectStatusText().then((res) => {
-      setStatusSelectList(res.data);
-    });
   }
 
   function submit() {
@@ -107,16 +104,20 @@ function Edit(props: StyledWrapComponents) {
   useEffect(() => {
     getDetail();
     options.loadOption();
+    getProjectStatusText().then((res) => {
+      setStatusSelectList(res.data);
+    });
   }, []);
 
   return (
     <PageWrapper className={className}>
-      <Title>基本信息</Title>
+   
       <Form
         form={form}
         layout="horizontal"
         initialValues={{ type: 1, status: 1 }}
       >
+           <Title>基本信息</Title>
         <Card style={{ marginTop: theme.margin }}>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="350px">
