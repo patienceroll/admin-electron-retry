@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import ProTable from "@ant-design/pro-table";
 import { useTheme } from "styled-components";
+import { Button } from "antd";
 
 import { getSalesContractDetailList } from "src/apps/admin/api/sales-contract-detail";
 import useSearchTable from "src/hooks/use-search-table";
+import * as ChooseMaterial from "./choose-material";
 
 export default function (props: Pick<SalesContract, "id">) {
   const { id } = props;
@@ -11,11 +13,13 @@ export default function (props: Pick<SalesContract, "id">) {
 
   const table = useSearchTable(getSalesContractDetailList);
 
+  const chooseMaterial = ChooseMaterial.createRef();
+
   const column = table.column([
     {
       title: "产品",
       key: "material",
-      fixed:'left',
+      fixed: "left",
       renderText: (_, row) => row.material?.name,
     },
     {
@@ -149,6 +153,20 @@ export default function (props: Pick<SalesContract, "id">) {
       onChange={table.onChange}
       columns={column}
       scroll={{ x: table.measureColumnWidth(column), y: 500 }}
+      toolBarRender={() => [
+        <Button
+          key="add"
+          type="primary"
+          onClick={() => {
+            chooseMaterial.current?.choose().then(() => {
+              table.reload();
+            });
+          }}
+        >
+          添加产品
+        </Button>,
+        <ChooseMaterial.default key="choose" ref={chooseMaterial} />,
+      ]}
     />
   );
 }

@@ -192,14 +192,10 @@ function SalesContract() {
                   `编辑 - ${row.name}`
                 );
 
-                function listener(event: MessageEvent<"success" | "delete">) {
+                function listener(event: MessageEvent<"success">) {
                   if (event.data === "success") {
                     table.reload();
                     contextedMessage.message?.success("编辑成功");
-                  }
-                  if (event.data === "delete") {
-                    table.reload();
-                    contextedMessage.message?.success("删除成功");
                   }
                 }
                 if (window) {

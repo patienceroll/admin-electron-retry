@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useTheme } from "styled-components";
+import { useCallback, useEffect, useRef } from "react";
 
 import useUpdate from "../use-update";
+import useTableInnerHeight from "./use-table-inner-height";
 
 /**
  * 
@@ -10,34 +10,13 @@ import useUpdate from "../use-update";
  */
 export default function (gap = 0) {
   const timer = useRef<NodeJS.Timeout>();
-  const {
-    padding,
-    margin,
-    Pagination = { itemSize: 24, itemSizeSM: 21 },
-  } = useTheme();
-  const isCompact = window.preload.getTheme().layout === "compact";
 
   const store = useRef<
     Map<HTMLElement, { element: HTMLElement; observe: ResizeObserver }>
   >(new Map());
 
   const [update] = useUpdate();
-  const tableInnerHeight = useMemo(() => {
-    const tableBottom = padding;
-
-    // toolbar高度
-    const toolbarHeight = 32 + padding * 2;
-
-    // 分页的高度
-    const pagenationHeight =
-      margin + (!isCompact ? Pagination.itemSize : Pagination.itemSizeSM);
-
-    // thead高度
-    const theadHeight = !isCompact ? 48 : 38;
-
-    return tableBottom + toolbarHeight + pagenationHeight + theadHeight;
-  }, [Pagination.itemSize, Pagination.itemSizeSM, isCompact, margin, padding]);
-
+  const tableInnerHeight = useTableInnerHeight();
   const addAElement = useCallback(
     (element: HTMLElement) => {
       const ele = store.current.get(element);
