@@ -60,7 +60,7 @@ function SalesContract() {
   const create = Create.createRef();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8)
+    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8),
   );
 
   const [areaOption] = useOption(getAreaOption);
@@ -78,10 +78,11 @@ function SalesContract() {
           onClick={() => {
             const window = openWindow.openCurrentAppWindow(
               `/sales/sales-contract/detail?id=${record.id}`,
-              "销售合同详情 - " + record.name
+              "销售合同详情 - " + record.name,
             );
+
             function listener(
-              event: MessageEvent<keyof SalesContract["btn_power"]>
+              event: MessageEvent<keyof SalesContract["btn_power"]>,
             ) {
               if (
                 [
@@ -189,7 +190,7 @@ function SalesContract() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/sales/sales-contract/edit?id=${row.id}`,
-                  `编辑 - ${row.name}`
+                  `编辑 - ${row.name}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -198,6 +199,7 @@ function SalesContract() {
                     contextedMessage.message?.success("编辑成功");
                   }
                 }
+
                 if (window) {
                   window.addEventListener("message", listener);
                 }
@@ -249,14 +251,14 @@ function SalesContract() {
       >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="合同名称/编号搜索"
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect
                 label="类型"
                 name="types"
@@ -271,7 +273,7 @@ function SalesContract() {
                 }}
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect<Area>
                 label="区域"
                 name="area_ids"
@@ -285,7 +287,7 @@ function SalesContract() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Project>
                 label="项目"
                 name="project_ids"
@@ -299,7 +301,7 @@ function SalesContract() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<typeof clientOption.list>
                 label="客户"
                 name="client_ids"
@@ -313,7 +315,15 @@ function SalesContract() {
                 }}
               />
             </Col>
-            <Col flex="500px">
+            <Col flex="280px">
+              <ProFormTreeSelect
+                label="负责人"
+                name="staff_ids"
+                placeholder="请选择负责人"
+                fieldProps={{ treeData: treeOptions, multiple: true }}
+              />
+            </Col>
+            <Col flex="560px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -326,7 +336,8 @@ function SalesContract() {
                 <AddressFormSearch />
               </ProForm.Item>
             </Col>
-            <Col flex="330px">
+
+            <Col flex="320px">
               <ProFormDateRangePicker
                 name="sign_date"
                 transform={(value) => ({
@@ -334,14 +345,6 @@ function SalesContract() {
                   end_time: value[1],
                 })}
                 label="签约日期"
-              />
-            </Col>
-            <Col flex="240px">
-              <ProFormTreeSelect
-                label="负责人"
-                name="staff_ids"
-                placeholder="请选择负责人"
-                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
             <Col flex="80px">
@@ -405,7 +408,7 @@ function SalesContract() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/sales/sales-contract/edit?id=${result.id}`,
-                "编辑合同"
+                "编辑合同",
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -424,7 +427,7 @@ function SalesContract() {
 
         {window.preload.getLocalUserHasPermission(
           "/sales/sales-contract",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -435,8 +438,8 @@ function SalesContract() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });
@@ -449,4 +452,8 @@ function SalesContract() {
   );
 }
 
-export default styled(SalesContract)``;
+export default styled(SalesContract)`
+  .ant-select-multiple .ant-select-selector {
+    border-radius: 0 !important;
+  }
+`;

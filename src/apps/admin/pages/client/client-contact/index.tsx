@@ -36,7 +36,7 @@ function ClientContact() {
   const [client] = useOption(getClientOption);
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin
+    theme.padding * 2 + theme.margin,
   );
 
   useEffect(() => {
@@ -129,14 +129,14 @@ function ClientContact() {
       >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="300px">
+            <Col flex="280px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="按姓名搜索"
               />
             </Col>
-            <Col flex="300px">
+            <Col flex="280px">
               <ProFormSelect<typeof client.list>
                 label="客户"
                 name="client_ids"
@@ -197,7 +197,7 @@ function ClientContact() {
 
         {window.preload.getLocalUserHasPermission(
           "/client/client-contact",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -208,8 +208,8 @@ function ClientContact() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

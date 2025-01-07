@@ -191,14 +191,14 @@ function OutStock() {
       <Card bordered>
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="合同名称/编号搜索"
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect<Area>
                 label="区域"
                 name="area_ids"
@@ -212,7 +212,7 @@ function OutStock() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Project>
                 label="项目"
                 name="project_ids"
@@ -226,7 +226,7 @@ function OutStock() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Client>
                 label="客户"
                 name="client_ids"
@@ -240,7 +240,7 @@ function OutStock() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<SalesContract>
                 label="合同"
                 name="sales_contract_ids"
@@ -254,7 +254,7 @@ function OutStock() {
                 }}
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect<SalesOrder>
                 label="订单"
                 name="sales_order_ids"
@@ -268,17 +268,7 @@ function OutStock() {
                 }}
               />
             </Col>
-            <Col flex="330px">
-              <ProFormDateRangePicker
-                name="bill_date"
-                transform={(value) => ({
-                  start_time: value[0],
-                  end_time: value[1],
-                })}
-                label="入库日期"
-              />
-            </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormTreeSelect
                 label="负责人"
                 name="staff_ids"
@@ -286,7 +276,7 @@ function OutStock() {
                 // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect
                 label="状态"
                 name="statuses"
@@ -298,6 +288,16 @@ function OutStock() {
                   optionFilterProp: "name",
                   mode: "multiple",
                 }}
+              />
+            </Col>
+            <Col flex="320px">
+              <ProFormDateRangePicker
+                name="bill_date"
+                transform={(value) => ({
+                  start_time: value[0],
+                  end_time: value[1],
+                })}
+                label="入库日期"
               />
             </Col>
             <Col flex="80px">

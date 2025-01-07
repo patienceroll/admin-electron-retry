@@ -38,7 +38,7 @@ function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin
+    theme.padding * 2 + theme.margin,
   );
 
   const create = Create.createRef();
@@ -56,7 +56,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户详情 - " + record.name_show
+              "客户详情 - " + record.name_show,
             );
           }}
         >
@@ -143,7 +143,7 @@ function Client() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/client/client/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`
+                  `编辑 - ${row.name_show}`,
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -200,14 +200,14 @@ function Client() {
       >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="按客户搜索"
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect
                 label="客户类型"
                 name="type"
@@ -215,7 +215,15 @@ function Client() {
                 fieldProps={{ fieldNames: { label: "text", value: "value" } }}
               />
             </Col>
-            <Col flex="500px">
+            <Col flex="280px">
+              <ProFormTreeSelect
+                label="负责人"
+                name="staff_ids"
+                placeholder="请选择负责人"
+                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+              />
+            </Col>
+            <Col flex="560px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -228,14 +236,7 @@ function Client() {
                 <AddressFormSearch />
               </ProForm.Item>
             </Col>
-            <Col flex="240px">
-              <ProFormTreeSelect
-                label="负责人"
-                name="staff_ids"
-                placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
-              />
-            </Col>
+
             <Col flex="80px">
               <SearchAction
                 loading={table.loading}
@@ -288,7 +289,7 @@ function Client() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户"
+                "编辑新创建的客户",
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -317,7 +318,7 @@ function Client() {
         )}
         {window.preload.getLocalUserHasPermission(
           "/client/client",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -328,8 +329,8 @@ function Client() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

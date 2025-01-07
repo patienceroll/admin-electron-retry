@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Card, Col, Row } from "antd";
 import {
-  ProForm,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
@@ -30,7 +29,6 @@ import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
-import AddressFormSearch from "src/framework/component/adress-form-search";
 
 function StockCheck() {
   const table = useSearchTable(getStockCheckList);
@@ -91,7 +89,6 @@ function StockCheck() {
           };
         },
       },
-      valueType: "dateRange",
       ellipsis: true,
       render: (_, row) => row.bill_date,
     },
@@ -198,28 +195,14 @@ function StockCheck() {
       <Card bordered>
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="合同名称/编号搜索"
               />
             </Col>
-            <Col flex="240px">
-              <ProFormSelect<Area>
-                label="区域"
-                name="area_ids"
-                options={areaOption.list}
-                fieldProps={{
-                  fieldNames: { label: "name", value: "id" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Project>
                 label="项目"
                 name="project_ids"
@@ -233,7 +216,7 @@ function StockCheck() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Client>
                 label="客户"
                 name="client_ids"
@@ -247,7 +230,7 @@ function StockCheck() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<SalesContract>
                 label="合同"
                 name="sales_contract_ids"
@@ -261,7 +244,7 @@ function StockCheck() {
                 }}
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect<SalesOrder>
                 label="订单"
                 name="sales_order_ids"
@@ -275,30 +258,7 @@ function StockCheck() {
                 }}
               />
             </Col>
-            <Col flex="500px">
-              <ProForm.Item
-                label="行政区"
-                name="region"
-                transform={({ province, city, county }) => ({
-                  province,
-                  city,
-                  county,
-                })}
-              >
-                <AddressFormSearch />
-              </ProForm.Item>
-            </Col>
-            <Col flex="330px">
-              <ProFormDateRangePicker
-                name="bill_date"
-                transform={(value) => ({
-                  start_time: value[0],
-                  end_time: value[1],
-                })}
-                label="发货日期"
-              />
-            </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormTreeSelect
                 label="负责人"
                 name="staff_ids"
@@ -306,7 +266,7 @@ function StockCheck() {
                 // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect
                 label="状态"
                 name="statuses"
@@ -318,6 +278,16 @@ function StockCheck() {
                   optionFilterProp: "name",
                   mode: "multiple",
                 }}
+              />
+            </Col>
+            <Col flex="320px">
+              <ProFormDateRangePicker
+                name="bill_date"
+                transform={(value) => ({
+                  start_time: value[0],
+                  end_time: value[1],
+                })}
+                label="发货日期"
               />
             </Col>
             <Col flex="80px">

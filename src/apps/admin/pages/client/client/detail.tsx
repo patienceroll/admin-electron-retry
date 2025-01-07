@@ -42,7 +42,7 @@ function Detail(props: StyledWrapComponents) {
         setDetail(res.data);
       });
     },
-    [id]
+    [id],
   );
 
   useEffect(() => {
@@ -128,21 +128,21 @@ function Detail(props: StyledWrapComponents) {
           style={{ marginTop: theme.margin }}
           gutter={[theme.padding, theme.padding]}
         >
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="客户">{detail.name}</InfoItem>
           </Col>
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="简称">{detail.short_name}</InfoItem>
           </Col>
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="类型">
               {clientTypeMap.get(detail.type)?.text}
             </InfoItem>
           </Col>
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="详细地址">{detail.address}</InfoItem>
           </Col>
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="是否签约">{detail.is_sign ? "是" : "否"}</InfoItem>
           </Col>
         </Row>
@@ -432,15 +432,15 @@ function Detail(props: StyledWrapComponents) {
           style={{ marginTop: theme.margin }}
           gutter={[theme.padding, theme.padding]}
         >
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
           </Col>
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="创建时间">
               {detail.created_user?.created_at}
             </InfoItem>
           </Col>
-          <Col flex="300px">
+          <Col flex="280px">
             <InfoItem label="更新时间">
               {detail.created_user?.updated_at}
             </InfoItem>
@@ -476,7 +476,7 @@ export default styled(Detail)`
 
   .anchor {
     position: fixed;
-    top: ${props => props.theme.margin}px;
+    top: ${(props) => props.theme.margin}px;
     right: 50px;
   }
 `;

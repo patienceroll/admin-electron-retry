@@ -121,7 +121,6 @@ function SalesOrderList() {
     {
       title: "下单日期",
       dataIndex: "bill_date",
-      valueType: "dateRange",
       renderText: (_, row) => row.bill_date,
     },
     {
@@ -202,14 +201,14 @@ function SalesOrderList() {
       <Card bordered>
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormText
                 label="关键词"
                 name="keyword"
                 placeholder="合同名称/编号搜索"
               />
             </Col>
-            <Col flex="240px">
+            <Col flex="280px">
               <ProFormSelect<Area>
                 label="区域"
                 name="area_ids"
@@ -223,7 +222,7 @@ function SalesOrderList() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Project>
                 label="项目"
                 name="project_ids"
@@ -237,7 +236,7 @@ function SalesOrderList() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<Client>
                 label="客户"
                 name="client_ids"
@@ -251,7 +250,7 @@ function SalesOrderList() {
                 }}
               />
             </Col>
-            <Col flex="330px">
+            <Col flex="280px">
               <ProFormSelect<SalesContract>
                 label="合同"
                 name="sales_contract_ids"
@@ -265,7 +264,15 @@ function SalesOrderList() {
                 }}
               />
             </Col>
-            <Col flex="500px">
+            <Col flex="280px">
+              <ProFormTreeSelect
+                label="负责人"
+                name="staff_ids"
+                placeholder="请选择负责人"
+                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+              />
+            </Col>
+            <Col flex="560px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -278,25 +285,8 @@ function SalesOrderList() {
                 <AddressFormSearch />
               </ProForm.Item>
             </Col>
-            <Col flex="330px">
-              <ProFormDateRangePicker
-                name="sign_date"
-                transform={(value) => ({
-                  start_time: value[0],
-                  end_time: value[1],
-                })}
-                label="下单日期"
-              />
-            </Col>
-            <Col flex="240px">
-              <ProFormTreeSelect
-                label="负责人"
-                name="staff_ids"
-                placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
-              />
-            </Col>
-            <Col flex="240px">
+
+            <Col flex="280px">
               <ProFormSelect
                 label="状态"
                 name="statuses"
@@ -308,6 +298,16 @@ function SalesOrderList() {
                   optionFilterProp: "name",
                   mode: "multiple",
                 }}
+              />
+            </Col>
+            <Col flex="320px">
+              <ProFormDateRangePicker
+                name="bill_date"
+                transform={(value) => ({
+                  start_time: value[0],
+                  end_time: value[1],
+                })}
+                label="下单日期"
               />
             </Col>
             <Col flex="80px">
@@ -400,4 +400,8 @@ function SalesOrderList() {
   );
 }
 
-export default styled(SalesOrderList)``;
+export default styled(SalesOrderList)`
+  .ant-select-multiple .ant-select-selector {
+    border-radius: 0 !important;
+  }
+`;

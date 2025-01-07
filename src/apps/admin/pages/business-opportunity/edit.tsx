@@ -296,7 +296,7 @@ function Edit(props: StyledWrapComponents) {
             <Col flex="100%">
               <Form.Item label={<span>备&emsp;&emsp;注</span>} name="remark">
                 <Input.TextArea
-                  style={{ height: 200 }}
+                  style={{ height: 100 }}
                   allowClear
                   placeholder="请输入备注"
                 />
@@ -323,12 +323,12 @@ function Edit(props: StyledWrapComponents) {
         <FloatButton.Group shape="square">
           <FloatButton
             icon={<Icon icon={SaveSvg} />}
-            tooltip="保存"
+            // description="保存"
             onClick={submit}
           />
           <FloatButton
             icon={<Icon icon={DeleteSvg} fill={theme.colorError} />}
-            tooltip="删除"
+            // description="删除"
             onClick={function () {
               contextedModal.modal?.confirm({
                 title: "删除",
