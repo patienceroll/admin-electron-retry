@@ -289,7 +289,7 @@ function BusinessOpportunity() {
                 }}
               />
             </Col>
-            <Col flex="560px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"

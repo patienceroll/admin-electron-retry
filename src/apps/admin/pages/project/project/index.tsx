@@ -257,7 +257,7 @@ export default function () {
                 }))}
               />
             </Col>
-            <Col flex="550px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"
