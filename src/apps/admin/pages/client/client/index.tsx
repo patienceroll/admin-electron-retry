@@ -33,6 +33,7 @@ import usePageTableHeight from "src/hooks/use-page-table-height";
 import { StaffStatus } from "src/apps/admin/api/staff";
 import images from "src/assets/images";
 import AddressFormSearch from "src/framework/component/adress-form-search";
+import useStaffTree from "src/b-hooks/use-staff-tree";
 
 function Client() {
   const table = useSearchTable(getClientList);
@@ -41,6 +42,7 @@ function Client() {
     theme.padding * 2 + theme.margin,
   );
 
+  const {options,treeOptions} = useStaffTree()
   const create = Create.createRef();
   const follow = Follow.createRef();
 
@@ -188,6 +190,7 @@ function Client() {
 
   useEffect(() => {
     table.reload();
+    options.loadOption()
   }, []);
 
   return (
@@ -220,10 +223,10 @@ function Client() {
                 label="负责人"
                 name="staff_ids"
                 placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
-            <Col flex="560px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"

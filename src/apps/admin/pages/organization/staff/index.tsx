@@ -109,7 +109,7 @@ function Staff() {
     {
       title: "操作",
       fixed: "right",
-      width: 180,
+      width: 200,
       render: (_, row) => (
         <Space>
           <Button

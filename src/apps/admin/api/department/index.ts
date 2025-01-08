@@ -59,7 +59,7 @@ export function addDepartment(params: any) {
  * 部门-编辑
  */
 export function editDepartment(params: any) {
-  return fetch.POST(fetch.base(`/api/department`), params);
+  return fetch.PUT(fetch.base(`/api/department`), params);
 }
 
 /**
