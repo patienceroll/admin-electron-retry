@@ -140,3 +140,10 @@ type AddresssParams = {
   longitude?: string;
   latitude?: string;
 };
+
+
+/** 渲染字段单项 */
+type RenderNames = {
+  key:string,
+  name:string
+}

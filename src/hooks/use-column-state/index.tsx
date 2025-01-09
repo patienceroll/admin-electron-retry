@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ColumnsState, ProColumns } from "@ant-design/pro-components";
 import { Resizable } from "react-resizable";
 
@@ -13,7 +13,7 @@ export default function useTableColumnState<T>(
 ) {
   const [data, setData] = useState<DexiedColumnState>();
 
-  function generateDexiedColumnState(oldState?: DexiedColumnState) {
+  const generateDexiedColumnState = useCallback( function (oldState?: DexiedColumnState) {
     const newState: DexiedColumnState["data"] = {};
     const oldData = oldState?.data || {};
     column.forEach((item) => {
@@ -32,7 +32,7 @@ export default function useTableColumnState<T>(
       }
     });
     return newState;
-  }
+  },[column])
 
   useEffect(() => {
     db.columnStateTable
@@ -56,7 +56,7 @@ export default function useTableColumnState<T>(
             });
         }
       });
-  }, [app, tableName]);
+  }, [app, generateDexiedColumnState, tableName]);
 
   function onChange(state: Record<string, ColumnsState>) {
     const newData: DexiedColumnState["data"] = {};
