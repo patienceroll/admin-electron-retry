@@ -25,7 +25,6 @@ export default function (props: Pick<SalesContract, "id">) {
     });
   }, [id]);
 
-
   const column = table.column([
     {
       title: "产品",
@@ -33,10 +32,6 @@ export default function (props: Pick<SalesContract, "id">) {
       fixed: "left",
       renderText: (_, row) => row.material?.name,
     },
-    ...renderNames.unit_fields.map<(typeof column)[number]>((item) => ({
-      title: item.name,
-      renderText: (_, row) => row.unit_arr?.[item.key],
-    })),
     ...renderNames.attr_fields.map<(typeof column)[number]>((item) => ({
       title: item.name,
       renderText: (_, row) => row.material_sku?.[item.key],
@@ -45,6 +40,10 @@ export default function (props: Pick<SalesContract, "id">) {
       title: "执行标准",
       dataIndex: "standard",
     },
+    ...renderNames.unit_fields.map<(typeof column)[number]>((item) => ({
+      title: item.name,
+      renderText: (_, row) => row.unit_arr?.[item.key],
+    })),
     {
       title: "金额",
       dataIndex: "amount",
