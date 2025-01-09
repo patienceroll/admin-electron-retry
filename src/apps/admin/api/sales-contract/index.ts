@@ -100,6 +100,7 @@ export const getSalesContractCode = () => {
 export const getMaterialSku = (
   params: ListParam & {
     id?: SalesContract["id"];
+    material_classify_id?: MaterialClassify['id']
   }
 ) => {
   return fetch.GET<List<SalesContractMaterialSku>>(
