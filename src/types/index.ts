@@ -141,9 +141,8 @@ type AddresssParams = {
   latitude?: string;
 };
 
-
 /** 渲染字段单项 */
-type RenderNames = {
-  key:string,
-  name:string
-}
+type RenderConfig = {
+  attr_fields: { key: string; name: string }[];
+  unit_fields: { key: string; name: string }[];
+};

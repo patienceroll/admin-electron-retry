@@ -113,6 +113,6 @@ export function salesContractDetailUnitSet(params: {
 
 
 /** 销售合同M明细渲染字段 */
-export function salesContractDetailNameRender(params: { sales_contract_id: SalesContract["id"] }) {
-  return fetch.GET<RenderNames[]>(fetch.base(`/api/sales-contract-detail/render`), params);
+export function salesContractDetailRenderConfig(params: { sales_contract_id: SalesContract["id"] }) {
+  return fetch.GET<RenderConfig>(fetch.base(`/api/sales-contract-detail/render`), params);
 }
