@@ -60,14 +60,13 @@ function SalesContract() {
   const create = Create.createRef();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8),
+    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8)
   );
 
   const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const { options, treeOptions } = useStaffTree();
-
 
   const column = table.column([
     {
@@ -79,11 +78,11 @@ function SalesContract() {
           onClick={() => {
             const window = openWindow.openCurrentAppWindow(
               `/sales/sales-contract/detail?id=${record.id}`,
-              "销售合同详情 - " + record.name,
+              "销售合同详情 - " + record.name
             );
 
             function listener(
-              event: MessageEvent<keyof SalesContract["btn_power"]>,
+              event: MessageEvent<keyof SalesContract["btn_power"]>
             ) {
               if (
                 [
@@ -185,13 +184,20 @@ function SalesContract() {
       render(_, row) {
         return (
           <Space>
-            <Button type="text">打印</Button>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
             <Button
               type="text"
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/sales/sales-contract/edit?id=${row.id}`,
-                  `编辑 - ${row.name}`,
+                  `编辑 - ${row.name}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -409,7 +415,7 @@ function SalesContract() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/sales/sales-contract/edit?id=${result.id}`,
-                "编辑合同",
+                "编辑合同"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -428,7 +434,7 @@ function SalesContract() {
 
         {window.preload.getLocalUserHasPermission(
           "/sales/sales-contract",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -439,8 +445,8 @@ function SalesContract() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current,
-                ),
+                  table.extraParams.current
+                )
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });
