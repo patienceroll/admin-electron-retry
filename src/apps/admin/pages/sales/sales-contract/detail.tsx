@@ -34,6 +34,8 @@ import SubmitSvg from "src/assets/svg/提审.svg";
 import StopSvg from "src/assets/svg/终止.svg";
 import FinishSvg from "src/assets/svg/完结.svg";
 import getApproval from "src/b-hooks/get-approval";
+import useRenderNames from "src/b-hooks/use-render-names";
+import { salesContractDetailRenderConfig } from "src/apps/admin/api/sales-contract-detail";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -44,6 +46,13 @@ function Detail(props: StyledWrapComponents) {
   const theme = useTheme();
 
   const [detail, setDetail] = useState<SalesContractDetail>();
+
+  const [_, attrCoumn, unitColumn] = useRenderNames(
+    salesContractDetailRenderConfig,
+    {
+      sales_contract_id: id,
+    }
+  );
 
   const getDetail = useCallback(
     function () {
@@ -141,22 +150,30 @@ function Detail(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }} id="产品明细">
         产品明细
       </Title>
-      <DetailSaleContractDetail id={id} />
+      <DetailSaleContractDetail
+        id={id}
+        attrCoumn={attrCoumn}
+        unitColumn={unitColumn}
+      />
 
       <Title style={{ marginTop: theme.margin }} id="销售订单">
         销售订单
       </Title>
-      <DetailSaleOrder id={id} />
+      <DetailSaleOrder id={id} attrCoumn={attrCoumn} unitColumn={unitColumn} />
 
       <Title style={{ marginTop: theme.margin }} id="销售发货">
         销售发货
       </Title>
-      <DetailSaleDeliver id={id} />
+      <DetailSaleDeliver
+        id={id}
+        attrCoumn={attrCoumn}
+        unitColumn={unitColumn}
+      />
 
       <Title style={{ marginTop: theme.margin }} id="销售退货">
         销售退货
       </Title>
-      <DetailSaleReturn id={id} />
+      <DetailSaleReturn id={id} attrCoumn={attrCoumn} unitColumn={unitColumn} />
 
       <Title style={{ marginTop: theme.margin }} id="审批记录">
         审批记录

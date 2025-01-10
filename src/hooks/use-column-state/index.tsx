@@ -13,26 +13,41 @@ export default function useTableColumnState<T>(
 ) {
   const [data, setData] = useState<DexiedColumnState>();
 
-  const generateDexiedColumnState = useCallback( function (oldState?: DexiedColumnState) {
-    const newState: DexiedColumnState["data"] = {};
-    const oldData = oldState?.data || {};
-    column.forEach((item) => {
-      if (typeof item.dataIndex === "string") {
-        const oldItem = oldData[item.dataIndex];
-        if (oldItem) {
-          newState[item.dataIndex] = {
-            ...oldItem,
-          };
-        } else {
-          newState[item.dataIndex] = {
-            width: typeof item.width === "number" ? item.width : undefined,
-            fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
-          };
+  const [memoryColumn, setMemoryColumn] = useState<ProColumns<T>[]>([]);
+
+  useEffect(() => {
+    const memoryColumnDataIndex = memoryColumn
+      .map((item) => item.dataIndex)
+      .join("");
+    const columnDataIndex = column.map((item) => item.dataIndex).join("");
+    if (memoryColumnDataIndex !== columnDataIndex) {
+      setMemoryColumn(column);
+    }
+  }, [column, memoryColumn]);
+
+  const generateDexiedColumnState = useCallback(
+    function (oldState?: DexiedColumnState) {
+      const newState: DexiedColumnState["data"] = {};
+      const oldData = oldState?.data || {};
+      memoryColumn.forEach((item) => {
+        if (typeof item.dataIndex === "string") {
+          const oldItem = oldData[item.dataIndex];
+          if (oldItem) {
+            newState[item.dataIndex] = {
+              ...oldItem,
+            };
+          } else {
+            newState[item.dataIndex] = {
+              width: typeof item.width === "number" ? item.width : undefined,
+              fixed: typeof item.fixed !== "boolean" ? item.fixed : undefined,
+            };
+          }
         }
-      }
-    });
-    return newState;
-  },[column])
+      });
+      return newState;
+    },
+    [memoryColumn]
+  );
 
   useEffect(() => {
     db.columnStateTable
@@ -49,11 +64,9 @@ export default function useTableColumnState<T>(
               setData({ id, data: newState, app, tableName });
             });
         } else {
-          db.columnStateTable
-            .update(result.id, { data: newState })
-            .then(() => {
-              setData({ ...result, data: newState });
-            });
+          db.columnStateTable.update(result.id, { data: newState }).then(() => {
+            setData({ ...result, data: newState });
+          });
         }
       });
   }, [app, generateDexiedColumnState, tableName]);

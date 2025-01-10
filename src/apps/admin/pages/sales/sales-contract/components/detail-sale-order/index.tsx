@@ -1,4 +1,4 @@
-import ProTable from "@ant-design/pro-table";
+import ProTable, { ProColumns } from "@ant-design/pro-table";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 
@@ -11,8 +11,13 @@ import {
   salesOrderStatus,
 } from "src/apps/admin/api/sales-order";
 
-export default function (props: Pick<SalesContract, "id">) {
-  const { id } = props;
+export default function (
+  props: Pick<SalesContract, "id"> & {
+    attrCoumn: ProColumns<any>[];
+    unitColumn: ProColumns<any>[];
+  }
+) {
+  const { id, attrCoumn, unitColumn } = props;
   const theme = useTheme();
   const table = useSearchTable(getSalesOrderList);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -42,94 +47,8 @@ export default function (props: Pick<SalesContract, "id">) {
       renderText: (_, row) => row.material?.name,
       ellipsis: true,
     },
-    {
-      title: "外径",
-      key: "o_diameter",
-      renderText: (_, row) => row.material_sku?.o_diameter,
-    },
-    {
-      title: "壁厚",
-      key: "wall_thickness",
-      renderText: (_, row) => row.material_sku?.wall_thickness,
-    },
-    {
-      title: "内涂层厚度",
-      key: "i_coat_thickness",
-      renderText: (_, row) => row.material_sku?.i_coat_thickness,
-    },
-    {
-      title: "外涂层厚度",
-      key: "o_coat_thickness",
-      renderText: (_, row) => row.material_sku?.o_coat_thickness,
-    },
-    {
-      title: "长度",
-      key: "length",
-      renderText: (_, row) => row.material_sku?.length,
-    },
-    {
-      title: "连接方式",
-      key: "connection_type",
-      renderText: (_, row) => row.material_sku?.connection_type,
-    },
-    {
-      title: "钢卷类型",
-      key: "steel_type",
-      renderText: (_, row) => row.material_sku?.steel_type,
-    },
-    {
-      title: "材质",
-      key: "texture",
-      renderText: (_, row) => row.material_sku?.texture,
-    },
-    {
-      title: "内涂层颜色",
-      key: "i_coat_color",
-      renderText: (_, row) => row.material_sku?.i_coat_color,
-    },
-    {
-      title: "外涂层颜色",
-      key: "o_coat_color",
-      renderText: (_, row) => row.material_sku?.o_coat_color,
-    },
-    {
-      title: "拓展属性",
-      dataIndex: "material_sku",
-      renderText(_, row) {
-        return row.material_sku?.name;
-      },
-      //   render(_, row) {
-      //     return (
-      //       <AttrSnapshoot attr_snapshoot={row.material_sku?.attr_snapshoot} />
-      //     );
-      //   },
-    },
-    {
-      title: "订单明细",
-      dataIndex: "id",
-      //   render: (_, row) => {
-      //     return row.line_unit.map((i) => (
-      //       <div
-      //         style={{
-      //           display: "flex",
-      //           textAlign: "left",
-      //           marginLeft: 20,
-      //         }}
-      //         key={i.id}
-      //       >
-      //         <Badge
-      //           status={i.is_execute ? "success" : "default"}
-      //           style={{ flexShrink: 0 }}
-      //         />
-      //         &nbsp;
-      //         <span style={{ flex: 1 }}>
-      //           {i.num}&nbsp;&nbsp;(&nbsp;{i.unit}&nbsp;)
-      //         </span>
-      //         <span style={{ flex: 1 }}>{new Money(i.price).toCNY()}</span>
-      //       </div>
-      //     ));
-      //   },
-    },
+    ...attrCoumn,
+    ...unitColumn,
     {
       title: "金额",
       dataIndex: "amount",

@@ -1,29 +1,20 @@
-import React, { useEffect, useState } from "react";
-import ProTable from "@ant-design/pro-table";
+import React, { useEffect } from "react";
+import ProTable, { ProColumns } from "@ant-design/pro-table";
 import { useTheme } from "styled-components";
 
-import {
-  getSalesContractDetailList,
-  salesContractDetailRenderConfig,
-} from "src/apps/admin/api/sales-contract-detail";
+import { getSalesContractDetailList } from "src/apps/admin/api/sales-contract-detail";
 import useSearchTable from "src/hooks/use-search-table";
 
-export default function (props: Pick<SalesContract, "id">) {
-  const { id } = props;
+export default function (
+  props: Pick<SalesContract, "id"> & {
+    attrCoumn: ProColumns<any>[];
+    unitColumn: ProColumns<any>[];
+  }
+) {
+  const { id, attrCoumn, unitColumn } = props;
   const theme = useTheme();
 
   const table = useSearchTable(getSalesContractDetailList);
-
-  const [renderNames, setRenderNames] = useState<RenderConfig>({
-    attr_fields: [],
-    unit_fields: [],
-  });
-
-  useEffect(() => {
-    salesContractDetailRenderConfig({ sales_contract_id: id }).then((res) => {
-      setRenderNames(res.data);
-    });
-  }, [id]);
 
   const column = table.column([
     {
@@ -32,18 +23,12 @@ export default function (props: Pick<SalesContract, "id">) {
       fixed: "left",
       renderText: (_, row) => row.material?.name,
     },
-    ...renderNames.attr_fields.map<(typeof column)[number]>((item) => ({
-      title: item.name,
-      renderText: (_, row) => row.material_sku?.[item.key],
-    })),
+    ...attrCoumn,
     {
       title: "执行标准",
       dataIndex: "standard",
     },
-    ...renderNames.unit_fields.map<(typeof column)[number]>((item) => ({
-      title: item.name,
-      renderText: (_, row) => row.unit_arr?.[item.key],
-    })),
+    ...unitColumn,
     {
       title: "金额",
       dataIndex: "amount",
