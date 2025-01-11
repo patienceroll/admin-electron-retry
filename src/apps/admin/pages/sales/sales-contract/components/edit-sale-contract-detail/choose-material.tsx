@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { Button, Col, Form, Input, Modal, Row, Select, Space } from "antd";
 import styled, { useTheme } from "styled-components";
-import ProTable from "@ant-design/pro-table";
+import ProTable, { ProColumns } from "@ant-design/pro-table";
 
 import useWather from "src/hooks/use-wather";
 import useSearchTable from "src/hooks/use-search-table";
@@ -19,10 +19,13 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-const ChooseMaterial = forwardRef<Ref, StyledWrapComponents>(function (
-  props,
-  ref
-) {
+const ChooseMaterial = forwardRef<
+  Ref,
+  StyledWrapComponents<{
+    attrCoumn: ProColumns<any>[];
+  }>
+>(function (props, ref) {
+  const { attrCoumn } = props;
   const promiseResolver = useRef<{
     resolve: (value: void | PromiseLike<void>) => void;
     reject: (reason?: unknown) => void;
@@ -50,7 +53,13 @@ const ChooseMaterial = forwardRef<Ref, StyledWrapComponents>(function (
           if (item) {
             form.setFieldsValue({ material_classify_id: item.id });
             table.extraParams.current.material_classify_id = item.id;
-            attrSearch.current?.changeAttr({ material_classify_id: item.id });
+            attrSearch.current
+              ?.changeAttr({ material_classify_id: item.id })
+              .then(() => form.getFieldsValue())
+              .then((res) => {
+                table.extraParams.current = res;
+                table.reload()
+              });
           }
         });
       });
@@ -65,49 +74,7 @@ const ChooseMaterial = forwardRef<Ref, StyledWrapComponents>(function (
       renderText: (_, row) => row.material?.name,
       ellipsis: true,
     },
-    {
-      title: "外径",
-      renderText: (_, row) => row.o_diameter,
-    },
-    {
-      title: "壁厚",
-      renderText: (_, row) => row.wall_thickness,
-    },
-    {
-      title: "内涂层厚度",
-      renderText: (_, row) => row.i_coat_thickness,
-    },
-    {
-      title: "外涂层厚度",
-      renderText: (_, row) => row.o_coat_thickness,
-    },
-    {
-      title: "长度",
-      renderText: (_, row) => row.length,
-    },
-    {
-      title: "连接方式",
-      renderText: (_, row) => row.connection_type,
-    },
-    {
-      title: "钢卷类型",
-      renderText: (_, row) => row.steel_type,
-    },
-    {
-      title: "材质",
-      renderText: (_, row) => row.texture,
-    },
-    {
-      title: "内涂层颜色",
-      renderText: (_, row) => row.i_coat_color,
-    },
-    {
-      title: "外涂层颜色",
-      renderText: (_, row) => row.o_coat_color,
-    },
-    {
-      title: "拓展属性",
-    },
+    ...attrCoumn,
   ]);
 
   const height = "60vh";
@@ -165,7 +132,7 @@ const ChooseMaterial = forwardRef<Ref, StyledWrapComponents>(function (
                 <Button type="primary">查询</Button>
               </Space>
               <Space>
-                <Button>关闭</Button>
+                <Button onClick={open.setFalse}>关闭</Button>
                 <Button type="primary">保存</Button>
               </Space>
             </div>

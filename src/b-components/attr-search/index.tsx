@@ -12,7 +12,7 @@ type Ref = {
   changeAttr: (options: {
     material_classify_id: MaterialClassify["id"];
     material_sku_id?: MaterialSku["id"];
-  }) => void;
+  }) => Promise<MaterialOfAttr["id"][]>;
 };
 
 type Props = {
@@ -30,18 +30,20 @@ export default forwardRef<Ref, Props>(function (props, ref) {
 
   useImperativeHandle(ref, () => ({
     changeAttr(options) {
-        console.log(options)
-      getMaterialsAttrList(options).then((res) => {
-        setAttrs(res.data);
-        const newValue: MaterialOfAttr["id"][] = [];
-        res.data.map((item) => {
-          item.detail.forEach((item) => {
-            if (item.is_select) {
-              newValue.push(item.id);
-            }
+      return new Promise<MaterialOfAttr["id"][]>((resolve, reject) => {
+        getMaterialsAttrList(options).then((res) => {
+          setAttrs(res.data);
+          const newValue: MaterialOfAttr["id"][] = [];
+          res.data.map((item) => {
+            item.detail.forEach((item) => {
+              if (item.is_select) {
+                newValue.push(item.id);
+              }
+            });
           });
-        });
-        onChange(newValue);
+          onChange(newValue);
+          resolve(newValue)
+        }).catch(reject);
       });
     },
   }));
