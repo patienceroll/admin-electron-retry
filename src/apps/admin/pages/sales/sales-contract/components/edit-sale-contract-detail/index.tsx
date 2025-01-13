@@ -124,7 +124,7 @@ export default function (props: Pick<SalesContract, "id">) {
           添加产品
         </Button>,
         <ChooseMaterial.default key="choose" ref={chooseMaterial} id={id} />,
-        <SetUnit.default key="set" ref={setUnit} />,
+        <SetUnit.default key="set" ref={setUnit} id={id} />,
       ]}
       summary={(pageData) => {
         return (

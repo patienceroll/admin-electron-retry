@@ -84,33 +84,6 @@ export function salesContractDetailUnit(
   );
 }
 
-/** 销售合同明细-设置物资执行单位 */
-export function salesContractDetailUnitSet(params: {
-  remark: string;
-  data: {
-    /**
-     * 是否执行单位;0:否,1:是
-     */
-    is_execute: number;
-    /**
-     * 物资单位id
-     */
-    material_unit_id: number;
-    /**
-     * 数量
-     */
-    num: number;
-    /**
-     * 单价
-     */
-    price: string;
-  }[];
-  attr_snapshoot: Record<string, string>;
-  id: SalesContractDetail["id"];
-}) {
-  return fetch.POST(fetch.base(`/api/sales-contract-detail/unit`), params);
-}
-
 /** 销售合同明细渲染字段 */
 export function salesContractDetailRenderConfig(params: {
   sales_contract_id: SalesContract["id"];
@@ -121,3 +94,19 @@ export function salesContractDetailRenderConfig(params: {
   );
 }
 
+/** 销售合同明细 编辑 */
+export function salesContractDetailEdit(params: {
+  attr_snapshoot: Record<string, string>;
+  id: SalesContract["id"];
+  line_unit: {
+    is_execute: 0 | 1;
+    material_unit_id: number;
+    num: number;
+    price: number | string;
+  }[];
+  line_attr: Record<string, string>;
+  remark?: string;
+  standard?: Record<string, string>;
+}) {
+  return fetch.PUT(fetch.base(`/api/sales-contract-detail`), params);
+}

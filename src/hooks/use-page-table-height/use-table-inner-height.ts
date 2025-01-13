@@ -64,7 +64,6 @@ export default function useTableInnerHeight(
     toolbar,
   ]);
 
-  console.log(tableInnerHeight);
 
   return tableInnerHeight;
 }

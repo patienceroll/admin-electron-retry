@@ -164,3 +164,18 @@ type Unit = {
   material_unit_id: number;
   unit: string;
 };
+
+/** 报表数据 */
+type ExcelTableData = {
+  data: Record<string, string>[];
+  head: ExcelTableColum[];
+};
+
+/** 报表列 */
+type ExcelTableColum = {
+  dataIndex?: string;
+  title: string;
+  width: number;
+  ellipsis?: boolean;
+  children?: ExcelTableColum[];
+};
