@@ -60,7 +60,7 @@ function SalesContract() {
   const create = Create.createRef();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8)
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
 
   const [areaOption] = useOption(getAreaOption);

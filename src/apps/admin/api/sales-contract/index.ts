@@ -100,7 +100,7 @@ export const getSalesContractCode = () => {
 export const getMaterialSku = (
   params: ListParam & {
     id?: SalesContract["id"];
-    material_classify_id?: MaterialClassify['id']
+    material_classify_id?: MaterialClassify["id"];
   }
 ) => {
   return fetch.GET<List<SalesContractMaterialSku>>(
@@ -179,3 +179,12 @@ export function getOperateRecord(params: Pick<SalesContract, "id">) {
   );
 }
 
+/** 销售合同的可选择的产品 列渲染 */
+export function salesContractMaterialRender(params: {
+  material_classify_id: MaterialClassify["id"];
+}) {
+  return fetch.GET<RenderConfig>(
+    fetch.base(`/api/sales-contract/material-sku/render`),
+    params
+  );
+}

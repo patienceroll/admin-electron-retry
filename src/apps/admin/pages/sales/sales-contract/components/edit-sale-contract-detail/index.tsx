@@ -83,7 +83,7 @@ export default function (props: Pick<SalesContract, "id">) {
         <ChooseMaterial.default
           key="choose"
           ref={chooseMaterial}
-          attrCoumn={attrCoumn}
+          id={id}
         />,
       ]}
     />

@@ -1,29 +1,70 @@
 import { useTheme } from "styled-components";
 import { useMemo } from "react";
 
-export default function useTableInnerHeight() {
+export default function useTableInnerHeight(
+  options: {
+    toolbar?: boolean;
+    pagenation?: boolean;
+    /** 选择栏 */
+    alert?: boolean;
+  } = {}
+) {
+  const { toolbar = true, pagenation = true, alert = false } = options;
+  const theme = useTheme();
   const {
     padding,
     margin,
     Pagination = { itemSize: 24, itemSizeSM: 21 },
-  } = useTheme();
+  } = theme;
   const isCompact = window.preload.getTheme().layout === "compact";
 
   const tableInnerHeight = useMemo(() => {
-    const tableBottom = padding;
-
-    // toolbar高度
-    const toolbarHeight = 32 + padding * 2;
-
-    // 分页的高度
-    const pagenationHeight =
-      margin + (!isCompact ? Pagination.itemSize : Pagination.itemSizeSM);
-
     // thead高度
     const theadHeight = !isCompact ? 48 : 38;
 
-    return tableBottom + toolbarHeight + pagenationHeight + theadHeight;
-  }, [Pagination.itemSize, Pagination.itemSizeSM, isCompact, margin, padding]);
+    // unknown height  // 不知道为啥滚动容器会多一像素
+    const unknownHeight = 1;
+    // 底部padding
+    const tableBottom = padding;
+    // 分页的高度
+    let pagenationHeight = 0;
+    if (pagenation) {
+      pagenationHeight =
+        margin + (!isCompact ? Pagination.itemSize : Pagination.itemSizeSM);
+    }
+    // toolbar高度
+
+    let toolbarHeight = 0;
+    if (toolbar) {
+      toolbarHeight = 32 + (isCompact ? 4 : 12) * 2;
+    }
+
+    // alert 高度
+    let alertHeight = 0;
+    if (alert) {
+      alertHeight = (isCompact ? 36 : 46) + margin;
+    }
+
+    return (
+      unknownHeight +
+      tableBottom +
+      toolbarHeight +
+      pagenationHeight +
+      theadHeight +
+      alertHeight
+    );
+  }, [
+    Pagination.itemSize,
+    Pagination.itemSizeSM,
+    alert,
+    isCompact,
+    margin,
+    padding,
+    pagenation,
+    toolbar,
+  ]);
+
+  console.log(tableInnerHeight);
 
   return tableInnerHeight;
 }

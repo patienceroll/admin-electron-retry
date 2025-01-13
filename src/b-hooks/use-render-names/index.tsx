@@ -6,6 +6,7 @@ export default function <
   Api extends (params: Params) => Promise<BaseResponse<RenderConfig>>
 >(api: Api, params: Params) {
   const [tempParams, setTempParams] = useState<Params>();
+  
 
   const [renderNames, setRenderNames] = useState<RenderConfig>({
     attr_fields: [],

@@ -49,7 +49,7 @@ function BusinessOpportunity() {
   const isCompact = window.preload.getTheme().layout === "compact";
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8),
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
 
   const create = Create.createRef();
@@ -67,11 +67,11 @@ function BusinessOpportunity() {
           onClick={() => {
             const window = openWindow.openCurrentAppWindow(
               `/business-opportunity/business-opportunity/detail?id=${record.id}`,
-              "业务机会详情 - " + record.name_show,
+              "业务机会详情 - " + record.name_show
             );
 
             function listener(
-              event: MessageEvent<keyof BusinessOpportunity["btn_power"]>,
+              event: MessageEvent<keyof BusinessOpportunity["btn_power"]>
             ) {
               if (
                 [
@@ -204,7 +204,7 @@ function BusinessOpportunity() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/business-opportunity/business-opportunity/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success" | "delete">) {
@@ -237,7 +237,7 @@ function BusinessOpportunity() {
                       () => {
                         contextedMessage.message?.success("成功删除");
                         table.reload();
-                      },
+                      }
                     );
                   },
                 });
@@ -374,7 +374,7 @@ function BusinessOpportunity() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会",
+                "编辑业务机会"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -393,7 +393,7 @@ function BusinessOpportunity() {
 
         {window.preload.getLocalUserHasPermission(
           "/business-opportunity/business-opportunity",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -404,8 +404,8 @@ function BusinessOpportunity() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current,
-                ),
+                  table.extraParams.current
+                )
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

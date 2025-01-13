@@ -37,7 +37,7 @@ export default function () {
 
   // 14 是加了tab之后高度有变化
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 0 : 8),
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
   const [area] = useOption(getAreaOption);
   const column = table.column([
@@ -50,11 +50,11 @@ export default function () {
           onClick={() => {
             const window = openWindow.openCurrentAppWindow(
               `/project/project/detail?id=${record.id}`,
-              "项目详情 - " + record.name_show,
+              "项目详情 - " + record.name_show
             );
 
             function listener(
-              event: MessageEvent<keyof BusinessOpportunity["btn_power"]>,
+              event: MessageEvent<keyof BusinessOpportunity["btn_power"]>
             ) {
               if (
                 [
@@ -169,7 +169,7 @@ export default function () {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/project/project/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
