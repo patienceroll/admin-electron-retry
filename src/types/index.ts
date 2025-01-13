@@ -146,3 +146,21 @@ type RenderConfig = {
   attr_fields: { key: string; name: string }[];
   unit_fields: { key: string; name: string }[];
 };
+
+/** 组合单位 */
+type Unit = {
+  alias: string;
+  line?: {
+    alias: string;
+    id: number;
+    is_execute: number;
+    material_unit_id: number;
+    num: number;
+    price: string;
+    unit: string;
+    used_num: number;
+    waste_num: number;
+  };
+  material_unit_id: number;
+  unit: string;
+};

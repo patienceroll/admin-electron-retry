@@ -19,6 +19,7 @@ export default function (props: InputNumberProps) {
       style={style}
       max={max}
       placeholder={placeholder}
+      precision={2}
     />
   );
 }

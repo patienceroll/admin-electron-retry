@@ -36,7 +36,6 @@ const ChooseMaterial = forwardRef<
   StyledWrapComponents<Pick<SalesContract, "id">>
 >(function (props, ref) {
   const { id } = props;
-  const isCompact = window.preload.getTheme().layout === "compact";
 
   const promiseResolver = useRef<{
     resolve: (value: void | PromiseLike<void>) => void;

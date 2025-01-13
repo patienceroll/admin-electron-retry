@@ -362,77 +362,38 @@ type SalesContractDetail = {
   /** 项目id */
   project_id: number;
 
-  /** 类型;1:主合同,2:补充协议 */
-  type: number;
+  /** 销售合同id */
+  sales_contract_id: number;
 
-  /** 主合同id */
-  pid: number;
+  /** 产品ID */
+  material_id: string;
 
-  /** 名称 */
-  name: string;
+  /** 物料SKU */
+  material_sku_id: string;
 
-  /** 编号 */
-  code: string;
+  /** 属性快照 */
+  attr_snapshoot: Record<string, string>;
 
-  /** 税率 */
-  tax_rate: number;
+  /** 执行标准 */
+  standard: string;
+
+  /** 数量 */
+  num: number;
+
+  /** 单位 */
+  unit: string;
+
+  /** 价格 */
+  price: string;
 
   /** 金额 */
   amount: string;
 
-  /** 签约日期 */
-  sign_date: number;
-
-  /** 签约地点 */
-  sign_address: string;
-
-  /** 负责人id */
-  staff_id: number;
-
-  /** 签约人id */
-  sign_staff_id: number;
-
-  /** 乙方结算人员 */
-  settle_staff_id: number;
-
-  /** 甲方负责人 */
-  client_contact_id: number;
-
-  /** 甲方结算人员 */
-  settle_client_contact_id: number;
-
-  /** 结算方式 */
-  settle_type: string;
-
-  /** 付款方式;1:先货后款,2:先款后货 */
-  payment_type: number;
-
-  /** 预付款比例 */
-  advance_ratio: number;
-
-  /** 质保金比例 */
-  quality_ratio: number;
-
-  /** 账户余额 */
-  balance_amount: string;
-
-  /** 收款账户id */
-  collect_bank_account_id: number;
-
-  /** 开票账户id */
-  invoice_bank_account_id: number;
-
   /** 备注 */
   remark: string;
 
-  /** 厂家配送;0:否,1:是 */
-  is_factory_dispatch: number;
-
-  /** 是否审批中;0:否,1:是 */
-  is_approve: number;
-
-  /** 状态 */
-  status: string;
+  /** 状态;0:停用,1:有效 */
+  status: number;
 
   /** 创建者id */
   created_id: number;
@@ -443,127 +404,137 @@ type SalesContractDetail = {
   /** 更新时间 */
   updated_at: string;
 
-  /** 创建时间 */
+  /** 添加时间 */
   created_at: string;
 
   /** 权限控制
    * is_edit : 0|1;
    * is_delete : 0|1;
    */
-  btn_power: {
-    is_edit: 0 | 1;
-    is_delete: 0 | 1;
-    is_submit: 0 | 1;
-    is_approve: 0 | 1;
-    is_invalid: 0 | 1;
-    is_suspend: 0 | 1;
-    is_end: 0 | 1;
-    is_cancel_operate: 0 | 1;
-  };
+  btn_power: { is_edit: 0 | 1; is_delete: 0 | 1 };
 
-  /** 扩展字段 1 */
-  status_show: string;
+  /**  */
+  unit_arr: Record<string, number | string>;
 
   /**
-   *  创建人员
+   *  物料信息
    */
+  material: {
+    /** ID */
+    id: string;
+
+    /** 物料分类id */
+    material_classify_id: number;
+
+    /** 名称 */
+    name: string;
+
+    /** 编号 */
+    code: string;
+
+    /** 品牌 */
+    brand: string;
+
+    /** 型号 */
+    model: string;
+
+    /** 单位 */
+    unit: string;
+
+    /** 照片 */
+    picture: string;
+
+    /** 默认仓库 */
+    warehouse_id: number;
+
+    /** 扩展字段 1 */
+    picture_path: string;
+
+    /**
+     *  类别
+     */
+    classify: {
+      /** 主键id */
+      id: number;
+
+      /** 名称 */
+      name: string;
+
+      /** 编号 */
+      code: string;
+    } | null;
+  } | null;
+
   /**
-   *  所属公司
+   *  物料属性信息
    */
-  company: {
+  material_sku: {
     /** 主键id */
     id: number;
 
     /** 名称 */
     name: string;
 
-    /** 简称 */
-    short_name: string;
-  } | null;
-
-  /**
-   *  客户信息
-   */
-  client: {
-    /** 主键id */
-    id: number;
-
-    /** 公司 */
-    name: string;
-
-    /** 简称 */
-    short_name: string;
-
-    /** 扩展字段 1 */
-    type_show: string;
-
-    /** 扩展字段 2 */
-    is_sign_show: string;
-
-    /** 扩展字段 3 */
-    name_show: string;
-
-    /** 扩展字段 4 */
-    status_show: string;
-  } | null;
-
-  /**
-   *  员工信息
-   */
-  staff: {
-    /** 主键id */
-    id: number;
-
-    /** 用户id */
-    user_id: number;
-
-    /** 用户名 */
-    name: string;
-
-    /** 工号 */
+    /** 编号 */
     code: string;
 
-    /** 手机号 */
-    phone: string;
+    /** 属性明细快照 */
+    attr_snapshoot: Record<string, string>;
 
-    /** 照片 */
-    avatar: string;
-
-    /** 身份证号 */
-    ID_card: string;
-
-    /** 微信号 */
-    wechat: string;
-
-    /** 扩展字段 1 */
-    avatar_path: string;
+    [key: string]: string;
   } | null;
 
   /**
-   *  项目信息
+   *  lineAttr
    */
-  project: {
+  line_attr: {
     /** 主键id */
     id: number;
 
-    /** 项目名称 */
-    name: string;
+    /** 表 */
+    table: string;
 
-    /** 简称 */
-    short_name: string;
-
-    /** 状态;0:草稿,1:待签约,2:履约中,3:已完结,4:已中止,5:已放弃 */
-    status: number;
-
-    /** 扩展字段 1 */
-    is_importance_show: string;
-
-    /** 扩展字段 2 */
-    name_show: string;
-
-    /** 扩展字段 3 */
-    status_show: string;
+    /** 表id */
+    table_id: number;
+    [key: string]: string;
   } | null;
+
+  /**
+   *  组合单位信息
+   */
+  line_unit:
+    | {
+        /** 主键id */
+        id: number;
+
+        /** 表 */
+        table: string;
+
+        /** 表id */
+        table_id: number;
+
+        /** 类型 */
+        type: number;
+
+        /** 物料单位id */
+        material_unit_id: number;
+
+        /** 数量 */
+        num: number;
+
+        /** 价格 */
+        price: string;
+
+        /** 单位 */
+        unit: string;
+
+        /** 单位别名 */
+        alias: string;
+
+        /** 是否执行单位;0:否,1:是 */
+        is_execute: number;
+      }[]
+    | null;
 };
 
 type SalesContractMaterialSku = {
