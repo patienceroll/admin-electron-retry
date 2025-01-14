@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
+import { Table } from "antd";
 import ProTable, { ProColumns } from "@ant-design/pro-table";
 import { useTheme } from "styled-components";
+import Decimal from "decimal.js";
 
 import { getSalesContractDetailList } from "src/apps/admin/api/sales-contract-detail";
 import useSearchTable from "src/hooks/use-search-table";
+import Money from "src/util/money";
 
 export default function (
   props: Pick<SalesContract, "id"> & {
@@ -29,6 +32,10 @@ export default function (
       dataIndex: "standard",
     },
     ...unitColumn,
+    {
+      title: "数量",
+      dataIndex: "num",
+    },
     {
       title: "金额",
       dataIndex: "amount",
@@ -58,6 +65,31 @@ export default function (
       onChange={table.onChange}
       columns={column}
       scroll={{ x: table.measureColumnWidth(column), y: 500 }}
+      summary={(data) => {
+        return (
+          <Table.Summary.Row>
+            {column.map((col, index) => (
+              <Table.Summary.Cell index={index}>
+                {index === 0 && "合计"}
+                {col.dataIndex === "num" &&
+                  data.reduce(
+                    (pre, current) =>
+                      new Decimal(pre).add(current.num || 0).toNumber(),
+                    0
+                  )}
+                {col.dataIndex === "amount" &&
+                  new Money(
+                    data.reduce(
+                      (pre, current) =>
+                        new Decimal(pre).add(current.amount || 0).toNumber(),
+                      0
+                    )
+                  ).toCNY()}
+              </Table.Summary.Cell>
+            ))}
+          </Table.Summary.Row>
+        );
+      }}
     />
   );
 }

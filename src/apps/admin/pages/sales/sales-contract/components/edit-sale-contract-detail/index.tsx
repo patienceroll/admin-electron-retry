@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ProTable from "@ant-design/pro-table";
 import { useTheme } from "styled-components";
 import { Button, Space, Table } from "antd";
+import Decimal from "decimal.js";
 
 import {
   deleteSalesContractDetail,
@@ -14,6 +15,7 @@ import useRenderNames from "src/b-hooks/use-render-names";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
 import * as SetUnit from "./set-unit";
+import Money from "src/util/money";
 
 export default function (props: Pick<SalesContract, "id">) {
   const { id } = props;
@@ -34,7 +36,7 @@ export default function (props: Pick<SalesContract, "id">) {
   const column = table.column([
     {
       title: "产品",
-      key: "material",
+      dataIndex: "material",
       fixed: "left",
       renderText: (_, row) => row.material?.name,
     },
@@ -44,6 +46,10 @@ export default function (props: Pick<SalesContract, "id">) {
       dataIndex: "standard",
     },
     ...unitColumn,
+    {
+      title: "数量",
+      dataIndex: "num",
+    },
     {
       title: "金额",
       dataIndex: "amount",
@@ -126,10 +132,28 @@ export default function (props: Pick<SalesContract, "id">) {
         <ChooseMaterial.default key="choose" ref={chooseMaterial} id={id} />,
         <SetUnit.default key="set" ref={setUnit} id={id} />,
       ]}
-      summary={(pageData) => {
+      summary={(data) => {
         return (
           <Table.Summary.Row>
-            <Table.Summary.Cell index={0}>合计</Table.Summary.Cell>
+            {column.map((col, index) => (
+              <Table.Summary.Cell index={index}>
+                {index === 0 && "合计"}
+                {col.dataIndex === "num" &&
+                  data.reduce(
+                    (pre, current) =>
+                      new Decimal(pre).add(current.num || 0).toNumber(),
+                    0
+                  )}
+                {col.dataIndex === "amount" &&
+                  new Money(
+                    data.reduce(
+                      (pre, current) =>
+                        new Decimal(pre).add(current.amount || 0).toNumber(),
+                      0
+                    )
+                  ).toCNY()}
+              </Table.Summary.Cell>
+            ))}
           </Table.Summary.Row>
         );
       }}
