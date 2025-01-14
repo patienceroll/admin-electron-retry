@@ -70,8 +70,11 @@ const SetUnit = forwardRef<
     sales_contract_id: id,
   });
 
+  /** 单位数据  */
   const lineUnit = useRef<Data[]>([]);
+  /** 属性数据 */
   const attrData = useRef<Map<string, string>>(new Map());
+  /** 扩展属性数据 */
   const extraAttrData = useRef<ExtraAttr[]>([]);
   const [remark, setRemark] = useState("");
 
@@ -86,7 +89,11 @@ const SetUnit = forwardRef<
         (acc, curr) => ({ ...acc, [curr.name]: curr.value }),
         {}
       ),
-      line_attr: Object.fromEntries(attrData.current.entries()),
+      line_attr: Array.from(attrData.current.keys()).reduce((pre, current) => {
+        const name = renderNames.attr_fields.find((at) => at.name === current);
+        if (name) return { ...pre, [name.key]: attrData.current.get(current) };
+        else return pre;
+      }, {}),
       line_unit: lineUnit.current
         .filter((item) => item.use)
         .map((item) => ({
