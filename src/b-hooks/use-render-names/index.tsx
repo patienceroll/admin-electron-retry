@@ -32,7 +32,7 @@ export default function <
   const unitColumn = useMemo(() => {
     return renderNames.unit_fields.map<ProColumns<any>>((item) => ({
       title: item.name,
-      renderText: (_, row: any) => row.material_sku?.[item.key],
+      renderText: (_, row: any) => row.unit_arr?.[item.key],
     }));
   }, [renderNames.unit_fields]);
 
