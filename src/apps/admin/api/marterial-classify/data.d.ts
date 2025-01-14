@@ -17,7 +17,7 @@ type MaterialClassify = {
   };
   
   type MaterialClassifyTree = {
-    child?: [];
+    child?: MaterialClassifyTree[];
     code: string;
     id: number;
     list: null;

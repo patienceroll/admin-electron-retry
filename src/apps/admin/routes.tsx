@@ -47,8 +47,12 @@ const BusinessOpportunityEdit = lazy(
  */
 //销售合同
 const SalesContract = lazy(() => import("./pages/sales/sales-contract"));
-const SalesContractDetail = lazy(() => import("./pages/sales/sales-contract/detail"));
-const SalesContractEdit = lazy(() => import("./pages/sales/sales-contract/edit"));
+const SalesContractDetail = lazy(
+  () => import("./pages/sales/sales-contract/detail")
+);
+const SalesContractEdit = lazy(
+  () => import("./pages/sales/sales-contract/edit")
+);
 //销售订单
 const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
 //销售发货
@@ -77,6 +81,8 @@ const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
 const Project = lazy(() => import("./pages/project/project"));
 const ProjectEdit = lazy(() => import("./pages/project/project/edit"));
 const ProjectDetail = lazy(() => import("./pages/project/project/detail"));
+
+const Material = lazy(() => import("./pages/material/material"));
 
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -137,8 +143,14 @@ export default function () {
         />
 
         <Route path="/sales/sales-contract" element={<SalesContract />} />
-        <Route path="/sales/sales-contract/detail" element={<SalesContractDetail />} />
-        <Route path="/sales/sales-contract/edit" element={<SalesContractEdit />} />
+        <Route
+          path="/sales/sales-contract/detail"
+          element={<SalesContractDetail />}
+        />
+        <Route
+          path="/sales/sales-contract/edit"
+          element={<SalesContractEdit />}
+        />
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
@@ -154,6 +166,8 @@ export default function () {
         <Route path="/project/project" element={<Project />} />
         <Route path="/project/project/edit" element={<ProjectEdit />} />
         <Route path="/project/project/detail" element={<ProjectDetail />} />
+
+        <Route path="/material/material" element={<Material />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
