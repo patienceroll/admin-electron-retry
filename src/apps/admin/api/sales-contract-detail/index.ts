@@ -97,7 +97,7 @@ export function salesContractDetailRenderConfig(params: {
 /** 销售合同明细 编辑 */
 export function salesContractDetailEdit(params: {
   attr_snapshoot: Record<string, string>;
-  id: SalesContract["id"];
+  id: SalesContractDetail["id"];
   line_unit: {
     is_execute: 0 | 1;
     material_unit_id: number;

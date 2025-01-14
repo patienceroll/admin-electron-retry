@@ -80,7 +80,7 @@ const SetUnit = forwardRef<
   function submit() {
     loading.setTrue();
     salesContractDetailEdit({
-      id,
+      id: item!.id,
       remark,
       attr_snapshoot: extraAttrData.current.reduce(
         (acc, curr) => ({ ...acc, [curr.name]: curr.value }),
@@ -253,6 +253,7 @@ const SetUnit = forwardRef<
       onCancel={open.setFalse}
       onOk={submit}
       className={props.className}
+      confirmLoading={loading.whether}
     >
       <Title>执行单位</Title>
       <ProTable
