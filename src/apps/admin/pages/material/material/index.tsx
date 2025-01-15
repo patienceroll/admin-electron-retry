@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Button, Card, Col, Row, Space, Tree, TreeDataNode } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tree,
+  TreeDataNode,
+} from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import { materialClassifyTree } from "src/apps/admin/api/marterial-classify";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import FixAttrSet from "src/assets/svg/维护属性.svg";
+import * as AttrSet from "./components/attr-set";
 
 interface ClassifyItem extends TreeDataNode {
   _item: MaterialClassifyTree;
@@ -14,6 +27,8 @@ function Materail(props: StyledWrapComponents) {
   const theme = useTheme();
 
   const [classify, setClassify] = useState<ClassifyItem[]>();
+
+  const attrSet = AttrSet.createRef();
 
   function getClassify() {
     materialClassifyTree().then((res) => {
@@ -49,12 +64,35 @@ function Materail(props: StyledWrapComponents) {
     <PageWrapper className={className}>
       <Row gutter={theme.padding}>
         <Col flex="300px">
-          <Card bordered className="classify">
+          <Card
+            bordered
+            className="classify"
+            styles={{
+              body: {
+                overflowY: "auto",
+              },
+            }}
+          >
             <Tree<ClassifyItem> showLine treeData={classify} />
           </Card>
         </Col>
         <Col flex={1}></Col>
       </Row>
+      <FloatButton.Group shape="square">
+        <FloatButton
+          tooltip="新建分类"
+          icon={<Icon icon={AddSvg} />}
+          onClick={() => {}}
+        />
+        <FloatButton
+          tooltip="维护属性"
+          icon={<Icon icon={FixAttrSet} />}
+          onClick={() => {
+            attrSet.current?.set()
+          }}
+        />
+      </FloatButton.Group>
+      <AttrSet.default ref={attrSet} />
     </PageWrapper>
   );
 }
