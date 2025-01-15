@@ -61,6 +61,22 @@ const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
 const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
 
 /**
+ * 采购管理模块
+ */
+//采购申请
+const PurchaseApply = lazy(() => import("./pages/purchase/purchase-apply"));
+//采购合同
+const PurchaseContract = lazy(
+  () => import("./pages/purchase/purchase-contract"),
+);
+//采购订单
+const PurchaseOrder = lazy(() => import("./pages/purchase/purchase-order"));
+//采购收货
+const PurchaseReceive = lazy(() => import("./pages/purchase/purchase-receive"));
+//采购退货
+const PurchaseReturn = lazy(() => import("./pages/purchase/purchase-return"));
+
+/**
  * 库存管理模块
  */
 //入库单
@@ -162,6 +178,18 @@ export default function () {
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
+
+        <Route path="/purchase/purchase-apply" element={<PurchaseApply />} />
+        <Route
+          path="/purchase/purchase-contract"
+          element={<PurchaseContract />}
+        />
+        <Route path="/purchase/purchase-order" element={<PurchaseOrder />} />
+        <Route
+          path="/purchase/purchase-receive"
+          element={<PurchaseReceive />}
+        />
+        <Route path="/purchase/purchase-return" element={<PurchaseReturn />} />
 
         <Route path="/inventory/in-stock" element={<InStock />} />
         <Route path="/inventory/out-stock" element={<OutStock />} />
