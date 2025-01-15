@@ -173,37 +173,6 @@ function Edit(props: StyledWrapComponents) {
               />
             </Col>
             <Col flex="350px">
-              <ProFormSelect<any>
-                label="甲方负责人"
-                name="client_contact_id"
-                placeholder="请选择甲方负责人"
-                options={clientConcat.list}
-                fieldProps={{
-                  fieldNames: { label: "name", value: "id" },
-                  filterOption: true,
-                  showSearch: true,
-                  optionFilterProp: "name",
-                }}
-              />
-            </Col>
-            <Col flex="350px">
-              <ProFormText
-                label="签约地点"
-                name="sign_address"
-                rules={[{ required: true }]}
-                placeholder="请输入签约地点"
-              />
-            </Col>
-            <Col flex="350px">
-              <ProFormDatePicker
-                label="签约日期"
-                name="sign_date"
-                rules={[{ required: true }]}
-                placeholder="请选择签约日期"
-                fieldProps={{ format: "YYYY-MM-DD", style: { width: "100%" } }}
-              />
-            </Col>
-            <Col flex="350px">
               <ProFormTreeSelect
                 label="签约人"
                 name="sign_staff_id"
@@ -216,15 +185,20 @@ function Edit(props: StyledWrapComponents) {
               />
             </Col>
             <Col flex="350px">
-              <ProFormTreeSelect
-                label="负责人"
-                name="staff_id"
+              <ProFormDatePicker
+                label="签约日期"
+                name="sign_date"
                 rules={[{ required: true }]}
-                placeholder="请选择负责人"
-                fieldProps={{
-                  treeData: treeOptions,
-                  treeNodeFilterProp: "title",
-                }}
+                placeholder="请选择签约日期"
+                fieldProps={{ format: "YYYY-MM-DD", style: { width: "100%" } }}
+              />
+            </Col>
+            <Col flex="350px">
+              <ProFormText
+                label="签约地点"
+                name="sign_address"
+                rules={[{ required: true }]}
+                placeholder="请输入签约地点"
               />
             </Col>
             <Col flex="350px">
@@ -293,10 +267,23 @@ function Edit(props: StyledWrapComponents) {
           </Row>
         </Card>
 
-        <Title style={{ marginTop: theme.margin }}>结算、付款及开票</Title>
-
+        <Title style={{ marginTop: theme.margin }}>联系人</Title>
         <Card style={{ marginTop: theme.margin }}>
           <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="350px">
+              <ProFormSelect<any>
+                label="甲方负责人"
+                name="client_contact_id"
+                placeholder="请选择甲方负责人"
+                options={clientConcat.list}
+                fieldProps={{
+                  fieldNames: { label: "name", value: "id" },
+                  filterOption: true,
+                  showSearch: true,
+                  optionFilterProp: "name",
+                }}
+              />
+            </Col>
             <Col flex="350px">
               <ProFormSelect<any>
                 label="甲方结算人员"
@@ -313,6 +300,18 @@ function Edit(props: StyledWrapComponents) {
             </Col>
             <Col flex="350px">
               <ProFormTreeSelect
+                label="乙方负责人"
+                name="staff_id"
+                rules={[{ required: true }]}
+                placeholder="请选择负责人"
+                fieldProps={{
+                  treeData: treeOptions,
+                  treeNodeFilterProp: "title",
+                }}
+              />
+            </Col>
+            <Col flex="350px">
+              <ProFormTreeSelect
                 label="乙方结算人员"
                 name="settle_staff_id"
                 rules={[{ required: true }]}
@@ -323,20 +322,23 @@ function Edit(props: StyledWrapComponents) {
                 }}
               />
             </Col>
-
-            <Col flex="700px">
-              <ProFormTextArea
-                name="settle_type"
-                label="结算方式"
-                placeholder="请输入结算方式"
-                rules={[{ required: true }]}
-              />
-            </Col>
           </Row>
         </Card>
 
-        <Title style={{ marginTop: theme.margin }}>附件信息</Title>
+        <Title style={{ marginTop: theme.margin }}>结算方式</Title>
+        <Card style={{ marginTop: theme.margin }}>
+          <ProFormTextArea
+            name="settle_type"
+            placeholder="请输入结算方式"
+            rules={[{ required: true }]}
+            fieldProps={{ style: { height: "200px" } }}
+          />
+        </Card>
 
+        <Title style={{ marginTop: theme.margin }}>产品明细</Title>
+        <EditSaleContractDetail id={id} />
+
+        <Title style={{ marginTop: theme.margin }}>附件信息</Title>
         {detail && (
           <Card style={{ marginTop: theme.margin }}>
             <BusinessFile
@@ -348,9 +350,6 @@ function Edit(props: StyledWrapComponents) {
             />
           </Card>
         )}
-
-        <Title style={{ marginTop: theme.margin }}>产品明细</Title>
-        <EditSaleContractDetail id={id} />
       </Form>
 
       {detail && (
