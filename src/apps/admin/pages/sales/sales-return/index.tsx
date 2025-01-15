@@ -71,6 +71,11 @@ function SalesReturn() {
       fixed: "left",
     },
     {
+      title: "退货日期",
+      dataIndex: "bill_date",
+      renderText: (_, row) => row.bill_date,
+    },
+    {
       title: "项目",
       dataIndex: "project",
       renderText(_, row) {

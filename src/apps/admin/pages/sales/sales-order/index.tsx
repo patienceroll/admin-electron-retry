@@ -32,7 +32,7 @@ import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import images from "src/assets/images";
 
-function SalesOrderList() {
+function SalesOrder() {
   const table = useSearchTable(getSalesOrderList);
   const theme = useTheme();
 
@@ -400,7 +400,7 @@ function SalesOrderList() {
   );
 }
 
-export default styled(SalesOrderList)`
+export default styled(SalesOrder)`
   .ant-select-multiple .ant-select-selector {
     border-radius: 0 !important;
   }

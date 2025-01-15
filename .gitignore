@@ -90,3 +90,10 @@ typings/
 
 # Electron-Forge
 out/
+/.idea/.gitignore
+/.idea/jsLinters/eslint.xml
+/.idea/modules.xml
+/.idea/nowbenben.electron.iml
+/.idea/prettier.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml

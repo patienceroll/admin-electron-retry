@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Card, Col, Row } from "antd";
 import {
-  ProForm,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
@@ -20,19 +19,20 @@ import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
-  getSalesDeliverList,
-  salesDeliverStatus,
-} from "src/apps/admin/api/sales-deliver";
+  getProduceReceiveList,
+  produceReceiveStatus,
+} from "src/apps/admin/api/produce-receive";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
+import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
-import AddressFormSearch from "src/framework/component/adress-form-search";
+import { getSalesDeliverOption } from "src/apps/admin/api/sales-deliver";
 
-function SalesDeliver() {
-  const table = useSearchTable(getSalesDeliverList);
+function ProduceReceiveList() {
+  const table = useSearchTable(getProduceReceiveList);
   const theme = useTheme();
 
   const [areaOption] = useOption(getAreaOption);
@@ -40,37 +40,31 @@ function SalesDeliver() {
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
+  const [salesDeliverOption] = useOption(getSalesDeliverOption);
 
   const column = table.column([
-    // {
-    //     title: "合同",
-    //     dataIndex: "name",
-    //     fixed: "left",
-    //     render: (_, record) => (
-    //         <Typography.Link
-    //             onClick={() => {
-    //                 openWindow
-    //                     .openCurrentAppWindow
-    //                     // `/sales/sales-deliver/detail?id=${record.id}`,
-    //                     // "销售合同详情 - " + record.name
-    //                     ();
-    //             }}
-    //         >
-    //             {record.name}
-    //         </Typography.Link>
-    //     ),
-    //     width: 260,
-    // },
     {
-      title: "发货单",
+      title: "领料单",
       dataIndex: "code",
       copyable: true,
       fixed: "left",
     },
     {
-      title: "发货日期",
+      title: "领料日期",
       dataIndex: "bill_date",
       renderText: (_, row) => row.bill_date,
+    },
+    {
+      title: "仓库",
+      dataIndex: "staff",
+      renderText: (_, row) => row.warehouse?.name,
+    },
+    {
+      title: "加工单",
+      dataIndex: "produce_complete",
+      renderText(_, row) {
+        return row.produce_complete?.code;
+      },
     },
     {
       title: "项目",
@@ -79,13 +73,13 @@ function SalesDeliver() {
         return row.project?.name_show;
       },
     },
-    {
-      title: "客户",
-      dataIndex: "client",
-      renderText(_, row) {
-        return row.client?.name_show;
-      },
-    },
+    // {
+    //   title: "客户",
+    //   dataIndex: "client",
+    //   renderText(_, row) {
+    //     return row.client?.name_show;
+    //   },
+    // },
     {
       title: "合同",
       dataIndex: "sales_contract_name",
@@ -101,28 +95,11 @@ function SalesDeliver() {
       },
     },
     {
-      title: "金额",
-      dataIndex: "amount",
-      valueType: "money",
-    },
-    {
-      title: "收货人",
-      dataIndex: "receive_man",
-    },
-    {
-      title: "收货电话",
-      dataIndex: "receive_tel",
-    },
-    {
-      title: "收货地址",
-      dataIndex: "receive_address",
-    },
-    {
       title: "备注",
       dataIndex: "remark",
     },
     {
-      title: "负责人",
+      title: "领料人",
       dataIndex: "staff",
       renderText: (_, row) => row.staff?.name,
     },
@@ -133,14 +110,14 @@ function SalesDeliver() {
     {
       title: "状态",
       dataIndex: "status",
-      valueEnum: salesDeliverStatus,
+      valueEnum: produceReceiveStatus,
     },
     {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
       width: 160,
-      // render: action<SalesDeliver>([
+      // render: action<ProduceReceive>([
       //     {
       //         text: "打印",
       //         async onClick({ entity }) {
@@ -154,7 +131,7 @@ function SalesDeliver() {
       //         btn_power: "is_edit",
       //         onClick({ entity }) {
       //             history.push({
-      //                 pathname: `/sales/sales-deliver/edit/${entity.id}`,
+      //                 pathname: `/sales/produce-receive/edit/${entity.id}`,
       //             });
       //         },
       //     },
@@ -167,7 +144,7 @@ function SalesDeliver() {
       //                 title: "删除",
       //                 content: `确定删除${entity.name}?`,
       //                 submitting() {
-      //                     return deleteSalesDeliver({ id: entity.id }).then(() => {
+      //                     return deleteProduceReceive({ id: entity.id }).then(() => {
       //                         message.success("删除成功");
       //                         reload();
       //                     });
@@ -179,7 +156,7 @@ function SalesDeliver() {
     },
   ]);
 
-  const columnState = useColumnState("salesDeliverList", column);
+  const columnState = useColumnState("produceReceiveList", column);
 
   useEffect(() => {
     table.reload();
@@ -188,6 +165,7 @@ function SalesDeliver() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
+    salesDeliverOption.loadOption();
   }, []);
 
   return (
@@ -201,20 +179,6 @@ function SalesDeliver() {
                 label="关键词"
                 name="keyword"
                 placeholder="合同名称/编号搜索"
-              />
-            </Col>
-            <Col flex="280px">
-              <ProFormSelect<Area>
-                label="区域"
-                name="area_ids"
-                options={areaOption.list}
-                fieldProps={{
-                  fieldNames: { label: "name", value: "id" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
               />
             </Col>
             <Col flex="280px">
@@ -281,25 +245,11 @@ function SalesDeliver() {
                 // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
-            <Col flex="560px">
-              <ProForm.Item
-                label="行政区"
-                name="region"
-                transform={({ province, city, county }) => ({
-                  province,
-                  city,
-                  county,
-                })}
-              >
-                <AddressFormSearch />
-              </ProForm.Item>
-            </Col>
-
             <Col flex="280px">
-              <ProFormSelect
+              <ProFormSelect<Area>
                 label="状态"
                 name="statuses"
-                options={Array.from(salesDeliverStatus.values())}
+                options={Array.from(BusinessOpportunityStatus.values())}
                 fieldProps={{
                   fieldNames: { label: "text", value: "value" },
                   showSearch: true,
@@ -316,7 +266,7 @@ function SalesDeliver() {
                   start_time: value[0],
                   end_time: value[1],
                 })}
-                label="发货日期"
+                label="退料日期"
               />
             </Col>
             <Col flex="80px">
@@ -377,7 +327,7 @@ function SalesDeliver() {
         //             modify.current?.create().then((result) => {
         //                 message.success("新增成功");
         //                 history.push({
-        //                     pathname: `/sales/sales-deliver/edit/${result.id}`,
+        //                     pathname: `/sales/produce-receive/edit/${result.id}`,
         //                 });
         //             });
         //         }}
@@ -391,7 +341,7 @@ function SalesDeliver() {
         //         onClick={async () => {
         //             try {
         //                 exporting.setTrue();
-        //                 const data = await salesDeliverExport({
+        //                 const data = await produceReceiveExport({
         //                     ...params,
         //                     ...extraParams.current,
         //                 });
@@ -409,4 +359,4 @@ function SalesDeliver() {
   );
 }
 
-export default styled(SalesDeliver)``;
+export default styled(ProduceReceiveList)``;
