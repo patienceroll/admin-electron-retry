@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { Col, Modal, Row } from "antd";
 import styled, { useTheme } from "styled-components";
+import ProTable from "@ant-design/pro-table";
 
 import useWather from "src/hooks/use-wather";
 
@@ -31,9 +32,16 @@ const AttrSet = forwardRef<Ref, StyledWrapComponents>(function (props, ref) {
       open={open.whether}
       footer={null}
       onCancel={open.setFalse}
+      width={600}
     >
       <Row gutter={theme.padding}>
-        <Col flex={1} >
+        <Col flex={1}>
+          <ProTable
+            columns={[{}]}
+            search={false}
+            pagination={false}
+            options={false}
+          />
         </Col>
         <Col></Col>
       </Row>
