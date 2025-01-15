@@ -1,4 +1,4 @@
-import fetch from "@/utils/fetch";
+import fetch from "src/util/fetch";
 
 export const purchaseContractStatus = new Map<
   PurchaseContract["status"],

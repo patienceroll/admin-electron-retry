@@ -84,10 +84,10 @@ function PurchaseReturnList() {
       },
     },
     {
-      title: "采购退货",
-      dataIndex: "purchase_return_code",
+      title: "采购收货",
+      dataIndex: "purchase_receive_code",
       renderText(_, row) {
-        return row.purchase_return?.code;
+        return row.purchase_receive?.code;
       },
     },
     {
