@@ -21,7 +21,7 @@ import styled, { useTheme } from "styled-components";
 import {
   getPurchaseReturnList,
   purchaseReturnStatus,
-} from "src/apps/admin/api/purchase-receive";
+} from "src/apps/admin/api/purchase-return";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
