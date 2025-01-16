@@ -47,12 +47,13 @@ function Materail(props: StyledWrapComponents) {
   const table = useSearchTable(getMaterialList);
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin
+    theme.padding * 2 + theme.margin,
   );
 
   function getClassify() {
     materialClassifyTree().then((res) => {
       setTree(res.data);
+
       function recusion(item: MaterialClassifyTree): ClassifyItem {
         return {
           _item: item,
@@ -81,6 +82,7 @@ function Materail(props: StyledWrapComponents) {
           children: item.child ? item.child.map((c) => recusion(c)) : undefined,
         };
       }
+
       setClassify(res.data.map(recusion));
     });
   }
@@ -92,12 +94,52 @@ function Materail(props: StyledWrapComponents) {
 
   const column = table.column([
     {
+      title: "一级大类",
+      dataIndex: "first_classify_name",
+      renderText(_, row) {
+        return row.first_classify?.name;
+      },
+    },
+    {
+      title: "二级大类",
+      dataIndex: "second_classify_name",
+      renderText(_, row) {
+        return row.second_classify?.name;
+      },
+    },
+    {
+      title: "类别",
+      dataIndex: "classify_name",
+      renderText(_, row) {
+        return row.classify?.name;
+      },
+    },
+    {
       title: "物资",
       dataIndex: "name",
     },
     {
-      title: "物资编码",
+      title: "编码",
       dataIndex: "code",
+    },
+    {
+      title: "品牌",
+      dataIndex: "brand",
+    },
+    {
+      title: "型号",
+      dataIndex: "model",
+    },
+    {
+      title: "主单位",
+      dataIndex: "unit",
+    },
+    {
+      title: "仓库",
+      dataIndex: "warehouse",
+      renderText(_, row) {
+        return row.warehouse?.name;
+      },
     },
     {
       title: "启用",
@@ -236,7 +278,7 @@ function Materail(props: StyledWrapComponents) {
         />
         {window.preload.getLocalUserHasPermission(
           "/material/material",
-          "export"
+          "export",
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -247,8 +289,8 @@ function Materail(props: StyledWrapComponents) {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

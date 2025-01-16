@@ -100,6 +100,34 @@ type Material = {
   };
 
   /**
+   *  一级大类
+   */
+  first_classify: {
+    /** 主键id */
+    id: number;
+
+    /** 名称 */
+    name: string;
+
+    /** 编号 */
+    code: string;
+  };
+
+  /**
+   *  二级大类
+   */
+  second_classify: {
+    /** 主键id */
+    id: number;
+
+    /** 名称 */
+    name: string;
+
+    /** 编号 */
+    code: string;
+  };
+
+  /**
    *  类别
    */
   classify: {
@@ -111,6 +139,17 @@ type Material = {
 
     /** 编号 */
     code: string;
+  };
+
+  /**
+   *  默认仓库
+   */
+  warehouse: {
+    /** 主键id */
+    id: number;
+
+    /** 名称 */
+    name: string;
   };
 
   /**
