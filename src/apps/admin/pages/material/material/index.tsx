@@ -10,6 +10,8 @@ import {
   Tree,
   TreeDataNode,
 } from "antd";
+import ProTable from "@ant-design/pro-table";
+import { ProFormText, ProFormTreeSelect } from "@ant-design/pro-form";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import { materialClassifyTree } from "src/apps/admin/api/marterial-classify";
@@ -18,6 +20,15 @@ import AddSvg from "src/assets/svg/add.svg";
 import FixAttrSet from "src/assets/svg/维护属性.svg";
 import * as AttrSet from "./components/attr-set";
 import * as ClassifyModify from "./components/classify-modify";
+import Search from "src/framework/component/search";
+import SearchAction from "src/framework/component/search/search-action";
+import useSearchTable from "src/hooks/use-search-table";
+import { getMaterialList, materialExport } from "src/apps/admin/api/material";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import useColumnState from "src/hooks/use-column-state";
+import { watherMap } from "src/apps/admin/api/general";
+import ExportSvg from "src/assets/svg/导出.svg";
+import contextedMessage from "src/framework/component/contexted-message";
 
 interface ClassifyItem extends TreeDataNode {
   _item: MaterialClassifyTree;
@@ -28,12 +39,20 @@ function Materail(props: StyledWrapComponents) {
   const theme = useTheme();
 
   const [classify, setClassify] = useState<ClassifyItem[]>();
+  const [tree, setTree] = useState<MaterialClassifyTree[]>([]);
 
   const attrSet = AttrSet.createRef();
   const classifyModify = ClassifyModify.createRef();
 
+  const table = useSearchTable(getMaterialList);
+
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
+
   function getClassify() {
     materialClassifyTree().then((res) => {
+      setTree(res.data);
       function recusion(item: MaterialClassifyTree): ClassifyItem {
         return {
           _item: item,
@@ -68,11 +87,52 @@ function Materail(props: StyledWrapComponents) {
 
   useEffect(() => {
     getClassify();
+    table.reload();
   }, []);
+
+  const column = table.column([
+    {
+      title: "物资",
+      dataIndex: "name",
+    },
+    {
+      title: "物资编码",
+      dataIndex: "code",
+    },
+    {
+      title: "启用",
+      dataIndex: "status",
+      valueEnum: watherMap,
+    },
+    {
+      title: "操作",
+      width: 200,
+      fixed: "right",
+      dataIndex: "action",
+      render(_, row) {
+        return (
+          <Space>
+            <Button type="text">编辑</Button>
+            {row.status === 1 && (
+              <Button type="text" danger>
+                停用
+              </Button>
+            )}
+            {row.status === 0 && <Button type="text">启用</Button>}
+            <Button type="text" danger>
+              删除
+            </Button>
+          </Space>
+        );
+      },
+    },
+  ]);
+
+  const columnState = useColumnState("material", column);
 
   return (
     <PageWrapper className={className}>
-      <Row gutter={theme.padding}>
+      <Row gutter={theme.padding} wrap={false}>
         <Col flex="300px">
           <Card
             bordered
@@ -80,15 +140,84 @@ function Materail(props: StyledWrapComponents) {
             styles={{
               body: {
                 overflowY: "auto",
+                height: `calc(100vh - ${theme.padding * 2}px)`,
               },
             }}
           >
             <Tree<ClassifyItem> showLine treeData={classify} />
           </Card>
         </Col>
-        <Col flex={1}></Col>
+        <Col flex={1}>
+          <Card
+            bordered
+            ref={(div) => {
+              if (div) addAElement(div);
+            }}
+          >
+            <Search>
+              <Row gutter={[theme.padding, theme.padding]}>
+                <Col flex="280px">
+                  <ProFormTreeSelect
+                    label="分类"
+                    name="material_classify_id"
+                    placeholder="按分类搜索"
+                    fieldProps={{
+                      treeData: tree,
+                      fieldNames: {
+                        label: "name",
+                        value: "id",
+                        children: "child",
+                      },
+                    }}
+                  />
+                </Col>
+                <Col flex="280px">
+                  <ProFormText
+                    label="关键词"
+                    name="keyword"
+                    placeholder="按关键词搜索"
+                  />
+                </Col>
+                <Col flex="80px">
+                  <SearchAction
+                    loading={table.loading}
+                    onReset={table.onReset}
+                    onFinish={table.onFinish}
+                  />
+                </Col>
+              </Row>
+            </Search>
+          </Card>
+
+          <ProTable
+            rowKey="id"
+            style={{ marginTop: theme.margin }}
+            search={false}
+            loading={table.loading}
+            options={table.options}
+            dataSource={table.dataSource}
+            pagination={table.pagination}
+            onChange={table.onChange}
+            columns={columnState.column}
+            scroll={{ x: table.measureColumnWidth(column), y: height }}
+            columnsState={{
+              value: columnState.data?.data,
+              onChange: columnState.onChange,
+            }}
+            components={{
+              header: {
+                cell: columnState.tableHeaderCellRender,
+              },
+            }}
+          />
+        </Col>
       </Row>
       <FloatButton.Group shape="square">
+        <FloatButton
+          tooltip="新建物资"
+          icon={<Icon icon={AddSvg} />}
+          onClick={() => {}}
+        />
         <FloatButton
           tooltip="新建分类"
           icon={<Icon icon={AddSvg} />}
@@ -105,9 +234,30 @@ function Materail(props: StyledWrapComponents) {
             attrSet.current?.set();
           }}
         />
+        {window.preload.getLocalUserHasPermission(
+          "/material/material",
+          "export"
+        ) && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              materialExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
       </FloatButton.Group>
       <AttrSet.default ref={attrSet} />
-      <ClassifyModify.default ref={classifyModify} />
+      <ClassifyModify.default classifies={tree} ref={classifyModify} />
     </PageWrapper>
   );
 }

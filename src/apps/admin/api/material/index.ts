@@ -5,7 +5,6 @@ import fetch from "src/util/fetch";
 export const postMaterial = (
   data: Pick<
     Material,
-    | "company_id"
     | "material_classify_id"
     | "name"
     | "code"
@@ -25,7 +24,6 @@ export const putMaterial = (
   data: Pick<
     Material,
     | "id"
-    | "company_id"
     | "material_classify_id"
     | "name"
     | "code"
