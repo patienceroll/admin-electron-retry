@@ -17,6 +17,7 @@ import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import FixAttrSet from "src/assets/svg/维护属性.svg";
 import * as AttrSet from "./components/attr-set";
+import * as ClassifyModify from "./components/classify-modify";
 
 interface ClassifyItem extends TreeDataNode {
   _item: MaterialClassifyTree;
@@ -29,6 +30,7 @@ function Materail(props: StyledWrapComponents) {
   const [classify, setClassify] = useState<ClassifyItem[]>();
 
   const attrSet = AttrSet.createRef();
+  const classifyModify = ClassifyModify.createRef();
 
   function getClassify() {
     materialClassifyTree().then((res) => {
@@ -41,7 +43,15 @@ function Materail(props: StyledWrapComponents) {
           title: () => (
             <Space>
               <span>{item.name}</span>
-              <Button type="text" size="small">
+              <Button
+                type="text"
+                size="small"
+                onClick={() => {
+                  classifyModify.current?.edit(item).then(() => {
+                    getClassify();
+                  });
+                }}
+              >
                 编辑
               </Button>
               <Button type="text" danger size="small">
@@ -82,17 +92,22 @@ function Materail(props: StyledWrapComponents) {
         <FloatButton
           tooltip="新建分类"
           icon={<Icon icon={AddSvg} />}
-          onClick={() => {}}
+          onClick={() => {
+            classifyModify.current?.create().then(() => {
+              getClassify();
+            });
+          }}
         />
         <FloatButton
           tooltip="维护属性"
           icon={<Icon icon={FixAttrSet} />}
           onClick={() => {
-            attrSet.current?.set()
+            attrSet.current?.set();
           }}
         />
       </FloatButton.Group>
       <AttrSet.default ref={attrSet} />
+      <ClassifyModify.default ref={classifyModify} />
     </PageWrapper>
   );
 }
