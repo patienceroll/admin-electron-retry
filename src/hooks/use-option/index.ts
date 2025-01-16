@@ -10,6 +10,7 @@ export default function <T, P>(
     params: { page: -1 } as OptionParams<P>,
     list: [] as T[],
     loading: false,
+    /** 不重置数据为空,直接加载 */
     load() {
       store.current.loading = true;
       update();
@@ -23,11 +24,13 @@ export default function <T, P>(
           update();
         });
     },
+    /**  重置数据为空并加载 */
     loadOption() {
       store.current.list = [];
       update();
       return store.current.load();
     },
+
   });
 
   return [store.current] as const;

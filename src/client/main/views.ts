@@ -4,6 +4,7 @@ import {
   nativeTheme,
   WebContentsView,
   app as electronApp,
+  screen,
 } from "electron";
 import env from "src/client/env";
 import devTool from "../env/dev-tool";
@@ -23,6 +24,9 @@ export default class Views {
     details: Electron.HandlerDetails,
     preload: string
   ): Electron.WindowOpenHandlerResponse {
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { workAreaSize } = primaryDisplay;
+
     return {
       action: "allow",
       createWindow(options: Electron.BaseWindowConstructorOptions) {
@@ -49,8 +53,8 @@ export default class Views {
         return window.webContents;
       },
       overrideBrowserWindowOptions: {
-        height: 800,
-        width: 1200,
+        height: workAreaSize.height - 100,
+        width: workAreaSize.width - 100,
         minHeight: 800,
         minWidth: 1200,
         title: details.frameName,

@@ -24,19 +24,20 @@ export default function useTableInnerHeight(
 
     // unknown height  // 不知道为啥滚动容器会多一像素
     const unknownHeight = 1;
-    // 底部padding
-    const tableBottom = padding;
+
     // 分页的高度
     let pagenationHeight = 0;
     if (pagenation) {
       pagenationHeight =
         margin + (!isCompact ? Pagination.itemSize : Pagination.itemSizeSM);
     }
+    // 底部padding
+    let tableBottom = 0;
     // toolbar高度
-
     let toolbarHeight = 0;
     if (toolbar) {
       toolbarHeight = 32 + (isCompact ? 4 : 12) * 2;
+      tableBottom = padding;
     }
 
     // alert 高度
@@ -63,7 +64,6 @@ export default function useTableInnerHeight(
     pagenation,
     toolbar,
   ]);
-
 
   return tableInnerHeight;
 }
