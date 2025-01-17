@@ -66,7 +66,7 @@ const SetUnit = forwardRef<
   const [loading] = useWather();
   const [item, setItem] = useState<SalesContractDetail>();
 
-  const [renderNames] = useRenderNames(salesContractDetailRenderConfig, {
+  const [{ renderNames }] = useRenderNames(salesContractDetailRenderConfig, {
     sales_contract_id: id,
   });
 

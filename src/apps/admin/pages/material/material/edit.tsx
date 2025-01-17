@@ -16,6 +16,7 @@ import {
   getMaterial,
   getMaterialsAttrList,
   getMaterialSkues,
+  materialRender,
   postMaterialsAttrSkues,
   postMaterialsUnit,
 } from "src/apps/admin/api/material";
@@ -29,6 +30,7 @@ import useWather from "src/hooks/use-wather";
 import contextedMessage from "src/framework/component/contexted-message";
 import useUpdate from "src/hooks/use-update";
 import useSearchTable from "src/hooks/use-search-table";
+import useRenderNames from "src/b-hooks/use-render-names";
 
 type EditUnit = Pick<
   Material["units"][number],
@@ -55,9 +57,13 @@ function Edit(props: StyledWrapComponents) {
 
   const [attr, setAttr] = useState<MaterialOfAttr[]>([]);
   const [checkedAttr] = useState(
-    new Map<MaterialOfAttr["id"], MaterialOfAttr["detail"][number]["id"][]>(),
+    new Map<MaterialOfAttr["id"], MaterialOfAttr["detail"][number]["id"][]>()
   );
   const [update] = useUpdate();
+
+  const [{ attrColumn, reload, }] = useRenderNames(materialRender, {
+    material_id: id,
+  });
 
   function getAttr(material_classify_id: MaterialClassify["id"]) {
     setAttr([]);
@@ -70,7 +76,7 @@ function Edit(props: StyledWrapComponents) {
     getMaterial({ id }).then((res) => {
       setDetail(res.data);
       setUnit(
-        res.data.units.map((item) => ({ ...item, key: key.randomString() })),
+        res.data.units.map((item) => ({ ...item, key: key.randomString() }))
       );
       form.setFieldsValue({
         ...res.data,
@@ -89,6 +95,7 @@ function Edit(props: StyledWrapComponents) {
     skus.extraParams.current.status = "1";
     skus.extraParams.current.material_id = id;
     skus.reload();
+    reload()
   }, [id]);
 
   return (
@@ -205,7 +212,7 @@ function Edit(props: StyledWrapComponents) {
                         unit: "",
                         alias: "",
                         key: key.randomString(),
-                      }),
+                      })
                     );
                   }}
                 >
@@ -249,7 +256,7 @@ function Edit(props: StyledWrapComponents) {
                                   item.key === row.key
                                     ? e.target.value
                                     : item.unit,
-                              })),
+                              }))
                             );
                           }}
                         />
@@ -272,7 +279,7 @@ function Edit(props: StyledWrapComponents) {
                                   item.key === row.key
                                     ? e.target.value
                                     : item.alias,
-                              })),
+                              }))
                             );
                           }}
                         />
@@ -292,7 +299,7 @@ function Edit(props: StyledWrapComponents) {
                                 t.map((item) => ({
                                   ...item,
                                   is_main: item.key === row.key ? 1 : 0,
-                                })),
+                                }))
                               );
                             }
                           }}
@@ -311,7 +318,7 @@ function Edit(props: StyledWrapComponents) {
                             danger
                             onClick={() => {
                               setUnit((t) =>
-                                t.filter((item) => item.key !== row.key),
+                                t.filter((item) => item.key !== row.key)
                               );
                             }}
                           >
@@ -359,7 +366,7 @@ function Edit(props: StyledWrapComponents) {
                             store.push(newAt);
                             checkedAttr.get(at.id)?.forEach((g) => {
                               const attrValue = at.detail.find(
-                                (atg) => g === atg.id,
+                                (atg) => g === atg.id
                               );
                               if (attrValue) {
                                 newAt.detail.push({
@@ -378,6 +385,7 @@ function Edit(props: StyledWrapComponents) {
                           .then(() => {
                             contextedMessage.message?.success("成功生成组合");
                             skus.reload();
+                            reload()
                           })
                           .finally(generateAttrGroup.setFalse);
                       }}
@@ -401,12 +409,12 @@ function Edit(props: StyledWrapComponents) {
                                   if (checked) {
                                     checkedAttr.set(
                                       item.id,
-                                      checkArray.filter((ch) => ch !== de.id),
+                                      checkArray.filter((ch) => ch !== de.id)
                                     );
                                   } else {
                                     checkedAttr.set(
                                       item.id,
-                                      checkArray.concat(de.id),
+                                      checkArray.concat(de.id)
                                     );
                                   }
                                   update();
@@ -429,6 +437,7 @@ function Edit(props: StyledWrapComponents) {
                     dataSource={skus.dataSource}
                     loading={skus.loading}
                     columns={skus.column([
+                      ...attrColumn,
                       {
                         title: "操作",
                         dataIndex: "action",

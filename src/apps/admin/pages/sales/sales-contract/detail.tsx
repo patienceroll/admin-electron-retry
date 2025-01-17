@@ -47,7 +47,7 @@ function Detail(props: StyledWrapComponents) {
 
   const [detail, setDetail] = useState<SalesContractDetail>();
 
-  const [_, attrCoumn, unitColumn] = useRenderNames(
+  const [{ attrColumn, unitColumn }] = useRenderNames(
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
@@ -152,28 +152,28 @@ function Detail(props: StyledWrapComponents) {
       </Title>
       <DetailSaleContractDetail
         id={id}
-        attrCoumn={attrCoumn}
+        attrCoumn={attrColumn}
         unitColumn={unitColumn}
       />
 
       <Title style={{ marginTop: theme.margin }} id="销售订单">
         销售订单
       </Title>
-      <DetailSaleOrder id={id} attrCoumn={attrCoumn} unitColumn={unitColumn} />
+      <DetailSaleOrder id={id} attrCoumn={attrColumn} unitColumn={unitColumn} />
 
       <Title style={{ marginTop: theme.margin }} id="销售发货">
         销售发货
       </Title>
       <DetailSaleDeliver
         id={id}
-        attrCoumn={attrCoumn}
+        attrCoumn={attrColumn}
         unitColumn={unitColumn}
       />
 
       <Title style={{ marginTop: theme.margin }} id="销售退货">
         销售退货
       </Title>
-      <DetailSaleReturn id={id} attrCoumn={attrCoumn} unitColumn={unitColumn} />
+      <DetailSaleReturn id={id} attrCoumn={attrColumn} unitColumn={unitColumn} />
 
       <Title style={{ marginTop: theme.margin }} id="审批记录">
         审批记录

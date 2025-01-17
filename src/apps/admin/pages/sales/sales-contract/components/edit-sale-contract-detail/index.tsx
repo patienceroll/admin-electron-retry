@@ -26,7 +26,7 @@ export default function (props: Pick<SalesContract, "id">) {
   const chooseMaterial = ChooseMaterial.createRef();
   const setUnit = SetUnit.createRef();
 
-  const [_, attrCoumn, unitColumn] = useRenderNames(
+  const [{ attrColumn, unitColumn }] = useRenderNames(
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
@@ -40,7 +40,7 @@ export default function (props: Pick<SalesContract, "id">) {
       fixed: "left",
       renderText: (_, row) => row.material?.name,
     },
-    ...attrCoumn,
+    ...attrColumn,
     {
       title: "执行标准",
       dataIndex: "standard",

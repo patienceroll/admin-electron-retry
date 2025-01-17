@@ -152,3 +152,12 @@ export function materialSort(params: {
 }) {
   return fetch.POST(fetch.base(`/api/material-attr/name-list`), params);
 }
+
+/** 物资字段渲染配置 */
+
+export function materialRender(params: { material_id: Material["id"] }) {
+  return fetch.GET<RenderConfig>(
+    fetch.base(`/api/material-sku/render`),
+    params
+  );
+}

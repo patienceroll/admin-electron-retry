@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProColumns } from "@ant-design/pro-table";
 
 export default function <
@@ -6,21 +6,27 @@ export default function <
   Api extends (params: Params) => Promise<BaseResponse<RenderConfig>>
 >(api: Api, params: Params) {
   const [tempParams, setTempParams] = useState<Params>();
-  
 
   const [renderNames, setRenderNames] = useState<RenderConfig>({
     attr_fields: [],
     unit_fields: [],
   });
 
+  const getData = useCallback(
+    (params: Params) => {
+      return api(params).then((res) => {
+        setRenderNames(res.data);
+      });
+    },
+    [api]
+  );
+
   useEffect(() => {
     if (JSON.stringify(tempParams) !== JSON.stringify(params)) {
       setTempParams(params);
-      api(params).then((res) => {
-        setRenderNames(res.data);
-      });
+      getData(params);
     }
-  }, [api, params, tempParams]);
+  }, [getData, params, tempParams]);
 
   const attrColumn = useMemo(() => {
     return renderNames.attr_fields.map<ProColumns<any>>((item) => ({
@@ -36,5 +42,20 @@ export default function <
     }));
   }, [renderNames.unit_fields]);
 
-  return [renderNames, attrColumn, unitColumn] as const;
+  const reload = useCallback(() => {
+    if (tempParams) return getData(tempParams);
+    return Promise.reject();
+  }, [getData, tempParams]);
+
+  const data = useMemo(
+    () => ({
+      renderNames,
+      attrColumn,
+      unitColumn,
+      reload,
+    }),
+    [attrColumn, reload, renderNames, unitColumn]
+  );
+
+  return [data] as const;
 }
