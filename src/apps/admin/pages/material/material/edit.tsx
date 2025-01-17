@@ -55,7 +55,7 @@ function Edit(props: StyledWrapComponents) {
 
   const [attr, setAttr] = useState<MaterialOfAttr[]>([]);
   const [checkedAttr] = useState(
-    new Map<MaterialOfAttr["id"], MaterialOfAttr["detail"][number]["id"][]>()
+    new Map<MaterialOfAttr["id"], MaterialOfAttr["detail"][number]["id"][]>(),
   );
   const [update] = useUpdate();
 
@@ -70,7 +70,7 @@ function Edit(props: StyledWrapComponents) {
     getMaterial({ id }).then((res) => {
       setDetail(res.data);
       setUnit(
-        res.data.units.map((item) => ({ ...item, key: key.randomString() }))
+        res.data.units.map((item) => ({ ...item, key: key.randomString() })),
       );
       form.setFieldsValue({
         ...res.data,
@@ -173,150 +173,158 @@ function Edit(props: StyledWrapComponents) {
                 ]}
               />
             </Col>
-            {detail && (
-              <Col flex="350px">
-                <Form.Item label="图片">
-                  <BusinessFile
-                    id={id}
-                    service="material"
-                    identify="图片"
-                    isCover={1}
-                    maxCount={1}
-                  />
-                </Form.Item>
-              </Col>
-            )}
           </Row>
         </Card>
 
-        <Title style={{ marginTop: theme.margin }}>单位设置</Title>
+        {/*<Title style={{ marginTop: theme.margin }}>单位设置</Title>*/}
         <Card style={{ marginTop: theme.margin }}>
-          <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                setUnit((t) =>
-                  t.concat({
-                    is_main: 0,
-                    unit: "",
-                    alias: "",
-                    key: key.randomString(),
-                  })
-                );
-              }}
-            >
-              新增单位
-            </Button>
-            <Button
-              type="primary"
-              loading={saveUnit.whether}
-              onClick={() => {
-                saveUnit.setTrue();
-                postMaterialsUnit({ id, units: unit })
-                  .then(() => {
-                    contextedMessage.message?.success("成功保存");
-                  })
-                  .finally(saveUnit.setFalse);
-              }}
-            >
-              保存
-            </Button>
-          </Space>
-          <ProTable
-            search={false}
-            pagination={false}
-            options={false}
-            dataSource={unit}
-            style={{ marginTop: theme.margin }}
-            columns={[
-              {
-                title: "单位",
-                dataIndex: "unit",
-                render(_, row) {
-                  return (
-                    <Input
-                      placeholder="请输入单位"
-                      value={row.unit}
-                      onChange={(e) => {
-                        setUnit((t) =>
-                          t.map((item) => ({
-                            ...item,
-                            unit:
-                              item.key === row.key ? e.target.value : item.unit,
-                          }))
-                        );
-                      }}
+          <Row>
+            <Col flex="350px">
+              {detail && (
+                <Col flex="350px">
+                  <Form.Item label="图片">
+                    <BusinessFile
+                      id={id}
+                      service="material"
+                      identify="图片"
+                      isCover={1}
+                      maxCount={1}
                     />
-                  );
-                },
-              },
-              {
-                title: "别称",
-                dataIndex: "alias",
-                render(_, row) {
-                  return (
-                    <Input
-                      placeholder="请输入单位"
-                      value={row.alias}
-                      onChange={(e) => {
-                        setUnit((t) =>
-                          t.map((item) => ({
-                            ...item,
-                            alias:
-                              item.key === row.key
-                                ? e.target.value
-                                : item.alias,
-                          }))
-                        );
-                      }}
-                    />
-                  );
-                },
-              },
-              {
-                title: "主单位",
-                dataIndex: "is_main",
-                render(_, row) {
-                  return (
-                    <Checkbox
-                      checked={row.is_main === 1}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setUnit((t) =>
-                            t.map((item) => ({
-                              ...item,
-                              is_main: item.key === row.key ? 1 : 0,
-                            }))
-                          );
-                        }
-                      }}
-                    />
-                  );
-                },
-              },
-              {
-                title: "操作",
-                dataIndex: "action",
-                render(_, row) {
-                  return (
-                    <Space>
-                      <Button
-                        type="text"
-                        danger
-                        onClick={() => {
-                          setUnit((t) =>
-                            t.filter((item) => item.key !== row.key)
-                          );
-                        }}
-                      >
-                        删除
-                      </Button>
-                    </Space>
-                  );
-                },
-              },
-            ]}
-          />
+                  </Form.Item>
+                </Col>
+              )}
+            </Col>
+            <Col flex="1">
+              <Space>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setUnit((t) =>
+                      t.concat({
+                        is_main: 0,
+                        unit: "",
+                        alias: "",
+                        key: key.randomString(),
+                      }),
+                    );
+                  }}
+                >
+                  新增单位
+                </Button>
+                <Button
+                  type="primary"
+                  loading={saveUnit.whether}
+                  onClick={() => {
+                    saveUnit.setTrue();
+                    postMaterialsUnit({ id, units: unit })
+                      .then(() => {
+                        contextedMessage.message?.success("成功保存");
+                      })
+                      .finally(saveUnit.setFalse);
+                  }}
+                >
+                  保存
+                </Button>
+              </Space>
+              <ProTable
+                search={false}
+                pagination={false}
+                options={false}
+                dataSource={unit}
+                style={{ marginTop: theme.margin }}
+                columns={[
+                  {
+                    title: "单位",
+                    dataIndex: "unit",
+                    render(_, row) {
+                      return (
+                        <Input
+                          placeholder="请输入单位"
+                          value={row.unit}
+                          onChange={(e) => {
+                            setUnit((t) =>
+                              t.map((item) => ({
+                                ...item,
+                                unit:
+                                  item.key === row.key
+                                    ? e.target.value
+                                    : item.unit,
+                              })),
+                            );
+                          }}
+                        />
+                      );
+                    },
+                  },
+                  {
+                    title: "别称",
+                    dataIndex: "alias",
+                    render(_, row) {
+                      return (
+                        <Input
+                          placeholder="请输入单位"
+                          value={row.alias}
+                          onChange={(e) => {
+                            setUnit((t) =>
+                              t.map((item) => ({
+                                ...item,
+                                alias:
+                                  item.key === row.key
+                                    ? e.target.value
+                                    : item.alias,
+                              })),
+                            );
+                          }}
+                        />
+                      );
+                    },
+                  },
+                  {
+                    title: "主单位",
+                    dataIndex: "is_main",
+                    render(_, row) {
+                      return (
+                        <Checkbox
+                          checked={row.is_main === 1}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setUnit((t) =>
+                                t.map((item) => ({
+                                  ...item,
+                                  is_main: item.key === row.key ? 1 : 0,
+                                })),
+                              );
+                            }
+                          }}
+                        />
+                      );
+                    },
+                  },
+                  {
+                    title: "操作",
+                    dataIndex: "action",
+                    render(_, row) {
+                      return (
+                        <Space>
+                          <Button
+                            type="text"
+                            danger
+                            onClick={() => {
+                              setUnit((t) =>
+                                t.filter((item) => item.key !== row.key),
+                              );
+                            }}
+                          >
+                            删除
+                          </Button>
+                        </Space>
+                      );
+                    },
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
         </Card>
         <Title style={{ marginTop: theme.margin }}>属性组合</Title>
         <Card style={{ marginTop: theme.margin }}>
@@ -351,7 +359,7 @@ function Edit(props: StyledWrapComponents) {
                             store.push(newAt);
                             checkedAttr.get(at.id)?.forEach((g) => {
                               const attrValue = at.detail.find(
-                                (atg) => g === atg.id
+                                (atg) => g === atg.id,
                               );
                               if (attrValue) {
                                 newAt.detail.push({
@@ -393,12 +401,12 @@ function Edit(props: StyledWrapComponents) {
                                   if (checked) {
                                     checkedAttr.set(
                                       item.id,
-                                      checkArray.filter((ch) => ch !== de.id)
+                                      checkArray.filter((ch) => ch !== de.id),
                                     );
                                   } else {
                                     checkedAttr.set(
                                       item.id,
-                                      checkArray.concat(de.id)
+                                      checkArray.concat(de.id),
                                     );
                                   }
                                   update();
