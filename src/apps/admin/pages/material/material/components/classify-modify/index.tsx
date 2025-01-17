@@ -5,12 +5,11 @@ import React, {
   useState,
 } from "react";
 
-import { Modal, Form, TreeSelect, Input, Radio, Select, Checkbox } from "antd";
+import { Modal, Form, TreeSelect, Input, Radio, Checkbox } from "antd";
 
 import useWather from "src/hooks/use-wather";
 import {
   getMaterialClassify,
-  materialClassifyTree,
   postMaterialClassify,
   putMaterialClassify,
 } from "src/apps/admin/api/marterial-classify";
@@ -111,6 +110,7 @@ export default forwardRef<Ref, { classifies: MaterialClassifyTree[] }>(
               showSearch
               treeData={props.classifies}
               placeholder="请选择父级分类"
+              treeNodeFilterProp="name"
               fieldNames={{
                 label: "name",
                 value: "id",

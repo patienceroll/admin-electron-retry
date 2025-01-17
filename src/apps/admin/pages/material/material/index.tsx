@@ -20,6 +20,7 @@ import AddSvg from "src/assets/svg/add.svg";
 import FixAttrSet from "src/assets/svg/维护属性.svg";
 import * as AttrSet from "./components/attr-set";
 import * as ClassifyModify from "./components/classify-modify";
+import * as MaterailCreate from "./components/material-create";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import useSearchTable from "src/hooks/use-search-table";
@@ -29,6 +30,7 @@ import useColumnState from "src/hooks/use-column-state";
 import { watherMap } from "src/apps/admin/api/general";
 import ExportSvg from "src/assets/svg/导出.svg";
 import contextedMessage from "src/framework/component/contexted-message";
+import openWindow from "src/util/open-window";
 
 interface ClassifyItem extends TreeDataNode {
   _item: MaterialClassifyTree;
@@ -43,11 +45,12 @@ function Materail(props: StyledWrapComponents) {
 
   const attrSet = AttrSet.createRef();
   const classifyModify = ClassifyModify.createRef();
+  const materailCreate = MaterailCreate.createRef();
 
   const table = useSearchTable(getMaterialList);
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin
   );
 
   function getClassify() {
@@ -154,7 +157,14 @@ function Materail(props: StyledWrapComponents) {
       render(_, row) {
         return (
           <Space>
-            <Button type="text">编辑</Button>
+            <Button
+              type="text"
+              onClick={() => {
+                onEditMaterail(row.id);
+              }}
+            >
+              编辑
+            </Button>
             {row.status === 1 && (
               <Button type="text" danger>
                 停用
@@ -171,6 +181,22 @@ function Materail(props: StyledWrapComponents) {
   ]);
 
   const columnState = useColumnState("material", column);
+
+  function onEditMaterail(id: Material["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/material/material/edit?id=${id}`,
+      "编辑物资"
+    );
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   return (
     <PageWrapper className={className}>
@@ -205,6 +231,8 @@ function Materail(props: StyledWrapComponents) {
                     placeholder="按分类搜索"
                     fieldProps={{
                       treeData: tree,
+                      treeNodeFilterProp: "name",
+                      showSearch: true,
                       fieldNames: {
                         label: "name",
                         value: "id",
@@ -258,7 +286,12 @@ function Materail(props: StyledWrapComponents) {
         <FloatButton
           tooltip="新建物资"
           icon={<Icon icon={AddSvg} />}
-          onClick={() => {}}
+          onClick={() => {
+            materailCreate.current?.create().then((res) => {
+              table.reload();
+              onEditMaterail(res.id);
+            });
+          }}
         />
         <FloatButton
           tooltip="新建分类"
@@ -278,7 +311,7 @@ function Materail(props: StyledWrapComponents) {
         />
         {window.preload.getLocalUserHasPermission(
           "/material/material",
-          "export",
+          "export"
         ) && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
@@ -289,8 +322,8 @@ function Materail(props: StyledWrapComponents) {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current,
-                ),
+                  table.extraParams.current
+                )
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });
@@ -300,6 +333,7 @@ function Materail(props: StyledWrapComponents) {
       </FloatButton.Group>
       <AttrSet.default ref={attrSet} />
       <ClassifyModify.default classifies={tree} ref={classifyModify} />
+      <MaterailCreate.default classifies={tree} ref={materailCreate} />
     </PageWrapper>
   );
 }

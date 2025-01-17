@@ -155,7 +155,13 @@ type Material = {
   /**
    *  units
    */
-  units: {}[];
+  units: {
+    id: number;
+    material_id: number;
+    unit: string;
+    alias: string;
+    is_main: 0 | 1;
+  }[];
   /**
    *  仓库信息
    */

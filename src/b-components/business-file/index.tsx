@@ -1,4 +1,4 @@
-import { Upload } from "antd";
+import { Upload, UploadProps } from "antd";
 import React from "react";
 
 import contextedNotify from "src/framework/component/contexted-notify";
@@ -12,16 +12,19 @@ import qiniu from "src/util/qiniu";
 
 type UploadResponse = { url: string; id: FileResponse["id"] };
 
-export default function <Id extends string | number = number>(props: {
-  id: Id;
-  identify: BusinessFileIdentify;
-  service: BusinessParams["service"];
-  isCover: BusinessParams["is_cover"];
-  files?: BusinessFile[];
-}) {
-  const { id, files, identify, service, isCover } = props;
+export default function <Id extends string | number = number>(
+  props: {
+    id: Id;
+    identify: BusinessFileIdentify;
+    service: BusinessParams["service"];
+    isCover: BusinessParams["is_cover"];
+    files?: BusinessFile[];
+  } & Pick<UploadProps, "maxCount">
+) {
+  const { id, files, identify, service, isCover, maxCount } = props;
   return (
     <Upload<UploadResponse>
+      maxCount={maxCount}
       listType="picture-card"
       defaultFileList={files?.map((item) => ({
         uid: String(item.file_id),

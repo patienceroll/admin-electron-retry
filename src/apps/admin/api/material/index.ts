@@ -14,7 +14,18 @@ export const postMaterial = (
     | "status"
   >
 ) => {
-  return fetch.POST(fetch.base("/api/material"), data);
+  return fetch.POST<
+    Pick<
+      Material,
+      | "material_classify_id"
+      | "name"
+      | "code"
+      | "brand"
+      | "model"
+      | "status"
+      | "id"
+    >
+  >(fetch.base("/api/material"), data);
 };
 
 /**
@@ -127,7 +138,11 @@ export function materialExport(params: Record<string, any>) {
 /**
  * 物资-单位设置
  */
-export const postMaterialsUnit = (params: Pick<MaterialOfAttrUnit, "id">) => {
+export const postMaterialsUnit = (
+  params: Pick<Material, "id"> & {
+    units: Pick<Material["units"][number], "unit" | "alias" | "is_main">[];
+  }
+) => {
   return fetch.POST(fetch.base("/api/material/unit"), params);
 };
 

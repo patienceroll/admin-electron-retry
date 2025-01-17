@@ -107,6 +107,8 @@ const ProjectEdit = lazy(() => import("./pages/project/project/edit"));
 const ProjectDetail = lazy(() => import("./pages/project/project/detail"));
 
 const Material = lazy(() => import("./pages/material/material"));
+const MaterialEdit = lazy(() => import("./pages/material/material/edit"));
+
 
 export default function () {
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -207,6 +209,7 @@ export default function () {
         <Route path="/project/project/detail" element={<ProjectDetail />} />
 
         <Route path="/material/material" element={<Material />} />
+        <Route path="/material/material/edit" element={<MaterialEdit />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
