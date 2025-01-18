@@ -109,7 +109,12 @@ export function getMaterialSkues(
 ) {
   return fetch.GET<List<MaterialSku>>(
     fetch.base(`/api/material-sku/list`),
-    params
+    params,
+    {
+      headers: {
+        "Menu-Slug": "material",
+      },
+    }
   );
 }
 

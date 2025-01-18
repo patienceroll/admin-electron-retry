@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { useSearchParams } from "react-router-dom";
-import { Button, Card, Checkbox, Col, Form, Input, Row, Space } from "antd";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  Radio,
+  Row,
+  Space,
+} from "antd";
 import {
   ProFormDependency,
   ProFormRadio,
@@ -9,14 +19,16 @@ import {
   ProFormText,
   ProFormTreeSelect,
 } from "@ant-design/pro-form";
-import ProTable from "@ant-design/pro-table";
+import ProTable, { ProColumns } from "@ant-design/pro-table";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
+  deleteMaterialSku,
   getMaterial,
   getMaterialsAttrList,
   getMaterialSkues,
   materialRender,
+  materialSkuStatus,
   postMaterialsAttrSkues,
   postMaterialsUnit,
 } from "src/apps/admin/api/material";
@@ -31,6 +43,7 @@ import contextedMessage from "src/framework/component/contexted-message";
 import useUpdate from "src/hooks/use-update";
 import useSearchTable from "src/hooks/use-search-table";
 import useRenderNames from "src/b-hooks/use-render-names";
+import contextedModal from "src/framework/component/contexted-modal";
 
 type EditUnit = Pick<
   Material["units"][number],
@@ -61,7 +74,7 @@ function Edit(props: StyledWrapComponents) {
   );
   const [update] = useUpdate();
 
-  const [{ attrColumn, reload, }] = useRenderNames(materialRender, {
+  const [{ renderNames, reload }] = useRenderNames(materialRender, {
     material_id: id,
   });
 
@@ -95,8 +108,69 @@ function Edit(props: StyledWrapComponents) {
     skus.extraParams.current.status = "1";
     skus.extraParams.current.material_id = id;
     skus.reload();
-    reload()
+    reload();
   }, [id]);
+
+  const column = skus.column([
+    ...renderNames.attr_fields.map<ProColumns<any>>((item) => ({
+      title: item.name,
+      renderText: (_, row: any) => row[item.key],
+    })),
+    {
+      title: "操作",
+      dataIndex: "action",
+      fixed: "right",
+      render(_, row) {
+        return (
+          <Space>
+            {row.status === 0 && (
+              <Button
+                type="text"
+                onClick={() => {
+                  materialSkuStatus({
+                    id: row.id,
+                    status: 1,
+                  }).then(skus.reload);
+                }}
+              >
+                启用
+              </Button>
+            )}
+            {row.status === 1 && (
+              <Button
+                type="text"
+                danger
+                onClick={() => {
+                  materialSkuStatus({
+                    id: row.id,
+                    status: 0,
+                  }).then(skus.reload);
+                }}
+              >
+                停用
+              </Button>
+            )}
+            <Button
+              type="text"
+              danger
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.name}?`,
+                  onOk: () =>
+                    deleteMaterialSku({
+                      id: row.id,
+                    }).then(skus.reload),
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
+    },
+  ]);
 
   return (
     <PageWrapper className={className}>
@@ -385,7 +459,7 @@ function Edit(props: StyledWrapComponents) {
                           .then(() => {
                             contextedMessage.message?.success("成功生成组合");
                             skus.reload();
-                            reload()
+                            reload();
                           })
                           .finally(generateAttrGroup.setFalse);
                       }}
@@ -432,31 +506,32 @@ function Edit(props: StyledWrapComponents) {
                 <Col flex={1}>
                   <ProTable
                     search={false}
-                    pagination={false}
+                    pagination={skus.pagination}
                     options={skus.options}
                     dataSource={skus.dataSource}
                     loading={skus.loading}
-                    columns={skus.column([
-                      ...attrColumn,
-                      {
-                        title: "操作",
-                        dataIndex: "action",
-                        fixed: "right",
-                        render(_, row) {
-                          return (
-                            <Space>
-                              <Button type="text">启用</Button>
-                              <Button type="text" danger>
-                                停用
-                              </Button>
-                              <Button type="text" danger>
-                                删除
-                              </Button>
-                            </Space>
-                          );
-                        },
-                      },
-                    ])}
+                    headerTitle={
+                      <Radio.Group
+                        value={skus.extraParams.current.status}
+                        options={[
+                          {
+                            label: "启用",
+                            value: "1",
+                          },
+                          {
+                            label: "停用",
+                            value: "0",
+                          },
+                        ]}
+                        onChange={(e) => {
+                          skus.extraParams.current.status = e.target.value;
+                          skus.reload();
+                          update();
+                        }}
+                      />
+                    }
+                    scroll={{ x: skus.measureColumnWidth(column), y: "60vh" }}
+                    columns={column}
                   />
                 </Col>
               </Row>

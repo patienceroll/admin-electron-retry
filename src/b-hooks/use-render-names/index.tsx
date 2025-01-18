@@ -15,7 +15,11 @@ export default function <
   const getData = useCallback(
     (params: Params) => {
       return api(params).then((res) => {
-        setRenderNames(res.data);
+        const { attr_fields, unit_fields } = res.data;
+        setRenderNames({
+          attr_fields: attr_fields || [],
+          unit_fields: unit_fields || [],
+        });
       });
     },
     [api]
