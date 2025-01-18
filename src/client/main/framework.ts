@@ -4,6 +4,7 @@ import {
   BrowserWindow,
   ipcMain,
   WebContentsView,
+  screen,
 } from "electron";
 
 import themeMain from "src/client/channel/theme/main";
@@ -47,9 +48,11 @@ export default class Framework {
   }
 
   private createBaseWindow() {
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { workAreaSize } = primaryDisplay;
     this.baseWindow = new BaseWindow({
-      height: 800,
-      width: 1200,
+      height: workAreaSize.height - 100,
+      width: workAreaSize.width - 100,
       minHeight: 800,
       minWidth: 1200,
       // icon: nativeImage.createFromPath(path.resolve(__dirname, Logo)),

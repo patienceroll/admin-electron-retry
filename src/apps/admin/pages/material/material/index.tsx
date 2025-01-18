@@ -24,13 +24,18 @@ import * as MaterailCreate from "./components/material-create";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import useSearchTable from "src/hooks/use-search-table";
-import { getMaterialList, materialExport } from "src/apps/admin/api/material";
+import {
+  deleteMaterial,
+  getMaterialList,
+  materialExport,
+} from "src/apps/admin/api/material";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import useColumnState from "src/hooks/use-column-state";
 import { watherMap } from "src/apps/admin/api/general";
 import ExportSvg from "src/assets/svg/导出.svg";
 import contextedMessage from "src/framework/component/contexted-message";
 import openWindow from "src/util/open-window";
+import contextedModal from "src/framework/component/contexted-modal";
 
 interface ClassifyItem extends TreeDataNode {
   _item: MaterialClassifyTree;
@@ -159,6 +164,7 @@ function Materail(props: StyledWrapComponents) {
           <Space>
             <Button
               type="text"
+              disabled={row.btn_power.is_edit !== 1}
               onClick={() => {
                 onEditMaterail(row.id);
               }}
@@ -166,14 +172,45 @@ function Materail(props: StyledWrapComponents) {
               编辑
             </Button>
             {row.status === 1 && (
-              <Button type="text" danger>
+              <Button
+                type="text"
+                danger
+                onClick={() => {
+                  contextedMessage.message?.info("该功能暂未开放");
+                }}
+              >
                 停用
               </Button>
             )}
-            {row.status === 0 && <Button type="text">启用</Button>}
-            <Button type="text" danger>
-              删除
-            </Button>
+            {row.status === 0 && (
+              <Button
+                type="text"
+                onClick={() => {
+                  contextedMessage.message?.info("该功能暂未开放");
+                }}
+              >
+                启用
+              </Button>
+            )}
+            <Button
+                type="text"
+                danger
+                disabled={row.btn_power.is_delete !== 1}
+                onClick={() => {
+                  contextedModal.modal?.confirm({
+                    title: "删除",
+                    content: `确定删除${row.name}?`,
+                    onOk() {
+                      return deleteMaterial({ id: row.id }).then(() => {
+                        contextedMessage.message?.success("成功删除");
+                        table.reload();
+                      });
+                    },
+                  });
+                }}
+              >
+                删除
+              </Button>
           </Space>
         );
       },
