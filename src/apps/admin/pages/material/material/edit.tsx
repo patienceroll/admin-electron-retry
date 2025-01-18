@@ -6,6 +6,7 @@ import {
   Card,
   Checkbox,
   Col,
+  FloatButton,
   Form,
   Input,
   Radio,
@@ -31,6 +32,7 @@ import {
   materialSkuStatus,
   postMaterialsAttrSkues,
   postMaterialsUnit,
+  putMaterial,
 } from "src/apps/admin/api/material";
 import Title from "src/framework/component/title";
 import { materialClassifyTree } from "src/apps/admin/api/marterial-classify";
@@ -44,6 +46,8 @@ import useUpdate from "src/hooks/use-update";
 import useSearchTable from "src/hooks/use-search-table";
 import useRenderNames from "src/b-hooks/use-render-names";
 import contextedModal from "src/framework/component/contexted-modal";
+import Icon from "src/framework/component/icon";
+import SaveSvg from "src/assets/svg/保存.svg";
 
 type EditUnit = Pick<
   Material["units"][number],
@@ -110,6 +114,29 @@ function Edit(props: StyledWrapComponents) {
     skus.reload();
     reload();
   }, [id]);
+
+  function submit() {
+    form
+      .validateFields()
+      .then(async (store) => {
+        const { status } = store;
+        if (status === 0) {
+          const result = await contextedModal.modal!.confirm({
+            title: "确定停用?",
+            content: "停用后,其属性组合将全面停用,请仔细核对!",
+          });
+          if (!result) return Promise.reject();
+        }
+        return putMaterial({
+          id: id,
+          ...store,
+        });
+      })
+      .then(() => {
+        window.parent.postMessage("success");
+        window.close();
+      });
+  }
 
   const column = skus.column([
     ...renderNames.attr_fields.map<ProColumns<any>>((item) => ({
@@ -539,6 +566,15 @@ function Edit(props: StyledWrapComponents) {
           </ProFormDependency>
         </Card>
       </Form>
+      {detail && (
+        <FloatButton
+          icon={<Icon icon={SaveSvg} />}
+          tooltip="保存"
+          shape="square"
+          style={{ insetInlineEnd: 24 }}
+          onClick={submit}
+        />
+      )}
     </PageWrapper>
   );
 }
