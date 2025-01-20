@@ -182,7 +182,6 @@ const ChooseMaterial = forwardRef<
                   children: "child",
                 }}
                 onChange={(e) => {
-                  console.log(e);
                   attrSearch.current?.changeAttr({
                     material_classify_id: e,
                   });
