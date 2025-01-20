@@ -3,7 +3,8 @@ import fetch from "src/util/fetch";
 /** 物料分类 树 */
 export function materialClassifyTree() {
   return fetch.GET<MaterialClassifyTree[]>(
-    fetch.base(`/api/material-classify/tree`)
+    fetch.base(`/api/material-classify/tree`),
+    undefined
   );
 }
 

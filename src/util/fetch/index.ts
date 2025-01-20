@@ -32,12 +32,50 @@ function request(url: string, params?: FetchParams, init: FetchInit = {}) {
   return fetch(query ? `${url}?${query}` : url, { ...init, method, body });
 }
 
+function getCurrentMenu(path: string) {
+  function recusion(menu: UserMenu[], store: UserMenu[]) {
+    menu.forEach((item) => {
+      store.push(item);
+      if (item.child) {
+        recusion(item.child, store);
+      }
+    });
+    return store;
+  }
+  const flatedMenu = recusion(window.preload.getLocalUserMenu() || [], []);
+  const menu = flatedMenu.find((item) => item.path === path);
+  return menu;
+}
+
+export const MenuSlug = {
+  memoryRouterPath: "",
+  get value() {
+    if (window.preload.isPackaged) {
+      const currentPath = `/${window.location.pathname
+        .split("/")
+        .filter(Boolean)
+        .slice(0, 2)
+        .join("/")}`;
+      return getCurrentMenu(currentPath)?.slug;
+    } else {
+      const currentPath = `/${window.location.pathname
+        .split("/")
+        .filter(Boolean)
+        .slice(1, 3)
+        .join("/")}`;
+
+      return getCurrentMenu(currentPath)?.slug;
+    }
+  },
+};
+
 function getDefaultHeader() {
   return {
     "Content-Type": "application/json",
     Authorization: "Bearer " + window.preload.getLocalToken(),
     Platform: "windows",
     "Company-Id": window.preload.getLocalCompany()?.id,
+    "Menu-Slug": MenuSlug.value,
   };
 }
 
@@ -149,16 +187,6 @@ function base(path: string) {
   throw new Error("错误的环境");
 }
 
-function getMenuSlugInit(menuSlug: string, init: FetchInit = {}): FetchInit {
-  return {
-    ...init,
-    headers: {
-      ...(init.headers || {}),
-      "Menu-Slug": menuSlug,
-    },
-  };
-}
-
 export default {
   GET,
   POST,
@@ -168,5 +196,4 @@ export default {
   PATCH,
   requestProgramResponse,
   base,
-  getMenuSlugInit
 } as const;
