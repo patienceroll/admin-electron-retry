@@ -207,6 +207,13 @@ const ChooseMaterial = forwardRef<
             <div className="action">
               <Space>
                 <Button
+                  onClick={() => {
+                    form.resetFields();
+                  }}
+                >
+                  重置
+                </Button>
+                <Button
                   type="primary"
                   onClick={() => {
                     table.extraParams.current = form.getFieldsValue();
