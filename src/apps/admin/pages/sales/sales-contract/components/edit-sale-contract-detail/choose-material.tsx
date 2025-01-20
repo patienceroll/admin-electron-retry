@@ -211,7 +211,7 @@ const ChooseMaterial = forwardRef<
                     options={item.detail}
                     fieldNames={{
                       label: "value",
-                      value: "id",
+                      value: "value",
                     }}
                     optionFilterProp="value"
                     placeholder="请选择"
