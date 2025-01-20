@@ -5,5 +5,6 @@ export default function electronPreload(): ElectronPreload {
     get isPackaged() {
       return ipcRenderer.sendSync("isPackaged");
     },
+    
   };
 }

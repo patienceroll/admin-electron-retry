@@ -103,7 +103,7 @@ export default function () {
           {contextHolder}
           {modalContextHolder}
           {messageContextHolder}
-          <Routes />
+          <Routes darkMode={darkMode} />
           <GlobalStyle />
         </ThemeProvider>
       </ProConfigProvider>

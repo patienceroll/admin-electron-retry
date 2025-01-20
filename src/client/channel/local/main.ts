@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { ipcMain, app } from "electron";
 
 import Framework from "src/client/main/framework";
 
@@ -54,5 +54,24 @@ export default function localMain(options: { framework: Framework }) {
     } else {
       event.returnValue = false;
     }
+  });
+
+  ipcMain.on("getLocalUserComonlyMenu", function (event) {
+    event.returnValue = framework.userLocal.conmonlyMenu || [];
+  });
+
+  ipcMain.on("setLocalUserComonlyMenu", function (event, menu: ConmonlyMenu[]) {
+    framework.userLocal.conmonlyMenu = menu;
+    framework.views.value.forEach((item) => {
+      item.view.webContents.send("onLocalUserComonlyMenuChange", menu);
+    });
+    event.returnValue = void 0;
+  });
+
+  ipcMain.on("resetUserInfo", function (event) {
+    framework.userLocal.reset();
+    app.relaunch();
+    app.exit();
+    event.returnValue = void 0;
   });
 }

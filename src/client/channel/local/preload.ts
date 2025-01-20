@@ -32,5 +32,23 @@ export default function localPreload(): LocalPreload {
     getLocalUserHasPermission(path, slug) {
       return ipcRenderer.sendSync("getLocalUserHasPermission", path, slug);
     },
+    getLocalUserComonlyMenu() {
+      return ipcRenderer.sendSync("getLocalUserComonlyMenu");
+    },
+    setLocalUserComonlyMenu(menu) {
+      return ipcRenderer.sendSync("setLocalUserComonlyMenu", menu);
+    },
+    resetUserInfo() {
+      return ipcRenderer.send("resetUserInfo");
+    },
+    onLocalUserComonlyMenuChange(callback) {
+      function listener(_: Electron.IpcRendererEvent, menu: ConmonlyMenu[]) {
+        callback(menu);
+      }
+      ipcRenderer.on("onLocalUserComonlyMenuChange", listener);
+      return function () {
+        ipcRenderer.removeListener("onLocalUserComonlyMenuChange", listener);
+      };
+    },
   };
 }

@@ -10,7 +10,7 @@ import Title from "src/framework/component/title";
 import Item from "src/framework/menu/components/item";
 import FadeInWrapper from "src/framework/component/fade-in-wrapper";
 import PageWrapper from "../component/page-wrapper";
-import * as SystemConfig from "./components/system-config"
+import * as SystemConfig from "./components/system-config";
 
 import images from "src/assets/images";
 
@@ -38,10 +38,6 @@ import approvalRecordSvg from "src/assets/svg/approval-record.svg";
 import "swiper/css";
 import "swiper/css/scrollbar";
 
-type CommandyMenu = UserMenu & {
-  count: number;
-};
-
 export const IconMap = {
   "approval-record": approvalRecordSvg,
   home: HomeSvg,
@@ -67,7 +63,7 @@ export const IconMap = {
 
 function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
   const { className, darkMode } = props;
-  const systemConfig = SystemConfig.createRef()
+  const systemConfig = SystemConfig.createRef();
   const theme = useTheme();
   const [div, setDiv] = useState<HTMLDivElement | null>(null);
 
@@ -96,17 +92,13 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
   const [currentMenu, setCurrentMenu] = useState<UserMenu>();
 
   // 常用菜单
-  const [commonlyUsed, setConmonlyUsed] = useState<CommandyMenu[]>(() => {
-    const data = localStorage.getItem("commonlyUsed");
-    if (data) {
-      return JSON.parse(data);
-    }
-    return [];
-  });
+  const [commonlyUsed, setConmonlyUsed] = useState<ConmonlyMenu[]>(() =>
+    window.preload.getLocalUserComonlyMenu()
+  );
 
   function pushARecordToLocal(params: UserMenu) {
     setConmonlyUsed((t) => {
-      let newData: CommandyMenu[] = [];
+      let newData: ConmonlyMenu[] = [];
       if (t.find((item) => item.id === params.id)) {
         const temp = t.map((i) => ({
           ...i,
@@ -118,7 +110,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
         newData.push({ ...params, count: 1 });
         newData = newData.sort((a, b) => b.count - a.count);
       }
-      localStorage.setItem("commonlyUsed", JSON.stringify(newData));
+      window.preload.setLocalUserComonlyMenu(newData);
       return newData;
     });
   }
@@ -226,9 +218,9 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
         type="primary"
         tooltip="系统设置"
         onClick={() => {
-          systemConfig.current?.open()
+          systemConfig.current?.open();
         }}
-        icon={<Icon  fill={theme.colorBgBase} icon={systemSvg} />}
+        icon={<Icon fill={theme.colorBgBase} icon={systemSvg} />}
       />
       <SystemConfig.default ref={systemConfig} />
     </PageWrapper>
