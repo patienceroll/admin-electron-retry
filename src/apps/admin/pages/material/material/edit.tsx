@@ -219,6 +219,7 @@ function Edit(props: StyledWrapComponents) {
             <Col flex="350px">
               <ProFormTreeSelect
                 label="分类"
+                readonly
                 name="material_classify_id"
                 placeholder="请选择分类"
                 tooltip="分类能决定采用哪些属性"
