@@ -224,6 +224,9 @@ const ChooseMaterial = forwardRef<
                 <Button
                   onClick={() => {
                     form.resetFields();
+                    table.extraParams.current = form.getFieldsValue();
+                    getRenderNames(form.getFieldsValue());
+                    table.reload();
                   }}
                 >
                   重置
