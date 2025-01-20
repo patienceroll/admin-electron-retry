@@ -5,7 +5,17 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button, Col, Form, Input, Modal, Row, Select, Space } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  Space,
+  TreeSelect,
+} from "antd";
 import styled, { useTheme } from "styled-components";
 import ProTable, { ProColumns } from "@ant-design/pro-table";
 
@@ -17,7 +27,10 @@ import {
   salesContractMaterialRender,
 } from "src/apps/admin/api/sales-contract";
 import useOption from "src/hooks/use-option";
-import { getMaterialClassifyOptions } from "src/apps/admin/api/marterial-classify";
+import {
+  getMaterialClassifyOptions,
+  materialClassifyTree,
+} from "src/apps/admin/api/marterial-classify";
 import useTableInnerHeight from "src/hooks/use-page-table-height/use-table-inner-height";
 import * as AttrSearch from "src/b-components/attr-search";
 import contextedMessage from "src/framework/component/contexted-message";
@@ -47,8 +60,8 @@ const ChooseMaterial = forwardRef<
   const [form] = Form.useForm<typeof table.extraParams.current>();
 
   const table = useSearchTable(getMaterialSku);
-  const [classify] = useOption(getMaterialClassifyOptions);
   const [select, setSelect] = useState<SalesContractMaterialSku[]>([]);
+  const [tree, setTree] = useState<MaterialClassifyTree[]>([]);
 
   const [renderNames, setRenderNames] = useState<RenderConfig>({
     attr_fields: [],
@@ -60,6 +73,11 @@ const ChooseMaterial = forwardRef<
   ) {
     salesContractMaterialRender(params).then((res) => {
       setRenderNames(res.data);
+    });
+  }
+  function getClassify() {
+    return materialClassifyTree().then((res) => {
+      setTree(res.data);
     });
   }
 
@@ -82,21 +100,7 @@ const ChooseMaterial = forwardRef<
         open.setTrue();
         form.resetFields();
         promiseResolver.current = { resolve, reject };
-        classify.loadOption().then((value) => {
-          const item = value.find((i) => i.name === "成品-1");
-          if (item) {
-            form.setFieldsValue({ material_classify_id: item.id });
-            table.extraParams.current.material_classify_id = item.id;
-            getRenderNames({ material_classify_id: item.id });
-            attrSearch.current
-              ?.changeAttr({ material_classify_id: item.id })
-              .then(() => form.getFieldsValue())
-              .then((res) => {
-                table.extraParams.current = res;
-                table.reload();
-              });
-          }
-        });
+        getClassify();
       });
     },
   }));
@@ -167,14 +171,18 @@ const ChooseMaterial = forwardRef<
               label="分类"
               name="material_classify_id"
             >
-              <Select<MaterialClassify["id"]>
-                options={classify.list}
-                fieldNames={{ label: "name", value: "id" }}
-                filterOption
+              <TreeSelect
                 showSearch
-                optionFilterProp="name"
+                treeData={tree}
                 placeholder="请选择分类"
+                treeNodeFilterProp="name"
+                fieldNames={{
+                  label: "name",
+                  value: "id",
+                  children: "child",
+                }}
                 onChange={(e) => {
+                  console.log(e);
                   attrSearch.current?.changeAttr({
                     material_classify_id: e,
                   });
