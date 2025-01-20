@@ -180,9 +180,9 @@ export function getOperateRecord(params: Pick<SalesContract, "id">) {
 }
 
 /** 销售合同的可选择的产品 列渲染 */
-export function salesContractMaterialRender(params: {
-  material_classify_id: MaterialClassify["id"];
-}) {
+export function salesContractMaterialRender(
+  params: Parameters<typeof getMaterialSku>[0]
+) {
   return fetch.GET<RenderConfig>(
     fetch.base(`/api/sales-contract/material-sku/render`),
     params

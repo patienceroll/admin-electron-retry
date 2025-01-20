@@ -26,15 +26,11 @@ import {
   postMaterialSku,
   salesContractMaterialRender,
 } from "src/apps/admin/api/sales-contract";
-import useOption from "src/hooks/use-option";
-import {
-  getMaterialClassifyOptions,
-  materialClassifyTree,
-} from "src/apps/admin/api/marterial-classify";
+import { materialClassifyTree } from "src/apps/admin/api/marterial-classify";
 import useTableInnerHeight from "src/hooks/use-page-table-height/use-table-inner-height";
-import * as AttrSearch from "src/b-components/attr-search";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
+import { getMaterialsAttrList } from "src/apps/admin/api/material";
 
 type Ref = {
   choose: () => Promise<void>;
@@ -62,6 +58,7 @@ const ChooseMaterial = forwardRef<
   const table = useSearchTable(getMaterialSku);
   const [select, setSelect] = useState<SalesContractMaterialSku[]>([]);
   const [tree, setTree] = useState<MaterialClassifyTree[]>([]);
+  const [attrs, setAttrs] = useState<MaterialOfAttr[]>([]);
 
   const [renderNames, setRenderNames] = useState<RenderConfig>({
     attr_fields: [],
@@ -75,9 +72,19 @@ const ChooseMaterial = forwardRef<
       setRenderNames(res.data);
     });
   }
+
   function getClassify() {
     return materialClassifyTree().then((res) => {
       setTree(res.data);
+    });
+  }
+
+  function getAttr(options: {
+    material_classify_id: MaterialClassify["id"];
+    material_sku_id?: MaterialSku["id"];
+  }) {
+    return getMaterialsAttrList(options).then((res) => {
+      setAttrs(res.data);
     });
   }
 
@@ -90,7 +97,6 @@ const ChooseMaterial = forwardRef<
     );
   }, [renderNames.attr_fields]);
 
-  const attrSearch = AttrSearch.createRef();
 
   const theme = useTheme();
 
@@ -182,10 +188,9 @@ const ChooseMaterial = forwardRef<
                   children: "child",
                 }}
                 onChange={(e) => {
-                  attrSearch.current?.changeAttr({
+                  getAttr({
                     material_classify_id: e,
                   });
-                  getRenderNames({ material_classify_id: e });
                 }}
               />
             </Form.Item>
@@ -199,9 +204,20 @@ const ChooseMaterial = forwardRef<
             </Form.Item>
 
             <div className="attr-container">
-              <Form.Item name="attr_ids">
-                <AttrSearch.default ref={attrSearch} />
-              </Form.Item>
+              {attrs.map((item) => (
+                <Form.Item label={item.name} name={item.key} key={item.key}>
+                  <Select
+                    mode="multiple"
+                    options={item.detail}
+                    fieldNames={{
+                      label: "value",
+                      value: "id",
+                    }}
+                    optionFilterProp="value"
+                    placeholder="请选择"
+                  />
+                </Form.Item>
+              ))}
             </div>
             <div className="action">
               <Space>
@@ -216,6 +232,7 @@ const ChooseMaterial = forwardRef<
                   type="primary"
                   onClick={() => {
                     table.extraParams.current = form.getFieldsValue();
+                    getRenderNames(form.getFieldsValue());
                     table.reload();
                   }}
                 >

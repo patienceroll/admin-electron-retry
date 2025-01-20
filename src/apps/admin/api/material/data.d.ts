@@ -179,6 +179,7 @@ type MaterialOfAttrUnit = {
 type MaterialOfAttr = {
   id: number;
   name: string;
+  key:string;
   detail: {
     id: number;
     material_attr_id: number;
