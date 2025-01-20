@@ -147,6 +147,7 @@ function Edit(props: StyledWrapComponents) {
       title: "操作",
       dataIndex: "action",
       fixed: "right",
+      width: 150,
       render(_, row) {
         return (
           <Space>

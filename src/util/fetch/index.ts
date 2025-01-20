@@ -149,6 +149,16 @@ function base(path: string) {
   throw new Error("错误的环境");
 }
 
+function getMenuSlugInit(menuSlug: string, init: FetchInit = {}): FetchInit {
+  return {
+    ...init,
+    headers: {
+      ...(init.headers || {}),
+      "Menu-Slug": menuSlug,
+    },
+  };
+}
+
 export default {
   GET,
   POST,
@@ -158,4 +168,5 @@ export default {
   PATCH,
   requestProgramResponse,
   base,
+  getMenuSlugInit
 } as const;

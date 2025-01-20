@@ -25,7 +25,7 @@ export const postMaterial = (
       | "status"
       | "id"
     >
-  >(fetch.base("/api/material"), data);
+  >(fetch.base("/api/material"), data, fetch.getMenuSlugInit("material"));
 };
 
 /**
@@ -44,7 +44,11 @@ export const putMaterial = (
     | "status"
   >
 ) => {
-  return fetch.PUT(fetch.base("/api/material"), data);
+  return fetch.PUT(
+    fetch.base("/api/material"),
+    data,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /**
@@ -53,7 +57,11 @@ export const putMaterial = (
 export const getMaterialList = (
   params: ListParam & { material_classify_id?: MaterialClassify["id"] }
 ) => {
-  return fetch.GET<List<Material>>(fetch.base("/api/material/list"), params);
+  return fetch.GET<List<Material>>(
+    fetch.base("/api/material/list"),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /**
@@ -61,20 +69,32 @@ export const getMaterialList = (
 export const getMaterialOption = (params: {
   material_classify_id?: MaterialClassify["id"];
 }) => {
-  return fetch.GET<Material[]>(fetch.base("/api/material/list"), params);
+  return fetch.GET<Material[]>(
+    fetch.base("/api/material/list"),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /**
  * 物资-列表-详情
  */
 export const getMaterial = (params: Pick<Material, "id">) => {
-  return fetch.GET<Material>(fetch.base("/api/material/detail"), params);
+  return fetch.GET<Material>(
+    fetch.base("/api/material/detail"),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 };
 /**
  * 物资-删除
  */
 export const deleteMaterial = (data: Pick<Material, "id">) => {
-  return fetch.DELETE(fetch.base("/api/material"), data);
+  return fetch.DELETE(
+    fetch.base("/api/material"),
+    data,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /**
@@ -85,7 +105,11 @@ export const getMaterialsAttrList = (params: {
   // material_id: Materail['id'];
   material_sku_id?: number;
 }) => {
-  return fetch.GET<MaterialOfAttr[]>(fetch.base("/api/material/attr"), params);
+  return fetch.GET<MaterialOfAttr[]>(
+    fetch.base("/api/material/attr"),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /**
@@ -96,7 +120,11 @@ export const postMaterialsAttrSkues = (
     attr: MaterialOfAttr[];
   }
 ) => {
-  return fetch.POST(fetch.base("/api/material/attr"), params);
+  return fetch.POST(
+    fetch.base("/api/material/attr"),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /** 物资 - 获取当前物资的sku */
@@ -110,17 +138,17 @@ export function getMaterialSkues(
   return fetch.GET<List<MaterialSku>>(
     fetch.base(`/api/material-sku/list`),
     params,
-    {
-      headers: {
-        "Menu-Slug": "material",
-      },
-    }
+    fetch.getMenuSlugInit("material")
   );
 }
 
 /** 物资 - 删除当前物资的sku */
 export function deleteMaterialSku(params: { id: MaterialSku["id"] }) {
-  return fetch.DELETE(fetch.base(`/api/material-sku`), params);
+  return fetch.DELETE(
+    fetch.base(`/api/material-sku`),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 }
 
 /** 物资 - sku 启用停用 */
@@ -128,7 +156,11 @@ export function materialSkuStatus(params: {
   id: MaterialSku["id"];
   status: MaterialSku["status"];
 }) {
-  return fetch.POST(fetch.base(`/api/material-sku/change-status`), params);
+  return fetch.POST(
+    fetch.base(`/api/material-sku/change-status`),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 }
 
 /** 物资-导出 */
@@ -137,7 +169,11 @@ export function materialExport(params: Record<string, any>) {
     file_name: string;
     file_path: string;
     remote_path: string;
-  }>(fetch.base(`/api/material/export`), params);
+  }>(
+    fetch.base(`/api/material/export`),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 }
 
 /**
@@ -148,14 +184,22 @@ export const postMaterialsUnit = (
     units: Pick<Material["units"][number], "unit" | "alias" | "is_main">[];
   }
 ) => {
-  return fetch.POST(fetch.base("/api/material/unit"), params);
+  return fetch.POST(
+    fetch.base("/api/material/unit"),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 };
 
 /** 物资 排序 */
 export function materialSort(params: {
   data: { id: MaterialAttr["id"]; list: number }[];
 }) {
-  return fetch.POST(fetch.base(`/api/material-attr/name-list`), params);
+  return fetch.POST(
+    fetch.base(`/api/material-attr/name-list`),
+    params,
+    fetch.getMenuSlugInit("material")
+  );
 }
 
 /** 物资字段渲染配置 */
