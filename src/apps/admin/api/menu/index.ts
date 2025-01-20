@@ -6,23 +6,31 @@ export const getMenuTree = (params: {
   /** 1:手机 2:PC */
   type: 1 | 2;
 }) => {
-  return fetch.GET<Menu[]>(fetch.base("/api/menu/tree"), params, {
-    headers: {
-      "menu-slug": "menu-management",
-    },
-  });
+  return fetch.GET<Menu[]>(
+    fetch.base("/api/menu/tree"),
+    params,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /** 菜单-当前用户树形图 */
 export const getUserMenuTree = () => {
-  return fetch.GET<Menu[]>(fetch.base("/api/menu/my-tree"));
+  return fetch.GET<Menu[]>(
+    fetch.base("/api/menu/my-tree"),
+    undefined,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
  * 菜单-删除
  */
 export const deleteMenu = (data: Pick<Menu, "id">) => {
-  return fetch.DELETE(fetch.base("/api/menu"), data);
+  return fetch.DELETE(
+    fetch.base("/api/menu"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
@@ -43,7 +51,11 @@ export const addMenuPermission = (data: {
   /** 状态 */
   is_hidden: 0 | 1;
 }) => {
-  return fetch.POST(fetch.base("/api/menu"), data);
+  return fetch.POST(
+    fetch.base("/api/menu"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
@@ -65,7 +77,11 @@ export const editMenuPermission = (data: {
   is_hidden: 0 | 1;
   id: Menu["id"];
 }) => {
-  return fetch.PUT(fetch.base("/api/menu"), data);
+  return fetch.PUT(
+    fetch.base("/api/menu"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
@@ -76,17 +92,25 @@ export const getPermissions = (
     menu_id?: Menu["id"];
   }
 ) => {
-  return fetch.GET<List<Permission>>(fetch.base("/api/permission/list"), data);
+  return fetch.GET<List<Permission>>(
+    fetch.base("/api/permission/list"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
  * 菜单权限-选项
  */
 export const getPermissionsOption = (data: { menu_id?: Menu["id"] }) => {
-  return fetch.GET<Permission[]>(fetch.base("/api/permission/list"), {
-    ...data,
-    page: 0,
-  });
+  return fetch.GET<Permission[]>(
+    fetch.base("/api/permission/list"),
+    {
+      ...data,
+      page: 0,
+    },
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
@@ -95,7 +119,11 @@ export const getPermissionsOption = (data: { menu_id?: Menu["id"] }) => {
 export const postPermission = (
   data: Pick<Permission, "name" | "slug" | "list"> & { menu_id: Menu["id"] }
 ) => {
-  return fetch.POST(fetch.base("/api/permission"), data);
+  return fetch.POST(
+    fetch.base("/api/permission"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
@@ -104,19 +132,31 @@ export const postPermission = (
 export const putPermission = (
   data: Pick<Permission, "name" | "slug" | "list" | "id">
 ) => {
-  return fetch.PUT(fetch.base("/api/permission"), data);
+  return fetch.PUT(
+    fetch.base("/api/permission"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 /**
  * 菜单权限-删除
  */
 export const deletePermission = (data: Pick<Permission, "id">) => {
-  return fetch.DELETE(fetch.base("/api/permission"), data);
+  return fetch.DELETE(
+    fetch.base("/api/permission"),
+    data,
+    fetch.getMenuSlugInit("menu-management")
+  );
 };
 
 export function setMenuStaff(params: {
   id: Menu["id"];
   staff_ids: Staff["id"][];
 }) {
-  return fetch.POST(fetch.base(`/api/menu/staff`), params);
+  return fetch.POST(
+    fetch.base(`/api/menu/staff`),
+    params,
+    fetch.getMenuSlugInit("menu-management")
+  );
 }
