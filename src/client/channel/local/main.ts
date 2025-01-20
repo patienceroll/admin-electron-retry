@@ -70,8 +70,6 @@ export default function localMain(options: { framework: Framework }) {
 
   ipcMain.on("resetUserInfo", function (event) {
     framework.userLocal.reset();
-    app.relaunch();
-    app.exit();
     event.returnValue = void 0;
   });
 }

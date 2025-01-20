@@ -90,7 +90,7 @@ function Login(props: StyledWrapComponents) {
         form.setFieldsValue(data);
       }
     }
-  }, []);
+  }, [form]);
 
   return (
     <div className={className}>

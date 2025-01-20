@@ -56,6 +56,7 @@ const SystemConfig = forwardRef<Ref>(function (props, ref) {
                 content: "常用菜单等用户数据将会被清空,并且您需要重新登录。",
                 onOk() {
                   window.preload.resetUserInfo();
+                  window.preload.login()
                 },
               });
             }}
