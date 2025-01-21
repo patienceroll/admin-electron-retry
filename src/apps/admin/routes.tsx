@@ -55,6 +55,8 @@ const SalesContractEdit = lazy(
 );
 //销售订单
 const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
+const SalesOrderEdit = lazy(() => import("./pages/sales/sales-order/edit"));
+const SalesOrderDetail = lazy(() => import("./pages/sales/sales-order/detail"));
 //销售发货
 const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
 //销售退货
@@ -177,7 +179,12 @@ export default function (props: { darkMode: boolean }) {
           path="/sales/sales-contract/edit"
           element={<SalesContractEdit />}
         />
+        
         <Route path="/sales/sales-order" element={<SalesOrder />} />
+        <Route path="/sales/sales-order/edit" element={<SalesOrderEdit />} />
+        <Route path="/sales/sales-order/detail" element={<SalesOrderDetail />} />
+
+
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
 

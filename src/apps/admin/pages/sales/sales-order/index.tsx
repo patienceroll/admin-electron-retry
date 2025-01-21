@@ -22,6 +22,7 @@ import styled, { useTheme } from "styled-components";
 import {
   deleteSalesOrder,
   getSalesOrderList,
+  salesOrderExport,
   salesOrderStatus,
 } from "src/apps/admin/api/sales-order";
 //关联接口
@@ -40,6 +41,8 @@ import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
 import Permission from "src/util/permission";
+import * as Create from "./components/create";
+import openWindow from "src/util/open-window";
 
 function SalesOrder() {
   const table = useSearchTable(getSalesOrderList);
@@ -50,6 +53,7 @@ function SalesOrder() {
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
+  const create = Create.createRef();
 
   const { addAElement, height } = usePageTableHeight(
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
@@ -355,9 +359,48 @@ function SalesOrder() {
           <FloatButton
             tooltip="新建订单"
             icon={<Icon icon={AddSvg} />}
-            onClick={() => {}}
+            onClick={() => {
+              create.current?.create().then((res) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                const window = openWindow.openCurrentAppWindow(
+                  `/sales/sales-order/edit?id=${res.id}`,
+                  "编辑销售订单"
+                );
+
+                function listener(event: MessageEvent<"success">) {
+                  if (event.data === "success") {
+                    table.reload();
+                    contextedMessage.message?.success("编辑成功");
+                  }
+                }
+
+                if (window) {
+                  window.addEventListener("message", listener);
+                }
+              });
+            }}
           />
         )}
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              salesOrderExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+        <Create.default ref={create} />
       </FloatButton.Group>
     </PageWrapper>
   );
