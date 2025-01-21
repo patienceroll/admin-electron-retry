@@ -42,6 +42,7 @@ import contextedModal from "src/framework/component/contexted-modal";
 import * as Create from "./components/create";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import images from "src/assets/images";
+import Permission from "src/util/permission";
 
 function BusinessOpportunity() {
   const table = useSearchTable(getBusinessOpportunityList);
@@ -391,10 +392,7 @@ function BusinessOpportunity() {
           }}
         />
 
-        {window.preload.getLocalUserHasPermission(
-          "/business-opportunity/business-opportunity",
-          "export"
-        ) && (
+        {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"

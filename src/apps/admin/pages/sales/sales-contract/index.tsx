@@ -51,6 +51,7 @@ import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
 import * as Create from "./components/create";
+import Permission from "src/util/permission";
 
 function SalesContract() {
   const table = useSearchTable(getSalesContractList);
@@ -432,10 +433,7 @@ function SalesContract() {
           }}
         />
 
-        {window.preload.getLocalUserHasPermission(
-          "/sales/sales-contract",
-          "export"
-        ) && (
+        {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"

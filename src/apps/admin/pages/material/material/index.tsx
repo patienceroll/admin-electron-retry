@@ -36,6 +36,7 @@ import ExportSvg from "src/assets/svg/导出.svg";
 import contextedMessage from "src/framework/component/contexted-message";
 import openWindow from "src/util/open-window";
 import contextedModal from "src/framework/component/contexted-modal";
+import Permission from "src/util/permission";
 
 interface ClassifyItem extends TreeDataNode {
   _item: MaterialClassifyTree;
@@ -193,24 +194,24 @@ function Materail(props: StyledWrapComponents) {
               </Button>
             )}
             <Button
-                type="text"
-                danger
-                disabled={row.btn_power.is_delete !== 1}
-                onClick={() => {
-                  contextedModal.modal?.confirm({
-                    title: "删除",
-                    content: `确定删除${row.name}?`,
-                    onOk() {
-                      return deleteMaterial({ id: row.id }).then(() => {
-                        contextedMessage.message?.success("成功删除");
-                        table.reload();
-                      });
-                    },
-                  });
-                }}
-              >
-                删除
-              </Button>
+              type="text"
+              danger
+              disabled={row.btn_power.is_delete !== 1}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.name}?`,
+                  onOk() {
+                    return deleteMaterial({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("成功删除");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
           </Space>
         );
       },
@@ -346,10 +347,7 @@ function Materail(props: StyledWrapComponents) {
             attrSet.current?.set();
           }}
         />
-        {window.preload.getLocalUserHasPermission(
-          "/material/material",
-          "export"
-        ) && (
+        {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"

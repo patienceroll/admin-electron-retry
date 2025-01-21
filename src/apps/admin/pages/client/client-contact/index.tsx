@@ -27,6 +27,7 @@ import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
 import usePageTableHeight from "src/hooks/use-page-table-height";
+import Permission from "src/util/permission";
 
 function ClientContact() {
   const table = useSearchTable(getClientContactList);
@@ -36,7 +37,7 @@ function ClientContact() {
   const [client] = useOption(getClientOption);
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin
   );
 
   useEffect(() => {
@@ -195,10 +196,7 @@ function ClientContact() {
           }}
         />
 
-        {window.preload.getLocalUserHasPermission(
-          "/client/client-contact",
-          "export",
-        ) && (
+        {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"
@@ -208,8 +206,8 @@ function ClientContact() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current,
-                ),
+                  table.extraParams.current
+                )
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

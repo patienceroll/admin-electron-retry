@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import PageWrapper from "../component/page-wrapper";
-import { MenuSlug } from "src/util/fetch";
+import Permission from "src/util/permission";
 
 export default function () {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export default function () {
   useEffect(() => {
     window.preload.appMounted();
     return window.preload.onChangePath((path) => {
-      MenuSlug.memoryRouterPath = path;
+      Permission.memoryRouterPath = path;
       navigate(path);
     });
   }, [navigate]);

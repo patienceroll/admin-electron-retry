@@ -16,7 +16,7 @@ type LocalPreload = {
   /** 获取当前登录的用户操作权限信息 */
   getLocalUserPermission: () => Record<string, Record<string, boolean>>;
   /** 获取当前用户是否有权限 */
-  getLocalUserHasPermission: (path: string, slug: string) => boolean;
+  getLocalUserHasPermission: (path: string, slug: PermissionSlugType) => boolean;
   /** 设置常用菜单(如果没有数据则增加,如果有数据则设置数据的count) */
   setLocalUserComonlyMenu: (menu: ConmonlyMenu[]) => void;
   /** 获取当前用户常用菜单 */
@@ -30,3 +30,4 @@ type LocalPreload = {
     callback: (menu: ConmonlyMenu[]) => void
   ) => DisposeFunction;
 };
+

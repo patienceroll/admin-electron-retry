@@ -1,4 +1,3 @@
-
 /** 角色 */
 type RoleListItem = {
   id: number;
@@ -16,37 +15,46 @@ type RoleListItem = {
   company: Company;
 };
 
+type PermissionSlugType =
+  | "see"
+  | "delete"
+  | "end"
+  | "invalid"
+  | "suspend"
+  | "export"
+  | "cancel-operate"
+  | "edit";
 
 /** 角色菜单 */
 type RoleMenu = {
+  id: number;
+  pid: number;
+  grade: number;
+  level: number;
+  name: string;
+  slug: string;
+  status: number;
+  child?: RoleMenu[];
+  data_permission: {
     id: number;
-    pid: number;
-    grade: number;
-    level: number;
-    name: string;
-    slug: string;
-    status: number;
-    child?: RoleMenu[];
-    data_permission: {
-      id: number;
-      menu_id: Menu["id"];
-      department_id: Department["id"];
-      department_name: Department["name"];
-    }[];
-    permission: (Pick<
-      Permission,
-      "id" | "is_sys" | "list" | "menu_id" | "name" | "slug" | "status"
-    > & {
-      role_permission: { permission_id: Permission["id"]; id: number }[];
-    })[];
-  };
-  
+    menu_id: Menu["id"];
+    department_id: Department["id"];
+    department_name: Department["name"];
+  }[];
+  permission: (Pick<
+    Permission,
+    "id" | "is_sys" | "list" | "menu_id" | "name" | "status"
+  > & {
+    slug: PermissionSlugType;
+    role_permission: { permission_id: Permission["id"]; id: number }[];
+  })[];
+};
 
 type Permission = {
   id: number;
   menu_id: number;
   name: string;
-  slug: string;
+  slug: PermissionSlugType;
   list: number;
   is_sys: 0 | 1;
   status: number;

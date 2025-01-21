@@ -34,15 +34,16 @@ import { StaffStatus } from "src/apps/admin/api/staff";
 import images from "src/assets/images";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import useStaffTree from "src/b-hooks/use-staff-tree";
+import Permission from "src/util/permission";
 
 function Client() {
   const table = useSearchTable(getClientList);
   const theme = useTheme();
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin,
+    theme.padding * 2 + theme.margin
   );
 
-  const {options,treeOptions} = useStaffTree()
+  const { options, treeOptions } = useStaffTree();
   const create = Create.createRef();
   const follow = Follow.createRef();
 
@@ -58,7 +59,7 @@ function Client() {
           onClick={() => {
             openWindow.openCurrentAppWindow(
               `/client/client/detail?id=${record.id}`,
-              "客户详情 - " + record.name_show,
+              "客户详情 - " + record.name_show
             );
           }}
         >
@@ -145,7 +146,7 @@ function Client() {
               onClick={function () {
                 const window = openWindow.openCurrentAppWindow(
                   `/client/client/edit?id=${row.id}`,
-                  `编辑 - ${row.name_show}`,
+                  `编辑 - ${row.name_show}`
                 );
 
                 function listener(event: MessageEvent<"success">) {
@@ -190,7 +191,7 @@ function Client() {
 
   useEffect(() => {
     table.reload();
-    options.loadOption()
+    options.loadOption();
   }, []);
 
   return (
@@ -292,7 +293,7 @@ function Client() {
               table.reload();
               const window = openWindow.openCurrentAppWindow(
                 `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户",
+                "编辑新创建的客户"
               );
 
               function listener(event: MessageEvent<"success">) {
@@ -319,10 +320,7 @@ function Client() {
             }}
           />
         )}
-        {window.preload.getLocalUserHasPermission(
-          "/client/client",
-          "export",
-        ) && (
+        {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
             tooltip="导出"
@@ -332,8 +330,8 @@ function Client() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current,
-                ),
+                  table.extraParams.current
+                )
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

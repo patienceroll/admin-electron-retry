@@ -1,3 +1,4 @@
+import permission from "../permission";
 import buildQuery from "./build-query";
 
 import controler from "src/framework/component/progress-bar/controler";
@@ -32,42 +33,7 @@ function request(url: string, params?: FetchParams, init: FetchInit = {}) {
   return fetch(query ? `${url}?${query}` : url, { ...init, method, body });
 }
 
-function getCurrentMenu(path: string) {
-  function recusion(menu: UserMenu[], store: UserMenu[]) {
-    menu.forEach((item) => {
-      store.push(item);
-      if (item.child) {
-        recusion(item.child, store);
-      }
-    });
-    return store;
-  }
-  const flatedMenu = recusion(window.preload.getLocalUserMenu() || [], []);
-  const menu = flatedMenu.find((item) => item.path === path);
-  return menu;
-}
 
-export const MenuSlug = {
-  memoryRouterPath: "",
-  get value() {
-    if (window.preload.isPackaged) {
-      const currentPath = `/${window.location.pathname
-        .split("/")
-        .filter(Boolean)
-        .slice(0, 2)
-        .join("/")}`;
-      return getCurrentMenu(currentPath)?.slug;
-    } else {
-      const currentPath = `/${window.location.pathname
-        .split("/")
-        .filter(Boolean)
-        .slice(1, 3)
-        .join("/")}`;
-
-      return getCurrentMenu(currentPath)?.slug;
-    }
-  },
-};
 
 function getDefaultHeader() {
   return {
@@ -75,7 +41,7 @@ function getDefaultHeader() {
     Authorization: "Bearer " + window.preload.getLocalToken(),
     Platform: "windows",
     "Company-Id": window.preload.getLocalCompany()?.id,
-    "Menu-Slug": MenuSlug.value,
+    "Menu-Slug": permission.menuSlug,
   };
 }
 

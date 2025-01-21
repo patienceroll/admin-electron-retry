@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, Row, Space, Tabs } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -36,6 +36,10 @@ import usePageTableHeight from "src/hooks/use-page-table-height";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
+import Permission from "src/util/permission";
 
 function SalesOrder() {
   const table = useSearchTable(getSalesOrderList);
@@ -287,20 +291,6 @@ function SalesOrder() {
               </ProForm.Item>
             </Col>
 
-            <Col flex="280px">
-              <ProFormSelect
-                label="状态"
-                name="statuses"
-                options={Array.from(salesOrderStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
             <Col flex="320px">
               <ProFormDateRangePicker
                 name="bill_date"
@@ -359,6 +349,16 @@ function SalesOrder() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            tooltip="新建订单"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {}}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }
