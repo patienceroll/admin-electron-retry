@@ -100,6 +100,16 @@ export const getSalesOrderMaterialSku = (
   );
 };
 
+/** 销售订单的可选择的产品 列渲染 */
+export function salesOrdertMaterialRender(
+  params: Parameters<typeof getSalesOrderMaterialSku>[0]
+) {
+  return fetch.GET<RenderConfig>(
+    fetch.base(`/api/sales-contract/material-sku/render`),
+    params
+  );
+}
+
 /**
  * 物资.弹窗-保存
  */

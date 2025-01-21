@@ -69,6 +69,24 @@ function SalesContract() {
   const [clientOption] = useOption(getClientOption);
   const { options, treeOptions } = useStaffTree();
 
+  function Edit(id: SalesContract["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/sales/sales-contract/edit?id=${id}`,
+      "编辑合同"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
+
   const column = table.column([
     {
       title: "合同",
@@ -196,21 +214,7 @@ function SalesContract() {
             <Button
               type="text"
               onClick={function () {
-                const window = openWindow.openCurrentAppWindow(
-                  `/sales/sales-contract/edit?id=${row.id}`,
-                  `编辑 - ${row.name}`
-                );
-
-                function listener(event: MessageEvent<"success">) {
-                  if (event.data === "success") {
-                    table.reload();
-                    contextedMessage.message?.success("编辑成功");
-                  }
-                }
-
-                if (window) {
-                  window.addEventListener("message", listener);
-                }
+                Edit(row.id);
               }}
             >
               编辑
@@ -414,21 +418,7 @@ function SalesContract() {
             create.current?.create().then((result) => {
               contextedMessage.message?.success("成功新增");
               table.reload();
-              const window = openWindow.openCurrentAppWindow(
-                `/sales/sales-contract/edit?id=${result.id}`,
-                "编辑合同"
-              );
-
-              function listener(event: MessageEvent<"success">) {
-                if (event.data === "success") {
-                  table.reload();
-                  contextedMessage.message?.success("编辑成功");
-                }
-              }
-
-              if (window) {
-                window.addEventListener("message", listener);
-              }
+              Edit(result.id);
             });
           }}
         />

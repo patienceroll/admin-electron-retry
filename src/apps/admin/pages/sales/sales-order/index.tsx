@@ -160,7 +160,9 @@ function SalesOrder() {
             <Button
               type="text"
               disabled={row.btn_power.is_edit !== 1}
-              onClick={function () {}}
+              onClick={function () {
+                Edit(row.id);
+              }}
             >
               编辑
             </Button>
@@ -199,6 +201,24 @@ function SalesOrder() {
     salesContractOption.loadOption();
     options.loadOption();
   }, []);
+
+  function Edit(id: SalesOrder["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/sales/sales-order/edit?id=${id}`,
+      "编辑销售订单"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   return (
     <PageWrapper>
@@ -281,7 +301,7 @@ function SalesOrder() {
                 fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
-            <Col flex="560px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -363,21 +383,7 @@ function SalesOrder() {
               create.current?.create().then((res) => {
                 contextedMessage.message?.success("成功新增");
                 table.reload();
-                const window = openWindow.openCurrentAppWindow(
-                  `/sales/sales-order/edit?id=${res.id}`,
-                  "编辑销售订单"
-                );
-
-                function listener(event: MessageEvent<"success">) {
-                  if (event.data === "success") {
-                    table.reload();
-                    contextedMessage.message?.success("编辑成功");
-                  }
-                }
-
-                if (window) {
-                  window.addEventListener("message", listener);
-                }
+                Edit(res.id);
               });
             }}
           />
