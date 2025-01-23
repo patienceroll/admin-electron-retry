@@ -141,6 +141,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
       pagination: pagination.current,
       dataSource: list.current,
       options,
+      page,
       onChange,
       onReset,
       onFinish,

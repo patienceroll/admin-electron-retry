@@ -66,8 +66,8 @@ const ChooseMaterial = forwardRef<
   });
 
   function getRenderNames() {
-    salesContractMaterialRender(
-      Object.assign({}, table.extraParams.current, table.params.current)
+    return salesContractMaterialRender(
+      Object.assign({}, table.extraParams.current,table.page.current)
     ).then((res) => {
       setRenderNames(res.data);
     });
@@ -190,6 +190,8 @@ const ChooseMaterial = forwardRef<
                   getAttr({
                     material_classify_id: e,
                   });
+                  form.resetFields();
+                  form.setFieldValue("material_classify_id", e);
                 }}
               />
             </Form.Item>
@@ -266,7 +268,7 @@ const ChooseMaterial = forwardRef<
             pagination={table.pagination}
             onChange={(...arg) => {
               table.onChange(...arg);
-              getRenderNames()
+              getRenderNames();
             }}
             columns={column}
             style={{

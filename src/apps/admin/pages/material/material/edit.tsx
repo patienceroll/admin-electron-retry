@@ -465,6 +465,7 @@ function Edit(props: StyledWrapComponents) {
                               name: at.name,
                               id: at.id,
                               detail: [],
+                              key: key.randomString()
                             };
                             store.push(newAt);
                             checkedAttr.get(at.id)?.forEach((g) => {
