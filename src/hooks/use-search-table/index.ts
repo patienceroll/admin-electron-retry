@@ -53,7 +53,7 @@ export default function <P extends Record<string | number, unknown>, Item>(
 
   const _api = useCallback(
     function () {
-      const p = Object.assign(
+      const p = Object.assign({},
         params.current,
         page.current,
         extraParams.current,
