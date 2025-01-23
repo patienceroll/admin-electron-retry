@@ -65,10 +65,10 @@ const ChooseMaterial = forwardRef<
     unit_fields: [],
   });
 
-  function getRenderNames(
-    params: Parameters<typeof salesContractMaterialRender>[0]
-  ) {
-    salesContractMaterialRender(params).then((res) => {
+  function getRenderNames() {
+    salesContractMaterialRender(
+      Object.assign({}, table.extraParams.current, table.params.current)
+    ).then((res) => {
       setRenderNames(res.data);
     });
   }
@@ -96,7 +96,6 @@ const ChooseMaterial = forwardRef<
       })
     );
   }, [renderNames.attr_fields]);
-
 
   const theme = useTheme();
 
@@ -225,7 +224,7 @@ const ChooseMaterial = forwardRef<
                   onClick={() => {
                     form.resetFields();
                     table.extraParams.current = form.getFieldsValue();
-                    getRenderNames(form.getFieldsValue());
+                    getRenderNames();
                     table.reload();
                   }}
                 >
@@ -235,7 +234,7 @@ const ChooseMaterial = forwardRef<
                   type="primary"
                   onClick={() => {
                     table.extraParams.current = form.getFieldsValue();
-                    getRenderNames(form.getFieldsValue());
+                    getRenderNames();
                     table.reload();
                   }}
                 >
@@ -265,7 +264,10 @@ const ChooseMaterial = forwardRef<
             options={table.options}
             dataSource={table.dataSource}
             pagination={table.pagination}
-            onChange={table.onChange}
+            onChange={(...arg) => {
+              table.onChange(...arg);
+              getRenderNames()
+            }}
             columns={column}
             style={{
               height: height,
