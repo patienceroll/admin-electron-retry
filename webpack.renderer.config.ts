@@ -1,4 +1,4 @@
-import type { Configuration } from "webpack";
+import type { WebpackConfiguration } from "@electron-forge/plugin-webpack/dist/Config";
 import path from "path";
 
 import { rules } from "./webpack.rules";
@@ -13,7 +13,7 @@ rules.push({
   use: ["@svgr/webpack"],
 });
 
-export const rendererConfig: Configuration = {
+export const rendererConfig: WebpackConfiguration = {
   module: {
     rules,
   },
@@ -23,5 +23,5 @@ export const rendererConfig: Configuration = {
       src: path.resolve(__dirname, "src"),
     },
     extensions: [".js", ".ts", ".jsx", ".tsx", ".css"],
-  }
+  },
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Tabs } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -30,10 +30,16 @@ import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import useStaffTree from "src/b-hooks/use-staff-tree";
 
 function SalesDeliver() {
   const table = useSearchTable(getSalesDeliverList);
   const theme = useTheme();
+  const isCompact = window.preload.getTheme().layout === "compact";
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
+  );
 
   const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
@@ -41,26 +47,9 @@ function SalesDeliver() {
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
 
+  const { options, treeOptions } = useStaffTree();
+
   const column = table.column([
-    // {
-    //     title: "合同",
-    //     dataIndex: "name",
-    //     fixed: "left",
-    //     render: (_, record) => (
-    //         <Typography.Link
-    //             onClick={() => {
-    //                 openWindow
-    //                     .openCurrentAppWindow
-    //                     // `/sales/sales-deliver/detail?id=${record.id}`,
-    //                     // "销售合同详情 - " + record.name
-    //                     ();
-    //             }}
-    //         >
-    //             {record.name}
-    //         </Typography.Link>
-    //     ),
-    //     width: 260,
-    // },
     {
       title: "发货单",
       dataIndex: "code",
@@ -135,48 +124,6 @@ function SalesDeliver() {
       dataIndex: "status",
       valueEnum: salesDeliverStatus,
     },
-    {
-      dataIndex: "id",
-      title: "操作",
-      fixed: "right",
-      width: 160,
-      // render: action<SalesDeliver>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/sales-deliver/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deleteSalesDeliver({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
-    },
   ]);
 
   const columnState = useColumnState("salesDeliverList", column);
@@ -188,12 +135,17 @@ function SalesDeliver() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
+    options.load();
   }, []);
 
   return (
     <PageWrapper>
-      {/*<Affix offsetTop={theme.padding}>*/}
-      <Card bordered>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="280px">
@@ -278,10 +230,10 @@ function SalesDeliver() {
                 label="负责人"
                 name="staff_ids"
                 placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
-            <Col flex="560px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -295,20 +247,6 @@ function SalesDeliver() {
               </ProForm.Item>
             </Col>
 
-            <Col flex="280px">
-              <ProFormSelect
-                label="状态"
-                name="statuses"
-                options={Array.from(salesDeliverStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
             <Col flex="320px">
               <ProFormDateRangePicker
                 name="bill_date"
@@ -329,11 +267,9 @@ function SalesDeliver() {
           </Row>
         </Search>
       </Card>
-      {/*</Affix>*/}
       <ProTable
         rowKey="id"
-        // style={{ marginTop: theme.margin }}
-        style={{ marginTop: "6px" }}
+        style={{ marginTop: theme.margin }}
         search={false}
         loading={table.loading}
         options={table.options}
@@ -341,7 +277,7 @@ function SalesDeliver() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -351,59 +287,25 @@ function SalesDeliver() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        // headerTitle={
-        //     <Tabs
-        //         items={[{value: -1, text: "全部"}, ...billStatus].map((i) => ({
-        //             key: `${i.value}`,
-        //             label: i.text,
-        //         }))}
-        //         onChange={(e) => {
-        //             const status = e === `-1` ? undefined : (e as any);
-        //             extraParams.current.status = status;
-        //             onChange(
-        //                 {current: 1},
-        //                 {},
-        //                 {},
-        //                 {action: "paginate", currentDataSource: dataSource},
-        //             );
-        //         }}
-        //     />
-        // }
-        // toolBarRender={() => [
-        //     <Button
-        //         hidden={!menu.getPermission()}
-        //         key={1}
-        //         onClick={() => {
-        //             modify.current?.create().then((result) => {
-        //                 message.success("新增成功");
-        //                 history.push({
-        //                     pathname: `/sales/sales-deliver/edit/${result.id}`,
-        //                 });
-        //             });
-        //         }}
-        //     >
-        //         新增
-        //     </Button>,
-        //     <Button
-        //         key="export"
-        //         hidden={!menu.getPermission({key: "export"})}
-        //         loading={exporting.whether}
-        //         onClick={async () => {
-        //             try {
-        //                 exporting.setTrue();
-        //                 const data = await salesDeliverExport({
-        //                     ...params,
-        //                     ...extraParams.current,
-        //                 });
-        //                 window.open(data.data.file_path);
-        //             } finally {
-        //                 exporting.setFalse();
-        //             }
-        //         }}
-        //     >
-        //         导出
-        //     </Button>,
-        // ]}
+        headerTitle={
+          <Tabs
+            items={[{ value: -1, text: "全部" }]
+              .concat(Array.from(salesDeliverStatus.values()))
+              .map((i) => ({
+                key: `${i.value}`,
+                label: i.text,
+              }))}
+            onChange={(e) => {
+              const status =
+                e === `-1`
+                  ? undefined
+                  : (e as unknown as SalesDeliver["status"]);
+              table.extraParams.current.status = status;
+              table.params.current.page = 1;
+              table.reload();
+            }}
+          />
+        }
       />
     </PageWrapper>
   );

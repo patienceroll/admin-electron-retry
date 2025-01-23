@@ -17,7 +17,7 @@ export const salesOrderStatus = new Map<
  */
 export function getSalesOrderList(
   params: ListParam & {
-    status?: BillStatus;
+    status?: SalesOrder["status"];
     sales_contract_id?: SalesContract["id"];
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
