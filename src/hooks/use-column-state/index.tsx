@@ -5,6 +5,7 @@ import { Resizable } from "react-resizable";
 import db, { type DexiedColumnState } from "src/util/db";
 
 import "react-resizable/css/styles.css";
+import key from "src/util/key";
 
 export default function useTableColumnState<T>(
   tableName: DexiedColumnState["tableName"],
@@ -12,6 +13,7 @@ export default function useTableColumnState<T>(
   app: Apps = "admin"
 ) {
   const [data, setData] = useState<DexiedColumnState>();
+  const latestTag = useRef("");
 
   const [memoryColumn, setMemoryColumn] = useState<ProColumns<T>[]>([]);
 
@@ -50,12 +52,15 @@ export default function useTableColumnState<T>(
   );
 
   useEffect(() => {
+    const tag = key.randomString();
+    latestTag.current = tag;
     db.columnStateTable
       .where("tableName")
       .equals(tableName)
       .and((item) => item.app === app)
       .first()
       .then((result) => {
+        if (tag !== latestTag.current) return;
         const newState = generateDexiedColumnState(result);
         if (!result) {
           db.columnStateTable

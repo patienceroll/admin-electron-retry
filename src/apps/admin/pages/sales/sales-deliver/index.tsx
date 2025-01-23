@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Tabs } from "antd";
+import { Card, Col, FloatButton, Row, Tabs } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -21,6 +21,7 @@ import styled, { useTheme } from "styled-components";
 //主体接口
 import {
   getSalesDeliverList,
+  salesDeliverExport,
   salesDeliverStatus,
 } from "src/apps/admin/api/sales-deliver";
 //关联接口
@@ -32,6 +33,11 @@ import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import useStaffTree from "src/b-hooks/use-staff-tree";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
+import Permission from "src/util/permission";
+import contextedMessage from "src/framework/component/contexted-message";
 
 function SalesDeliver() {
   const table = useSearchTable(getSalesDeliverList);
@@ -307,6 +313,34 @@ function SalesDeliver() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            tooltip="新建发货单"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {}}
+          />
+        )}
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              salesDeliverExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }

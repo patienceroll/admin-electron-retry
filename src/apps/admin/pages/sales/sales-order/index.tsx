@@ -406,8 +406,8 @@ function SalesOrder() {
             }}
           />
         )}
-        <Create.default ref={create} />
       </FloatButton.Group>
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }
