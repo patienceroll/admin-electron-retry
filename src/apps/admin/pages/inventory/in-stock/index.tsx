@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -18,7 +18,12 @@ import useOption from "src/hooks/use-option";
 import styled, { useTheme } from "styled-components";
 
 //主体接口
-import { getInStockList, inStockStatus } from "src/apps/admin/api/in-stock";
+import {
+  deleteInStock,
+  getInStockList,
+  inStockExport,
+  inStockStatus,
+} from "src/apps/admin/api/in-stock";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
@@ -26,10 +31,22 @@ import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import useStaffTree from "src/b-hooks/use-staff-tree";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import Permission from "src/util/permission";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
 
 function InStock() {
   const table = useSearchTable(getInStockList);
   const theme = useTheme();
+  const isCompact = window.preload.getTheme().layout === "compact";
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
+  );
+
   const { options, treeOptions } = useStaffTree();
 
   const [areaOption] = useOption(getAreaOption);
@@ -39,25 +56,6 @@ function InStock() {
   const [salesOrderOption] = useOption(getSalesOrderOption);
 
   const column = table.column([
-    // {
-    //     title: "合同",
-    //     dataIndex: "name",
-    //     fixed: "left",
-    //     render: (_, record) => (
-    //         <Typography.Link
-    //             onClick={() => {
-    //                 openWindow
-    //                     .openCurrentAppWindow
-    //                     // `/sales/sales-deliver/detail?id=${record.id}`,
-    //                     // "销售合同详情 - " + record.name
-    //                     ();
-    //             }}
-    //         >
-    //             {record.name}
-    //         </Typography.Link>
-    //     ),
-    //     width: 260,
-    // },
     {
       title: "入库单",
       dataIndex: "code",
@@ -133,46 +131,45 @@ function InStock() {
       valueEnum: inStockStatus,
     },
     {
-      dataIndex: "id",
+      dataIndex: "action",
       title: "操作",
       fixed: "right",
-      width: 160,
-      // render: action<InStock>([
-      //   {
-      //     text: "打印",
-      //     async onClick({ entity }) {
-      //       const action = await inStockPrint({});
-      //       action.prepareToPrint(entity);
-      //     },
-      //   },
-      //   {
-      //     text: "编辑",
-      //     color: action.green,
-      //     btn_power: "is_edit",
-      //     onClick({ entity }) {
-      //       history.push({
-      //         pathname: `/inventory/in-stock/edit/${entity.id}`,
-      //       });
-      //     },
-      //   },
-      //   {
-      //     text: "删除",
-      //     color: action.red,
-      //     btn_power: "is_delete",
-      //     onClick({ entity }) {
-      //       asyncConfirm({
-      //         title: "删除",
-      //         content: `确定删除${entity.code}?`,
-      //         submitting() {
-      //           return deleteInStock({ id: entity.id }).then(() => {
-      //             message.success("删除成功");
-      //             reload();
-      //           });
-      //         },
-      //       });
-      //     },
-      //   },
-      // ]),
+      width: 200,
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+            <Button type="text" onClick={function () {}}>
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.code}?`,
+                  onOk() {
+                    return deleteInStock({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("删除成功");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -185,13 +182,17 @@ function InStock() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
-    options.loadOption()
+    options.loadOption();
   }, []);
 
   return (
     <PageWrapper>
-      {/*<Affix offsetTop={theme.padding}>*/}
-      <Card bordered>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="280px">
@@ -279,20 +280,7 @@ function InStock() {
                 fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
-            <Col flex="280px">
-              <ProFormSelect
-                label="状态"
-                name="statuses"
-                options={Array.from(inStockStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
+
             <Col flex="320px">
               <ProFormDateRangePicker
                 name="bill_date"
@@ -313,11 +301,9 @@ function InStock() {
           </Row>
         </Search>
       </Card>
-      {/*</Affix>*/}
       <ProTable
         rowKey="id"
-        // style={{ marginTop: theme.margin }}
-        style={{ marginTop: "6px" }}
+        style={{ marginTop: theme.margin }}
         search={false}
         loading={table.loading}
         options={table.options}
@@ -325,7 +311,7 @@ function InStock() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -335,60 +321,53 @@ function InStock() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        // headerTitle={
-        //   <Tabs
-        //       items={[{ value: -1, text: "全部" }, ...inStockStatus].map((i) => ({
-        //         key: `${i.value}`,
-        //         label: i.text,
-        //       }))}
-        //       onChange={(e) => {
-        //         const status = e === `-1` ? undefined : (e as any);
-        //         extraParams.current.status = status;
-        //         onChange(
-        //             { current: 1 },
-        //             {},
-        //             {},
-        //             { action: "paginate", currentDataSource: dataSource },
-        //         );
-        //       }}
-        //   />
-        // }
-        // toolBarRender={() => [
-        //   <Button
-        //       hidden={!menu.getPermission()}
-        //       key={1}
-        //       onClick={() => {
-        //         modify.current?.create().then((result) => {
-        //           message.success("新增成功");
-        //           history.push({
-        //             pathname: `/inventory/in-stock/edit/${result.id}`,
-        //           });
-        //         });
-        //       }}
-        //   >
-        //     新增
-        //   </Button>,
-        //   <Button
-        //       key="export"
-        //       hidden={!menu.getPermission({ key: "export" })}
-        //       loading={exporting.whether}
-        //       onClick={async () => {
-        //         try {
-        //           exporting.setTrue();
-        //           const data = await inStockExport({
-        //             ...params,
-        //             ...extraParams.current,
-        //           });
-        //           window.open(data.data.file_path);
-        //         } finally {
-        //           exporting.setFalse();
-        //         }
-        //       }}
-        //   >
-        //     导出
-        //   </Button>,
-        // ]}
+        headerTitle={
+          <Tabs
+            items={[{ value: -1, text: "全部" }]
+              .concat(Array.from(inStockStatus.values()))
+              .map((i) => ({
+                key: `${i.value}`,
+                label: i.text,
+              }))}
+            onChange={(e) => {
+              const status =
+                e === `-1` ? undefined : (e as unknown as InStock["status"]);
+              table.extraParams.current.status = status;
+              table.params.current.page = 1;
+              table.reload();
+            }}
+          />
+        }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("export") && (
+          <FloatButton
+            tooltip="新建合同"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {}}
+          />
+        )}
+
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              inStockExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }

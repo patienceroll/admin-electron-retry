@@ -31,10 +31,14 @@ import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import useStaffTree from "src/b-hooks/use-staff-tree";
+import usePageTableHeight from "src/hooks/use-page-table-height";
 
 function SalesDeliver() {
   const table = useSearchTable(getWarehouseLogList);
   const theme = useTheme();
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
   const { options, treeOptions } = useStaffTree();
 
   const [areaOption] = useOption(getAreaOption);
@@ -171,13 +175,17 @@ function SalesDeliver() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
-    options.loadOption()
+    options.loadOption();
   }, []);
 
   return (
     <PageWrapper>
-      {/*<Affix offsetTop={theme.padding}>*/}
-      <Card bordered>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="280px">
@@ -299,11 +307,10 @@ function SalesDeliver() {
           </Row>
         </Search>
       </Card>
-      {/*</Affix>*/}
+
       <ProTable
         rowKey="id"
-        // style={{ marginTop: theme.margin }}
-        style={{ marginTop: "6px" }}
+        style={{ marginTop: theme.margin }}
         search={false}
         loading={table.loading}
         options={table.options}
@@ -311,7 +318,7 @@ function SalesDeliver() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -321,45 +328,6 @@ function SalesDeliver() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        // headerTitle={
-        //     <Tabs
-        //         items={[{value: -1, text: "全部"}, ...billStatus].map((i) => ({
-        //             key: `${i.value}`,
-        //             label: i.text,
-        //         }))}
-        //         onChange={(e) => {
-        //             const status = e === `-1` ? undefined : (e as any);
-        //             extraParams.current.status = status;
-        //             onChange(
-        //                 {current: 1},
-        //                 {},
-        //                 {},
-        //                 {action: "paginate", currentDataSource: dataSource},
-        //             );
-        //         }}
-        //     />
-        // }
-        // toolBarRender={() => [
-        //     <Button
-        //         key="export"
-        //         hidden={!menu.getPermission({key: "export"})}
-        //         loading={exporting.whether}
-        //         onClick={async () => {
-        //             try {
-        //                 exporting.setTrue();
-        //                 const data = await salesDeliverExport({
-        //                     ...params,
-        //                     ...extraParams.current,
-        //                 });
-        //                 window.open(data.data.file_path);
-        //             } finally {
-        //                 exporting.setFalse();
-        //             }
-        //         }}
-        //     >
-        //         导出
-        //     </Button>,
-        // ]}
       />
     </PageWrapper>
   );
