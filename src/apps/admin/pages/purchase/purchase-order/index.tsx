@@ -30,10 +30,12 @@ import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import { getSalesDeliverOption } from "src/apps/admin/api/sales-deliver";
+import useStaffTree from "src/b-hooks/use-staff-tree";
 
 function PurchaseOrderList() {
   const table = useSearchTable(getPurchaseOrderList);
-  const theme = useTheme();
+  const theme = useTheme();  const { options, treeOptions } = useStaffTree();
+  
 
   const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
@@ -191,6 +193,7 @@ function PurchaseOrderList() {
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
     salesDeliverOption.loadOption();
+    options.loadOption()
   }, []);
 
   return (
@@ -267,7 +270,7 @@ function PurchaseOrderList() {
                 label="负责人"
                 name="staff_ids"
                 placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
             <Col flex="280px">

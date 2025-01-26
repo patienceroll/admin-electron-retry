@@ -31,10 +31,12 @@ import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
+import useStaffTree from "src/b-hooks/use-staff-tree";
 
 function StockAllot() {
   const table = useSearchTable(getStockAllotList);
   const theme = useTheme();
+  const { options, treeOptions } = useStaffTree();
 
   const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
@@ -157,6 +159,7 @@ function StockAllot() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
+    options.loadOption()
   }, []);
 
   return (
@@ -233,7 +236,7 @@ function StockAllot() {
                 label="负责人"
                 name="staff_ids"
                 placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
             <Col flex="580px">

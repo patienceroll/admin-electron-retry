@@ -25,10 +25,13 @@ import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
+import useStaffTree from "src/b-hooks/use-staff-tree";
 
 function OutStock() {
   const table = useSearchTable(getOutStockList);
   const theme = useTheme();
+
+  const { options, treeOptions } = useStaffTree();
 
   const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
@@ -183,6 +186,7 @@ function OutStock() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
+    options.loadOption();
   }, []);
 
   return (
@@ -273,7 +277,7 @@ function OutStock() {
                 label="负责人"
                 name="staff_ids"
                 placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
             <Col flex="280px">
