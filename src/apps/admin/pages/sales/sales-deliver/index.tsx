@@ -188,8 +188,8 @@ function SalesDeliver() {
 
   function Edit(id: SalesDeliver["id"]) {
     const window = openWindow.openCurrentAppWindow(
-      `/sales/sales-contract/edit?id=${id}`,
-      "编辑合同"
+      `/sales/sales-deliver/edit?id=${id}`,
+      "编辑销售发货"
     );
 
     function listener(event: MessageEvent<"success">) {
