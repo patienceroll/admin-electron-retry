@@ -43,6 +43,7 @@ export function getSalesOrderOption(params: {
   statistics_id?: number | string;
   client_id?: Client["id"];
   is_show_detail?: 0 | 1;
+  statuses?: SalesOrder["status"][];
 }) {
   return fetch.GET<SalesOrder[]>(fetch.base(`/api/sales-order/list`), params);
 }

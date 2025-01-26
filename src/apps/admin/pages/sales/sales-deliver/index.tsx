@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, FloatButton, Row, Tabs } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -8,6 +8,7 @@ import {
   ProFormTreeSelect,
   ProTable,
 } from "@ant-design/pro-components";
+import styled, { useTheme } from "styled-components";
 
 import Search from "src/framework/component/search";
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -16,10 +17,10 @@ import SearchAction from "src/framework/component/search/search-action";
 import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
 import useOption from "src/hooks/use-option";
-import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
+  deleteSalesDeliver,
   getSalesDeliverList,
   salesDeliverExport,
   salesDeliverStatus,
@@ -38,6 +39,9 @@ import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
 import Permission from "src/util/permission";
 import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import * as Create from "./components/create";
+import openWindow from "src/util/open-window";
 
 function SalesDeliver() {
   const table = useSearchTable(getSalesDeliverList);
@@ -54,6 +58,7 @@ function SalesDeliver() {
   const [salesOrderOption] = useOption(getSalesOrderOption);
 
   const { options, treeOptions } = useStaffTree();
+  const create = Create.createRef();
 
   const column = table.column([
     {
@@ -130,9 +135,74 @@ function SalesDeliver() {
       dataIndex: "status",
       valueEnum: salesDeliverStatus,
     },
+    {
+      title: "操作",
+      dataIndex: "action",
+      width: 200,
+      fixed: "right",
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+            <Button
+              type="text"
+              onClick={function () {
+                Edit(row.id);
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              disabled={row.btn_power.is_delete !== 1}
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.code}?`,
+                  onOk() {
+                    return deleteSalesDeliver({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("删除成功");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
+    },
   ]);
 
   const columnState = useColumnState("salesDeliverList", column);
+
+  function Edit(id: SalesDeliver["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/sales/sales-contract/edit?id=${id}`,
+      "编辑合同"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   useEffect(() => {
     table.reload();
@@ -319,7 +389,13 @@ function SalesDeliver() {
           <FloatButton
             tooltip="新建发货单"
             icon={<Icon icon={AddSvg} />}
-            onClick={() => {}}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
           />
         )}
         {Permission.getPermission("export") && (
@@ -341,6 +417,7 @@ function SalesDeliver() {
           />
         )}
       </FloatButton.Group>
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }
