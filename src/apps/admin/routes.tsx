@@ -113,6 +113,14 @@ const ProjectDetail = lazy(() => import("./pages/project/project/detail"));
 const Material = lazy(() => import("./pages/material/material"));
 const MaterialEdit = lazy(() => import("./pages/material/material/edit"));
 
+// 供应商
+const Supplier = lazy(() => import("./pages/supplier/supplier"));
+const SupplierEdit = lazy(() => import("./pages/supplier/supplier/edit"));
+const SupplierContact = lazy(() => import("./pages/supplier/supplier-contact"));
+const SupplierContactEdit = lazy(
+  () => import("./pages/supplier/supplier-contact/edit")
+);
+
 export default function (props: { darkMode: boolean }) {
   const { darkMode } = props;
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -181,14 +189,19 @@ export default function (props: { darkMode: boolean }) {
           path="/sales/sales-contract/edit"
           element={<SalesContractEdit />}
         />
-        
+
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-order/edit" element={<SalesOrderEdit />} />
-        <Route path="/sales/sales-order/detail" element={<SalesOrderDetail />} />
-
+        <Route
+          path="/sales/sales-order/detail"
+          element={<SalesOrderDetail />}
+        />
 
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
-        <Route path="/sales/sales-deliver/edit" element={<SalesDeliverEdit />} />
+        <Route
+          path="/sales/sales-deliver/edit"
+          element={<SalesDeliverEdit />}
+        />
         <Route path="/sales/sales-return" element={<SalesReturn />} />
         <Route path="/sales/sales-return/edit" element={<SalesReturnEdit />} />
 
@@ -221,6 +234,17 @@ export default function (props: { darkMode: boolean }) {
 
         <Route path="/material/material" element={<Material />} />
         <Route path="/material/material/edit" element={<MaterialEdit />} />
+
+        <Route path="/supplier/supplier" element={<Supplier />} />
+        <Route path="/supplier/supplier/edit" element={<SupplierEdit />} />
+        <Route
+          path="/supplier/supplier-contact"
+          element={<SupplierContact />}
+        />
+        <Route
+          path="/supplier/supplier-contact/edit"
+          element={<SupplierContactEdit />}
+        />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
