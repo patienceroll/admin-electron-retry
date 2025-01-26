@@ -43,6 +43,9 @@ const Permission = {
   routeToPermisionPath,
   getCurrentMenu,
   getPermission,
+  get memoryRouterPath() {
+    return Store.memoryRouterPath;
+  },
   set memoryRouterPath(value: string) {
     Store.memoryRouterPath = value;
   },
