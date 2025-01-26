@@ -85,12 +85,7 @@ const Create = forwardRef<Ref, StyledWrapComponents>(function (props, ref) {
       onOk={submit}
       confirmLoading={loading.whether}
     >
-      <Form
-        form={form}
-        autoComplete="off"
-        labelCol={{ span: 5 }}
-        initialValues={{ status: 0 }}
-      >
+      <Form form={form} autoComplete="off" labelCol={{ span: 5 }}>
         <Form.Item label="项目">
           <Select
             options={project.list}
@@ -111,7 +106,7 @@ const Create = forwardRef<Ref, StyledWrapComponents>(function (props, ref) {
         </Form.Item>
         <Form.Item label="合同" name="sales_contract_id">
           <Select
-          allowClear
+            allowClear
             options={saleConttact.list}
             loading={saleConttact.loading}
             placeholder="请选择合同"

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -8,6 +8,7 @@ import {
   ProFormTreeSelect,
   ProTable,
 } from "@ant-design/pro-components";
+import styled, { useTheme } from "styled-components";
 
 import Search from "src/framework/component/search";
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -16,26 +17,42 @@ import SearchAction from "src/framework/component/search/search-action";
 import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
 import useOption from "src/hooks/use-option";
-import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
+  deleteSalesReturn,
   getSalesReturnList,
+  salesReturnExport,
   salesReturnStatus,
 } from "src/apps/admin/api/sales-return";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
-import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import { getSalesDeliverOption } from "src/apps/admin/api/sales-deliver";
 import AddressFormSearch from "src/framework/component/adress-form-search";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import openWindow from "src/util/open-window";
+import useStaffTree from "src/b-hooks/use-staff-tree";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import Permission from "src/util/permission";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
+import * as Create from "./components/create";
 
 function SalesReturn() {
   const table = useSearchTable(getSalesReturnList);
   const theme = useTheme();
+
+  const isCompact = window.preload.getTheme().layout === "compact";
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
+  );
+  const create = Create.createRef();
 
   const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
@@ -43,27 +60,27 @@ function SalesReturn() {
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
   const [salesDeliverOption] = useOption(getSalesDeliverOption);
+  const { options, treeOptions } = useStaffTree();
+
+  function Edit(id: SalesReturn["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/sales/sales-return/edit?id=${id}`,
+      "编辑销售退货"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   const column = table.column([
-    // {
-    //     title: "合同",
-    //     dataIndex: "name",
-    //     fixed: "left",
-    //     render: (_, record) => (
-    //         <Typography.Link
-    //             onClick={() => {
-    //                 openWindow
-    //                     .openCurrentAppWindow
-    //                     // `/sales/sales-return/detail?id=${record.id}`,
-    //                     // "销售合同详情 - " + record.name
-    //                     ();
-    //             }}
-    //         >
-    //             {record.name}
-    //         </Typography.Link>
-    //     ),
-    //     width: 260,
-    // },
     {
       title: "退货单",
       dataIndex: "code",
@@ -146,46 +163,51 @@ function SalesReturn() {
       valueEnum: salesReturnStatus,
     },
     {
-      dataIndex: "id",
       title: "操作",
+      dataIndex: "action",
+      width: 200,
       fixed: "right",
-      width: 160,
-      // render: action<SalesReturn>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/sales-return/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deleteSalesReturn({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+            <Button
+              type="text"
+              onClick={function () {
+                Edit(row.id);
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              disabled={row.btn_power.is_delete !== 1}
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.code}?`,
+                  onOk() {
+                    return deleteSalesReturn({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("删除成功");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -199,12 +221,17 @@ function SalesReturn() {
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
     salesDeliverOption.loadOption();
+    options.loadOption();
   }, []);
 
   return (
     <PageWrapper>
-      {/*<Affix offsetTop={theme.padding}>*/}
-      <Card bordered>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
         <Search>
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="280px">
@@ -303,10 +330,10 @@ function SalesReturn() {
                 label="负责人"
                 name="staff_ids"
                 placeholder="请选择负责人"
-                // fieldProps={{ treeData: staffTreeData, multiple: true }}
+                fieldProps={{ treeData: treeOptions, multiple: true }}
               />
             </Col>
-            <Col flex="560px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"
@@ -320,20 +347,6 @@ function SalesReturn() {
               </ProForm.Item>
             </Col>
 
-            <Col flex="280px">
-              <ProFormSelect<Area>
-                label="状态"
-                name="statuses"
-                options={Array.from(BusinessOpportunityStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
             <Col flex="320px">
               <ProFormDateRangePicker
                 name="bill_date"
@@ -354,11 +367,9 @@ function SalesReturn() {
           </Row>
         </Search>
       </Card>
-      {/*</Affix>*/}
       <ProTable
         rowKey="id"
-        // style={{ marginTop: theme.margin }}
-        style={{ marginTop: "6px" }}
+        style={{ marginTop: theme.margin }}
         search={false}
         loading={table.loading}
         options={table.options}
@@ -366,7 +377,7 @@ function SalesReturn() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{ x: table.measureColumnWidth(column), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -376,60 +387,60 @@ function SalesReturn() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        // headerTitle={
-        //     <Tabs
-        //         items={[{value: -1, text: "全部"}, ...billStatus].map((i) => ({
-        //             key: `${i.value}`,
-        //             label: i.text,
-        //         }))}
-        //         onChange={(e) => {
-        //             const status = e === `-1` ? undefined : (e as any);
-        //             extraParams.current.status = status;
-        //             onChange(
-        //                 {current: 1},
-        //                 {},
-        //                 {},
-        //                 {action: "paginate", currentDataSource: dataSource},
-        //             );
-        //         }}
-        //     />
-        // }
-        // toolBarRender={() => [
-        //     <Button
-        //         hidden={!menu.getPermission()}
-        //         key={1}
-        //         onClick={() => {
-        //             modify.current?.create().then((result) => {
-        //                 message.success("新增成功");
-        //                 history.push({
-        //                     pathname: `/sales/sales-return/edit/${result.id}`,
-        //                 });
-        //             });
-        //         }}
-        //     >
-        //         新增
-        //     </Button>,
-        //     <Button
-        //         key="export"
-        //         hidden={!menu.getPermission({key: "export"})}
-        //         loading={exporting.whether}
-        //         onClick={async () => {
-        //             try {
-        //                 exporting.setTrue();
-        //                 const data = await salesReturnExport({
-        //                     ...params,
-        //                     ...extraParams.current,
-        //                 });
-        //                 window.open(data.data.file_path);
-        //             } finally {
-        //                 exporting.setFalse();
-        //             }
-        //         }}
-        //     >
-        //         导出
-        //     </Button>,
-        // ]}
+        headerTitle={
+          <Tabs
+            items={[{ value: -1, text: "全部" }]
+              .concat(Array.from(salesReturnStatus.values()))
+              .map((i) => ({
+                key: `${i.value}`,
+                label: i.text,
+              }))}
+            onChange={(e) => {
+              const status =
+                e === `-1`
+                  ? undefined
+                  : (e as unknown as SalesDeliver["status"]);
+              table.extraParams.current.status = status;
+              table.params.current.page = 1;
+              table.reload();
+            }}
+          />
+        }
       />
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            tooltip="新建退货单"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((res) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(res.id);
+              });
+            }}
+          />
+        )}
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            tooltip="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              salesReturnExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }

@@ -276,7 +276,7 @@ function ReceiveOrder() {
                 // fieldProps={{ treeData: staffTreeData, multiple: true }}
               />
             </Col>
-            <Col flex="560px">
+            <Col flex="580px">
               <ProForm.Item
                 label="行政区"
                 name="region"

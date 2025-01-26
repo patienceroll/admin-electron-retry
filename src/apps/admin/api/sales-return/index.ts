@@ -42,7 +42,7 @@ export function getSalesReturn(params: Pick<SalesReturn, "id">) {
 /**
  * 销售退款-添加
  */
-export function addSalesReturn(params: any) {
+export function addSalesReturn(params: Pick<SalesReturn, "id">) {
   return fetch.POST<
     Pick<
       SalesReturn,
