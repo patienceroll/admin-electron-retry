@@ -394,7 +394,7 @@ function Detail(props: StyledWrapComponents) {
 
       {detail && (
         <FloatButton.Group shape="square">
-          {detail.btn_power.is_approve && (
+          {detail.btn_power.is_approve === 1 && (
             <FloatButton
               tooltip="审批"
               icon={<Icon icon={ApprovalSvg} />}
@@ -410,7 +410,7 @@ function Detail(props: StyledWrapComponents) {
             />
           )}
 
-          {detail.btn_power.is_submit && (
+          {detail.btn_power.is_submit  === 1 && (
             <FloatButton
               tooltip="立项"
               icon={<Icon icon={LixiangSvg} />}
@@ -430,7 +430,7 @@ function Detail(props: StyledWrapComponents) {
             />
           )}
 
-          {detail.btn_power.is_invalid && (
+          {detail.btn_power.is_invalid  === 1 && (
             <FloatButton
               tooltip="作废"
               icon={<Icon icon={ZuofeiSvg} fill={theme.colorError} />}
@@ -449,7 +449,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_cancel_operate && (
+          {detail.btn_power.is_cancel_operate  === 1 && (
             <FloatButton
               tooltip="撤销"
               icon={<Icon icon={CancelSvg} fill={theme.colorWarning} />}
