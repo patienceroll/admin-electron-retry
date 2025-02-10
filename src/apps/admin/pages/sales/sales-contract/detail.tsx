@@ -140,7 +140,7 @@ function Detail(props: StyledWrapComponents) {
                 {detail.is_factory_dispatch ? "是" : "否"}
               </InfoItem>
             </Col>
-            <Divider />
+            <Divider style={{ margin: 0 }} />
             <Col flex="400px">
               <InfoItem label="金额">
                 {new Money(detail.amount).toCNY()}
@@ -196,7 +196,7 @@ function Detail(props: StyledWrapComponents) {
                 {detail.remark}
               </InfoItem>
             </Col>
-            <Divider />
+            <Divider style={{ margin: 0 }} />
             <Col flex="400px">
               <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
             </Col>

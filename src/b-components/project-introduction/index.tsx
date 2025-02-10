@@ -20,7 +20,7 @@ function ProjectIntroduction(
 
   const [open] = useWather();
 
-  const [intro, setIntro] = useState<Project>();
+  const [intro, setIntro] = useState<ProjectIntro>();
 
   const getIntro = useCallback(() => {
     getProjectIntroduction({ id }).then((res) => {
@@ -51,11 +51,13 @@ function ProjectIntroduction(
                 speed={1000}
                 style={{ width: "100%" }}
               >
-                <Image
+                {intro?.file.map(item => <Image
+                  key={item.file_id}
                   height={200}
                   width="100%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                />
+                  src={item.full_path}
+                />)}
+
               </Carousel>
             </Col>
             <Col flex={1}>

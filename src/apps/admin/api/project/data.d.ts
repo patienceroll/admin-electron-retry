@@ -191,6 +191,10 @@ type Project = {
   } | null;
 };
 
+type ProjectIntro = Project & {
+  file: BusinessFile[]
+}
+
 type ProjectDetail = {
   /** 主键id */
   id: number;
@@ -259,7 +263,7 @@ type ProjectDetail = {
   win_bid_amount: string;
 
   /** 重点项目;0:否,1:是 */
-  is_importance: 0|1;
+  is_importance: 0 | 1;
 
   /** 行业 */
   trade: string;

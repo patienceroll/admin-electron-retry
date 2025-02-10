@@ -34,7 +34,7 @@ export function getProject(params: Pick<SalesContract, "id">) {
 }
 
 export function getProjectIntroduction(params: { id: Project["id"] }) {
-  return fetch.GET<Project>(fetch.base(`/api/project/introduction`), params);
+  return fetch.GET<ProjectIntro>(fetch.base(`/api/project/introduction`), params);
 }
 
 /**
