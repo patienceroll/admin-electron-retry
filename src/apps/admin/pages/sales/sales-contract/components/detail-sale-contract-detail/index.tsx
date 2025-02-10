@@ -7,12 +7,13 @@ import Decimal from "decimal.js";
 import { getSalesContractDetailList } from "src/apps/admin/api/sales-contract-detail";
 import useSearchTable from "src/hooks/use-search-table";
 import Money from "src/util/money";
+import useColumnState from "src/hooks/use-column-state";
 
 export default function (
   props: Pick<SalesContract, "id"> & {
     attrCoumn: ProColumns<any>[];
     unitColumn: ProColumns<any>[];
-  },
+  }
 ) {
   const { id, attrCoumn, unitColumn } = props;
   const theme = useTheme();
@@ -22,7 +23,7 @@ export default function (
   const column = table.column([
     {
       title: "产品",
-      key: "material",
+      dataIndex: "material",
       fixed: "left",
       renderText: (_, row) => row.material?.name,
     },
@@ -53,6 +54,11 @@ export default function (
     table.reload();
   }, []);
 
+  const columnState = useColumnState(
+    "salesContractDetail_ContractDetail",
+    column
+  );
+
   return (
     <ProTable
       style={{ marginTop: theme.margin }}
@@ -63,8 +69,12 @@ export default function (
       dataSource={table.dataSource}
       pagination={table.pagination}
       onChange={table.onChange}
-      columns={column}
-      scroll={{ x: table.measureColumnWidth(column), y: 500 }}
+      columns={columnState.column}
+      scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: 500 }}
+      columnsState={{
+        value: columnState.data?.data,
+        onChange: columnState.onChange,
+      }}
       summary={(data) => {
         return (
           <Table.Summary.Row>
@@ -82,8 +92,8 @@ export default function (
                     data.reduce(
                       (pre, current) =>
                         new Decimal(pre).add(current.amount || 0).toNumber(),
-                      0,
-                    ),
+                      0
+                    )
                   ).toCNY()}
               </Table.Summary.Cell>
             ))}

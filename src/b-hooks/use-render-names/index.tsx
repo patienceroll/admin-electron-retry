@@ -35,6 +35,7 @@ export default function <
   const attrColumn = useMemo(() => {
     return renderNames.attr_fields.map<ProColumns<any>>((item) => ({
       title: item.name,
+      dataIndex: item.key,
       renderText: (_, row: any) => row.material_sku?.[item.key],
     }));
   }, [renderNames.attr_fields]);
@@ -42,6 +43,7 @@ export default function <
   const unitColumn = useMemo(() => {
     return renderNames.unit_fields.map<ProColumns<any>>((item) => ({
       title: item.name,
+      dataIndex: item.key,
       renderText: (_, row: any) => row.unit_arr?.[item.key],
     }));
   }, [renderNames.unit_fields]);

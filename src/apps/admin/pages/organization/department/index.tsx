@@ -166,7 +166,7 @@ function Department() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        scroll={{ x: table.measureColumnWidth(column), y: height }}
+        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
       />
 
       <FloatButton.Group shape="square">

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ColumnsState, ProColumns } from "@ant-design/pro-components";
 import { Resizable } from "react-resizable";
 
@@ -140,17 +146,34 @@ export default function useTableColumnState<T>(
     );
   }
 
-  return {
-    onChange,
-    data,
-    tableHeaderCellRender,
-    column: column.map((item) => {
+  const widthColumn = useMemo(() => {
+    return memoryColumn.filter((item) => {
+      if (typeof item.dataIndex !== "string") return false;
+      if (!data) return true;
+      const dataItem = data.data[item.dataIndex];
+      if (!dataItem) return true;
+      return dataItem.show === undefined || dataItem.show === true;
+    });
+  }, [memoryColumn, data]);
+
+  const renderColumn = useMemo(() => {
+    return memoryColumn.map((item) => {
       if (typeof item.dataIndex === "string" && data) {
-        const wid = data.data[item.dataIndex]?.width;
+        const wid = data.data[item.dataIndex as string]?.width;
         return { ...item, width: wid ? wid : item.width };
       } else {
         return item;
       }
-    }),
+    });
+  }, [data, memoryColumn]);
+
+  return {
+    onChange,
+    data,
+    tableHeaderCellRender,
+    /** 计算表格宽度的column,根据列的是否展示等有变化 */
+    widthColumn,
+    /** 用于表格渲染的column,通知表格列的数据,此数据主要用于影响表格列的宽度 */
+    column: renderColumn,
   };
 }

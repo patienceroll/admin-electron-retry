@@ -314,7 +314,7 @@ function ReceiveOrder() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(column), y: height }}
+        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
