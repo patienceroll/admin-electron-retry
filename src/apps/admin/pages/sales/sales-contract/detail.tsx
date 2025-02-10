@@ -130,7 +130,7 @@ function Detail(props: StyledWrapComponents) {
           <Col flex="400px">
             <InfoItem label="质保金比例">{`${detail.quality_ratio}%`}</InfoItem>
           </Col>
-          <Divider />
+          <Divider  style={{margin:0}}/>
           <Col flex="400px">
             <InfoItem label="甲方负责人">
               {detail.client_contact?.name} {detail.client_contact?.phone}
@@ -152,7 +152,7 @@ function Detail(props: StyledWrapComponents) {
               {detail.settle_staff?.name} {detail.settle_staff?.phone}
             </InfoItem>
           </Col>
-          <Divider />
+          <Divider  style={{margin:0}}/>
 
           <Col flex="100%">
             <InfoItem
@@ -162,7 +162,7 @@ function Detail(props: StyledWrapComponents) {
               {detail.settle_type}
             </InfoItem>
           </Col>
-          <Divider />
+          <Divider  style={{margin:0}}/>
           <Col flex="100%">
             <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
               {detail.remark}

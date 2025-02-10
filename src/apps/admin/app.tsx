@@ -94,6 +94,10 @@ export default function () {
           Form: {
             itemMarginBottom: designToken.padding / 2,
           },
+          Divider: {
+            margin: designToken.paddingSM,
+            marginLG: designToken.padding
+          }
         },
       })}
     >
