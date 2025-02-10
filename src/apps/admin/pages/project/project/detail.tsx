@@ -283,7 +283,7 @@ function Detail(props: StyledWrapComponents) {
 
       {detail && (
         <FloatButton.Group shape="square">
-          {detail.btn_power.is_approve && (
+          {detail.btn_power.is_approve === 1 && (
             <FloatButton
               tooltip="审批"
               icon={<Icon icon={ApprovalSvg} />}
@@ -317,7 +317,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_cancel && (
+          {detail.btn_power.is_cancel === 1  && (
             <FloatButton
               tooltip="放弃"
               icon={<Icon icon={GiveUpSvg} fill={theme.colorWarning} />}
@@ -336,7 +336,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_suspend && (
+          {detail.btn_power.is_suspend === 1  && (
             <FloatButton
               tooltip="中止"
               icon={<Icon icon={StopSvg} fill={theme.colorError} />}
@@ -355,7 +355,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_invalid && (
+          {detail.btn_power.is_invalid === 1  && (
             <FloatButton
               tooltip="作废"
               icon={<Icon icon={StopSvg} fill={theme.colorError} />}
@@ -374,7 +374,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_end && (
+          {detail.btn_power.is_end === 1  && (
             <FloatButton
               tooltip="完结"
               icon={<Icon icon={FinishSvg} />}
@@ -393,7 +393,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_cancel_operate && (
+          {detail.btn_power.is_cancel_operate === 1  && (
             <FloatButton
               tooltip="撤销"
               icon={<Icon icon={FinishSvg} fill={theme.colorWarning} />}
