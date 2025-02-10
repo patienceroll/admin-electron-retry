@@ -5,19 +5,18 @@ function InfoItem(
   props: React.PropsWithChildren<
     StyledWrapComponents<{
       label: React.ReactNode;
-      labelWidth?: React.CSSProperties["width"];
       contentClass?: string;
       contentStyle?: React.CSSProperties;
     }>
   >
 ) {
-  const { className, label, children, labelWidth = 100, contentStyle } = props;
+  const { className, label, children , contentStyle } = props;
   return (
     <div className={className}>
       {isValidElement(label) ? (
         label
       ) : (
-        <span className="label" style={{ width: labelWidth }}>
+        <span className="label" style={{  }}>
           {label}:
         </span>
       )}

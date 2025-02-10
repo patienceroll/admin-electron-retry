@@ -142,18 +142,11 @@ function Detail(props: StyledWrapComponents) {
           <Divider />
 
           <Col flex="100%">
-            <InfoItem
-              label="结算方式"
-              contentStyle={{ whiteSpace: "pre-wrap" }}
-            >
-              {detail.settle_type}
-            </InfoItem>
+            <InfoItem label="结算方式">{detail.settle_type}</InfoItem>
           </Col>
           <Divider />
           <Col flex="100%">
-            <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
-              {detail.remark}
-            </InfoItem>
+            <InfoItem label="备注">{detail.remark}</InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
