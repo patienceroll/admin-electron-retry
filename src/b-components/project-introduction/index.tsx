@@ -1,4 +1,4 @@
-import { Carousel, Col, Image, Popover, Row } from "antd";
+import { Carousel, Col, Image, Popover, Row, Typography } from "antd";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -60,15 +60,41 @@ function ProjectIntroduction(
             </Col>
             <Col flex={1}>
               <h2>{intro?.name}</h2>
-              <InfoItem label="编码">{intro?.code}</InfoItem>
-              <InfoItem label="简称">{intro?.short_name}</InfoItem>
-              <InfoItem label="地址">{intro?.address}</InfoItem>
-              <InfoItem label="负责部门">
-                {intro?.staff?.department?.name}
-              </InfoItem>
-              <InfoItem label="业务员">
-                {intro?.staff?.name} {intro?.staff?.phone}
-              </InfoItem>
+              <Row>
+                <Col span={24}>
+                  <InfoItem label="编号">
+                    &nbsp;
+                    <Typography.Text copyable>{intro?.code}</Typography.Text>
+                  </InfoItem>
+                </Col>
+                <Col span={24}>
+                  <InfoItem label="简称">{intro?.short_name}</InfoItem>
+                </Col>
+                <Col span={12}>
+                  <InfoItem label="类别">{intro?.category}</InfoItem>
+                </Col>
+                <Col span={12}>
+                  <InfoItem label="行业">{intro?.trade}</InfoItem>
+                </Col>
+                <Col span={24}>
+                  <InfoItem label="地址">
+                    {intro?.province}
+                    {intro?.city}
+                    {intro?.county}
+                    {intro?.address}
+                  </InfoItem>
+                </Col>
+                <Col span={24}>
+                  <InfoItem label="负责部门">
+                    {intro?.staff?.department?.name}
+                  </InfoItem>
+                </Col>
+                <Col span={24}>
+                  <InfoItem label="业务员">
+                    {intro?.staff?.name} {intro?.staff?.phone}
+                  </InfoItem>
+                </Col>
+              </Row>
             </Col>
           </Row>
           <div style={{ marginTop: theme.padding }}>

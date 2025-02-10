@@ -114,10 +114,10 @@ function Detail(props: StyledWrapComponents) {
             <Col flex="400px">
               <InfoItem label="项目">
                 <span style={{ paddingLeft: theme.padding }}>
-                  {detail.project?.name_show} &nbsp;
+                  {/*{detail.project?.name_show} &nbsp;*/}
                   <ProjectIntroduction id={detail.project_id}>
                     <span style={{ color: theme.colorLink, cursor: "pointer" }}>
-                      概览
+                      {detail.project?.name_show}
                     </span>
                   </ProjectIntroduction>
                 </span>
