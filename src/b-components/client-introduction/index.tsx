@@ -51,11 +51,14 @@ function ClientIntroduction(
                 speed={1000}
                 style={{ width: "100%" }}
               >
-                <Image
-                  height={200}
-                  width="100%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                />
+                {intro?.file.map((item) => (
+                  <Image
+                    key={item.file_id}
+                    height={200}
+                    width="100%"
+                    src={item.full_path}
+                  />
+                ))}
               </Carousel>
             </Col>
             <Col flex={1}>
