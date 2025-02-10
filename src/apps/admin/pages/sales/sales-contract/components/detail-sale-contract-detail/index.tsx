@@ -78,7 +78,7 @@ export default function (
       summary={(data) => {
         return (
           <Table.Summary.Row>
-            {column.map((col, index) => (
+            {columnState.widthColumn.map((col, index) => (
               <Table.Summary.Cell index={index}>
                 {index === 0 && "合计"}
                 {/*{col.dataIndex === "num" &&*/}

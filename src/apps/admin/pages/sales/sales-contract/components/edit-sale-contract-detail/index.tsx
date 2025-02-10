@@ -16,6 +16,7 @@ import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
 import * as SetUnit from "./set-unit";
 import Money from "src/util/money";
+import useColumnState from "src/hooks/use-column-state";
 
 export default function (props: Pick<SalesContract, "id">) {
   const { id } = props;
@@ -105,6 +106,11 @@ export default function (props: Pick<SalesContract, "id">) {
     table.reload();
   }, []);
 
+  const columnState = useColumnState(
+    "salesContractEdit_ContractDetail",
+    column
+  );
+
   return (
     <ProTable
       style={{ marginTop: theme.margin }}
@@ -115,8 +121,8 @@ export default function (props: Pick<SalesContract, "id">) {
       dataSource={table.dataSource}
       pagination={table.pagination}
       onChange={table.onChange}
-      columns={column}
-      scroll={{ x: table.measureColumnWidth(column), y: 500 }}
+      columns={columnState.column}
+      scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: 500 }}
       toolBarRender={() => [
         <Button
           key="add"
@@ -135,7 +141,7 @@ export default function (props: Pick<SalesContract, "id">) {
       summary={(data) => {
         return (
           <Table.Summary.Row>
-            {column.map((col, index) => (
+            {columnState.widthColumn.map((col, index) => (
               <Table.Summary.Cell index={index}>
                 {index === 0 && "合计"}
                 {col.dataIndex === "num" &&
