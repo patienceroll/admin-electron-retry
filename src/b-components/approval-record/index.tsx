@@ -25,7 +25,14 @@ export default function ApprovalRecord<T>(props: {
 
   const _getApprovalRecord = useCallback(
     function () {
-      recordApi({ id }).then((res) => setApprovalData(res.data));
+      recordApi({ id }).then((res) => {
+        setApprovalData(res.data);
+        setActiveKeys(
+          res.data
+            .filter((item) => [0, 1].includes(item.status))
+            .map((item) => item.id)
+        );
+      });
     },
     [id, recordApi]
   );
