@@ -16,6 +16,7 @@ import {
   getSalesOrderDetailList,
   salesOrderDetailRenderConfig,
 } from "src/apps/admin/api/sales-order-detail";
+import useColumnState from "src/hooks/use-column-state";
 
 export default function (props: Pick<SalesOrder, "id">) {
   const { id } = props;
@@ -105,6 +106,12 @@ export default function (props: Pick<SalesOrder, "id">) {
     table.reload();
   }, []);
 
+    const columnState = useColumnState(
+      "salesOrderEdit_OrderDetail",
+      column
+    );
+  
+
   return (
     <ProTable
       style={{ marginTop: theme.margin }}
@@ -115,8 +122,8 @@ export default function (props: Pick<SalesOrder, "id">) {
       dataSource={table.dataSource}
       pagination={table.pagination}
       onChange={table.onChange}
-      columns={column}
-      scroll={{ x: table.measureColumnWidth(column), y: 500 }}
+      columns={columnState.column}
+      scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: 500 }}
       toolBarRender={() => [
         <Space>
           <Button type="primary">合同内添加</Button>
@@ -128,7 +135,7 @@ export default function (props: Pick<SalesOrder, "id">) {
       summary={(data) => {
         return (
           <Table.Summary.Row>
-            {column.map((col, index) => (
+            {columnState.widthColumn.map((col, index) => (
               <Table.Summary.Cell index={index}>
                 {index === 0 && "合计"}
                 {col.dataIndex === "num" &&
