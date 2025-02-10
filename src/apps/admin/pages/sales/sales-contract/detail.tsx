@@ -222,12 +222,12 @@ function Detail(props: StyledWrapComponents) {
         recordApi={getOperateRecord}
       />
 
-      <Title style={{ marginTop: theme.margin }} id="销售订单">
+      {/* <Title style={{ marginTop: theme.margin }} id="销售订单">
         销售订单
       </Title>
-      <DetailSaleOrder id={id} attrCoumn={attrColumn} unitColumn={unitColumn} />
+      <DetailSaleOrder id={id} attrCoumn={attrColumn} unitColumn={unitColumn} /> */}
 
-      <Title style={{ marginTop: theme.margin }} id="销售发货">
+      {/* <Title style={{ marginTop: theme.margin }} id="销售发货">
         销售发货
       </Title>
       <DetailSaleDeliver
@@ -243,7 +243,7 @@ function Detail(props: StyledWrapComponents) {
         id={id}
         attrCoumn={attrColumn}
         unitColumn={unitColumn}
-      />
+      /> */}
 
       {/*<Title style={{ marginTop: theme.margin }} id="系统信息">*/}
       {/*  系统信息*/}
@@ -395,9 +395,9 @@ function Detail(props: StyledWrapComponents) {
           "审批记录",
           "操作记录",
           // "系统信息",
-          "销售订单",
-          "销售发货",
-          "销售退货",
+          // "销售订单",
+          // "销售发货",
+          // "销售退货",
         ].map((item) => ({
           key: item,
           title: item,
