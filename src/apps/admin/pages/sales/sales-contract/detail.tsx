@@ -36,6 +36,7 @@ import FinishSvg from "src/assets/svg/完结.svg";
 import getApproval from "src/b-hooks/get-approval";
 import useRenderNames from "src/b-hooks/use-render-names";
 import { salesContractDetailRenderConfig } from "src/apps/admin/api/sales-contract-detail";
+import ProjectIntroduction from "src/b-components/project-introduction";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -51,7 +52,7 @@ function Detail(props: StyledWrapComponents) {
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
-    },
+    }
   );
 
   const getDetail = useCallback(
@@ -60,7 +61,7 @@ function Detail(props: StyledWrapComponents) {
         setDetail(res.data);
       });
     },
-    [id],
+    [id]
   );
 
   useEffect(() => {
@@ -94,7 +95,16 @@ function Detail(props: StyledWrapComponents) {
             </InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="项目"> {detail.project?.name_show}</InfoItem>
+            <InfoItem label="项目">
+              <span style={{paddingLeft:theme.padding}}>
+                {detail.project?.name_show} &nbsp;
+                <ProjectIntroduction id={detail.project_id}>
+                  <span style={{ color: theme.colorLink, cursor: "pointer" }}>
+                    概览
+                  </span>
+                </ProjectIntroduction>
+              </span>
+            </InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="客户"> {detail.client?.name_show}</InfoItem>
