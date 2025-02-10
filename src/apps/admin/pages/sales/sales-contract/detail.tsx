@@ -1,7 +1,16 @@
 import styled, { useTheme } from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Anchor, Col, Divider, FloatButton, Row, Tag, Typography } from "antd";
+import {
+  Anchor,
+  Card,
+  Col,
+  Divider,
+  FloatButton,
+  Row,
+  Tag,
+  Typography,
+} from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
@@ -13,6 +22,7 @@ import {
   getApprovalRecord,
   getOperateRecord,
   getSalesContract,
+  salesContractStatus,
   salesContractType,
   startApproval,
 } from "src/apps/admin/api/sales-contract";
@@ -21,9 +31,6 @@ import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
 import DetailSaleContractDetail from "./components/detail-sale-contract-detail";
 import BusinessFile from "src/b-components/business-file";
-import DetailSaleOrder from "./components/detail-sale-order";
-import DetailSaleDeliver from "./components/detail-sale-deliver";
-import DetailSaleReturn from "./components/detail-sale-return";
 import ApprovalRecord from "src/b-components/approval-record";
 import OperateRecord from "src/b-components/operate-record";
 import contextedModal from "src/framework/component/contexted-modal";
@@ -72,114 +79,136 @@ function Detail(props: StyledWrapComponents) {
     <PageWrapper className={className}>
       <Title id="基本信息">基本信息</Title>
 
-      {detail && (
-        <Row
-          style={{ marginTop: theme.margin }}
-          gutter={[theme.padding, theme.padding]}
-        >
-          <Col flex="400px">
-            <InfoItem label="合同"> {detail.name}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="编号">
-              &nbsp;
-              <Typography.Text copyable>{detail.code}</Typography.Text>
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="类型">
-              &nbsp;
-              <Tag color={salesContractType.get(detail.type)?.color}>
-                {salesContractType.get(detail.type)?.text}
-              </Tag>
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="项目">
-              <span style={{ paddingLeft: theme.padding }}>
-                {detail.project?.name_show} &nbsp;
-                <ProjectIntroduction id={detail.project_id}>
-                  <span style={{ color: theme.colorLink, cursor: "pointer" }}>
-                    概览
-                  </span>
-                </ProjectIntroduction>
-              </span>
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="客户"> {detail.client?.name_show}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="签约日期">{detail.sign_date}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="金额">{new Money(detail.amount).toCNY()}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="税率">{`${detail.tax_rate}%`}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="预付款比例">{`${detail.advance_ratio}%`}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="质保金比例">{`${detail.quality_ratio}%`}</InfoItem>
-          </Col>
-          <Divider  style={{margin:0}}/>
-          <Col flex="400px">
-            <InfoItem label="甲方负责人">
-              {detail.client_contact?.name} {detail.client_contact?.phone}
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="乙方负责人">
-              {detail.staff?.name} {detail.staff?.phone}
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="甲方结算人员">
-              {detail.settle_client_contact?.name}
-              {detail.settle_client_contact?.phone}
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="乙方结算人员">
-              {detail.settle_staff?.name} {detail.settle_staff?.phone}
-            </InfoItem>
-          </Col>
-          <Divider  style={{margin:0}}/>
+      <Card style={{ marginTop: theme.margin }}>
+        {detail && (
+          <Row
+            style={{ marginTop: theme.margin }}
+            gutter={[theme.padding, theme.padding]}
+          >
+            <Col flex="400px">
+              <InfoItem label="合同"> {detail.name}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="编号">
+                &nbsp;
+                <Typography.Text copyable>{detail.code}</Typography.Text>
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="类型">
+                &nbsp;
+                <Tag color={salesContractType.get(detail.type)?.color}>
+                  {salesContractType.get(detail.type)?.text}
+                </Tag>
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="状态">
+                &nbsp;
+                <Tag color={salesContractStatus.get(detail.status)?.color}>
+                  {salesContractStatus.get(detail.status)?.text}
+                </Tag>
+                {detail.is_approve === 1 && <Tag color="#d46b08">审批中</Tag>}
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="项目">
+                <span style={{ paddingLeft: theme.padding }}>
+                  {detail.project?.name_show} &nbsp;
+                  <ProjectIntroduction id={detail.project_id}>
+                    <span style={{ color: theme.colorLink, cursor: "pointer" }}>
+                      概览
+                    </span>
+                  </ProjectIntroduction>
+                </span>
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="客户"> {detail.client?.name_show}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="签约日期">{detail.sign_date}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="是否厂家配送">
+                {detail.is_factory_dispatch ? "是" : "否"}
+              </InfoItem>
+            </Col>
+            <Divider />
+            <Col flex="400px">
+              <InfoItem label="金额">
+                {new Money(detail.amount).toCNY()}
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="税率">{`${detail.tax_rate}%`}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="预付款比例">{`${detail.advance_ratio}%`}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="质保金比例">{`${detail.quality_ratio}%`}</InfoItem>
+            </Col>
+            <Divider style={{ margin: 0 }} />
+            <Col flex="400px">
+              <InfoItem label="甲方负责人">
+                {detail.client_contact?.name} {detail.client_contact?.phone}
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="乙方负责人">
+                {detail.staff?.name} {detail.staff?.phone}
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="甲方结算人员">
+                {detail.settle_client_contact?.name}
+                {detail.settle_client_contact?.phone}
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="乙方结算人员">
+                {detail.settle_staff?.name} {detail.settle_staff?.phone}
+              </InfoItem>
+            </Col>
+            <Divider style={{ margin: 0 }} />
 
-          <Col flex="100%">
-            <InfoItem
-              label="结算方式"
-              contentStyle={{ whiteSpace: "pre-wrap" }}
-            >
-              {detail.settle_type}
-            </InfoItem>
-          </Col>
-          <Divider  style={{margin:0}}/>
-          <Col flex="100%">
-            <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
-              {detail.remark}
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="创建时间">{detail.created_at}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="更新时间">{detail.updated_at}</InfoItem>
-          </Col>
-        </Row>
-      )}
-
+            <Col flex="100%">
+              <InfoItem
+                label="结算方式"
+                contentStyle={{ whiteSpace: "pre-wrap" }}
+              >
+                {detail.settle_type}
+              </InfoItem>
+            </Col>
+            <Divider style={{ margin: 0 }} />
+            <Col flex="100%">
+              <InfoItem
+                label="备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注"
+                contentStyle={{ whiteSpace: "pre-wrap" }}
+              >
+                {detail.remark}
+              </InfoItem>
+            </Col>
+            <Divider />
+            <Col flex="400px">
+              <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="创建时间">{detail.created_at}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="更新时间">{detail.updated_at}</InfoItem>
+            </Col>
+          </Row>
+        )}
+      </Card>
       <Title style={{ marginTop: theme.margin }} id="产品明细">
         产品明细
       </Title>
