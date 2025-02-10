@@ -11,15 +11,14 @@ export const ClientStatus = new Map<
 
 export const clientNature = ["民营企业", "国有企业", "事业单位", "其他单位"];
 
-export const clientTypeMap = new Map<
-  Client["type"],
-  EnumValue<Client["type"]>
->([
-  [1, { value: 1, color: "blue", text: "施工单位" }],
-  [2, { value: 2, color: "#cfc922", text: "业主单位" }],
-  [3, { value: 3, color: "green", text: "设计院" }],
-  [4, { value: 4, color: "rgba(0, 0, 0, 0.25)", text: "其他单位" }],
-]);
+export const clientTypeMap = new Map<Client["type"], EnumValue<Client["type"]>>(
+  [
+    [1, { value: 1, color: "blue", text: "施工单位" }],
+    [2, { value: 2, color: "#cfc922", text: "业主单位" }],
+    [3, { value: 3, color: "green", text: "设计院" }],
+    [4, { value: 4, color: "rgba(0, 0, 0, 0.25)", text: "其他单位" }],
+  ],
+);
 
 /**
  * 客户联系人-列表
@@ -27,11 +26,11 @@ export const clientTypeMap = new Map<
 export function getClientContactDetailList(
   params: ListParam & {
     client_id?: Client["id"];
-  }
+  },
 ) {
   return fetch.GET<List<Client>>(
     fetch.base(`/api/client-contact/list`),
-    params
+    params,
   );
 }
 
@@ -43,12 +42,9 @@ export function getClientList(
     is_sign?: Client["is_sign"];
     project_id?: Project["id"];
     business_opportunity_id?: BusinessOpportunity["id"];
-  }
+  },
 ) {
-  return fetch.GET<List<Client>>(
-    fetch.base(`/api/client/list`),
-    params
-  );
+  return fetch.GET<List<Client>>(fetch.base(`/api/client/list`), params);
 }
 
 /** 客户选项 */
@@ -73,6 +69,14 @@ export function getClientOption(params: {
 }
 
 /**
+ * 客户简介
+ * @param params
+ */
+export function getClientIntroduction(params: { id: Client["id"] }) {
+  return fetch.GET<Project>(fetch.base(`/api/client/introduction`), params);
+}
+
+/**
  * 客户-详情
  */
 export function getClient(params: Pick<Client, "id">) {
@@ -89,7 +93,7 @@ export function addClient(
       "name" | "short_name" | "type" | "nature" | "address" | "is_sign"
     >
   > &
-    AddresssParams & { project_id?: Project["id"] }
+    AddresssParams & { project_id?: Project["id"] },
 ) {
   return fetch.POST<ClientAddResponse>(fetch.base(`/api/client`), params);
 }
@@ -116,5 +120,3 @@ export function clientExport(params: Record<string, any>) {
     remote_path: string;
   }>(fetch.base(`/api/client/export`), params);
 }
-
-

@@ -33,6 +33,10 @@ export function getProject(params: Pick<SalesContract, "id">) {
   return fetch.GET<ProjectDetail>(fetch.base(`/api/project/detail`), params);
 }
 
+/**
+ * 项目简介
+ * @param params
+ */
 export function getProjectIntroduction(params: { id: Project["id"] }) {
   return fetch.GET<ProjectIntro>(fetch.base(`/api/project/introduction`), params);
 }
@@ -86,7 +90,7 @@ export function getProjectStatistics() {
  * 生成合同编号 */
 export const getProjectCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/project/code")
+    fetch.base("/api/project/code"),
   );
 };
 
@@ -96,7 +100,7 @@ export const getProjectCode = () => {
 export function addProjectUnit(params: any) {
   return fetch.POST<ProjectUnitAddResponse>(
     fetch.base(`/api/project-unit`),
-    params
+    params,
   );
 }
 
@@ -113,11 +117,11 @@ export function editProjectUnit(params: any) {
 export function getProjectUnitList(
   params: ListParam & {
     id: Project["id"];
-  }
+  },
 ) {
   return fetch.GET<List<ProjectUnit>>(
     fetch.base(`/api/project-unit/list`),
-    params
+    params,
   );
 }
 
@@ -157,7 +161,7 @@ export function cancel(params: Pick<Project, "id">) {
 export function getApprovalRecord(params: Pick<Project, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/project/approval-record`),
-    params
+    params,
   );
 }
 
