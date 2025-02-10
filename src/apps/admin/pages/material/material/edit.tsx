@@ -74,7 +74,7 @@ function Edit(props: StyledWrapComponents) {
 
   const [attr, setAttr] = useState<MaterialOfAttr[]>([]);
   const [checkedAttr] = useState(
-    new Map<MaterialOfAttr["id"], MaterialOfAttr["detail"][number]["id"][]>()
+    new Map<MaterialOfAttr["id"], MaterialOfAttr["detail"][number]["id"][]>(),
   );
   const [update] = useUpdate();
 
@@ -93,7 +93,7 @@ function Edit(props: StyledWrapComponents) {
     getMaterial({ id }).then((res) => {
       setDetail(res.data);
       setUnit(
-        res.data.units.map((item) => ({ ...item, key: key.randomString() }))
+        res.data.units.map((item) => ({ ...item, key: key.randomString() })),
       );
       form.setFieldsValue({
         ...res.data,
@@ -143,6 +143,10 @@ function Edit(props: StyledWrapComponents) {
       title: item.name,
       renderText: (_, row: any) => row[item.key],
     })),
+    {
+      title: "编码",
+      dataIndex: "code",
+    },
     {
       title: "操作",
       dataIndex: "action",
@@ -315,7 +319,7 @@ function Edit(props: StyledWrapComponents) {
                         unit: "",
                         alias: "",
                         key: key.randomString(),
-                      })
+                      }),
                     );
                   }}
                 >
@@ -359,7 +363,7 @@ function Edit(props: StyledWrapComponents) {
                                   item.key === row.key
                                     ? e.target.value
                                     : item.unit,
-                              }))
+                              })),
                             );
                           }}
                         />
@@ -382,7 +386,7 @@ function Edit(props: StyledWrapComponents) {
                                   item.key === row.key
                                     ? e.target.value
                                     : item.alias,
-                              }))
+                              })),
                             );
                           }}
                         />
@@ -402,7 +406,7 @@ function Edit(props: StyledWrapComponents) {
                                 t.map((item) => ({
                                   ...item,
                                   is_main: item.key === row.key ? 1 : 0,
-                                }))
+                                })),
                               );
                             }
                           }}
@@ -421,7 +425,7 @@ function Edit(props: StyledWrapComponents) {
                             danger
                             onClick={() => {
                               setUnit((t) =>
-                                t.filter((item) => item.key !== row.key)
+                                t.filter((item) => item.key !== row.key),
                               );
                             }}
                           >
@@ -470,7 +474,7 @@ function Edit(props: StyledWrapComponents) {
                             store.push(newAt);
                             checkedAttr.get(at.id)?.forEach((g) => {
                               const attrValue = at.detail.find(
-                                (atg) => g === atg.id
+                                (atg) => g === atg.id,
                               );
                               if (attrValue) {
                                 newAt.detail.push({
@@ -513,12 +517,12 @@ function Edit(props: StyledWrapComponents) {
                                   if (checked) {
                                     checkedAttr.set(
                                       item.id,
-                                      checkArray.filter((ch) => ch !== de.id)
+                                      checkArray.filter((ch) => ch !== de.id),
                                     );
                                   } else {
                                     checkedAttr.set(
                                       item.id,
-                                      checkArray.concat(de.id)
+                                      checkArray.concat(de.id),
                                     );
                                   }
                                   update();

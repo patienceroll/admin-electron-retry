@@ -1,7 +1,7 @@
 import styled, { useTheme } from "styled-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Col, Row, Tag, Typography, Anchor, FloatButton } from "antd";
+import { Anchor, Col, Divider, FloatButton, Row, Tag, Typography } from "antd";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
@@ -51,7 +51,7 @@ function Detail(props: StyledWrapComponents) {
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
-    }
+    },
   );
 
   const getDetail = useCallback(
@@ -60,7 +60,7 @@ function Detail(props: StyledWrapComponents) {
         setDetail(res.data);
       });
     },
-    [id]
+    [id],
   );
 
   useEffect(() => {
@@ -112,14 +112,6 @@ function Detail(props: StyledWrapComponents) {
             <InfoItem label="质保金比例">{`${detail.quality_ratio}%`}</InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="甲方负责人">
-              {detail.client_contact?.name}
-            </InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="负责人">{detail.staff?.name}</InfoItem>
-          </Col>
-          <Col flex="400px">
             <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
           </Col>
           <Col flex="400px">
@@ -128,11 +120,14 @@ function Detail(props: StyledWrapComponents) {
           <Col flex="400px">
             <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
           </Col>
-          <Col flex="800px">
-            <InfoItem label="备注">{detail.remark}</InfoItem>
+          <Divider style={{ margin: "6px 0" }} />
+          <Col flex="400px">
+            <InfoItem label="甲方负责人">
+              {detail.client_contact?.name}
+            </InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="结算方式">{detail.settle_type}</InfoItem>
+            <InfoItem label="乙方负责人">{detail.staff?.name}</InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="甲方结算人员">
@@ -142,6 +137,28 @@ function Detail(props: StyledWrapComponents) {
           <Col flex="400px">
             <InfoItem label="乙方结算人员">
               {detail.settle_staff?.name}
+            </InfoItem>
+          </Col>
+          <Divider style={{ margin: "6px 0" }} />
+
+          <Col flex="100%">
+            <InfoItem label="结算方式">{detail.settle_type}</InfoItem>
+          </Col>
+          <Divider style={{ margin: "6px 0" }} />
+          <Col flex="100%">
+            <InfoItem label="备注">{detail.remark}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="创建时间">
+              {detail.created_user?.created_at}
+            </InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="更新时间">
+              {detail.created_user?.updated_at}
             </InfoItem>
           </Col>
         </Row>
@@ -156,24 +173,20 @@ function Detail(props: StyledWrapComponents) {
         unitColumn={unitColumn}
       />
 
-      <Title style={{ marginTop: theme.margin }} id="销售订单">
-        销售订单
+      <Title style={{ marginTop: theme.margin }} id="附件信息">
+        附件信息
       </Title>
-      <DetailSaleOrder id={id} attrCoumn={attrColumn} unitColumn={unitColumn} />
-
-      <Title style={{ marginTop: theme.margin }} id="销售发货">
-        销售发货
-      </Title>
-      <DetailSaleDeliver
-        id={id}
-        attrCoumn={attrColumn}
-        unitColumn={unitColumn}
-      />
-
-      <Title style={{ marginTop: theme.margin }} id="销售退货">
-        销售退货
-      </Title>
-      <DetailSaleReturn id={id} attrCoumn={attrColumn} unitColumn={unitColumn} />
+      {detail && (
+        <div style={{ marginTop: theme.margin }}>
+          <BusinessFile
+            id={id}
+            service="sales-contract"
+            identify="合同附件"
+            isCover={0}
+            files={detail.file["合同附件"]}
+          />
+        </div>
+      )}
 
       <Title style={{ marginTop: theme.margin }} id="审批记录">
         审批记录
@@ -193,43 +206,52 @@ function Detail(props: StyledWrapComponents) {
         recordApi={getOperateRecord}
       />
 
-      <Title style={{ marginTop: theme.margin }} id="附件信息">
-        附件信息
+      <Title style={{ marginTop: theme.margin }} id="销售订单">
+        销售订单
       </Title>
-      {detail && (
-        <div style={{ marginTop: theme.margin }}>
-          <BusinessFile
-            id={id}
-            service="sales-contract"
-            identify="合同附件"
-            isCover={0}
-            files={detail.file["合同附件"]}
-          />
-        </div>
-      )}
-      <Title style={{ marginTop: theme.margin }} id="系统信息">
-        系统信息
+      <DetailSaleOrder id={id} attrCoumn={attrColumn} unitColumn={unitColumn} />
+
+      <Title style={{ marginTop: theme.margin }} id="销售发货">
+        销售发货
       </Title>
-      {detail && (
-        <Row
-          style={{ marginTop: theme.margin }}
-          gutter={[theme.padding, theme.padding]}
-        >
-          <Col flex="300px">
-            <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
-          </Col>
-          <Col flex="300px">
-            <InfoItem label="创建时间">
-              {detail.created_user?.created_at}
-            </InfoItem>
-          </Col>
-          <Col flex="300px">
-            <InfoItem label="更新时间">
-              {detail.created_user?.updated_at}
-            </InfoItem>
-          </Col>
-        </Row>
-      )}
+      <DetailSaleDeliver
+        id={id}
+        attrCoumn={attrColumn}
+        unitColumn={unitColumn}
+      />
+
+      <Title style={{ marginTop: theme.margin }} id="销售退货">
+        销售退货
+      </Title>
+      <DetailSaleReturn
+        id={id}
+        attrCoumn={attrColumn}
+        unitColumn={unitColumn}
+      />
+
+      {/*<Title style={{ marginTop: theme.margin }} id="系统信息">*/}
+      {/*  系统信息*/}
+      {/*</Title>*/}
+      {/*{detail && (*/}
+      {/*  <Row*/}
+      {/*    style={{ marginTop: theme.margin }}*/}
+      {/*    gutter={[theme.padding, theme.padding]}*/}
+      {/*  >*/}
+      {/*    <Col flex="300px">*/}
+      {/*      <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>*/}
+      {/*    </Col>*/}
+      {/*    <Col flex="300px">*/}
+      {/*      <InfoItem label="创建时间">*/}
+      {/*        {detail.created_user?.created_at}*/}
+      {/*      </InfoItem>*/}
+      {/*    </Col>*/}
+      {/*    <Col flex="300px">*/}
+      {/*      <InfoItem label="更新时间">*/}
+      {/*        {detail.created_user?.updated_at}*/}
+      {/*      </InfoItem>*/}
+      {/*    </Col>*/}
+      {/*  </Row>*/}
+      {/*)}*/}
 
       {detail && (
         <FloatButton.Group shape="square">
@@ -353,13 +375,13 @@ function Detail(props: StyledWrapComponents) {
         items={[
           "基本信息",
           "产品明细",
+          "附件信息",
+          "审批记录",
+          "操作记录",
+          // "系统信息",
           "销售订单",
           "销售发货",
           "销售退货",
-          "审批记录",
-          "操作记录",
-          "附件信息",
-          "系统信息",
         ].map((item) => ({
           key: item,
           title: item,
