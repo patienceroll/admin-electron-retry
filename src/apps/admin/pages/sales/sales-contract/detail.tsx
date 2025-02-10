@@ -52,7 +52,7 @@ function Detail(props: StyledWrapComponents) {
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
-    }
+    },
   );
 
   const getDetail = useCallback(
@@ -61,7 +61,7 @@ function Detail(props: StyledWrapComponents) {
         setDetail(res.data);
       });
     },
-    [id]
+    [id],
   );
 
   useEffect(() => {
@@ -96,7 +96,7 @@ function Detail(props: StyledWrapComponents) {
           </Col>
           <Col flex="400px">
             <InfoItem label="项目">
-              <span style={{paddingLeft:theme.padding}}>
+              <span style={{ paddingLeft: theme.padding }}>
                 {detail.project?.name_show} &nbsp;
                 <ProjectIntroduction id={detail.project_id}>
                   <span style={{ color: theme.colorLink, cursor: "pointer" }}>
@@ -133,20 +133,23 @@ function Detail(props: StyledWrapComponents) {
           <Divider />
           <Col flex="400px">
             <InfoItem label="甲方负责人">
-              {detail.client_contact?.name}
+              {detail.client_contact?.name} {detail.client_contact?.phone}
             </InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="乙方负责人">{detail.staff?.name}</InfoItem>
+            <InfoItem label="乙方负责人">
+              {detail.staff?.name} {detail.staff?.phone}
+            </InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="甲方结算人员">
               {detail.settle_client_contact?.name}
+              {detail.settle_client_contact?.phone}
             </InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="乙方结算人员">
-              {detail.settle_staff?.name}
+              {detail.settle_staff?.name} {detail.settle_staff?.phone}
             </InfoItem>
           </Col>
           <Divider />
@@ -169,14 +172,10 @@ function Detail(props: StyledWrapComponents) {
             <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="创建时间">
-              {detail.created_user?.created_at}
-            </InfoItem>
+            <InfoItem label="创建时间">{detail.created_at}</InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="更新时间">
-              {detail.created_user?.updated_at}
-            </InfoItem>
+            <InfoItem label="更新时间">{detail.updated_at}</InfoItem>
           </Col>
         </Row>
       )}
