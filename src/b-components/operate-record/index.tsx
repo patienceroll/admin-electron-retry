@@ -10,9 +10,9 @@ import {
 export default function <T>(props: {
   id: T;
   recordApi: (params: { id: T }) => Promise<BaseResponse<OperateRecord[]>>;
-  style?:React.CSSProperties
+  style?: React.CSSProperties;
 }) {
-  const { id, recordApi,style } = props;
+  const { id, recordApi, style } = props;
   const [data] = useOption(recordApi);
 
   useEffect(() => {
@@ -56,8 +56,8 @@ export default function <T>(props: {
       pagination={false}
       dataSource={data.list}
       style={style}
-      options={{ reload: data.loadOption, density: false }}
-      scroll={{ y: "50vh", x: tableMeasureColumnWidth(column) }}
+      options={false}
+      scroll={{ y: "40vh", x: tableMeasureColumnWidth(column) }}
       columns={column}
     />
   );
