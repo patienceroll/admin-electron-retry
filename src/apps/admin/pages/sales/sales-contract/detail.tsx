@@ -44,6 +44,7 @@ import getApproval from "src/b-hooks/get-approval";
 import useRenderNames from "src/b-hooks/use-render-names";
 import { salesContractDetailRenderConfig } from "src/apps/admin/api/sales-contract-detail";
 import ProjectIntroduction from "src/b-components/project-introduction";
+import ClientIntroduction from "src/b-components/client-introduction";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -114,7 +115,6 @@ function Detail(props: StyledWrapComponents) {
             <Col flex="400px">
               <InfoItem label="项目">
                 <span style={{ paddingLeft: theme.padding }}>
-                  {/*{detail.project?.name_show} &nbsp;*/}
                   <ProjectIntroduction id={detail.project_id}>
                     <span style={{ color: theme.colorLink, cursor: "pointer" }}>
                       {detail.project?.name_show}
@@ -124,7 +124,15 @@ function Detail(props: StyledWrapComponents) {
               </InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="客户"> {detail.client?.name_show}</InfoItem>
+              <InfoItem label="客户">
+                <span style={{ paddingLeft: theme.padding }}>
+                  <ClientIntroduction id={detail.client_id}>
+                    <span style={{ color: theme.colorLink, cursor: "pointer" }}>
+                      {detail.client?.name_show}
+                    </span>
+                  </ClientIntroduction>
+                </span>
+              </InfoItem>
             </Col>
             <Col flex="400px">
               <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
@@ -300,7 +308,7 @@ function Detail(props: StyledWrapComponents) {
 
       {detail && (
         <FloatButton.Group shape="square">
-          {detail.btn_power.is_submit  === 1 && (
+          {detail.btn_power.is_submit === 1 && (
             <FloatButton
               tooltip="提审"
               icon={<Icon icon={SubmitSvg} />}
@@ -319,7 +327,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_approve  === 1&& (
+          {detail.btn_power.is_approve === 1 && (
             <FloatButton
               tooltip="审批"
               icon={<Icon icon={ApprovalSvg} />}
@@ -353,7 +361,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_suspend  === 1&& (
+          {detail.btn_power.is_suspend === 1 && (
             <FloatButton
               tooltip="中止"
               icon={<Icon icon={StopSvg} fill={theme.colorError} />}
@@ -372,7 +380,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_end  === 1 && (
+          {detail.btn_power.is_end === 1 && (
             <FloatButton
               tooltip="完结"
               icon={<Icon icon={FinishSvg} />}
