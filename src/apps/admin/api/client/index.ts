@@ -73,7 +73,7 @@ export function getClientOption(params: {
  * @param params
  */
 export function getClientIntroduction(params: { id: Client["id"] }) {
-  return fetch.GET<Project>(fetch.base(`/api/client/introduction`), params);
+  return fetch.GET<ClientIntro>(fetch.base(`/api/client/introduction`), params);
 }
 
 /**

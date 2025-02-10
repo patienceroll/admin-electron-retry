@@ -214,6 +214,13 @@ type Client = {
       }[]
     | null;
 };
+
+
+type ClientIntro = Client & {
+  file: BusinessFile[]
+}
+
+
 /** 新增客户后返回的数据 */
 type ClientAddResponse = Pick<
   Client,

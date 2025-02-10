@@ -11,6 +11,7 @@ import useWather from "src/hooks/use-wather";
 
 import { getClientIntroduction } from "src/apps/admin/api/client";
 import InfoItem from "src/framework/component/info-item";
+import images from "src/assets/images";
 
 function ClientIntroduction(
   props: StyledWrapComponents<PropsWithChildren<{ id: Client["id"] }>>,
@@ -20,7 +21,7 @@ function ClientIntroduction(
 
   const [open] = useWather();
 
-  const [intro, setIntro] = useState<Client>();
+  const [intro, setIntro] = useState<ClientIntro>();
 
   const getIntro = useCallback(() => {
     getClientIntroduction({ id }).then((res) => {
@@ -51,14 +52,17 @@ function ClientIntroduction(
                 speed={1000}
                 style={{ width: "100%" }}
               >
-                {intro?.file.map((item) => (
-                  <Image
-                    key={item.file_id}
-                    height={200}
-                    width="100%"
-                    src={item.full_path}
-                  />
-                ))}
+                {intro?.file && intro.file.length === 0 && <Image
+                  height={200}
+                  width="100%"
+                  src={images.emptyImage}
+                />}
+                {intro?.file.map(item => <Image
+                  key={item.file_id}
+                  height={200}
+                  width="100%"
+                  src={item.full_path}
+                />)}
               </Carousel>
             </Col>
             <Col flex={1}>
