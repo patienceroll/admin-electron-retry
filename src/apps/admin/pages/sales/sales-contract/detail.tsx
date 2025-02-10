@@ -51,7 +51,7 @@ function Detail(props: StyledWrapComponents) {
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
-    }
+    },
   );
 
   const getDetail = useCallback(
@@ -60,7 +60,7 @@ function Detail(props: StyledWrapComponents) {
         setDetail(res.data);
       });
     },
-    [id]
+    [id],
   );
 
   useEffect(() => {
@@ -97,7 +97,16 @@ function Detail(props: StyledWrapComponents) {
             <InfoItem label="项目"> {detail.project?.name_show}</InfoItem>
           </Col>
           <Col flex="400px">
-            <InfoItem label="客户"> {detail.client?.name}</InfoItem>
+            <InfoItem label="客户"> {detail.client?.name_show}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="签约日期">{detail.sign_date}</InfoItem>
+          </Col>
+          <Col flex="400px">
+            <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="金额">{new Money(detail.amount).toCNY()}</InfoItem>
@@ -110,15 +119,6 @@ function Detail(props: StyledWrapComponents) {
           </Col>
           <Col flex="400px">
             <InfoItem label="质保金比例">{`${detail.quality_ratio}%`}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="签约日期">{detail.sign_date}</InfoItem>
-          </Col>
-          <Col flex="400px">
-            <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
           </Col>
           <Divider />
           <Col flex="400px">
@@ -142,11 +142,18 @@ function Detail(props: StyledWrapComponents) {
           <Divider />
 
           <Col flex="100%">
-            <InfoItem label="结算方式">{detail.settle_type}</InfoItem>
+            <InfoItem
+              label="结算方式"
+              contentStyle={{ whiteSpace: "pre-wrap" }}
+            >
+              {detail.settle_type}
+            </InfoItem>
           </Col>
           <Divider />
           <Col flex="100%">
-            <InfoItem label="备注">{detail.remark}</InfoItem>
+            <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
+              {detail.remark}
+            </InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>

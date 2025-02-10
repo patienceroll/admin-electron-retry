@@ -12,7 +12,7 @@ export default function (
   props: Pick<SalesContract, "id"> & {
     attrCoumn: ProColumns<any>[];
     unitColumn: ProColumns<any>[];
-  }
+  },
 ) {
   const { id, attrCoumn, unitColumn } = props;
   const theme = useTheme();
@@ -32,10 +32,10 @@ export default function (
       dataIndex: "standard",
     },
     ...unitColumn,
-    {
-      title: "数量",
-      dataIndex: "num",
-    },
+    // {
+    //   title: "数量",
+    //   dataIndex: "num",
+    // },
     {
       title: "金额",
       dataIndex: "amount",
@@ -71,19 +71,19 @@ export default function (
             {column.map((col, index) => (
               <Table.Summary.Cell index={index}>
                 {index === 0 && "合计"}
-                {col.dataIndex === "num" &&
-                  data.reduce(
-                    (pre, current) =>
-                      new Decimal(pre).add(current.num || 0).toNumber(),
-                    0
-                  )}
+                {/*{col.dataIndex === "num" &&*/}
+                {/*  data.reduce(*/}
+                {/*    (pre, current) =>*/}
+                {/*      new Decimal(pre).add(current.num || 0).toNumber(),*/}
+                {/*    0*/}
+                {/*  )}*/}
                 {col.dataIndex === "amount" &&
                   new Money(
                     data.reduce(
                       (pre, current) =>
                         new Decimal(pre).add(current.amount || 0).toNumber(),
-                      0
-                    )
+                      0,
+                    ),
                   ).toCNY()}
               </Table.Summary.Cell>
             ))}
