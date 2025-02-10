@@ -11,6 +11,7 @@ import useWather from "src/hooks/use-wather";
 
 import { getProjectIntroduction } from "src/apps/admin/api/project";
 import InfoItem from "src/framework/component/info-item";
+import images from "src/assets/images";
 
 function ProjectIntroduction(
   props: StyledWrapComponents<PropsWithChildren<{ id: Project["id"] }>>,
@@ -51,6 +52,11 @@ function ProjectIntroduction(
                 speed={1000}
                 style={{ width: "100%" }}
               >
+                {intro?.file && intro.file.length === 0 && <Image
+                  height={200}
+                  width="100%"
+                  src={images.emptyImage}
+                />}
                 {intro?.file.map(item => <Image
                   key={item.file_id}
                   height={200}
