@@ -51,7 +51,7 @@ function Detail(props: StyledWrapComponents) {
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
-    },
+    }
   );
 
   const getDetail = useCallback(
@@ -60,7 +60,7 @@ function Detail(props: StyledWrapComponents) {
         setDetail(res.data);
       });
     },
-    [id],
+    [id]
   );
 
   useEffect(() => {
@@ -120,7 +120,7 @@ function Detail(props: StyledWrapComponents) {
           <Col flex="400px">
             <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
           </Col>
-          <Divider style={{ margin: "6px 0" }} />
+          <Divider />
           <Col flex="400px">
             <InfoItem label="甲方负责人">
               {detail.client_contact?.name}
@@ -139,14 +139,21 @@ function Detail(props: StyledWrapComponents) {
               {detail.settle_staff?.name}
             </InfoItem>
           </Col>
-          <Divider style={{ margin: "6px 0" }} />
+          <Divider />
 
           <Col flex="100%">
-            <InfoItem label="结算方式">{detail.settle_type}</InfoItem>
+            <InfoItem
+              label="结算方式"
+              contentStyle={{ whiteSpace: "pre-wrap" }}
+            >
+              {detail.settle_type}
+            </InfoItem>
           </Col>
-          <Divider style={{ margin: "6px 0" }} />
+          <Divider />
           <Col flex="100%">
-            <InfoItem label="备注">{detail.remark}</InfoItem>
+            <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
+              {detail.remark}
+            </InfoItem>
           </Col>
           <Col flex="400px">
             <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>

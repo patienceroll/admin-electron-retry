@@ -6,10 +6,12 @@ function InfoItem(
     StyledWrapComponents<{
       label: React.ReactNode;
       labelWidth?: React.CSSProperties["width"];
+      contentClass?: string;
+      contentStyle?: React.CSSProperties;
     }>
   >
 ) {
-  const { className, label, children, labelWidth = 100 } = props;
+  const { className, label, children, labelWidth = 100, contentStyle } = props;
   return (
     <div className={className}>
       {isValidElement(label) ? (
@@ -22,7 +24,12 @@ function InfoItem(
       {isValidElement(children) ? (
         children
       ) : (
-        <span className="children">{children}</span>
+        <span
+          className={`content ${props.contentClass || ""}`}
+          style={contentStyle}
+        >
+          {children}
+        </span>
       )}
     </div>
   );
@@ -37,7 +44,7 @@ export default styled(InfoItem)`
     flex-shrink: 0;
   }
 
-  .children {
+  .content {
     flex: 1;
     color: ${(props) => props.theme.colorText};
     padding-left: ${(props) => props.theme.padding}px;
