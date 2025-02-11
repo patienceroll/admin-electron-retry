@@ -349,6 +349,8 @@ type SalesContract = {
 };
 
 type SalesContractDetail = {
+  client_contact?: { name: string; phone: string };
+  settle_client_contact?: { name: string; phone: string };
   file: Record<BusinessFileIdentify, BusinessFile[] | undefined>;
 
   /** 主键id */
