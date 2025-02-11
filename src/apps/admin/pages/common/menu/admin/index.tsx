@@ -170,7 +170,7 @@ function Admin() {
       <Permission.default ref={permission} />
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新建菜单"
+          description="新建菜单"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(function () {

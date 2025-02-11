@@ -285,7 +285,7 @@ function Client() {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新建客户"
+          description="新建客户"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             create.current?.create().then((result) => {
@@ -312,7 +312,7 @@ function Client() {
         {select.length !== 0 && (
           <FloatButton
             icon={<Icon icon={FollowSvg} />}
-            tooltip="批量跟进"
+            description="批量跟进"
             onClick={function () {
               follow.current?.follow(select).then(() => {
                 contextedMessage.message?.success("成功提交");
@@ -323,7 +323,7 @@ function Client() {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               clientExport(

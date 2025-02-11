@@ -343,7 +343,7 @@ function InStock() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("export") && (
           <FloatButton
-            tooltip="新建合同"
+            description="新建合同"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {}}
           />
@@ -352,7 +352,7 @@ function InStock() {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               inStockExport(

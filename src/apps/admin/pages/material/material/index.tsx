@@ -322,7 +322,7 @@ function Materail(props: StyledWrapComponents) {
       </Row>
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新建物资"
+          description="新建物资"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             materailCreate.current?.create().then((res) => {
@@ -332,7 +332,7 @@ function Materail(props: StyledWrapComponents) {
           }}
         />
         <FloatButton
-          tooltip="新建分类"
+          description="新建分类"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             classifyModify.current?.create().then(() => {
@@ -341,7 +341,7 @@ function Materail(props: StyledWrapComponents) {
           }}
         />
         <FloatButton
-          tooltip="维护属性"
+          description="维护属性"
           icon={<Icon icon={FixAttrSet} />}
           onClick={() => {
             attrSet.current?.set();
@@ -350,7 +350,7 @@ function Materail(props: StyledWrapComponents) {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               materialExport(

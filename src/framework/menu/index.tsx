@@ -216,7 +216,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
       <FloatButton
         shape="square"
         type="primary"
-        tooltip="系统设置"
+        description="系统设置"
         onClick={() => {
           systemConfig.current?.open();
         }}

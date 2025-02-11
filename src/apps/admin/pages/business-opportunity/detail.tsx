@@ -396,7 +396,7 @@ function Detail(props: StyledWrapComponents) {
         <FloatButton.Group shape="square">
           {detail.btn_power.is_approve === 1 && (
             <FloatButton
-              tooltip="审批"
+              description="审批"
               icon={<Icon icon={ApprovalSvg} />}
               onClick={() => {
                 getApproval()
@@ -412,7 +412,7 @@ function Detail(props: StyledWrapComponents) {
 
           {detail.btn_power.is_submit  === 1 && (
             <FloatButton
-              tooltip="立项"
+              description="立项"
               icon={<Icon icon={LixiangSvg} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -432,7 +432,7 @@ function Detail(props: StyledWrapComponents) {
 
           {detail.btn_power.is_invalid  === 1 && (
             <FloatButton
-              tooltip="作废"
+              description="作废"
               icon={<Icon icon={ZuofeiSvg} fill={theme.colorError} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -451,7 +451,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_cancel_operate  === 1 && (
             <FloatButton
-              tooltip="撤销"
+              description="撤销"
               icon={<Icon icon={CancelSvg} fill={theme.colorWarning} />}
               onClick={() => {
                 contextedModal.modal?.confirm({

@@ -249,7 +249,7 @@ function Edit(props: StyledWrapComponents) {
       {detail && (
         <FloatButton
           icon={<Icon icon={SaveSvg} />}
-          tooltip="保存"
+          description="保存"
           shape="square"
           style={{ insetInlineEnd: 24 }}
           onClick={submit}

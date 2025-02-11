@@ -410,7 +410,7 @@ function SalesReturn() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("edit") && (
           <FloatButton
-            tooltip="新建退货单"
+            description="新建退货单"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {
               create.current?.create().then((res) => {
@@ -424,7 +424,7 @@ function SalesReturn() {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               salesReturnExport(

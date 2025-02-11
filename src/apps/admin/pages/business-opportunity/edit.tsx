@@ -323,12 +323,12 @@ function Edit(props: StyledWrapComponents) {
         <FloatButton.Group shape="square">
           <FloatButton
             icon={<Icon icon={SaveSvg} />}
-            // description="保存"
+            description="保存"
             onClick={submit}
           />
           <FloatButton
             icon={<Icon icon={DeleteSvg} fill={theme.colorError} />}
-            // description="删除"
+            description="删除"
             onClick={function () {
               contextedModal.modal?.confirm({
                 title: "删除",

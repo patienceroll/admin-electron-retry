@@ -186,7 +186,7 @@ function ClientContact() {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新建联系人"
+          description="新建联系人"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             modify.current?.create().then(() => {
@@ -199,7 +199,7 @@ function ClientContact() {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               clientContactExport(

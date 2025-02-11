@@ -367,7 +367,7 @@ function BusinessOpportunity() {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新建机会"
+          description="新建机会"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             create.current?.create().then((result) => {
@@ -395,7 +395,7 @@ function BusinessOpportunity() {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               businessOpportunityExport(

@@ -171,7 +171,7 @@ function Department() {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新增部门"
+          description="新增部门"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(() => {

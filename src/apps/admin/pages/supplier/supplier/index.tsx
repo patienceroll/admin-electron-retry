@@ -171,7 +171,7 @@ function Supplier() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("edit") && (
           <FloatButton
-            tooltip="新建供应商"
+            description="新建供应商"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {
               //   create.current?.create().then((result) => {
@@ -185,7 +185,7 @@ function Supplier() {
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
-            tooltip="导出"
+            description="导出"
             onClick={function () {
               contextedMessage.message?.info("正在导出...");
               supplierExport(

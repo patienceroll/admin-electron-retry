@@ -141,7 +141,7 @@ const Role = function (props: StyledWrapComponents) {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新增角色"
+          description="新增角色"
           icon={<Icon  icon={AddSvg} />}
           onClick={() => {
             ref.current?.create().then(() => {
@@ -151,7 +151,7 @@ const Role = function (props: StyledWrapComponents) {
           }}
         />
         <FloatButton
-          tooltip="刷新"
+          description="刷新"
           onClick={() => {
             table.reload();
           }}

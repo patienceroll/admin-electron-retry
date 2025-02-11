@@ -285,7 +285,7 @@ function Detail(props: StyledWrapComponents) {
         <FloatButton.Group shape="square">
           {detail.btn_power.is_approve === 1 && (
             <FloatButton
-              tooltip="审批"
+              description="审批"
               icon={<Icon icon={ApprovalSvg} />}
               onClick={() => {
                 getApproval()
@@ -300,7 +300,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_submit && (
             <FloatButton
-              tooltip="提审"
+              description="提审"
               icon={<Icon icon={SubmitSvg} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -319,7 +319,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_cancel === 1  && (
             <FloatButton
-              tooltip="放弃"
+              description="放弃"
               icon={<Icon icon={GiveUpSvg} fill={theme.colorWarning} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -338,7 +338,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_suspend === 1  && (
             <FloatButton
-              tooltip="中止"
+              description="中止"
               icon={<Icon icon={StopSvg} fill={theme.colorError} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -357,7 +357,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_invalid === 1  && (
             <FloatButton
-              tooltip="作废"
+              description="作废"
               icon={<Icon icon={StopSvg} fill={theme.colorError} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -376,7 +376,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_end === 1  && (
             <FloatButton
-              tooltip="完结"
+              description="完结"
               icon={<Icon icon={FinishSvg} />}
               onClick={() => {
                 contextedModal.modal?.confirm({
@@ -395,7 +395,7 @@ function Detail(props: StyledWrapComponents) {
           )}
           {detail.btn_power.is_cancel_operate === 1  && (
             <FloatButton
-              tooltip="撤销"
+              description="撤销"
               icon={<Icon icon={FinishSvg} fill={theme.colorWarning} />}
               onClick={() => {
                 contextedModal.modal?.confirm({

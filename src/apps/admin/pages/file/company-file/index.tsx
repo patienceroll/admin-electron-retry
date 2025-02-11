@@ -248,7 +248,7 @@ function BusinessFile(props: StyledWrapComponents) {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          tooltip="新建文件夹"
+          description="新建文件夹"
           icon={<Icon  icon={AddSvg} />}
           onClick={() => {
             ref.current?.create(folder).then(() => {
@@ -259,7 +259,7 @@ function BusinessFile(props: StyledWrapComponents) {
         />
         {folder.current_dir && folder.current_dir.id !== 0 && (
           <FloatButton
-            tooltip="上传文件到当前目录"
+            description="上传文件到当前目录"
             icon={<Icon  icon={UploadSvg} />}
             onClick={() => {
               uploadRef.current
