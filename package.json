@@ -10,7 +10,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "tsc": "tsc --noEmit --pretty"
+    "tsc": "tsc . --noEmit --pretty"
   },
   "keywords": [],
   "author": "10791",

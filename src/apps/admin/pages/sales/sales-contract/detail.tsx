@@ -397,6 +397,7 @@ function Detail(props: StyledWrapComponents) {
                   },
                 });
               }}
+              description="成功完结成功完结"
             />
           )}
           {detail.btn_power.is_cancel_operate === 1 && (

@@ -63,6 +63,12 @@ h1,h2,h3,h4,h5,h6 {
   row-gap: ${(props) => props.theme.padding}px;
 }
 
+.ant-float-btn-square {
+  .ant-float-btn-body {
+    width: unset!important;
+    height: unset!important;;
+  }
+}
 
 
 `;

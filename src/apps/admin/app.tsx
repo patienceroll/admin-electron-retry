@@ -97,6 +97,9 @@ export default function () {
           Divider: {
             margin: designToken.paddingSM,
             marginLG: designToken.padding
+          },
+          FloatButton: {
+          
           }
         },
       })}
