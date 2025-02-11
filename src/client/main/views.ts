@@ -24,14 +24,36 @@ export default class Views {
     details: Electron.HandlerDetails,
     preload: string
   ): Electron.WindowOpenHandlerResponse {
-    const primaryDisplay = screen.getPrimaryDisplay();
-    const { workAreaSize } = primaryDisplay;
+    // 获取当前显示器信息
+    const cursorPoint = screen.getCursorScreenPoint();
+    const currentDisplay = screen.getDisplayNearestPoint(cursorPoint);
 
+    const height = currentDisplay.workAreaSize.height - 100;
+    const width = currentDisplay.workAreaSize.width - 100;
+    const x =
+      currentDisplay.bounds.x + (currentDisplay.bounds.width - width) / 2;
+    const y =
+      currentDisplay.bounds.y + (currentDisplay.bounds.height - height) / 2;
     return {
       action: "allow",
       createWindow(options: Electron.BaseWindowConstructorOptions) {
-        const window = new BrowserWindow(options);
-
+        const newOptions = Object.assign({}, options, {
+          width,
+          height,
+          x,
+          y,
+          minHeight: 800,
+          minWidth: 1200,
+          title: details.frameName,
+          autoHideMenuBar: true,
+          titleBarStyle: "default",
+          backgroundColor: nativeTheme.shouldUseDarkColors ? "#000" : "#fff",
+          // alwaysOnTop: true,
+          webPreferences: {
+            preload: preload,
+          },
+        });
+        const window = new BrowserWindow(newOptions);
         const isFileProtocol = getProtocolType(details.url) === "file";
         if (isFileProtocol) {
           const [url, path] = details.url.split("#");
@@ -51,21 +73,6 @@ export default class Views {
           window.webContents.openDevTools();
         }
         return window.webContents;
-      },
-      overrideBrowserWindowOptions: {
-        height: workAreaSize.height - 100,
-        width: workAreaSize.width - 100,
-        minHeight: 800,
-        minWidth: 1200,
-        title: details.frameName,
-        autoHideMenuBar: true,
-        titleBarStyle: "default",
-        backgroundColor: nativeTheme.shouldUseDarkColors ? "#000" : "#fff",
-        // alwaysOnTop: true,
-        center: true,
-        webPreferences: {
-          preload: preload,
-        },
       },
     };
   }

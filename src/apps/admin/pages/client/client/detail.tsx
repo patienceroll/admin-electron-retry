@@ -67,7 +67,7 @@ function Detail(props: StyledWrapComponents) {
     saleReturn.reload();
   }, []);
 
-  const column = tableColumn<NonNullable<SalesContract["detail"]>[number]>([
+  const column = tableColumn<NonNullable<ClientContact["detail"]>[number]>([
     {
       title: "物资",
       dataIndex: "material",
