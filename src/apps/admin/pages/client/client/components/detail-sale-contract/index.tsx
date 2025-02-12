@@ -14,7 +14,7 @@ export default function (props: { id: Client["id"] }) {
 
   const saleContact = useSearchTable(getSalesContractList);
 
-  const column = tableColumn<NonNullable<ClientContact["detail"]>[number]>([
+  const column = tableColumn<NonNullable<SalesContract["detail"]>[number]>([
     {
       title: "物资",
       dataIndex: "material",

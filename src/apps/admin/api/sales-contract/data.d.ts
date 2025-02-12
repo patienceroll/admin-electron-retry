@@ -346,6 +346,402 @@ type SalesContract = {
         full_path: string;
       }[]
     | null;
+  /**
+   *  明细信息
+   */
+  detail:
+    | {
+        /** 主键id */
+        id: number;
+
+        /** 销售合同id */
+        sales_contract_id: number;
+
+        /** 产品ID */
+        material_id: string;
+
+        /** 物料SKU */
+        material_sku_id: string;
+
+        /** 属性快照 */
+        attr_snapshoot: Record<string, string>;
+
+        /** 数量 */
+        num: number;
+
+        /** 单位 */
+        unit: string;
+
+        /** 价格 */
+        price: string;
+
+        /** 金额 */
+        amount: string;
+
+        /** 备注 */
+        remark: string;
+
+        /**
+         *  物料信息
+         */
+        material: {
+          /** ID */
+          id: string;
+
+          /** 物料分类id */
+          material_classify_id: number;
+
+          /** 名称 */
+          name: string;
+
+          /** 编号 */
+          code: string;
+
+          /** 品牌 */
+          brand: string;
+
+          /** 型号 */
+          model: string;
+
+          /** 单位 */
+          unit: string;
+
+          /** 照片 */
+          picture: string;
+
+          /** 默认仓库 */
+          warehouse_id: number;
+
+          /** 扩展字段 1 */
+          picture_path: string;
+
+          /**
+           *  类别
+           */
+          classify: {
+            /** 主键id */
+            id: number;
+
+            /** 名称 */
+            name: string;
+
+            /** 编号 */
+            code: string;
+          } | null;
+        } | null;
+
+        /**
+         *  物料属性信息
+         */
+        material_sku: {
+          /** 主键id */
+          id: number;
+
+          /** 名称 */
+          name: string;
+
+          /** 编号 */
+          code: string;
+
+          /** 属性明细快照 */
+          attr_snapshoot: Record<string, string>;
+
+          /** 键值1 */
+          field_1: string;
+
+          /** 键值2 */
+          field_2: string;
+
+          /** 键值3 */
+          field_3: string;
+
+          /** 键值4 */
+          field_4: string;
+
+          /** 键值5 */
+          field_5: string;
+
+          /** 键值6 */
+          field_6: string;
+
+          /** 键值7 */
+          field_7: string;
+
+          /** 键值8 */
+          field_8: string;
+
+          /** 键值9 */
+          field_9: string;
+
+          /** 键值10 */
+          field_10: string;
+
+          /** 键值11 */
+          field_11: string;
+
+          /** 键值12 */
+          field_12: string;
+
+          /** 键值13 */
+          field_13: string;
+
+          /** 键值14 */
+          field_14: string;
+
+          /** 键值15 */
+          field_15: string;
+
+          /** 键值16 */
+          field_16: string;
+
+          /** 键值17 */
+          field_17: string;
+
+          /** 键值18 */
+          field_18: string;
+
+          /** 键值19 */
+          field_19: string;
+
+          /** 键值20 */
+          field_20: string;
+
+          /** 键值21 */
+          field_21: string;
+
+          /** 键值22 */
+          field_22: string;
+
+          /** 键值23 */
+          field_23: string;
+
+          /** 键值24 */
+          field_24: string;
+
+          /** 键值25 */
+          field_25: string;
+
+          /** 键值26 */
+          field_26: string;
+
+          /** 键值27 */
+          field_27: string;
+
+          /** 键值28 */
+          field_28: string;
+
+          /** 键值29 */
+          field_29: string;
+
+          /** 键值30 */
+          field_30: string;
+
+          /** 键值31 */
+          field_31: string;
+
+          /** 键值32 */
+          field_32: string;
+
+          /** 键值33 */
+          field_33: string;
+
+          /** 键值34 */
+          field_34: string;
+
+          /** 键值35 */
+          field_35: string;
+
+          /** 键值36 */
+          field_36: string;
+
+          /** 键值37 */
+          field_37: string;
+
+          /** 键值38 */
+          field_38: string;
+
+          /** 键值39 */
+          field_39: string;
+
+          /** 键值40 */
+          field_40: string;
+
+          /** 扩展字段 1 */
+          picture_path: string;
+        } | null;
+
+        /**
+         *  lineAttr
+         */
+        line_attr: {
+          /** 主键id */
+          id: number;
+
+          /** 表 */
+          table: string;
+
+          /** 表id */
+          table_id: number;
+
+          /** 键值1 */
+          field_1: string;
+
+          /** 键值2 */
+          field_2: string;
+
+          /** 键值3 */
+          field_3: string;
+
+          /** 键值4 */
+          field_4: string;
+
+          /** 键值5 */
+          field_5: string;
+
+          /** 键值6 */
+          field_6: string;
+
+          /** 键值7 */
+          field_7: string;
+
+          /** 键值8 */
+          field_8: string;
+
+          /** 键值9 */
+          field_9: string;
+
+          /** 键值10 */
+          field_10: string;
+
+          /** 键值11 */
+          field_11: string;
+
+          /** 键值12 */
+          field_12: string;
+
+          /** 键值13 */
+          field_13: string;
+
+          /** 键值14 */
+          field_14: string;
+
+          /** 键值15 */
+          field_15: string;
+
+          /** 键值16 */
+          field_16: string;
+
+          /** 键值17 */
+          field_17: string;
+
+          /** 键值18 */
+          field_18: string;
+
+          /** 键值19 */
+          field_19: string;
+
+          /** 键值20 */
+          field_20: string;
+
+          /** 键值21 */
+          field_21: string;
+
+          /** 键值22 */
+          field_22: string;
+
+          /** 键值23 */
+          field_23: string;
+
+          /** 键值24 */
+          field_24: string;
+
+          /** 键值25 */
+          field_25: string;
+
+          /** 键值26 */
+          field_26: string;
+
+          /** 键值27 */
+          field_27: string;
+
+          /** 键值28 */
+          field_28: string;
+
+          /** 键值29 */
+          field_29: string;
+
+          /** 键值30 */
+          field_30: string;
+
+          /** 键值31 */
+          field_31: string;
+
+          /** 键值32 */
+          field_32: string;
+
+          /** 键值33 */
+          field_33: string;
+
+          /** 键值34 */
+          field_34: string;
+
+          /** 键值35 */
+          field_35: string;
+
+          /** 键值36 */
+          field_36: string;
+
+          /** 键值37 */
+          field_37: string;
+
+          /** 键值38 */
+          field_38: string;
+
+          /** 键值39 */
+          field_39: string;
+
+          /** 键值40 */
+          field_40: string;
+        } | null;
+
+        /**
+         *  组合单位信息
+         */
+        line_unit:
+          | {
+              /** 主键id */
+              id: number;
+
+              /** 表 */
+              table: string;
+
+              /** 表id */
+              table_id: number;
+
+              /** 类型 */
+              type: number;
+
+              /** 物料单位id */
+              material_unit_id: number;
+
+              /** 数量 */
+              num: number;
+
+              /** 价格 */
+              price: string;
+
+              /** 单位 */
+              unit: string;
+
+              /** 单位别名 */
+              alias: string;
+
+              /** 是否执行单位;0:否,1:是 */
+              is_execute: number;
+            }[]
+          | null;
+      }[]
+    | null;
 };
 
 type SalesContractDetail = {

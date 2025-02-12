@@ -13,7 +13,7 @@ export default function (props: { id: Client["id"] }) {
   const theme = useTheme();
   const saleReturn = useSearchTable(getSalesReturnList);
 
-  const column = tableColumn<NonNullable<ClientContact["detail"]>[number]>([
+  const column = tableColumn<NonNullable<SalesReturn["detail"]>[number]>([
     {
       title: "物资",
       dataIndex: "material",
