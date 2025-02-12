@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button, Descriptions, Drawer, Radio } from "antd";
+import { Button, Descriptions, Drawer, Radio, Space } from "antd";
 import styled from "styled-components";
 
 import useWather from "src/hooks/use-wather";
@@ -48,21 +48,26 @@ const SystemConfig = forwardRef<Ref>(function (props, ref) {
           </Radio.Group>
         </Descriptions.Item>
         <Descriptions.Item label="用户信息">
-          <Button
-            type="primary"
-            onClick={() => {
-              contextedModal.modal?.confirm({
-                title: "清除用户信息?",
-                content: "常用菜单等用户数据将会被清空,并且您需要重新登录。",
-                onOk() {
-                  window.preload.resetUserInfo();
-                  window.preload.login()
-                },
-              });
-            }}
-          >
-            清除用户信息
-          </Button>
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "清除用户信息?",
+                  content: "常用菜单等用户数据将会被清空,并且您需要重新登录。",
+                  onOk() {
+                    window.preload.resetUserInfo();
+                    window.preload.login();
+                  },
+                });
+              }}
+            >
+              清除用户信息
+            </Button>
+            <Button type="primary" onClick={window.preload.login}>
+              登录
+            </Button>
+          </Space>
         </Descriptions.Item>
       </Descriptions>
     </Drawer>
