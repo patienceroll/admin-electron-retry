@@ -12,6 +12,7 @@ class ThemeLocal {
 
   constructor() {
     this._local = new Local(this.key, ThemeLocal.defaultTheme);
+    this._local.store.colorPrimary = systemPreferences.getAccentColor()
     this._local.syncToFile();
   }
 

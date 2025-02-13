@@ -171,7 +171,7 @@ function Supplier() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("edit") && (
           <FloatButton
-            description="新建供应商"
+            description="供应商"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {
               //   create.current?.create().then((result) => {
