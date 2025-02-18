@@ -4,13 +4,13 @@ import ProTable, { ProColumns } from "@ant-design/pro-table";
 import { useTheme } from "styled-components";
 import Decimal from "decimal.js";
 
-import { getSalesContractDetailList } from "src/apps/admin/api/sales-contract-detail";
+import { getSalesOrderDetailList } from "src/apps/admin/api/sales-order-detail";
 import useSearchTable from "src/hooks/use-search-table";
 import Money from "src/util/money";
 import useColumnState from "src/hooks/use-column-state";
 
 export default function (
-  props: Pick<SalesContract, "id"> & {
+  props: Pick<SalesOrder, "id"> & {
     attrCoumn: ProColumns<any>[];
     unitColumn: ProColumns<any>[];
   },
@@ -18,7 +18,7 @@ export default function (
   const { id, attrCoumn, unitColumn } = props;
   const theme = useTheme();
 
-  const table = useSearchTable(getSalesContractDetailList);
+  const table = useSearchTable(getSalesOrderDetailList);
 
   const column = table.column([
     {
@@ -31,6 +31,10 @@ export default function (
     {
       title: "执行标准",
       dataIndex: "standard",
+    },
+    {
+      title: "需求日期",
+      dataIndex: "demand_date",
     },
     ...unitColumn,
     {
@@ -46,14 +50,11 @@ export default function (
   ]);
 
   useEffect(() => {
-    table.extraParams.current.sales_contract_id = id;
+    table.extraParams.current.sales_order_id = id;
     table.reload();
   }, []);
 
-  const columnState = useColumnState(
-    "salesContractDetail_ContractDetail",
-    column,
-  );
+  const columnState = useColumnState("salesOrderDetail_OrderDetail", column);
 
   return (
     <ProTable

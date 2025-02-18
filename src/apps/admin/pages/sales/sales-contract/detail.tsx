@@ -259,53 +259,6 @@ function Detail(props: StyledWrapComponents) {
         recordApi={getOperateRecord}
       />
 
-      {/* <Title style={{ marginTop: theme.margin }} id="销售订单">
-        销售订单
-      </Title>
-      <DetailSaleOrder id={id} attrCoumn={attrColumn} unitColumn={unitColumn} /> */}
-
-      {/* <Title style={{ marginTop: theme.margin }} id="销售发货">
-        销售发货
-      </Title>
-      <DetailSaleDeliver
-        id={id}
-        attrCoumn={attrColumn}
-        unitColumn={unitColumn}
-      />
-
-      <Title style={{ marginTop: theme.margin }} id="销售退货">
-        销售退货
-      </Title>
-      <DetailSaleReturn
-        id={id}
-        attrCoumn={attrColumn}
-        unitColumn={unitColumn}
-      /> */}
-
-      {/*<Title style={{ marginTop: theme.margin }} id="系统信息">*/}
-      {/*  系统信息*/}
-      {/*</Title>*/}
-      {/*{detail && (*/}
-      {/*  <Row*/}
-      {/*    style={{ marginTop: theme.margin }}*/}
-      {/*    gutter={[theme.padding, theme.padding]}*/}
-      {/*  >*/}
-      {/*    <Col flex="300px">*/}
-      {/*      <InfoItem label="创建人">{detail.created_user?.name}</InfoItem>*/}
-      {/*    </Col>*/}
-      {/*    <Col flex="300px">*/}
-      {/*      <InfoItem label="创建时间">*/}
-      {/*        {detail.created_user?.created_at}*/}
-      {/*      </InfoItem>*/}
-      {/*    </Col>*/}
-      {/*    <Col flex="300px">*/}
-      {/*      <InfoItem label="更新时间">*/}
-      {/*        {detail.created_user?.updated_at}*/}
-      {/*      </InfoItem>*/}
-      {/*    </Col>*/}
-      {/*  </Row>*/}
-      {/*)}*/}
-
       {detail && (
         <FloatButton.Group shape="square">
           {detail.btn_power.is_submit === 1 && (
@@ -425,21 +378,13 @@ function Detail(props: StyledWrapComponents) {
         className="anchor"
         replace
         offsetTop={theme.padding}
-        items={[
-          "基本信息",
-          "产品明细",
-          "附件信息",
-          "审批记录",
-          "操作记录",
-          // "系统信息",
-          // "销售订单",
-          // "销售发货",
-          // "销售退货",
-        ].map((item) => ({
-          key: item,
-          title: item,
-          href: `#${item}`,
-        }))}
+        items={["基本信息", "产品明细", "附件信息", "审批记录", "操作记录"].map(
+          (item) => ({
+            key: item,
+            title: item,
+            href: `#${item}`,
+          }),
+        )}
       />
     </PageWrapper>
   );

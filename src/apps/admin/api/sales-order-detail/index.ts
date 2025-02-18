@@ -1,15 +1,16 @@
 import fetch from "src/util/fetch";
+
 /**
  * 销售订单明细-列表
  */
 export function getSalesOrderDetailList(
   params: ListParam & {
     sales_order_id?: SalesOrder["id"];
-  }
+  },
 ) {
   return fetch.GET<List<SalesOrderDetail>>(
     fetch.base(`/api/sales-order-detail/list`),
-    params
+    params,
   );
 }
 
@@ -31,14 +32,14 @@ export function salesOrderDetailRenderConfig(params: {
 }) {
   return fetch.GET<RenderConfig>(
     fetch.base(`/api/sales-contract-detail/render`),
-    params
+    params,
   );
 }
 
 /**
  * 销售订单明细-render统计 */
 export function getSalesOrderDetailRenderTotal(
-  params: Parameters<typeof getSalesOrderDetailRender>[0]
+  params: Parameters<typeof getSalesOrderDetailRender>[0],
 ) {
   return fetch.GET<{
     data: {
@@ -122,7 +123,7 @@ export function salesOrderDetailUnitSet(params: {
 export function getProduceUnit(params: Pick<SalesOrderDetail, "id">) {
   return fetch.GET<Unit[]>(
     fetch.base(`/api/sales-order-detail/produce-unit`),
-    params
+    params,
   );
 }
 
@@ -151,7 +152,7 @@ export function setProduceUnit(params: {
 export function getPurchaseUnit(params: Pick<SalesOrderDetail, "id">) {
   return fetch.GET<Unit[]>(
     fetch.base(`/api/sales-order-detail/purchase-unit`),
-    params
+    params,
   );
 }
 
@@ -175,8 +176,6 @@ export function setPurchaseUnit(params: {
 }) {
   return fetch.POST(
     fetch.base(`/api/sales-order-detail/purchase-unit`),
-    params
+    params,
   );
 }
-
-

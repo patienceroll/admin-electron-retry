@@ -31,7 +31,7 @@ export default function (props: Pick<SalesContract, "id">) {
     salesContractDetailRenderConfig,
     {
       sales_contract_id: id,
-    }
+    },
   );
 
   const column = table.column([
@@ -108,7 +108,7 @@ export default function (props: Pick<SalesContract, "id">) {
 
   const columnState = useColumnState(
     "salesContractEdit_ContractDetail",
-    column
+    column,
   );
 
   return (
@@ -144,19 +144,13 @@ export default function (props: Pick<SalesContract, "id">) {
             {columnState.widthColumn.map((col, index) => (
               <Table.Summary.Cell index={index}>
                 {index === 0 && "合计"}
-                {col.dataIndex === "num" &&
-                  data.reduce(
-                    (pre, current) =>
-                      new Decimal(pre).add(current.num || 0).toNumber(),
-                    0
-                  )}
                 {col.dataIndex === "amount" &&
                   new Money(
                     data.reduce(
                       (pre, current) =>
                         new Decimal(pre).add(current.amount || 0).toNumber(),
-                      0
-                    )
+                      0,
+                    ),
                   ).toCNY()}
               </Table.Summary.Cell>
             ))}

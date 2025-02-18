@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -56,16 +65,49 @@ function SalesOrder() {
   const create = Create.createRef();
 
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14),
   );
   const { options, treeOptions } = useStaffTree();
 
   const column = table.column([
     {
       title: "订单号",
-      dataIndex: "code",
-      copyable: true,
+      dataIndex: "name",
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/sales/sales-order/detail?id=${record.id}`,
+              "销售订单详情 - " + record.code,
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesOrder["btn_power"]>,
+            ) {
+              if (
+                [
+                  "is_approve",
+                  "is_submit",
+                  "is_cancel",
+                  "is_suspend",
+                  "is_invalid",
+                  "is_end",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
     },
     {
       title: "标识",
@@ -205,7 +247,7 @@ function SalesOrder() {
   function Edit(id: SalesOrder["id"]) {
     const window = openWindow.openCurrentAppWindow(
       `/sales/sales-order/edit?id=${id}`,
-      "编辑销售订单"
+      "编辑销售订单",
     );
 
     function listener(event: MessageEvent<"success">) {
@@ -345,7 +387,10 @@ function SalesOrder() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -398,8 +443,8 @@ function SalesOrder() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });
