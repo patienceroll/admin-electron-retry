@@ -24,11 +24,11 @@ export function getSalesDeliverList(
     is_show_detail?: 0 | 1;
     project_id?: Project["id"];
     sales_contract_id?: SalesContract["id"];
-  }
+  },
 ) {
   return fetch.GET<List<SalesDeliver>>(
     fetch.base(`/api/sales-deliver/list`),
-    params
+    params,
   );
 }
 
@@ -45,7 +45,7 @@ export function getSalesDeliverOption(params: {
 }) {
   return fetch.GET<SalesDeliver[]>(
     fetch.base(`/api/sales-deliver/list`),
-    params
+    params,
   );
 }
 
@@ -55,7 +55,7 @@ export function getSalesDeliverOption(params: {
 export function getSalesDeliver(params: Pick<SalesDeliver, "id">) {
   return fetch.GET<SalesDeliver>(
     fetch.base(`/api/sales-deliver/detail`),
-    params
+    params,
   );
 }
 
@@ -65,7 +65,7 @@ export function getSalesDeliver(params: Pick<SalesDeliver, "id">) {
 export function addSalesDeliver(params: Pick<SalesOrder, "id">) {
   return fetch.POST<SalesDeliverAddResponse>(
     fetch.base(`/api/sales-deliver`),
-    params
+    params,
   );
 }
 
@@ -87,32 +87,8 @@ export function deleteSalesDeliver(params: Pick<SalesDeliver, "id">) {
  * 生成合同编号 */
 export const getSalesDeliverCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/sales-deliver/code")
+    fetch.base("/api/sales-deliver/code"),
   );
-};
-
-/**
- * 物资.弹窗 */
-export const getSalesDeliverMaterialSku = (
-  params: ListParam & {
-    id?: SalesDeliver["id"];
-    sales_order_id?: SalesDeliver["sales_order_id"];
-  }
-) => {
-  return fetch.GET<List<SalesDeliverMaterialSku>>(
-    fetch.base("/api/sales-deliver/inventory-material"),
-    params
-  );
-};
-
-/**
- * 物资.弹窗-保存
- */
-export const postSalesDeliverMaterialSku = (data: {
-  id: SalesDeliver["id"];
-  ids: SalesDeliverMaterialSku["id"][];
-}) => {
-  return fetch.POST(fetch.base("/api/sales-deliver/inventory-material"), data);
 };
 
 /** 销售发货单-发起审批 */
@@ -133,7 +109,7 @@ export function approval(params: {
 export function getApprovalRecord(params: Pick<SalesDeliver, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-deliver/approval-record`),
-    params
+    params,
   );
 }
 
@@ -160,6 +136,6 @@ export function salesDeliverExport(params: Record<string, any>) {
 export function getOperateRecord(params: Pick<SalesDeliver, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/sales-deliver/log`),
-    params
+    params,
   );
 }

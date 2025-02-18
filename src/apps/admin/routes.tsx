@@ -6,14 +6,14 @@ const Blank = lazy(() => import("src/framework/blank"));
 const UserInfo = lazy(() => import("./pages/user-info"));
 const OrganizationCompany = lazy(() => import("./pages/organization/company"));
 const OrganizationDepartment = lazy(
-  () => import("./pages/organization/department")
+  () => import("./pages/organization/department"),
 );
 const OrganizationStaff = lazy(() => import("./pages/organization/staff"));
 const OrganizationStaffCreate = lazy(
-  () => import("./pages/organization/staff/create")
+  () => import("./pages/organization/staff/create"),
 );
 const OrganizationStaffEdit = lazy(
-  () => import("./pages/organization/staff/edit")
+  () => import("./pages/organization/staff/edit"),
 );
 const OrganizationJob = lazy(() => import("./pages/organization/job"));
 const Page404 = lazy(() => import("src/framework/404"));
@@ -27,19 +27,19 @@ const CommonRoleEdit = lazy(() => import("./pages/common/role/detail"));
 const CommonMenu = lazy(() => import("./pages/common/menu"));
 const CommonMenuStaff = lazy(() => import("./pages/common/menu-staff"));
 const VisualizationArchitecture = lazy(
-  () => import("./pages/visualization/architecture")
+  () => import("./pages/visualization/architecture"),
 );
 const Client = lazy(() => import("./pages/client/client"));
-const ClientDetail = lazy(() => import("./pages/client/client/detail"));
+const ClientInfo = lazy(() => import("./pages/client/client/detail"));
 const ClientEdit = lazy(() => import("./pages/client/client/edit"));
 const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
-const BusinessOpportunityDetail = lazy(
-  () => import("./pages/business-opportunity/detail")
+const BusinessOpportunityInfo = lazy(
+  () => import("./pages/business-opportunity/detail"),
 );
 const BusinessOpportunityEdit = lazy(
-  () => import("./pages/business-opportunity/edit")
+  () => import("./pages/business-opportunity/edit"),
 );
 
 /**
@@ -47,22 +47,29 @@ const BusinessOpportunityEdit = lazy(
  */
 //销售合同
 const SalesContract = lazy(() => import("./pages/sales/sales-contract"));
-const SalesContractDetail = lazy(
-  () => import("./pages/sales/sales-contract/detail")
-);
 const SalesContractEdit = lazy(
-  () => import("./pages/sales/sales-contract/edit")
+  () => import("./pages/sales/sales-contract/edit"),
 );
+const SalesContractInfo = lazy(
+  () => import("./pages/sales/sales-contract/detail"),
+);
+
 //销售订单
 const SalesOrder = lazy(() => import("./pages/sales/sales-order"));
 const SalesOrderEdit = lazy(() => import("./pages/sales/sales-order/edit"));
-const SalesOrderDetail = lazy(() => import("./pages/sales/sales-order/detail"));
+const SalesOrderInfo = lazy(() => import("./pages/sales/sales-order/detail"));
 //销售发货
 const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
 const SalesDeliverEdit = lazy(() => import("./pages/sales/sales-deliver/edit"));
+const SalesDeliverInfo = lazy(
+  () => import("./pages/sales/sales-deliver/detail"),
+);
 //销售退货
 const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
 const SalesReturnEdit = lazy(() => import("./pages/sales/sales-return/edit"));
+// const SalesReturnDetail = lazy(
+//   () => import("./pages/sales/sales-return/detail"),
+// );
 
 /**
  * 采购管理模块
@@ -71,7 +78,7 @@ const SalesReturnEdit = lazy(() => import("./pages/sales/sales-return/edit"));
 const PurchaseApply = lazy(() => import("./pages/purchase/purchase-apply"));
 //采购合同
 const PurchaseContract = lazy(
-  () => import("./pages/purchase/purchase-contract")
+  () => import("./pages/purchase/purchase-contract"),
 );
 //采购订单
 const PurchaseOrder = lazy(() => import("./pages/purchase/purchase-order"));
@@ -108,7 +115,7 @@ const ProduceReturn = lazy(() => import("./pages/produce/produce-return"));
 
 const Project = lazy(() => import("./pages/project/project"));
 const ProjectEdit = lazy(() => import("./pages/project/project/edit"));
-const ProjectDetail = lazy(() => import("./pages/project/project/detail"));
+const ProjectInfo = lazy(() => import("./pages/project/project/detail"));
 
 const Material = lazy(() => import("./pages/material/material"));
 const MaterialEdit = lazy(() => import("./pages/material/material/edit"));
@@ -118,7 +125,7 @@ const Supplier = lazy(() => import("./pages/supplier/supplier"));
 const SupplierEdit = lazy(() => import("./pages/supplier/supplier/edit"));
 const SupplierContact = lazy(() => import("./pages/supplier/supplier-contact"));
 const SupplierContactEdit = lazy(
-  () => import("./pages/supplier/supplier-contact/edit")
+  () => import("./pages/supplier/supplier-contact/edit"),
 );
 
 export default function (props: { darkMode: boolean }) {
@@ -163,7 +170,7 @@ export default function (props: { darkMode: boolean }) {
         />
 
         <Route path="/client/client" element={<Client />} />
-        <Route path="/client/client/detail" element={<ClientDetail />} />
+        <Route path="/client/client/detail" element={<ClientInfo />} />
         <Route path="/client/client/edit" element={<ClientEdit />} />
         <Route path="/client/client-contact" element={<ClientContant />} />
 
@@ -173,7 +180,7 @@ export default function (props: { darkMode: boolean }) {
         />
         <Route
           path="/business-opportunity/business-opportunity/detail"
-          element={<BusinessOpportunityDetail />}
+          element={<BusinessOpportunityInfo />}
         />
         <Route
           path="/business-opportunity/business-opportunity/edit"
@@ -183,7 +190,7 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/sales/sales-contract" element={<SalesContract />} />
         <Route
           path="/sales/sales-contract/detail"
-          element={<SalesContractDetail />}
+          element={<SalesContractInfo />}
         />
         <Route
           path="/sales/sales-contract/edit"
@@ -192,16 +199,18 @@ export default function (props: { darkMode: boolean }) {
 
         <Route path="/sales/sales-order" element={<SalesOrder />} />
         <Route path="/sales/sales-order/edit" element={<SalesOrderEdit />} />
-        <Route
-          path="/sales/sales-order/detail"
-          element={<SalesOrderDetail />}
-        />
+        <Route path="/sales/sales-order/detail" element={<SalesOrderInfo />} />
 
         <Route path="/sales/sales-deliver" element={<SalesDeliver />} />
         <Route
           path="/sales/sales-deliver/edit"
           element={<SalesDeliverEdit />}
         />
+        <Route
+          path="/sales/sales-deliver/detail"
+          element={<SalesDeliverInfo />}
+        />
+
         <Route path="/sales/sales-return" element={<SalesReturn />} />
         <Route path="/sales/sales-return/edit" element={<SalesReturnEdit />} />
 
@@ -230,7 +239,7 @@ export default function (props: { darkMode: boolean }) {
 
         <Route path="/project/project" element={<Project />} />
         <Route path="/project/project/edit" element={<ProjectEdit />} />
-        <Route path="/project/project/detail" element={<ProjectDetail />} />
+        <Route path="/project/project/detail" element={<ProjectInfo />} />
 
         <Route path="/material/material" element={<Material />} />
         <Route path="/material/material/edit" element={<MaterialEdit />} />

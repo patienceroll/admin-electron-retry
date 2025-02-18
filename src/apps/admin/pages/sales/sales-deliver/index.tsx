@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -48,7 +57,7 @@ function SalesDeliver() {
   const theme = useTheme();
   const isCompact = window.preload.getTheme().layout === "compact";
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14),
   );
 
   const [areaOption] = useOption(getAreaOption);
@@ -64,8 +73,39 @@ function SalesDeliver() {
     {
       title: "发货单",
       dataIndex: "code",
-      copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/sales/sales-deliver/detail?id=${record.id}`,
+              "发货单详情 - " + record.code,
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesOrder["btn_power"]>,
+            ) {
+              if (
+                [
+                  "is_approve",
+                  "is_submit",
+                  "is_cancel",
+                  "is_suspend",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
     },
     {
       title: "发货日期",
@@ -189,7 +229,7 @@ function SalesDeliver() {
   function Edit(id: SalesDeliver["id"]) {
     const window = openWindow.openCurrentAppWindow(
       `/sales/sales-deliver/edit?id=${id}`,
-      "编辑销售发货"
+      "编辑销售发货",
     );
 
     function listener(event: MessageEvent<"success">) {
@@ -353,7 +393,10 @@ function SalesDeliver() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -408,8 +451,8 @@ function SalesDeliver() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });

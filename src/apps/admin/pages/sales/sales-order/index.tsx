@@ -72,7 +72,7 @@ function SalesOrder() {
   const column = table.column([
     {
       title: "订单号",
-      dataIndex: "name",
+      dataIndex: "code",
       fixed: "left",
       render: (_, record) => (
         <Typography.Link
