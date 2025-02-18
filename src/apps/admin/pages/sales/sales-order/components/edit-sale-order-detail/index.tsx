@@ -18,8 +18,8 @@ import {
 } from "src/apps/admin/api/sales-order-detail";
 import useColumnState from "src/hooks/use-column-state";
 
-export default function (props: Pick<SalesOrder, "id">) {
-  const { id } = props;
+export default function (props: Pick<SalesOrder, "id" | "sales_contract_id">) {
+  const { id, sales_contract_id } = props;
   const theme = useTheme();
 
   const table = useSearchTable(getSalesOrderDetailList);
@@ -31,7 +31,7 @@ export default function (props: Pick<SalesOrder, "id">) {
     salesOrderDetailRenderConfig,
     {
       sales_order_id: id,
-    },
+    }
   );
 
   const column = table.column([
@@ -122,10 +122,24 @@ export default function (props: Pick<SalesOrder, "id">) {
       scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: 500 }}
       toolBarRender={() => [
         <Space>
-          <Button type="primary">合同内添加</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              chooseMaterial.current?.choose().then(() => {
+                table.reload();
+              });
+            }}
+          >
+            合同内添加
+          </Button>
           <Button type="primary">合同外添加</Button>
         </Space>,
-        <ChooseMaterial.default key="choose" ref={chooseMaterial} id={id} />,
+        <ChooseMaterial.default
+          key="choose"
+          ref={chooseMaterial}
+          sales_contract_id={sales_contract_id}
+          id={id}
+        />,
         <SetUnit.default key="set" ref={setUnit} id={id} />,
       ]}
       summary={(data) => {
@@ -139,8 +153,8 @@ export default function (props: Pick<SalesOrder, "id">) {
                     data.reduce(
                       (pre, current) =>
                         new Decimal(pre).add(current.amount || 0).toNumber(),
-                      0,
-                    ),
+                      0
+                    )
                   ).toCNY()}
               </Table.Summary.Cell>
             ))}

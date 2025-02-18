@@ -233,7 +233,7 @@ function Edit(props: StyledWrapComponents) {
                     identify="销售订单"
                     isCover={0}
                     id={id}
-                    files={detail.file['销售订单']}
+                    files={detail.file["销售订单"]}
                   />
                 </Form.Item>
               </Col>
@@ -244,7 +244,12 @@ function Edit(props: StyledWrapComponents) {
 
       <Title style={{ flex: 1, marginTop: theme.margin }}>产品明细</Title>
 
-      <EditSaleOrderDetail id={id} />
+      {detail && (
+        <EditSaleOrderDetail
+          id={id}
+          sales_contract_id={detail.sales_contract_id}
+        />
+      )}
 
       {detail && (
         <FloatButton

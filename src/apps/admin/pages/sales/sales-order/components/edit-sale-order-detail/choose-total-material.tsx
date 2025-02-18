@@ -26,7 +26,7 @@ import useTableInnerHeight from "src/hooks/use-page-table-height/use-table-inner
 import contextedMessage from "src/framework/component/contexted-message";
 import { getMaterialsAttrList } from "src/apps/admin/api/material";
 import {
-  getSalesOrderMaterialSku,
+  getMaterialSku,
   postSalesOrderMaterialSku,
   salesOrderMaterialRender,
 } from "src/apps/admin/api/sales-order";
@@ -39,7 +39,7 @@ export function createRef() {
   return useRef<Ref>(null);
 }
 
-const ChooseMaterial = forwardRef<
+const ChooseTotalMaterial = forwardRef<
   Ref,
   StyledWrapComponents<Pick<SalesOrder, "id" | "sales_contract_id">>
 >(function (props, ref) {
@@ -54,7 +54,7 @@ const ChooseMaterial = forwardRef<
   const [loading] = useWather();
   const [form] = Form.useForm<typeof table.extraParams.current>();
 
-  const table = useSearchTable(getSalesOrderMaterialSku);
+  const table = useSearchTable(getMaterialSku);
   const [select, setSelect] = useState<SalesOrderMaterialSku[]>([]);
   const [tree, setTree] = useState<MaterialClassifyTree[]>([]);
   const [attrs, setAttrs] = useState<MaterialOfAttr[]>([]);
@@ -279,7 +279,7 @@ const ChooseMaterial = forwardRef<
   );
 });
 
-export default styled(ChooseMaterial)`
+export default styled(ChooseTotalMaterial)`
   .form {
     display: flex;
     flex-direction: column;

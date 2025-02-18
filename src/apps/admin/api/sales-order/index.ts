@@ -179,7 +179,7 @@ export const getMaterialSku = (
     id?: SalesOrder["id"];
   }
 ) => {
-  return fetch.GET<List<SalesContractMaterialSku>>(
+  return fetch.GET<List<SalesOrderMaterialSku>>(
     fetch.base("/api/sales-order/material-sku"),
     params
   );
@@ -199,4 +199,14 @@ export const postMaterialSku = (data: {
 /** 销售订单-操作记录 */
 export function getOperateRecord(params: Pick<SalesOrder, "id">) {
   return fetch.GET<OperateRecord[]>(fetch.base(`/api/sales-order/log`), params);
+}
+
+/** 销售合同的可选择的产品 列渲染 */
+export function salesOrderMaterialRender(
+  params: Parameters<typeof getMaterialSku>[0]
+) {
+  return fetch.GET<RenderConfig>(
+    fetch.base(`/api/sales-order/material-sku/render`),
+    params
+  );
 }
