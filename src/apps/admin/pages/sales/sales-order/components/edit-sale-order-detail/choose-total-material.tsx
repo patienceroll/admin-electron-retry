@@ -27,9 +27,11 @@ import contextedMessage from "src/framework/component/contexted-message";
 import { getMaterialsAttrList } from "src/apps/admin/api/material";
 import {
   getMaterialSku,
+  postMaterialSku,
   postSalesOrderMaterialSku,
   salesOrderMaterialRender,
 } from "src/apps/admin/api/sales-order";
+import contextedModal from "src/framework/component/contexted-modal";
 
 type Ref = {
   choose: () => Promise<void>;
@@ -41,14 +43,14 @@ export function createRef() {
 
 const ChooseTotalMaterial = forwardRef<
   Ref,
-  StyledWrapComponents<Pick<SalesOrder, "id" | "sales_contract_id">>
+  StyledWrapComponents<Pick<SalesOrder, "id">>
 >(function (props, ref) {
-  const { id, sales_contract_id } = props;
+  const { id } = props;
 
   const promiseResolver = useRef<{
     resolve: (value: void | PromiseLike<void>) => void;
     reject: (reason?: unknown) => void;
-  }>({ resolve() {}, reject() {} });
+  }>({ resolve() { }, reject() { } });
 
   const [open] = useWather();
   const [loading] = useWather();
@@ -127,16 +129,37 @@ const ChooseTotalMaterial = forwardRef<
     if (select.length === 0) {
       contextedMessage.message?.warning("请至少选择一个物资");
     } else {
-      loading.setTrue();
-      return postSalesOrderMaterialSku({
-        id,
-        ids: select.map((item) => item.id),
+      let value = "";
+      contextedModal.modal?.confirm({
+        title: "请输入执行标准",
+        okButtonProps: {
+          style: {
+            backgroundColor: theme.colorPrimary,
+          },
+        },
+        content: (
+          <Input
+            placeholder="请输入执行标准"
+            onChange={(e) => {
+              value = e.target.value;
+            }}
+          />
+        ),
+        onOk() {
+          loading.setTrue();
+          return postMaterialSku({
+            id: id,
+            ids: select.map(item => item.id),
+            standard: value,
+          })
+            .then(() => {
+              promiseResolver.current.resolve();
+              open.setFalse();
+            })
+            .finally(loading.setFalse);
+        },
       })
-        .then(() => {
-          promiseResolver.current.resolve();
-          open.setFalse();
-        })
-        .finally(loading.setFalse);
+
     }
   }
 
@@ -207,7 +230,7 @@ const ChooseTotalMaterial = forwardRef<
                   onClick={() => {
                     form.resetFields();
                     table.extraParams.current = Object.assign(
-                      { id, sales_contract_id },
+                      { id },
                       form.getFieldsValue()
                     );
                     getRenderNames(table.extraParams.current);
@@ -220,7 +243,7 @@ const ChooseTotalMaterial = forwardRef<
                   type="primary"
                   onClick={() => {
                     table.extraParams.current = Object.assign(
-                      { id, sales_contract_id },
+                      { id },
                       form.getFieldsValue()
                     );
                     getRenderNames(table.extraParams.current);

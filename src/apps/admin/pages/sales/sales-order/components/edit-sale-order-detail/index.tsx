@@ -17,6 +17,7 @@ import {
   salesOrderDetailRenderConfig,
 } from "src/apps/admin/api/sales-order-detail";
 import useColumnState from "src/hooks/use-column-state";
+import * as ChooseTotalMaterial from "./choose-total-material";
 
 export default function (props: Pick<SalesOrder, "id" | "sales_contract_id">) {
   const { id, sales_contract_id } = props;
@@ -25,6 +26,7 @@ export default function (props: Pick<SalesOrder, "id" | "sales_contract_id">) {
   const table = useSearchTable(getSalesOrderDetailList);
 
   const chooseMaterial = ChooseMaterial.createRef();
+  const chooseTotalMaterial = ChooseTotalMaterial.createRef();
   const setUnit = SetUnit.createRef();
 
   const [{ attrColumn, unitColumn }] = useRenderNames(
@@ -125,14 +127,12 @@ export default function (props: Pick<SalesOrder, "id" | "sales_contract_id">) {
           <Button
             type="primary"
             onClick={() => {
-              chooseMaterial.current?.choose().then(() => {
-                table.reload();
-              });
+              chooseMaterial.current?.choose().then(table.reload);
             }}
           >
             合同内添加
           </Button>
-          <Button type="primary">合同外添加</Button>
+          <Button type="primary" onClick={() => { chooseTotalMaterial.current?.choose().then(table.reload) }}>合同外添加</Button>
         </Space>,
         <ChooseMaterial.default
           key="choose"
@@ -140,6 +140,7 @@ export default function (props: Pick<SalesOrder, "id" | "sales_contract_id">) {
           sales_contract_id={sales_contract_id}
           id={id}
         />,
+        <ChooseTotalMaterial.default id={id} ref={chooseTotalMaterial} />,
         <SetUnit.default key="set" ref={setUnit} id={id} />,
       ]}
       summary={(data) => {
