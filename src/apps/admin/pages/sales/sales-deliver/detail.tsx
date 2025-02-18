@@ -15,21 +15,17 @@ import {
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
   approval,
-  billEnd,
   billInvalid,
-  billSuspend,
   cancelOperate,
   getApprovalRecord,
   getOperateRecord,
-  getSalesContract,
-  salesContractStatus,
-  salesContractType,
+  getSalesDeliver,
+  salesDeliverStatus,
   startApproval,
-} from "src/apps/admin/api/sales-contract";
+} from "src/apps/admin/api/sales-deliver";
 import Title from "src/framework/component/title";
 import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
-import DetailSaleContractDetail from "./components/detail-sale-contract-detail";
 import BusinessFile from "src/b-components/business-file";
 import ApprovalRecord from "src/b-components/approval-record";
 import OperateRecord from "src/b-components/operate-record";
@@ -42,7 +38,7 @@ import StopSvg from "src/assets/svg/终止.svg";
 import FinishSvg from "src/assets/svg/完结.svg";
 import getApproval from "src/b-hooks/get-approval";
 import useRenderNames from "src/b-hooks/use-render-names";
-import { salesContractDetailRenderConfig } from "src/apps/admin/api/sales-contract-detail";
+import { salesDeliverDetailRenderConfig } from "src/apps/admin/api/sales-deliver-detail";
 import ProjectIntroduction from "src/b-components/project-introduction";
 import ClientIntroduction from "src/b-components/client-introduction";
 
@@ -50,22 +46,22 @@ function Detail(props: StyledWrapComponents) {
   const { className } = props;
   const params = useLocation();
   const search = new URLSearchParams(params.search);
-  const id = search.get("id")! as unknown as SalesContract["id"];
+  const id = search.get("id")! as unknown as SalesOrder["id"];
 
   const theme = useTheme();
 
-  const [detail, setDetail] = useState<SalesContractDetail>();
+  const [detail, setDetail] = useState<SalesOrderDetail>();
 
   const [{ attrColumn, unitColumn }] = useRenderNames(
-    salesContractDetailRenderConfig,
+    salesDeliverDetailRenderConfig,
     {
-      sales_contract_id: id,
+      sales_deliver_id: id,
     },
   );
 
   const getDetail = useCallback(
     function () {
-      getSalesContract({ id }).then((res) => {
+      getSalesDeliver({ id }).then((res) => {
         setDetail(res.data);
       });
     },
@@ -87,27 +83,16 @@ function Detail(props: StyledWrapComponents) {
             gutter={[theme.padding, theme.padding]}
           >
             <Col flex="400px">
-              <InfoItem label="合同"> {detail.name}</InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="编号">
+              <InfoItem label="发货单">
                 &nbsp;
                 <Typography.Text copyable>{detail.code}</Typography.Text>
               </InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="类型">
-                &nbsp;
-                <Tag color={salesContractType.get(detail.type)?.color}>
-                  {salesContractType.get(detail.type)?.text}
-                </Tag>
-              </InfoItem>
-            </Col>
-            <Col flex="400px">
               <InfoItem label="状态">
                 &nbsp;
-                <Tag color={salesContractStatus.get(detail.status)?.color}>
-                  {salesContractStatus.get(detail.status)?.text}
+                <Tag color={salesDeliverStatus.get(detail.status)?.color}>
+                  {salesDeliverStatus.get(detail.status)?.text}
                 </Tag>
                 {detail.is_approve === 1 && <Tag color="#d46b08">审批中</Tag>}
               </InfoItem>
@@ -135,72 +120,46 @@ function Detail(props: StyledWrapComponents) {
               </InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="签约人">{detail.sign_staff?.name}</InfoItem>
+              <InfoItem label="合同">{detail.sales_contract?.name}</InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="签约日期">{detail.sign_date}</InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="签约地点">{detail.sign_address}</InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="是否厂家配送">
-                {detail.is_factory_dispatch ? "是" : "否"}
+              <InfoItem label="合同编号">
+                &nbsp;
+                <Typography.Text copyable>
+                  {detail.sales_contract?.code}
+                </Typography.Text>
               </InfoItem>
             </Col>
-            <Divider style={{ margin: 0 }} />
+            <Col flex="400px">
+              <InfoItem label="订单编号">
+                &nbsp;
+                <Typography.Text copyable>
+                  {detail.sales_order?.code}
+                </Typography.Text>
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="收货人">{detail.receive_man}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="收货电话">{detail.receive_tel}%</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="收货地址">{detail.receive_address}%</InfoItem>
+            </Col>
             <Col flex="400px">
               <InfoItem label="金额">
                 {new Money(detail.amount).toCNY()}
               </InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="税率">{`${detail.tax_rate}%`}</InfoItem>
+              <InfoItem label="单据日期">{detail.bill_date}</InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="预付款比例">{`${detail.advance_ratio}%`}</InfoItem>
+              <InfoItem label="负责人">{detail.staff?.name}</InfoItem>
             </Col>
-            <Col flex="400px">
-              <InfoItem label="质保金比例">{`${detail.quality_ratio}%`}</InfoItem>
-            </Col>
-            <Divider style={{ margin: 0 }} />
-            <Col flex="400px">
-              <InfoItem label="甲方负责人">
-                {detail.client_contact?.name} {detail.client_contact?.phone}
-              </InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="乙方负责人">
-                {detail.staff?.name} {detail.staff?.phone}
-              </InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="甲方结算人员">
-                {detail.settle_client_contact?.name}
-                {detail.settle_client_contact?.phone}
-              </InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="乙方结算人员">
-                {detail.settle_staff?.name} {detail.settle_staff?.phone}
-              </InfoItem>
-            </Col>
-            <Divider style={{ margin: 0 }} />
-
             <Col flex="100%">
-              <InfoItem
-                label="结算方式"
-                contentStyle={{ whiteSpace: "pre-wrap" }}
-              >
-                {detail.settle_type}
-              </InfoItem>
-            </Col>
-            <Divider style={{ margin: 0 }} />
-            <Col flex="100%">
-              <InfoItem
-                label="备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注"
-                contentStyle={{ whiteSpace: "pre-wrap" }}
-              >
+              <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
                 {detail.remark}
               </InfoItem>
             </Col>
@@ -218,13 +177,13 @@ function Detail(props: StyledWrapComponents) {
         )}
       </Card>
       <Title style={{ marginTop: theme.margin }} id="产品明细">
-        合同明细
+        发货明细
       </Title>
-      <DetailSaleContractDetail
-        id={id}
-        attrCoumn={attrColumn}
-        unitColumn={unitColumn}
-      />
+      {/*<DetailSaleOrderDetail*/}
+      {/*  id={id}*/}
+      {/*  attrCoumn={attrColumn}*/}
+      {/*  unitColumn={unitColumn}*/}
+      {/*/>*/}
 
       <Title style={{ marginTop: theme.margin }} id="附件信息">
         附件信息
@@ -234,9 +193,9 @@ function Detail(props: StyledWrapComponents) {
           <BusinessFile
             id={id}
             service="sales-contract"
-            identify="合同附件"
+            identify="发货单附件"
             isCover={0}
-            files={detail.file["合同附件"]}
+            files={detail.file["发货单附件"]}
           />
         </div>
       )}
@@ -302,7 +261,7 @@ function Detail(props: StyledWrapComponents) {
               onClick={() => {
                 contextedModal.modal?.confirm({
                   title: "作废",
-                  content: "此合同将会作废，你确定要作废吗？",
+                  content: "此发货单将会作废，你确定要作废吗？",
                   onOk() {
                     return billInvalid({ id }).then(() => {
                       getDetail();
@@ -312,44 +271,6 @@ function Detail(props: StyledWrapComponents) {
                   },
                 });
               }}
-            />
-          )}
-          {detail.btn_power.is_suspend === 1 && (
-            <FloatButton
-              description="中止"
-              icon={<Icon icon={StopSvg} fill={theme.colorError} />}
-              onClick={() => {
-                contextedModal.modal?.confirm({
-                  title: "中止",
-                  content: "你确定要中止该合同吗？",
-                  onOk() {
-                    return billSuspend({ id }).then(() => {
-                      getDetail();
-                      window.parent.postMessage("is_suspend");
-                      contextedMessage.message?.success("成功中止");
-                    });
-                  },
-                });
-              }}
-            />
-          )}
-          {detail.btn_power.is_end === 1 && (
-            <FloatButton
-              icon={<Icon icon={FinishSvg} />}
-              onClick={() => {
-                contextedModal.modal?.confirm({
-                  title: "完结",
-                  content: "你确定要完结该合同吗？",
-                  onOk() {
-                    return billEnd({ id }).then(() => {
-                      getDetail();
-                      window.parent.postMessage("is_end");
-                      contextedMessage.message?.success("成功完结");
-                    });
-                  },
-                });
-              }}
-              description="完结"
             />
           )}
           {detail.btn_power.is_cancel_operate === 1 && (

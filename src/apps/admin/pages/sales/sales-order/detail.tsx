@@ -127,7 +127,10 @@ function Detail(props: StyledWrapComponents) {
             </Col>
             <Col flex="400px">
               <InfoItem label="合同编号">
-                {detail.sales_contract?.code}
+                &nbsp;
+                <Typography.Text copyable>
+                  {detail.sales_contract?.code}
+                </Typography.Text>
               </InfoItem>
             </Col>
 
@@ -176,7 +179,7 @@ function Detail(props: StyledWrapComponents) {
         )}
       </Card>
       <Title style={{ marginTop: theme.margin }} id="产品明细">
-        产品明细
+        订单明细
       </Title>
       <DetailSaleOrderDetail
         id={id}
