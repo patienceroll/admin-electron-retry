@@ -410,7 +410,7 @@ function SalesReturn() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("edit") && (
           <FloatButton
-            description="新建退货单"
+            description="新建"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {
               create.current?.create().then((res) => {

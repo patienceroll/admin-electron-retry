@@ -248,7 +248,7 @@ function BusinessFile(props: StyledWrapComponents) {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          description="新建文件夹"
+          description="新文件夹"
           icon={<Icon  icon={AddSvg} />}
           onClick={() => {
             ref.current?.create(folder).then(() => {

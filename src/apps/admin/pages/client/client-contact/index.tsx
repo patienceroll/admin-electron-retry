@@ -186,7 +186,7 @@ function ClientContact() {
 
       <FloatButton.Group shape="square">
         <FloatButton
-          description="新建联系人"
+          description="新建"
           icon={<Icon icon={AddSvg} />}
           onClick={() => {
             modify.current?.create().then(() => {
