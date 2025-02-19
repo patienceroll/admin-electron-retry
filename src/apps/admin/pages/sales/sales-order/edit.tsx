@@ -14,7 +14,7 @@ import {
 import dayjs from "dayjs";
 
 import PageWrapper from "src/framework/component/page-wrapper";
-import { getSalesOrder } from "src/apps/admin/api/sales-order";
+import { editSalesOrder, getSalesOrder } from "src/apps/admin/api/sales-order";
 import Title from "src/framework/component/title";
 import Icon from "src/framework/component/icon";
 import SaveSvg from "src/assets/svg/保存.svg";
@@ -63,7 +63,16 @@ function Edit(props: StyledWrapComponents) {
   }
 
   function submit() {
-    return form.validateFields().then((store) => {});
+    return form.validateFields().then((store) => {
+      editSalesOrder({
+        id,
+        ...store,
+        bill_date: store.bill_date.format("YYYY-MM-DD"),
+      }).then(() => {
+        window.parent.postMessage("success");
+        window.close();
+      });
+    });
   }
 
   useEffect(() => {

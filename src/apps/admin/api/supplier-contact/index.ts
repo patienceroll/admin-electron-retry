@@ -13,7 +13,7 @@ export const SupplierContactStatus = new Map<
 /**
  * 供应商联系人-列表
  */
-export function getSupplierContactList(params: ListParam) {
+export function getSupplierContactList(params: ListParam & {supplier_id:Supplier["id"]}) {
   return fetch.GET<List<SupplierContact>>(
     fetch.base(`/api/supplier-contact/list`),
     params

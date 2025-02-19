@@ -3,23 +3,20 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Card, Col, FloatButton, Form, Row } from "antd";
 import {
-  ProFormDatePicker,
-  ProFormDigit,
   ProFormRadio,
-  ProFormSelect,
   ProFormText,
   ProFormTextArea,
-  ProFormTreeSelect,
 } from "@ant-design/pro-form";
-import dayjs from "dayjs";
 
 import PageWrapper from "src/framework/component/page-wrapper";
-import { getSupplier } from "src/apps/admin/api/supplier";
+import { editSupplier, getSupplier } from "src/apps/admin/api/supplier";
 import Title from "src/framework/component/title";
 import Icon from "src/framework/component/icon";
 import PostionSVG from "src/assets/svg/定位.svg";
 import * as ChooseAddress from "src/framework/component/choose-address";
-
+import EditContact from "./components/edit-contact";
+import EditBankAccount from "./components/edit-bank-account";
+import SaveSvg from "src/assets/svg/保存.svg";
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
   const params = useLocation();
@@ -36,6 +33,18 @@ function Edit(props: StyledWrapComponents) {
       setDetail(res.data);
       form.setFieldsValue({
         ...res.data,
+      });
+    });
+  }
+
+  function submit() {
+    return form.validateFields().then((store) => {
+      editSupplier({
+        id,
+        ...store,
+      }).then(() => {
+        window.parent.postMessage("success");
+        window.close();
       });
     });
   }
@@ -109,8 +118,20 @@ function Edit(props: StyledWrapComponents) {
         </Card>
 
         <Title style={{ marginTop: theme.margin }}>联系人</Title>
+        <EditContact id={id} />
         <Title style={{ marginTop: theme.margin }}>账户信息</Title>
+        <EditBankAccount id={id} />
       </Form>
+
+      {detail && (
+        <FloatButton
+          icon={<Icon icon={SaveSvg} />}
+          description="保存"
+          shape="square"
+          style={{ insetInlineEnd: 24 }}
+          onClick={submit}
+        />
+      )}
       <ChooseAddress.default ref={chooseAddressRef} />
     </PageWrapper>
   );
