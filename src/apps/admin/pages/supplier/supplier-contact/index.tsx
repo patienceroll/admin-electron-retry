@@ -16,7 +16,6 @@ import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
 import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
-import openWindow from "src/util/open-window";
 import Permission from "src/util/permission";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
@@ -30,6 +29,7 @@ import {
 import { watherMap } from "src/apps/admin/api/general";
 import useOption from "src/hooks/use-option";
 import { getSupplierOption } from "src/apps/admin/api/supplier";
+import * as Modify from "./components/modify";
 
 function SupplierContact() {
   const theme = useTheme();
@@ -40,6 +40,7 @@ function SupplierContact() {
 
   const table = useSearchTable(getSupplierContactList);
   const [supplier] = useOption(getSupplierOption);
+  const modify = Modify.createRef();
 
   const column = table.column([
     {
@@ -93,7 +94,15 @@ function SupplierContact() {
       render(_, row) {
         return (
           <Space>
-            <Button type="text" onClick={() => Edit(row.id)}>
+            <Button
+              type="text"
+              onClick={() => {
+                modify.current?.edit(row).then(() => {
+                  table.reload();
+                  contextedMessage.message?.success("成功编辑");
+                });
+              }}
+            >
               编辑
             </Button>
             <Button
@@ -120,25 +129,7 @@ function SupplierContact() {
     },
   ]);
 
-  const columnState = useColumnState("supplierList", column);
-
-  function Edit(id: Supplier["id"]) {
-    const window = openWindow.openCurrentAppWindow(
-      `/supplier/supplier-contact/edit?id=${id}`,
-      "编辑供应商联系人"
-    );
-
-    function listener(event: MessageEvent<"success">) {
-      if (event.data === "success") {
-        table.reload();
-        contextedMessage.message?.success("编辑成功");
-      }
-    }
-
-    if (window) {
-      window.addEventListener("message", listener);
-    }
-  }
+  const columnState = useColumnState("supplierContactList", column);
 
   useEffect(() => {
     table.reload();
@@ -198,7 +189,10 @@ function SupplierContact() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -216,11 +210,10 @@ function SupplierContact() {
             description="新联系人"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {
-              //   create.current?.create().then((result) => {
-              //     contextedMessage.message?.success("成功新增");
-              //     table.reload();
-              //     Edit(result.id);
-              //   });
+              modify.current?.create().then(() => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+              });
             }}
           />
         )}
@@ -243,6 +236,7 @@ function SupplierContact() {
           />
         )}
       </FloatButton.Group>
+      <Modify.default ref={modify} />
     </PageWrapper>
   );
 }
