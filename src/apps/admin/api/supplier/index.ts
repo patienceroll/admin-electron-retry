@@ -9,7 +9,6 @@ export const SupplierStatus = new Map<
   [2, { value: 2, color: "rgb(156,156,148)", text: "停用" }],
 ]);
 
-
 /**
  * 供应商-列表
  */
@@ -31,7 +30,19 @@ export function getSupplier(params: Pick<Supplier, "id">) {
  * 供应商-添加
  */
 export function addSupplier(params: any) {
-  return fetch.POST(fetch.base(`/api/supplier`), params);
+  return fetch.POST<
+    Pick<
+      Supplier,
+      | "name"
+      | "short_name"
+      | "address"
+      | "remark"
+      | "status"
+      | "company_id"
+      | "id"
+      | "name_show"
+    >
+  >(fetch.base(`/api/supplier`), params);
 }
 
 /**

@@ -22,6 +22,7 @@ import Permission from "src/util/permission";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
+import * as Create from "./components/create";
 
 function Supplier() {
   const theme = useTheme();
@@ -31,6 +32,7 @@ function Supplier() {
   );
 
   const table = useSearchTable(getSupplierList);
+  const create = Create.createRef();
 
   const column = table.column([
     {
@@ -156,7 +158,10 @@ function Supplier() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -171,14 +176,14 @@ function Supplier() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("edit") && (
           <FloatButton
-            description="供应商"
+            description="新供应商"
             icon={<Icon icon={AddSvg} />}
             onClick={() => {
-              //   create.current?.create().then((result) => {
-              //     contextedMessage.message?.success("成功新增");
-              //     table.reload();
-              //     Edit(result.id);
-              //   });
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
             }}
           />
         )}
@@ -201,6 +206,7 @@ function Supplier() {
           />
         )}
       </FloatButton.Group>
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }
