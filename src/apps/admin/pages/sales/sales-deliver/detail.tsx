@@ -26,6 +26,7 @@ import {
 import Title from "src/framework/component/title";
 import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
+import DetailSaleDeliverDetail from "./components/detail-sale-deliver-detail";
 import BusinessFile from "src/b-components/business-file";
 import ApprovalRecord from "src/b-components/approval-record";
 import OperateRecord from "src/b-components/operate-record";
@@ -179,11 +180,11 @@ function Detail(props: StyledWrapComponents) {
       <Title style={{ marginTop: theme.margin }} id="产品明细">
         发货明细
       </Title>
-      {/*<DetailSaleOrderDetail*/}
-      {/*  id={id}*/}
-      {/*  attrCoumn={attrColumn}*/}
-      {/*  unitColumn={unitColumn}*/}
-      {/*/>*/}
+      <DetailSaleDeliverDetail
+        id={id}
+        attrCoumn={attrColumn}
+        unitColumn={unitColumn}
+      />
 
       <Title style={{ marginTop: theme.margin }} id="附件信息">
         附件信息

@@ -33,3 +33,17 @@ export function salesDeliverDetailRenderConfig(params: {
     params,
   );
 }
+
+/**
+ * 销售订单明细-列表
+ */
+export function getSalesDeliverDetailList(
+  params: ListParam & {
+    sales_deliver_id?: SalesDeliver["id"];
+  },
+) {
+  return fetch.GET<List<SalesDeliverDetail>>(
+    fetch.base(`/api/sales-deliver-detail/list`),
+    params,
+  );
+}
