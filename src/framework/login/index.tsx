@@ -27,7 +27,7 @@ function Login(props: StyledWrapComponents) {
   const { className } = props;
   const chooseCompanyPromise = useRef({
     resolve: () => {},
-    reject: (reason?: any) => {},
+    reject: () => {},
   });
 
   const [form] = Form.useForm();
