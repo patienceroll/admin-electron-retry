@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -80,6 +89,40 @@ function PurchaseContractList() {
       title: "采购合同",
       dataIndex: "name",
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/purchase/purchase-contract/detail?id=${record.id}`,
+              "采购合同详情 - " + record.name
+            );
+
+            function listener(
+              event: MessageEvent<keyof PurchaseContract["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_submit",
+                  "is_approve",
+                  "is_invalid",
+                  "is_suspend",
+                  "is_end",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.name}
+        </Typography.Link>
+      ),
+      width: 260,
     },
     {
       title: "合同编号",

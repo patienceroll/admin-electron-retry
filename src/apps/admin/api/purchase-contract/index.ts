@@ -19,11 +19,11 @@ export function getPurchaseContractList(
   params: ListParam & {
     status?: BillStatus;
     supplier_id?: Supplier["id"];
-  },
+  }
 ) {
   return fetch.GET<List<PurchaseContract>>(
     fetch.base(`/api/purchase-contract/list`),
-    params,
+    params
   );
 }
 /**
@@ -33,11 +33,12 @@ export function getPurchaseContractOption(
   params: ListParam & {
     status?: BillStatus;
     supplier_id?: Supplier["id"];
-  },
+    statuses?: PurchaseContract["status"][];
+  }
 ) {
   return fetch.GET<PurchaseContract[]>(
     fetch.base(`/api/purchase-contract/list`),
-    params,
+    params
   );
 }
 
@@ -47,7 +48,7 @@ export function getPurchaseContractOption(
 export function getPurchaseContract(params: Pick<PurchaseContract, "id">) {
   return fetch.GET<PurchaseContract>(
     fetch.base(`/api/purchase-contract/detail`),
-    params,
+    params
   );
 }
 
@@ -57,7 +58,7 @@ export function getPurchaseContract(params: Pick<PurchaseContract, "id">) {
 export function addPurchaseContract(params: any) {
   return fetch.POST<PurchaseContractAddResponse>(
     fetch.base(`/api/purchase-contract`),
-    params,
+    params
   );
 }
 
@@ -79,7 +80,7 @@ export function deletePurchaseContract(params: Pick<PurchaseContract, "id">) {
  * 生成合同编号 */
 export const getPurchaseContractCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/purchase-contract/code"),
+    fetch.base("/api/purchase-contract/code")
   );
 };
 
@@ -88,11 +89,11 @@ export const getPurchaseContractCode = () => {
 export const getPurchaseContractMaterialSku = (
   params: ListParam & {
     id?: PurchaseContract["id"];
-  },
+  }
 ) => {
   return fetch.GET<List<PurchaseContractMaterialSku>>(
     fetch.base("/api/purchase-contract/material-sku"),
-    params,
+    params
   );
 };
 
@@ -110,7 +111,7 @@ export const postPurchaseContractMaterialSku = (data: {
 export function startApproval(params: Pick<PurchaseContract, "id">) {
   return fetch.POST(
     fetch.base(`/api/purchase-contract/start-approval`),
-    params,
+    params
   );
 }
 
@@ -142,7 +143,7 @@ export function billEnd(params: Pick<PurchaseContract, "id">) {
 export function cancelOperate(params: Pick<PurchaseContract, "id">) {
   return fetch.POST(
     fetch.base(`/api/purchase-contract/cancel-operate`),
-    params,
+    params
   );
 }
 
@@ -150,7 +151,7 @@ export function cancelOperate(params: Pick<PurchaseContract, "id">) {
 export function getApprovalRecord(params: Pick<PurchaseContract, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/purchase-contract/approval-record`),
-    params,
+    params
   );
 }
 
@@ -160,16 +161,13 @@ export function purchaseContractExport(params: Record<string, any>) {
     file_name: string;
     file_path: string;
     remote_path: string;
-  }>(
-    fetch.base(`/api/purchase-contract/export`),
-    params,
-  );
+  }>(fetch.base(`/api/purchase-contract/export`), params);
 }
 
 /** 采购申请-操作记录 */
 export function getOperateRecord(params: Pick<PurchaseContract, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/purchase-contract/log`),
-    params,
+    params
   );
 }

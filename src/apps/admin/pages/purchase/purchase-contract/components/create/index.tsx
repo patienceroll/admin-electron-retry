@@ -1,7 +1,10 @@
 import { Button, Form, Input, Modal, Radio, Select, Space } from "antd";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 
-import { addPurchaseContract, getPurchaseContractOption } from "src/apps/admin/api/purchase-contract";
+import {
+  addPurchaseContract,
+  getPurchaseContractOption,
+} from "src/apps/admin/api/purchase-contract";
 import { getSupplierOption } from "src/apps/admin/api/supplier";
 import useOption from "src/hooks/use-option";
 import useUpdate from "src/hooks/use-update";
@@ -18,19 +21,21 @@ export function createRef() {
 export default forwardRef<Ref>(function (props, ref) {
   const promiseResolver = useRef<{
     resolve: (
-      value: PurchaseContractAddResponse | PromiseLike<PurchaseContractAddResponse>
+      value:
+        | PurchaseContractAddResponse
+        | PromiseLike<PurchaseContractAddResponse>
     ) => void;
     reject: (reason?: unknown) => void;
   }>({ resolve() {}, reject() {} });
 
-  const [update] = useUpdate()
+  const [update] = useUpdate();
 
   const [open] = useWather();
   const [loading] = useWather();
   const [form] = Form.useForm();
 
-  const [purchaseContrac] = useOption(getPurchaseContractOption)
-  const [suppler] = useOption(getSupplierOption)
+  const [purchaseContract] = useOption(getPurchaseContractOption);
+  const [suppler] = useOption(getSupplierOption);
 
   useImperativeHandle(ref, () => ({
     create() {
@@ -41,27 +46,30 @@ export default forwardRef<Ref>(function (props, ref) {
         };
         form.resetFields();
         open.setTrue();
+        purchaseContract.params.statuses = [1, 2, 3, 4];
+        purchaseContract.loadOption()
+        suppler.loadOption()
       });
     },
   }));
 
-    function submit() {
-      form
-        .validateFields()
-        .then((store) => {
-          loading.setTrue();
-          return addPurchaseContract(store);
-        })
-        .then((res) => {
-          loading.setTrue();
-          promiseResolver.current.resolve(res.data);
-          open.setFalse();
-          loading.setFalse();
-        })
-        .catch(loading.setFalse);
-    }
+  function submit() {
+    form
+      .validateFields()
+      .then((store) => {
+        loading.setTrue();
+        return addPurchaseContract(store);
+      })
+      .then((res) => {
+        loading.setTrue();
+        promiseResolver.current.resolve(res.data);
+        open.setFalse();
+        loading.setFalse();
+      })
+      .catch(loading.setFalse);
+  }
 
-    const contractType = form.getFieldValue("type");
+  const contractType = form.getFieldValue("type");
 
   return (
     <Modal
@@ -75,17 +83,18 @@ export default forwardRef<Ref>(function (props, ref) {
           <Button onClick={open.setFalse} disabled={loading.whether}>
             关闭
           </Button>
-          <Button type="primary" disabled={!contractType} loading={loading.whether} onClick={submit}>
+          <Button
+            type="primary"
+            disabled={!contractType}
+            loading={loading.whether}
+            onClick={submit}
+          >
             保存
           </Button>
         </Space>
       }
     >
-              <Form
-        form={form}
-        autoComplete="off"
-        labelCol={{ span: 4 }}
-      >
+      <Form form={form} autoComplete="off" labelCol={{ span: 4 }}>
         <Form.Item name="type" label="类型">
           <Radio.Group onChange={update}>
             <Radio value={1}>主合同</Radio>
@@ -96,8 +105,8 @@ export default forwardRef<Ref>(function (props, ref) {
         {contractType === 2 && (
           <Form.Item label="主合同" name="pid" rules={[{ required: true }]}>
             <Select
-              options={purchaseContrac.list}
-              loading={purchaseContrac.loading}
+              options={purchaseContract.list}
+              loading={purchaseContract.loading}
               placeholder="请选择"
               filterOption
               showSearch
@@ -128,8 +137,6 @@ export default forwardRef<Ref>(function (props, ref) {
             </Form.Item>
           </>
         )}
-
-  
       </Form>
     </Modal>
   );

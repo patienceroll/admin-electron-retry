@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 function Detail(props: StyledWrapComponents) {
     return <PageWrapper>
-        
+        采购合同详情
     </PageWrapper>
 }
 
