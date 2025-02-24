@@ -69,8 +69,9 @@ function Component(props: StyledWrapComponents) {
               {routes.routes.map((item) => (
                 <SwiperSlide
                   key={item.path}
-                  className={`tab-item ${item.path === routes.current ? "tab-item-active" : ""
-                    }`}
+                  className={`tab-item ${
+                    item.path === routes.current ? "tab-item-active" : ""
+                  }`}
                   onClick={function () {
                     const instance = routes.routes.find(
                       (tab) => tab.path === item?.path
@@ -80,25 +81,29 @@ function Component(props: StyledWrapComponents) {
                     }
                   }}
                 >
-                  <div>{item.name}</div>  
-                  {routes.routes.length !== 1 && <div
-                    className="close-icon-wrapper"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.preload.close(item.path);
-                    }}
-                  >
-                    <Icon
-                      icon={closeSvg}
-                      width={theme.fontSize - 2}
-                      height={theme.fontSize - 2}
-                      fill={
-                        routes.current === item.path
-                          ? theme.colorBgBase
-                          : theme.colorTextBase
-                      }
-                    />
-                  </div>}
+                  <div>{item.name}</div>
+                  {routes.routes.length !== 1 && (
+                    <div className="close-icon-wrapper">
+                      <div
+                        className="close-icon"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.preload.close(item.path);
+                        }}
+                      >
+                        <Icon
+                          icon={closeSvg}
+                          width={`${theme.fontSize - 4}px`}
+                          height={`${theme.fontSize - 4}px`}
+                          fill={
+                            routes.current === item.path
+                              ? theme.colorBgBase
+                              : theme.colorTextBase
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -215,8 +220,7 @@ export default styled(Component)`
     line-height: 30px;
     color: ${(props) => props.theme.colorTextBase};
     background-color: ${(props) => props.theme.colorPrimaryBg};
-    cursor: pointer;
-    font-size: ${(props) => props.theme.fontSize};
+    font-size: ${(props) => props.theme.fontSize}px;
 
     &:hover {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
@@ -227,8 +231,21 @@ export default styled(Component)`
       align-items: center;
       justify-content: center;
       padding-inline: ${(props) => props.theme.padding - 7}px;
+    }
+
+    .close-icon {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: ${(props) => props.theme.fontSize}px;
+      width: ${(props) => props.theme.fontSize}px;
+      border-radius: ${(props) => props.theme.fontSize}px;
       &:hover {
         background-color: ${(props) => props.theme.colorBgTextActive};
+      }
+      > svg {
+        line-height: ${(props) => props.theme.fontSize}px;
       }
     }
   }
@@ -243,8 +260,7 @@ export default styled(Component)`
       background-color: ${(props) => props.theme.colorPrimary};
     }
 
-    .close-icon-wrapper {
-      cursor: pointer;
+    .close-icon {
       &:hover {
         background-color: ${(props) => props.theme.colorPrimaryActive};
       }

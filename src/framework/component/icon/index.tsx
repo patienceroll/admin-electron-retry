@@ -13,8 +13,8 @@ function Icon(
     icon,
     Object.assign(
       {
-        width: theme.fontSize,
-        height: theme.fontSize,
+        width: `${theme.fontSize}px`,
+        height: `${theme.fontSize}px`,
         fill: theme.colorPrimary,
       } as React.SVGProps<SVGSVGElement>,
       restProps
