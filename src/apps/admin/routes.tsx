@@ -90,6 +90,8 @@ const PurchaseContractDetail = lazy(
 );
 //采购订单
 const PurchaseOrder = lazy(() => import("./pages/purchase/purchase-order"));
+const PurchaseOrderDetail = lazy(() => import("./pages/purchase/purchase-order/detail"));
+const PurchaseOrderEdit = lazy(() => import("./pages/purchase/purchase-order/edit"));
 //采购收货
 const PurchaseReceive = lazy(() => import("./pages/purchase/purchase-receive"));
 //采购退货
@@ -235,6 +237,8 @@ export default function (props: { darkMode: boolean }) {
           element={<PurchaseContractDetail />}
         />
         <Route path="/purchase/purchase-order" element={<PurchaseOrder />} />
+        <Route path="/purchase/purchase-order/edit" element={<PurchaseOrderEdit />} />
+        <Route path="/purchase/purchase-order/detail" element={<PurchaseOrderDetail />} />
         <Route
           path="/purchase/purchase-receive"
           element={<PurchaseReceive />}

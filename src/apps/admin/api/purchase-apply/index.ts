@@ -25,6 +25,21 @@ export function getPurchaseApplyList(
     params,
   );
 }
+/**
+ * 采购申请-选项
+ */
+export function getPurchaseApplyOptions(
+  params: ListParam & {
+    status?: BillStatus;
+    type?: number;
+    statuses?:PurchaseApply['status'][]
+  },
+) {
+  return fetch.GET<PurchaseApply[]>(
+    fetch.base(`/api/purchase-apply/list`),
+    params,
+  );
+}
 
 /**
  * 采购申请-详情
