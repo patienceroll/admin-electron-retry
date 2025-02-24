@@ -26,6 +26,20 @@ export function getPurchaseContractList(
     params,
   );
 }
+/**
+ * 采购合同-选项
+ */
+export function getPurchaseContractOption(
+  params: ListParam & {
+    status?: BillStatus;
+    supplier_id?: Supplier["id"];
+  },
+) {
+  return fetch.GET<PurchaseContract[]>(
+    fetch.base(`/api/purchase-contract/list`),
+    params,
+  );
+}
 
 /**
  * 采购合同-详情
@@ -142,7 +156,11 @@ export function getApprovalRecord(params: Pick<PurchaseContract, "id">) {
 
 /** 采购合同-导出 */
 export function purchaseContractExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(
     fetch.base(`/api/purchase-contract/export`),
     params,
   );

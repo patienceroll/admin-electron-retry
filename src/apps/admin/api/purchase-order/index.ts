@@ -137,7 +137,11 @@ export function cancelOperate(params: Pick<PurchaseOrder, "id">) {
 
 /** 采购订单-导出 */
 export function purchaseOrderExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(fetch.base(`/api/purchase-order/export`), params);
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(fetch.base(`/api/purchase-order/export`), params);
 }
 
 /** 采购申请-操作记录 */

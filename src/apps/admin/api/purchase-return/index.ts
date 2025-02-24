@@ -129,7 +129,11 @@ export function cancelOperate(params: Pick<PurchaseReturn, "id">) {
 
 /** 采购退货-导出 */
 export function purchaseReturnExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(
     fetch.base(`/api/purchase-return/export`),
     params,
   );

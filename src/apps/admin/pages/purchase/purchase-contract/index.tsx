@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, Row, Space, Tabs } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -21,6 +21,7 @@ import styled, { useTheme } from "styled-components";
 import {
   deletePurchaseContract,
   getPurchaseContractList,
+  purchaseContractExport,
   purchaseContractStatus,
 } from "src/apps/admin/api/purchase-contract";
 //关联接口
@@ -35,7 +36,12 @@ import usePageTableHeight from "src/hooks/use-page-table-height";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
-
+import openWindow from "src/util/open-window";
+import * as Create from "./components/create";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
+import Permission from "src/util/permission";
 function PurchaseContractList() {
   const table = useSearchTable(getPurchaseContractList);
   const theme = useTheme();
@@ -43,11 +49,31 @@ function PurchaseContractList() {
   const { addAElement, height } = usePageTableHeight(
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
+
+  const create = Create.createRef();
   const { treeOptions } = useStaffTree();
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
+
+  function Edit(id: PurchaseContract["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/purchase/purchase-contract/edit?id=${id}`,
+      "编辑采购合同"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   const column = table.column([
     {
@@ -108,7 +134,9 @@ function PurchaseContractList() {
             <Button
               type="text"
               disabled={row.btn_power.is_edit !== 1}
-              onClick={function () {}}
+              onClick={function () {
+                Edit(row.id);
+              }}
             >
               编辑
             </Button>
@@ -293,6 +321,39 @@ function PurchaseContractList() {
           />
         }
       />
+      <Create.default ref={create} />
+      <FloatButton.Group shape="square">
+        <FloatButton
+          description="新建采购"
+          icon={<Icon icon={AddSvg} />}
+          onClick={() => {
+            create.current?.create().then((result) => {
+              contextedMessage.message?.success("成功新增");
+              table.reload();
+              Edit(result.id);
+            });
+          }}
+        />
+
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            description="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              purchaseContractExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }

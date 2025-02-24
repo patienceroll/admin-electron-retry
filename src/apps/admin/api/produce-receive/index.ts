@@ -156,7 +156,11 @@ export function produceRecieveDeleteBarcode(
 
 /** 生产领料-导出 */
 export function produceReceiveExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(
     fetch.base(`/api/produce-receive/export`),
     params,
   );

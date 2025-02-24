@@ -14,7 +14,9 @@ function Edit(props: StyledWrapComponents) {
     const [detail, setDetail] = useState<SalesOrder>();
     const [form] = Form.useForm();
 
-    return  <PageWrapper className={className}></PageWrapper>
+    return  <PageWrapper className={className}>
+        编辑采购合同
+    </PageWrapper>
 }
 
 export default styled(Edit)``

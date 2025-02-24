@@ -142,7 +142,11 @@ export function produceReturnDeleteBarcode(
 
 /** 生产退料-导出 */
 export function produceReturnExport(params: Record<string, any>) {
-  return fetch.GET<ExportRes>(fetch.base(`/api/produce-return/export`), params);
+  return fetch.GET<{
+    file_name: string;
+    file_path: string;
+    remote_path: string;
+  }>(fetch.base(`/api/produce-return/export`), params);
 }
 
 /** 生产退料-操作记录 */
