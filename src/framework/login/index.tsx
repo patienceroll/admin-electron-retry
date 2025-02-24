@@ -99,7 +99,7 @@ function Login(props: StyledWrapComponents) {
       </div>
       <div className="right">
         <Icon className="close" onClick={window.preload.quit} icon={closeSvg} />
-        <Form form={form} name="login" style={{ width: 300 }}>
+        <Form className="form" form={form} name="login" style={{ width: 300 }}>
           <Form.Item
             name="account"
             rules={[{ required: true, message: "请输入用户名" }]}
@@ -181,7 +181,8 @@ export default styled(Login)`
     flex: 1;
     height: 100%;
     position: relative;
-
+    -webkit-app-region: drag;
+    cursor: move;
     img {
       width: 100%;
       height: 100%;
@@ -197,11 +198,17 @@ export default styled(Login)`
     justify-content: center;
     align-items: center;
     position: relative;
+    -webkit-app-region: drag;
     background-color: ${(props) => props.theme.colorBgBase};
+  }
+
+  .form {
+    -webkit-app-region: no-drag;
   }
 
   .close {
     position: absolute;
+    -webkit-app-region: no-drag;
     right: ${(props) => props.theme.padding}px;
     top: ${(props) => props.theme.padding}px;
     cursor: pointer;
