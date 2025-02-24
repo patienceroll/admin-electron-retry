@@ -108,6 +108,8 @@ const PurchaseReceiveDetail = lazy(
 
 //采购退货
 const PurchaseReturn = lazy(() => import("./pages/purchase/purchase-return"));
+const PurchaseReturnDetail = lazy(() => import("./pages/purchase/purchase-return/detail"));
+const PurchaseReturnEdit = lazy(() => import("./pages/purchase/purchase-return/edit"));
 
 /**
  * 库存管理模块
@@ -272,6 +274,8 @@ export default function (props: { darkMode: boolean }) {
           element={<PurchaseReceiveDetail />}
         />
         <Route path="/purchase/purchase-return" element={<PurchaseReturn />} />
+        <Route path="/purchase/purchase-return/edit" element={<PurchaseReturnEdit />} />
+        <Route path="/purchase/purchase-return/detail" element={<PurchaseReturnDetail />} />
 
         <Route path="/inventory/in-stock" element={<InStock />} />
         <Route path="/inventory/out-stock" element={<OutStock />} />

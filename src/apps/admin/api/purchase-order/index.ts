@@ -19,11 +19,26 @@ export function getPurchaseOrderList(
   params: ListParam & {
     status?: BillStatus;
     supplier_id?: Supplier["id"];
-  },
+  }
 ) {
   return fetch.GET<List<PurchaseOrder>>(
     fetch.base(`/api/purchase-order/list`),
-    params,
+    params
+  );
+}
+/**
+ * 采购订单-选项
+ */
+export function getPurchaseOrderOptions(
+  params: ListParam & {
+    status?: BillStatus;
+    supplier_id?: Supplier["id"];
+    statuses?: PurchaseOrder["status"][];
+  }
+) {
+  return fetch.GET<PurchaseOrder[]>(
+    fetch.base(`/api/purchase-order/list`),
+    params
   );
 }
 
@@ -33,7 +48,7 @@ export function getPurchaseOrderList(
 export function getPurchaseOrder(params: Pick<PurchaseOrder, "id">) {
   return fetch.GET<PurchaseOrder>(
     fetch.base(`/api/purchase-order/detail`),
-    params,
+    params
   );
 }
 
@@ -43,7 +58,7 @@ export function getPurchaseOrder(params: Pick<PurchaseOrder, "id">) {
 export function addPurchaseOrder(params: any) {
   return fetch.POST<PurchaseOrderAddResponse>(
     fetch.base(`/api/purchase-order`),
-    params,
+    params
   );
 }
 
@@ -65,7 +80,7 @@ export function deletePurchaseOrder(params: Pick<PurchaseOrder, "id">) {
  * 生成合同编号 */
 export const getPurchaseOrderCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/purchase-order/code"),
+    fetch.base("/api/purchase-order/code")
   );
 };
 
@@ -75,11 +90,11 @@ export const getPurchaseOrderMaterialSku = (
   params: ListParam & {
     sales_contract_id?: PurchaseOrder["sales_contract_id"];
     id?: PurchaseOrder["id"];
-  },
+  }
 ) => {
   return fetch.GET<List<PurchaseOrderMaterialSku>>(
     fetch.base("/api/purchase-order/superior-detail"),
-    params,
+    params
   );
 };
 
@@ -111,7 +126,7 @@ export function approval(params: {
 export function getApprovalRecord(params: Pick<PurchaseOrder, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/purchase-order/approval-record`),
-    params,
+    params
   );
 }
 
@@ -148,6 +163,6 @@ export function purchaseOrderExport(params: Record<string, any>) {
 export function getOperateRecord(params: Pick<PurchaseOrder, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/purchase-order/log`),
-    params,
+    params
   );
 }

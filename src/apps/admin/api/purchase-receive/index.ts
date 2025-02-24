@@ -21,11 +21,29 @@ export function getPurchaseReceiveList(
     /** 1客户 2项目 3合同 4订单 */
     statistics_type?: 1 | 2 | 3 | 4;
     statistics_id?: number | string;
-  },
+  }
 ) {
   return fetch.GET<List<PurchaseReceive>>(
     fetch.base(`/api/purchase-receive/list`),
-    params,
+    params
+  );
+}
+/**
+ * 采购收货-选项
+ */
+export function getPurchaseReceiveOptions(
+  params: ListParam & {
+    status?: BillStatus;
+    supplier_id?: Supplier["id"];
+    /** 1客户 2项目 3合同 4订单 */
+    statistics_type?: 1 | 2 | 3 | 4;
+    statistics_id?: number | string;
+    purchase_order_id?: PurchaseOrder["id"];
+  }
+) {
+  return fetch.GET<PurchaseReceive[]>(
+    fetch.base(`/api/purchase-receive/list`),
+    params
   );
 }
 
@@ -35,7 +53,7 @@ export function getPurchaseReceiveList(
 export function getPurchaseReceive(params: Pick<PurchaseReceive, "id">) {
   return fetch.GET<PurchaseReceive>(
     fetch.base(`/api/purchase-receive/detail`),
-    params,
+    params
   );
 }
 
@@ -45,7 +63,7 @@ export function getPurchaseReceive(params: Pick<PurchaseReceive, "id">) {
 export function addPurchaseReceive(params: any) {
   return fetch.POST<PurchaseReceiveAddResponse>(
     fetch.base(`/api/purchase-receive`),
-    params,
+    params
   );
 }
 
@@ -67,7 +85,7 @@ export function deletePurchaseReceive(params: Pick<PurchaseReceive, "id">) {
  * 生成合同编号 */
 export const getPurchaseReceiveCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/purchase-receive/code"),
+    fetch.base("/api/purchase-receive/code")
   );
 };
 
@@ -77,11 +95,11 @@ export const getPurchaseReceiveMaterialSku = (
   params: ListParam & {
     purchase_order_id?: PurchaseOrder["id"];
     id?: PurchaseReceive["id"];
-  },
+  }
 ) => {
   return fetch.GET<List<PurchaseReceiveMaterialSku>>(
     fetch.base("/api/purchase-receive/superior-detail"),
-    params,
+    params
   );
 };
 
@@ -113,7 +131,7 @@ export function approval(params: {
 export function getApprovalRecord(params: Pick<PurchaseReceive, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/purchase-receive/approval-record`),
-    params,
+    params
   );
 }
 
@@ -133,16 +151,13 @@ export function purchaseReceiveExport(params: Record<string, any>) {
     file_name: string;
     file_path: string;
     remote_path: string;
-  }>(
-    fetch.base(`/api/purchase-receive/export`),
-    params,
-  );
+  }>(fetch.base(`/api/purchase-receive/export`), params);
 }
 
 /** 采购申请-操作记录 */
 export function getOperateRecord(params: Pick<PurchaseReceive, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/purchase-receive/log`),
-    params,
+    params
   );
 }

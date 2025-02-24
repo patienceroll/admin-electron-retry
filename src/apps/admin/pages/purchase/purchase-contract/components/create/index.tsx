@@ -35,7 +35,7 @@ export default forwardRef<Ref>(function (props, ref) {
   const [form] = Form.useForm();
 
   const [purchaseContract] = useOption(getPurchaseContractOption);
-  const [suppler] = useOption(getSupplierOption);
+  const [supplier] = useOption(getSupplierOption);
 
   useImperativeHandle(ref, () => ({
     create() {
@@ -48,7 +48,7 @@ export default forwardRef<Ref>(function (props, ref) {
         open.setTrue();
         purchaseContract.params.statuses = [1, 2, 3, 4];
         purchaseContract.loadOption()
-        suppler.loadOption()
+        supplier.loadOption()
       });
     },
   }));
@@ -124,7 +124,7 @@ export default forwardRef<Ref>(function (props, ref) {
               rules={[{ required: true }]}
             >
               <Select
-                options={suppler.list}
+                options={supplier.list}
                 placeholder="请选择"
                 fieldNames={{ label: "name", value: "id" }}
                 filterOption
