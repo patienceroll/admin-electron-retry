@@ -76,6 +76,8 @@ const SalesReturnEdit = lazy(() => import("./pages/sales/sales-return/edit"));
  */
 //采购申请
 const PurchaseApply = lazy(() => import("./pages/purchase/purchase-apply"));
+const PurchaseApplyEdit = lazy(() => import("./pages/purchase/purchase-apply/edit"));
+const PurchaseApplyDetail = lazy(() => import("./pages/purchase/purchase-apply/detail"));
 //采购合同
 const PurchaseContract = lazy(
   () => import("./pages/purchase/purchase-contract")
@@ -218,6 +220,8 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/sales/sales-return/edit" element={<SalesReturnEdit />} />
 
         <Route path="/purchase/purchase-apply" element={<PurchaseApply />} />
+        <Route path="/purchase/purchase-apply/edit" element={<PurchaseApplyEdit />} />
+        <Route path="/purchase/purchase-apply/detail" element={<PurchaseApplyDetail />} />
         <Route
           path="/purchase/purchase-contract"
           element={<PurchaseContract />}
