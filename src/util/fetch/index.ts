@@ -33,8 +33,6 @@ function request(url: string, params?: FetchParams, init: FetchInit = {}) {
   return fetch(query ? `${url}?${query}` : url, { ...init, method, body });
 }
 
-
-
 function getDefaultHeader() {
   return {
     "Content-Type": "application/json",
@@ -113,6 +111,7 @@ function GET<T>(...argument: Parameters<typeof request>) {
   init.method = "GET";
   return requestProgramResponse<T>(url, params, init);
 }
+
 /**
  * ### post */
 function POST<T>(...argument: Parameters<typeof request>) {
@@ -149,7 +148,7 @@ function base(path: string) {
   // if (env === "test") return Config.test.baseUrl + path;
   // if (env === "newtest") return Config.newtest.baseUrl + path;
   // if (env === "production") return Config.production.baseUrl + path;
-  return "http://118.89.67.217:9638" + path;
+  return "https://api.nowbenben.com" + path;
   throw new Error("错误的环境");
 }
 

@@ -18,10 +18,10 @@ const devContentSecurityPolicy = buildCSP({
   defaultSrc: ["'self'"],
   connectSrc: [
     "'self'",
-    "http://118.89.67.217:9638",
+    "https://api.nowbenben.com",
     "*.qiniu.com",
     "*.amap.com",
-    "*.qiniup.com"
+    "*.qiniup.com",
   ],
   fontSrc: ["'self'", "data:"],
   imgSrc: ["*", "data:", "blob:"],
