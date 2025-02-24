@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -35,6 +44,7 @@ import Permission from "src/util/permission";
 import { purchaseReturnExport } from "src/apps/admin/api/purchase-return";
 import Icon from "src/framework/component/icon";
 import ExportSvg from "src/assets/svg/导出.svg";
+import openWindow from "src/util/open-window";
 function PurchaseReceiveList() {
   const table = useSearchTable(getPurchaseReceiveList);
   const theme = useTheme();
@@ -54,6 +64,19 @@ function PurchaseReceiveList() {
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            openWindow.openCurrentAppWindow(
+              `/purchase/purchase-receive/detail?id=${record.id}`,
+              "采购收货详情 - " + record.code
+            );
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
     },
     {
       title: "收货日期",

@@ -76,8 +76,12 @@ const SalesReturnEdit = lazy(() => import("./pages/sales/sales-return/edit"));
  */
 //采购申请
 const PurchaseApply = lazy(() => import("./pages/purchase/purchase-apply"));
-const PurchaseApplyEdit = lazy(() => import("./pages/purchase/purchase-apply/edit"));
-const PurchaseApplyDetail = lazy(() => import("./pages/purchase/purchase-apply/detail"));
+const PurchaseApplyEdit = lazy(
+  () => import("./pages/purchase/purchase-apply/edit")
+);
+const PurchaseApplyDetail = lazy(
+  () => import("./pages/purchase/purchase-apply/detail")
+);
 //采购合同
 const PurchaseContract = lazy(
   () => import("./pages/purchase/purchase-contract")
@@ -90,10 +94,18 @@ const PurchaseContractDetail = lazy(
 );
 //采购订单
 const PurchaseOrder = lazy(() => import("./pages/purchase/purchase-order"));
-const PurchaseOrderDetail = lazy(() => import("./pages/purchase/purchase-order/detail"));
-const PurchaseOrderEdit = lazy(() => import("./pages/purchase/purchase-order/edit"));
+const PurchaseOrderDetail = lazy(
+  () => import("./pages/purchase/purchase-order/detail")
+);
+const PurchaseOrderEdit = lazy(
+  () => import("./pages/purchase/purchase-order/edit")
+);
 //采购收货
 const PurchaseReceive = lazy(() => import("./pages/purchase/purchase-receive"));
+const PurchaseReceiveDetail = lazy(
+  () => import("./pages/purchase/purchase-receive/detail")
+);
+
 //采购退货
 const PurchaseReturn = lazy(() => import("./pages/purchase/purchase-return"));
 
@@ -222,8 +234,14 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/sales/sales-return/edit" element={<SalesReturnEdit />} />
 
         <Route path="/purchase/purchase-apply" element={<PurchaseApply />} />
-        <Route path="/purchase/purchase-apply/edit" element={<PurchaseApplyEdit />} />
-        <Route path="/purchase/purchase-apply/detail" element={<PurchaseApplyDetail />} />
+        <Route
+          path="/purchase/purchase-apply/edit"
+          element={<PurchaseApplyEdit />}
+        />
+        <Route
+          path="/purchase/purchase-apply/detail"
+          element={<PurchaseApplyDetail />}
+        />
         <Route
           path="/purchase/purchase-contract"
           element={<PurchaseContract />}
@@ -237,11 +255,21 @@ export default function (props: { darkMode: boolean }) {
           element={<PurchaseContractDetail />}
         />
         <Route path="/purchase/purchase-order" element={<PurchaseOrder />} />
-        <Route path="/purchase/purchase-order/edit" element={<PurchaseOrderEdit />} />
-        <Route path="/purchase/purchase-order/detail" element={<PurchaseOrderDetail />} />
+        <Route
+          path="/purchase/purchase-order/edit"
+          element={<PurchaseOrderEdit />}
+        />
+        <Route
+          path="/purchase/purchase-order/detail"
+          element={<PurchaseOrderDetail />}
+        />
         <Route
           path="/purchase/purchase-receive"
           element={<PurchaseReceive />}
+        />
+        <Route
+          path="/purchase/purchase-receive/detail"
+          element={<PurchaseReceiveDetail />}
         />
         <Route path="/purchase/purchase-return" element={<PurchaseReturn />} />
 
