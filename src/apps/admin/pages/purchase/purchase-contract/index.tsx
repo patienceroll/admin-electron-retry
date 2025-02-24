@@ -60,7 +60,7 @@ function PurchaseContractList() {
   );
 
   const create = Create.createRef();
-  const { treeOptions } = useStaffTree();
+  const {options, treeOptions } = useStaffTree();
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
@@ -216,6 +216,7 @@ function PurchaseContractList() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
+    options.loadOption()
   }, []);
 
   return (

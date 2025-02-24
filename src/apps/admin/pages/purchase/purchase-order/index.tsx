@@ -53,7 +53,7 @@ import * as Create from "./components/create";
 function PurchaseOrderList() {
   const table = useSearchTable(getPurchaseOrderList);
   const theme = useTheme();
-  const { treeOptions } = useStaffTree();
+  const { options, treeOptions } = useStaffTree();
   const isCompact = window.preload.getTheme().layout === "compact";
   const { addAElement, height } = usePageTableHeight(
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
@@ -259,6 +259,11 @@ function PurchaseOrderList() {
 
   useEffect(() => {
     table.reload();
+    options.loadOption();
+    projectOption.loadOption();
+    clientOption.loadOption();
+    salesContractOption.loadOption();
+    salesOrderOption.loadOption();
   }, []);
 
   return (

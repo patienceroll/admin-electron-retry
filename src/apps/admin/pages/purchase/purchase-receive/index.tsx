@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Tabs } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -25,14 +25,16 @@ import {
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { BusinessOpportunityStatus } from "src/apps/admin/api/business-opportunity";
-import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
-import { getSalesDeliverOption } from "src/apps/admin/api/sales-deliver";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
-
+import contextedMessage from "src/framework/component/contexted-message";
+import Permission from "src/util/permission";
+import { purchaseReturnExport } from "src/apps/admin/api/purchase-return";
+import Icon from "src/framework/component/icon";
+import ExportSvg from "src/assets/svg/导出.svg";
 function PurchaseReceiveList() {
   const table = useSearchTable(getPurchaseReceiveList);
   const theme = useTheme();
@@ -41,12 +43,10 @@ function PurchaseReceiveList() {
   const { addAElement, height } = usePageTableHeight(
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
-  const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
-  const [salesDeliverOption] = useOption(getSalesDeliverOption);
 
   const column = table.column([
     {
@@ -96,13 +96,6 @@ function PurchaseReceiveList() {
         return row.project?.name_show;
       },
     },
-    // {
-    //   title: "客户",
-    //   dataIndex: "client",
-    //   renderText(_, row) {
-    //     return row.client?.name_show;
-    //   },
-    // },
     {
       title: "合同",
       dataIndex: "sales_contract_name",
@@ -144,43 +137,21 @@ function PurchaseReceiveList() {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
-      width: 160,
-      // render: action<PurchaseReceive>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/purchase-receive/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deletePurchaseReceive({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
+      width: 200,
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -188,12 +159,10 @@ function PurchaseReceiveList() {
 
   useEffect(() => {
     table.reload();
-    areaOption.loadOption();
     projectOption.loadOption();
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
-    salesDeliverOption.loadOption();
     options.loadOption();
   }, []);
 
@@ -310,7 +279,10 @@ function PurchaseReceiveList() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -340,6 +312,27 @@ function PurchaseReceiveList() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            description="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              purchaseReturnExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }

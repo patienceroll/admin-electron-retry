@@ -57,7 +57,7 @@ function PurchaseApplyList() {
   const { addAElement, height } = usePageTableHeight(
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
-  const { treeOptions } = useStaffTree();
+  const { treeOptions,options } = useStaffTree();
   const create = Create.createRef();
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
@@ -229,6 +229,7 @@ function PurchaseApplyList() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
+    options.loadOption()
   }, []);
 
   return (
