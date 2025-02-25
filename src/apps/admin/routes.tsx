@@ -124,6 +124,8 @@ const InStockDetail = lazy(() => import("./pages/inventory/in-stock/detail"));
 const InStockEdit = lazy(() => import("./pages/inventory/in-stock/edit"));
 //出库单
 const OutStock = lazy(() => import("./pages/inventory/out-stock"));
+const OutStockDetail = lazy(() => import("./pages/inventory/out-stock/detail"));
+const OutStockEdit = lazy(() => import("./pages/inventory/out-stock/edit"));
 //发货单
 const DeliverOrder = lazy(() => import("./pages/inventory/deliver-order"));
 //收货单
@@ -294,8 +296,15 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/inventory/in-stock" element={<InStock />} />
         <Route path="/inventory/in-stock/edit" element={<InStockEdit />} />
         <Route path="/inventory/in-stock/detail" element={<InStockDetail />} />
+        
         <Route path="/inventory/out-stock" element={<OutStock />} />
+        <Route path="/inventory/out-stock/detail" element={<OutStockDetail />} />
+        <Route path="/inventory/out-stock/edit" element={<OutStockEdit />} />
+
+
         <Route path="/inventory/deliver-order" element={<DeliverOrder />} />
+        
+        
         <Route path="/inventory/receive-order" element={<ReceiveOrder />} />
         <Route path="/inventory/warehouse-log" element={<WarehouseLog />} />
         <Route path="/inventory/stock-check" element={<StockCheck />} />
