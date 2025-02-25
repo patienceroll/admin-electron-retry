@@ -62,7 +62,7 @@ function Job(props: StyledWrapComponents) {
               fieldProps={{
                 treeData: deparmentTree,
                 showSearch: true,
-                treeNodeFilterProp:'name',
+                treeNodeFilterProp: "name",
                 fieldNames: {
                   children: "child",
                   label: "name",
@@ -109,15 +109,14 @@ function Job(props: StyledWrapComponents) {
                 />
               }
               actions={[
-                <Icon
-                  icon={EditSvg}
+                <div
                   onClick={() => {
                     ref.current?.edit(item).then(table.reload);
                   }}
-                />,
-                <Icon
-                  icon={DeleteSvg}
-                  fill={theme.colorError}
+                >
+                  <Icon icon={EditSvg} />
+                </div>,
+                <div
                   onClick={() => {
                     contextedModal.modal?.confirm({
                       title: "删除",
@@ -130,7 +129,9 @@ function Job(props: StyledWrapComponents) {
                       },
                     });
                   }}
-                />,
+                >
+                  <Icon icon={DeleteSvg} fill={theme.colorError} />
+                </div>,
               ]}
             >
               <Descriptions column={1}>
@@ -143,7 +144,7 @@ function Job(props: StyledWrapComponents) {
         </div>
 
         <div className="page">
-        <Pagination
+          <Pagination
             {...table.pagination}
             onChange={(page, pageSize) => {
               table.onChange(
@@ -155,7 +156,6 @@ function Job(props: StyledWrapComponents) {
             }}
           />
 
-
           <Button
             type="primary"
             icon={
@@ -163,7 +163,7 @@ function Job(props: StyledWrapComponents) {
                 width={18}
                 height={18}
                 icon={AddSvg}
-                fill={theme.colorTextBase}
+                fill={theme.colorWhite}
               />
             }
             onClick={() => {
@@ -172,7 +172,6 @@ function Job(props: StyledWrapComponents) {
           >
             新建职位
           </Button>
-    
         </div>
       </div>
 

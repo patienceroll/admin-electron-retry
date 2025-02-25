@@ -9,7 +9,7 @@ type Warehouse = {
   county: string;
   address: string;
   remark: string;
-  status: number;
+  status: WarehouseListItemStatus;
   created_id: number;
   deleted_at: string;
   updated_at: string;
@@ -19,3 +19,5 @@ type Warehouse = {
   created_user: CreateUser;
   company: Company;
 };
+
+type WarehouseListItemStatus  =  0 | 1 | 2;

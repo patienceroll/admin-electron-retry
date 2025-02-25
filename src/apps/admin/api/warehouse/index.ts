@@ -1,4 +1,18 @@
 import fetch from "src/util/fetch";
+
+
+
+
+
+export const WarehouseStatus = new Map<
+  WarehouseListItemStatus,
+  EnumValue<WarehouseListItemStatus>
+>([
+  [0, { value: 0, color: "rgba(0, 0, 0, 0.25)", text: "草稿" }],
+  [1, { value: 1, color: "green", text: "启用" }],
+  [2, { value: 2, color: "rgb(156,156,148)", text: "停用" }],
+]);
+
 /**
  * 仓库-列表
  */

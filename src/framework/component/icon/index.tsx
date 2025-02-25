@@ -1,4 +1,4 @@
-import React, { createElement } from "react";
+import React, { createElement, useMemo } from "react";
 import { useTheme } from "styled-components";
 
 function Icon(
@@ -9,15 +9,25 @@ function Icon(
   const { icon, ...restProps } = props;
   const theme = useTheme();
 
+  const width = useMemo(() => {
+    if (restProps.width === undefined) return `${theme.fontSize}px`;
+    if (typeof restProps.width === "number") return `${restProps.width}px`;
+    return restProps.width;
+  }, [restProps.width, theme.fontSize]);
+
+  const height = useMemo(() => {
+    if (restProps.height === undefined) return `${theme.fontSize}px`;
+    if (typeof restProps.height === "number") return `${restProps.height}px`;
+    return restProps.height;
+  }, [restProps.height, theme.fontSize]);
+
   return createElement(
     icon,
-    Object.assign(
+    Object.assign<React.SVGProps<SVGSVGElement>, React.SVGProps<SVGSVGElement>>(
       {
-        width: `${theme.fontSize}px`,
-        height: `${theme.fontSize}px`,
         fill: theme.colorPrimary,
-      } as React.SVGProps<SVGSVGElement>,
-      restProps
+      },
+      { ...restProps, width,height }
     )
   );
 }

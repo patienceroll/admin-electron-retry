@@ -23,7 +23,7 @@ export default function (gap = 0) {
       if (!ele) {
         const resizeObserver = new ResizeObserver(function () {
           if (timer.current) clearTimeout(timer.current);
-          setTimeout(update, 300);
+          timer.current = setTimeout(update, 300);
         });
         resizeObserver.observe(element);
         store.current.set(element, { element, observe: resizeObserver });

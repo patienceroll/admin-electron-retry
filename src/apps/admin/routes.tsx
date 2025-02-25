@@ -108,8 +108,12 @@ const PurchaseReceiveDetail = lazy(
 
 //采购退货
 const PurchaseReturn = lazy(() => import("./pages/purchase/purchase-return"));
-const PurchaseReturnDetail = lazy(() => import("./pages/purchase/purchase-return/detail"));
-const PurchaseReturnEdit = lazy(() => import("./pages/purchase/purchase-return/edit"));
+const PurchaseReturnDetail = lazy(
+  () => import("./pages/purchase/purchase-return/detail")
+);
+const PurchaseReturnEdit = lazy(
+  () => import("./pages/purchase/purchase-return/edit")
+);
 
 /**
  * 库存管理模块
@@ -128,6 +132,8 @@ const WarehouseLog = lazy(() => import("./pages/inventory/warehouse-log"));
 const StockCheck = lazy(() => import("./pages/inventory/stock-check"));
 //调拨单
 const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
+// 库存仓库
+const InventoryWarehouse = lazy(() => import("./pages/inventory/warehouse"));
 
 /**
  * 生产管理模块
@@ -274,8 +280,14 @@ export default function (props: { darkMode: boolean }) {
           element={<PurchaseReceiveDetail />}
         />
         <Route path="/purchase/purchase-return" element={<PurchaseReturn />} />
-        <Route path="/purchase/purchase-return/edit" element={<PurchaseReturnEdit />} />
-        <Route path="/purchase/purchase-return/detail" element={<PurchaseReturnDetail />} />
+        <Route
+          path="/purchase/purchase-return/edit"
+          element={<PurchaseReturnEdit />}
+        />
+        <Route
+          path="/purchase/purchase-return/detail"
+          element={<PurchaseReturnDetail />}
+        />
 
         <Route path="/inventory/in-stock" element={<InStock />} />
         <Route path="/inventory/out-stock" element={<OutStock />} />
@@ -284,6 +296,7 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/inventory/warehouse-log" element={<WarehouseLog />} />
         <Route path="/inventory/stock-check" element={<StockCheck />} />
         <Route path="/inventory/stock-allot" element={<StockAllot />} />
+        <Route path="/inventory/warehouse" element={<InventoryWarehouse />} />
 
         <Route path="/produce/produce-receive" element={<ProduceReceive />} />
         <Route path="/produce/produce-return" element={<ProduceReturn />} />
