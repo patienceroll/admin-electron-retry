@@ -120,6 +120,8 @@ const PurchaseReturnEdit = lazy(
  */
 //入库单
 const InStock = lazy(() => import("./pages/inventory/in-stock"));
+const InStockDetail = lazy(() => import("./pages/inventory/in-stock/detail"));
+const InStockEdit = lazy(() => import("./pages/inventory/in-stock/edit"));
 //出库单
 const OutStock = lazy(() => import("./pages/inventory/out-stock"));
 //发货单
@@ -290,6 +292,8 @@ export default function (props: { darkMode: boolean }) {
         />
 
         <Route path="/inventory/in-stock" element={<InStock />} />
+        <Route path="/inventory/in-stock/edit" element={<InStockEdit />} />
+        <Route path="/inventory/in-stock/detail" element={<InStockDetail />} />
         <Route path="/inventory/out-stock" element={<OutStock />} />
         <Route path="/inventory/deliver-order" element={<DeliverOrder />} />
         <Route path="/inventory/receive-order" element={<ReceiveOrder />} />

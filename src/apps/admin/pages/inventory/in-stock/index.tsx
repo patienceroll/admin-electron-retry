@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -38,6 +47,8 @@ import Permission from "src/util/permission";
 import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import ExportSvg from "src/assets/svg/导出.svg";
+import * as Create from "./components/create";
+import openWindow from "src/util/open-window";
 
 function InStock() {
   const table = useSearchTable(getInStockList);
@@ -47,6 +58,7 @@ function InStock() {
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
 
+  const create = Create.createRef();
   const { options, treeOptions } = useStaffTree();
 
   const [areaOption] = useOption(getAreaOption);
@@ -55,12 +67,63 @@ function InStock() {
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
 
+  function Edit(id: InStock["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/inventory/in-stock/edit?id=${id}`,
+      "编辑入库单"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
+
   const column = table.column([
     {
       title: "入库单",
       dataIndex: "code",
-      copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/inventory/in-stock/detail?id=${record.id}`,
+              "入库单详情 - " + record.code
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesContract["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_approve",
+                  "is_submit",
+                  "is_invalid",
+                  "is_end",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
+      width: 260,
     },
     {
       title: "仓库",
@@ -146,7 +209,12 @@ function InStock() {
             >
               打印
             </Button>
-            <Button type="text" onClick={function () {}}>
+            <Button
+              type="text"
+              onClick={function () {
+                Edit(row.id);
+              }}
+            >
               编辑
             </Button>
             <Button
@@ -311,7 +379,10 @@ function InStock() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -343,9 +414,15 @@ function InStock() {
       <FloatButton.Group shape="square">
         {Permission.getPermission("export") && (
           <FloatButton
-            description="新建合同"
+            description="新入库单"
             icon={<Icon icon={AddSvg} />}
-            onClick={() => {}}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
           />
         )}
 
@@ -368,6 +445,7 @@ function InStock() {
           />
         )}
       </FloatButton.Group>
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }
