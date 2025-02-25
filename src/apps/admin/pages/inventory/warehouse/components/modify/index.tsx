@@ -67,7 +67,7 @@ export default forwardRef<Ref>(function (props, ref) {
         config.current = {
           reject,
           resolve,
-          title: "新增",
+          title: "新建仓库",
           item: undefined,
         };
         open.setTrue();
@@ -80,7 +80,7 @@ export default forwardRef<Ref>(function (props, ref) {
         config.current = {
           reject,
           resolve,
-          title: "编辑",
+          title: "编辑仓库",
           item: item,
         };
 

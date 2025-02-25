@@ -78,13 +78,15 @@ function Warehouse(props: StyledWrapComponents) {
               />
             }
             actions={[
-              <div>
-                <Icon icon={EditSvg} onClick={() => {
-                    modify.current?.edit(item).then(() => {
-                      table.reload();
-                      contextedMessage.message?.success("成功编辑");
-                    });
-                }} />
+              <div
+                onClick={() => {
+                  modify.current?.edit(item).then(() => {
+                    table.reload();
+                    contextedMessage.message?.success("成功编辑");
+                  });
+                }}
+              >
+                <Icon icon={EditSvg} />
               </div>,
               <div
                 onClick={() => {
