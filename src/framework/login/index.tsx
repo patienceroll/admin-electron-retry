@@ -91,7 +91,6 @@ function Login(props: StyledWrapComponents) {
       }
     }
   }, [form]);
-
   return (
     <div className={className}>
       <div className="left">
@@ -142,6 +141,8 @@ function Login(props: StyledWrapComponents) {
         title="请选择任职公司"
         closable={false}
         footer={null}
+        rootClassName="modal"
+        getContainer={() => document.getElementsByClassName(className!)[0] as HTMLElement}
       >
         <List
           itemLayout="horizontal"
@@ -215,6 +216,13 @@ export default styled(Login)`
 
     &:hover {
       background-color: ${(props) => props.theme.colorPrimaryBgHover};
+    }
+  }
+
+  .modal {
+    .ant-modal-wrap {
+      -webkit-app-region: no-drag;
+
     }
   }
 `;
