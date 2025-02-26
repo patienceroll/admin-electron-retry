@@ -412,7 +412,7 @@ function InStock() {
       />
 
       <FloatButton.Group shape="square">
-        {Permission.getPermission("export") && (
+        {Permission.getPermission("edit") && (
           <FloatButton
             description="新入库单"
             icon={<Icon icon={AddSvg} />}

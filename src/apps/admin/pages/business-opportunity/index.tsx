@@ -334,7 +334,10 @@ function BusinessOpportunity() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -366,31 +369,33 @@ function BusinessOpportunity() {
       />
 
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建机会"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            create.current?.create().then((result) => {
-              contextedMessage.message?.success("成功新增");
-              table.reload();
-              const window = openWindow.openCurrentAppWindow(
-                `/business-opportunity/business-opportunity/edit?id=${result.id}`,
-                "编辑业务机会"
-              );
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新建机会"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                const window = openWindow.openCurrentAppWindow(
+                  `/business-opportunity/business-opportunity/edit?id=${result.id}`,
+                  "编辑业务机会"
+                );
 
-              function listener(event: MessageEvent<"success">) {
-                if (event.data === "success") {
-                  table.reload();
-                  contextedMessage.message?.success("编辑成功");
+                function listener(event: MessageEvent<"success">) {
+                  if (event.data === "success") {
+                    table.reload();
+                    contextedMessage.message?.success("编辑成功");
+                  }
                 }
-              }
 
-              if (window) {
-                window.addEventListener("message", listener);
-              }
-            });
-          }}
-        />
+                if (window) {
+                  window.addEventListener("message", listener);
+                }
+              });
+            }}
+          />
+        )}
 
         {Permission.getPermission("export") && (
           <FloatButton

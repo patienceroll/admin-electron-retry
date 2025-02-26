@@ -25,6 +25,7 @@ import Icon from "src/framework/component/icon";
 import AddSvg from "src/assets/svg/add.svg";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import useColumnState from "src/hooks/use-column-state";
+import Permission from "src/util/permission";
 
 function Staff() {
   const table = useSearchTable(getStaffList);
@@ -249,28 +250,33 @@ function Staff() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
       />
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建员工"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            const window = openWindow.openCurrentAppWindow(
-              "/organization/staff/create",
-              "新建员工"
-            );
-            function listener(event: MessageEvent<"success">) {
-              if (event.data === "success") {
-                table.reload();
-                contextedMessage.message?.success("新建成功");
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新建员工"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              const window = openWindow.openCurrentAppWindow(
+                "/organization/staff/create",
+                "新建员工"
+              );
+              function listener(event: MessageEvent<"success">) {
+                if (event.data === "success") {
+                  table.reload();
+                  contextedMessage.message?.success("新建成功");
+                }
               }
-            }
-            if (window) {
-              window.addEventListener("message", listener);
-            }
-          }}
-        />
+              if (window) {
+                window.addEventListener("message", listener);
+              }
+            }}
+          />
+        )}
       </FloatButton.Group>
       <EditPermission ref={permissionRef} />
     </PageWrapper>

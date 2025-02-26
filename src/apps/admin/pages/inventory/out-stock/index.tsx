@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -18,7 +27,12 @@ import useOption from "src/hooks/use-option";
 import styled, { useTheme } from "styled-components";
 
 //主体接口
-import { getOutStockList, outStockStatus } from "src/apps/admin/api/out-stock";
+import {
+  deleteOutStock,
+  getOutStockList,
+  outStockExport,
+  outStockStatus,
+} from "src/apps/admin/api/out-stock";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
 import { getAreaOption } from "src/apps/admin/api/sales-territory";
@@ -27,7 +41,14 @@ import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
-
+import openWindow from "src/util/open-window";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import * as Create from "./components/create";
+import Permission from "src/util/permission";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import ExportSvg from "src/assets/svg/导出.svg";
 function OutStock() {
   const table = useSearchTable(getOutStockList);
   const theme = useTheme();
@@ -36,6 +57,7 @@ function OutStock() {
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
 
+  const create = Create.createRef();
   const { options, treeOptions } = useStaffTree();
 
   const [areaOption] = useOption(getAreaOption);
@@ -44,12 +66,64 @@ function OutStock() {
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
 
+  function Edit(id: OutStock["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/inventory/out-stock/edit?id=${id}`,
+      "编辑出库单"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
+
   const column = table.column([
     {
       title: "出库单",
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/inventory/out-stock/detail?id=${record.id}`,
+              "出库单详情 - " + record.code
+            );
+
+            function listener(
+              event: MessageEvent<keyof OutStock["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_submit",
+                  "is_approve",
+                  "is_invalid",
+                  "is_cancel_operate",
+                  "is_end",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
+      width: 260,
     },
     {
       title: "仓库",
@@ -123,43 +197,47 @@ function OutStock() {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
-      width: 160,
-      // render: action<OutStock>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/sales-deliver/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deleteOutStock({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
+      width: 200,
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+            <Button
+              type="text"
+              onClick={function () {
+                Edit(row.id);
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.code}?`,
+                  onOk() {
+                    return deleteOutStock({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("删除成功");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -302,7 +380,10 @@ function OutStock() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -330,6 +411,40 @@ function OutStock() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        <FloatButton
+          description="新出库单"
+          icon={<Icon icon={AddSvg} />}
+          onClick={() => {
+            create.current?.create().then((result) => {
+              contextedMessage.message?.success("成功新增");
+              table.reload();
+              Edit(result.id);
+            });
+          }}
+        />
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            description="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              outStockExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
+
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }

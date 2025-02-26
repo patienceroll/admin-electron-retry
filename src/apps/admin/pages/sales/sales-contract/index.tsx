@@ -379,7 +379,10 @@ function SalesContract() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -411,17 +414,19 @@ function SalesContract() {
       />
 
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建合同"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            create.current?.create().then((result) => {
-              contextedMessage.message?.success("成功新增");
-              table.reload();
-              Edit(result.id);
-            });
-          }}
-        />
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新建合同"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
+          />
+        )}
 
         {Permission.getPermission("export") && (
           <FloatButton

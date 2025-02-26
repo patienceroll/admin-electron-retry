@@ -411,18 +411,19 @@ function PurchaseReturnList() {
       />
 
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="采购退货"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            create.current?.create().then((result) => {
-              contextedMessage.message?.success("成功新增");
-              table.reload();
-              Edit(result.id);
-            });
-          }}
-        />
-
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="采购退货"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
+          />
+        )}
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}

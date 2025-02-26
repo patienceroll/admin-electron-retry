@@ -23,6 +23,7 @@ import AddSvg from "src/assets/svg/add.svg";
 import contextedMessage from "src/framework/component/contexted-message";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import useColumnState from "src/hooks/use-column-state";
+import Permission from "src/util/permission";
 
 function Department() {
   const table = useSearchTable(getDepartmentList);
@@ -166,20 +167,25 @@ function Department() {
             cell: columnState.tableHeaderCellRender,
           },
         }}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
       />
 
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新增部门"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            ref.current?.create().then(() => {
-              contextedMessage.message?.success("新增成功");
-              table.reload();
-            });
-          }}
-        />
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新增部门"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              ref.current?.create().then(() => {
+                contextedMessage.message?.success("新增成功");
+                table.reload();
+              });
+            }}
+          />
+        )}
       </FloatButton.Group>
 
       <Edit ref={ref} />

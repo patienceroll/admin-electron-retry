@@ -172,7 +172,10 @@ function ClientContact() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -185,16 +188,18 @@ function ClientContact() {
       />
 
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            modify.current?.create().then(() => {
-              contextedMessage.message?.success("新增成功");
-              table.reload();
-            });
-          }}
-        />
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新建"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              modify.current?.create().then(() => {
+                contextedMessage.message?.success("新增成功");
+                table.reload();
+              });
+            }}
+          />
+        )}
 
         {Permission.getPermission("export") && (
           <FloatButton

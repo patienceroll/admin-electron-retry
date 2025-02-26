@@ -57,7 +57,7 @@ function PurchaseApplyList() {
   const { addAElement, height } = usePageTableHeight(
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
-  const { treeOptions,options } = useStaffTree();
+  const { treeOptions, options } = useStaffTree();
   const create = Create.createRef();
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
@@ -229,7 +229,7 @@ function PurchaseApplyList() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
-    options.loadOption()
+    options.loadOption();
   }, []);
 
   return (
@@ -379,18 +379,19 @@ function PurchaseApplyList() {
         }
       />
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="采购申请"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            create.current?.create().then((result) => {
-              contextedMessage.message?.success("成功新增");
-              table.reload();
-              Edit(result.id);
-            });
-          }}
-        />
-
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="采购申请"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
+          />
+        )}
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}

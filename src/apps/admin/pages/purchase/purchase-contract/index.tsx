@@ -60,7 +60,7 @@ function PurchaseContractList() {
   );
 
   const create = Create.createRef();
-  const {options, treeOptions } = useStaffTree();
+  const { options, treeOptions } = useStaffTree();
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
@@ -216,7 +216,7 @@ function PurchaseContractList() {
     clientOption.loadOption();
     salesContractOption.loadOption();
     salesOrderOption.loadOption();
-    options.loadOption()
+    options.loadOption();
   }, []);
 
   return (
@@ -367,17 +367,19 @@ function PurchaseContractList() {
       />
       <Create.default ref={create} />
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建采购"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            create.current?.create().then((result) => {
-              contextedMessage.message?.success("成功新增");
-              table.reload();
-              Edit(result.id);
-            });
-          }}
-        />
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新建采购"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
+          />
+        )}
 
         {Permission.getPermission("export") && (
           <FloatButton

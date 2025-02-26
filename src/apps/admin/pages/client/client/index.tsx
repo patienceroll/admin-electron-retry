@@ -262,7 +262,10 @@ function Client() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -284,31 +287,33 @@ function Client() {
       />
 
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建客户"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            create.current?.create().then((result) => {
-              contextedMessage.message?.success("新增成功");
-              table.reload();
-              const window = openWindow.openCurrentAppWindow(
-                `/client/client/edit?id=${result.id}`,
-                "编辑新创建的客户"
-              );
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新建客户"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("新增成功");
+                table.reload();
+                const window = openWindow.openCurrentAppWindow(
+                  `/client/client/edit?id=${result.id}`,
+                  "编辑新创建的客户"
+                );
 
-              function listener(event: MessageEvent<"success">) {
-                if (event.data === "success") {
-                  table.reload();
-                  contextedMessage.message?.success("编辑成功");
+                function listener(event: MessageEvent<"success">) {
+                  if (event.data === "success") {
+                    table.reload();
+                    contextedMessage.message?.success("编辑成功");
+                  }
                 }
-              }
 
-              if (window) {
-                window.addEventListener("message", listener);
-              }
-            });
-          }}
-        />
+                if (window) {
+                  window.addEventListener("message", listener);
+                }
+              });
+            }}
+          />
+        )}
         {select.length !== 0 && (
           <FloatButton
             icon={<Icon icon={FollowSvg} />}

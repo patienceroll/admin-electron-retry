@@ -307,7 +307,10 @@ function Materail(props: StyledWrapComponents) {
             pagination={table.pagination}
             onChange={table.onChange}
             columns={columnState.column}
-            scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+            scroll={{
+              x: table.measureColumnWidth(columnState.widthColumn),
+              y: height,
+            }}
             columnsState={{
               value: columnState.data?.data,
               onChange: columnState.onChange,
@@ -321,32 +324,36 @@ function Materail(props: StyledWrapComponents) {
         </Col>
       </Row>
       <FloatButton.Group shape="square">
-        <FloatButton
-          description="新建物资"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            materailCreate.current?.create().then((res) => {
-              table.reload();
-              onEditMaterail(res.id);
-            });
-          }}
-        />
-        <FloatButton
-          description="新建分类"
-          icon={<Icon icon={AddSvg} />}
-          onClick={() => {
-            classifyModify.current?.create().then(() => {
-              getClassify();
-            });
-          }}
-        />
-        <FloatButton
-          description="维护属性"
-          icon={<Icon icon={FixAttrSet} />}
-          onClick={() => {
-            attrSet.current?.set();
-          }}
-        />
+        {Permission.getPermission("edit") && (
+          <>
+            <FloatButton
+              description="新建物资"
+              icon={<Icon icon={AddSvg} />}
+              onClick={() => {
+                materailCreate.current?.create().then((res) => {
+                  table.reload();
+                  onEditMaterail(res.id);
+                });
+              }}
+            />
+            <FloatButton
+              description="新建分类"
+              icon={<Icon icon={AddSvg} />}
+              onClick={() => {
+                classifyModify.current?.create().then(() => {
+                  getClassify();
+                });
+              }}
+            />
+            <FloatButton
+              description="维护属性"
+              icon={<Icon icon={FixAttrSet} />}
+              onClick={() => {
+                attrSet.current?.set();
+              }}
+            />
+          </>
+        )}
         {Permission.getPermission("export") && (
           <FloatButton
             icon={<Icon icon={ExportSvg} />}
