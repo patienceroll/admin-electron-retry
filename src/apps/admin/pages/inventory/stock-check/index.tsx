@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProFormDateRangePicker,
   ProFormSelect,
@@ -19,19 +28,25 @@ import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
+  deleteStockCheck,
   getStockCheckList,
   stockCheckStatus,
   stockCheckType,
 } from "src/apps/admin/api/stock-check";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
-import { getAreaOption } from "src/apps/admin/api/sales-territory";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
-
+import openWindow from "src/util/open-window";
+import contextedMessage from "src/framework/component/contexted-message";
+import contextedModal from "src/framework/component/contexted-modal";
+import * as Create from "./components/create";
+import Permission from "src/util/permission";
 function StockCheck() {
   const table = useSearchTable(getStockCheckList);
   const theme = useTheme();
@@ -40,12 +55,30 @@ function StockCheck() {
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
   const { options, treeOptions } = useStaffTree();
+  const create = Create.createRef();
 
-  const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
+
+  function Edit(id: StockCheck["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/inventory/stock-check/edit?id=${id}`,
+      "编辑盘点单"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   const column = table.column([
     {
@@ -53,11 +86,45 @@ function StockCheck() {
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/inventory/stock-check/detail?id=${record.id}`,
+              "盘点单详情 - " + record.code
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesContract["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_submit",
+                  "is_approve",
+                  "is_end",
+                  "is_invalid",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
+      width: 260,
     },
     {
       title: "类型",
       dataIndex: "type",
-      customValueEnum: stockCheckType,
+      valueEnum: stockCheckType,
     },
     {
       title: "盘点目标",
@@ -126,43 +193,47 @@ function StockCheck() {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
-      width: 160,
-      // render: action<StockCheck>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/sales-deliver/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deleteStockCheck({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
+      width: 200,
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+            <Button
+              type="text"
+              onClick={function () {
+                Edit(row.id);
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.code}?`,
+                  onOk() {
+                    return deleteStockCheck({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("删除成功");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -170,7 +241,6 @@ function StockCheck() {
 
   useEffect(() => {
     table.reload();
-    areaOption.loadOption();
     projectOption.loadOption();
     clientOption.loadOption();
     salesContractOption.loadOption();
@@ -291,7 +361,10 @@ function StockCheck() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -319,6 +392,23 @@ function StockCheck() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新盘点单"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
+      <Create.default ref={create} />
     </PageWrapper>
   );
 }

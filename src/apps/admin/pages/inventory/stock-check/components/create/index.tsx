@@ -1,18 +1,17 @@
-import { Button, Form, Modal, Select, Space } from "antd";
+import { Button, DatePicker, Form, Modal, Radio, Select, Space } from "antd";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 
-import { addOutStock } from "src/apps/admin/api/out-stock";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
-import { addStockAllot } from "src/apps/admin/api/stock-allot";
+import { addStockCheck } from "src/apps/admin/api/stock-check";
 import { getWarehouseOption } from "src/apps/admin/api/warehouse";
 import useOption from "src/hooks/use-option";
 import useUpdate from "src/hooks/use-update";
 import useWather from "src/hooks/use-wather";
 
 type Ref = {
-  create: () => Promise<StockAllotAddRes>;
+  create: () => Promise<StockCheckAddResponse>;
 };
 
 export function createRef() {
@@ -21,7 +20,9 @@ export function createRef() {
 
 export default forwardRef<Ref>(function (props, ref) {
   const promiseResolver = useRef<{
-    resolve: (value: StockAllotAddRes | PromiseLike<StockAllotAddRes>) => void;
+    resolve: (
+      value: StockCheckAddResponse | PromiseLike<StockCheckAddResponse>
+    ) => void;
     reject: (reason?: unknown) => void;
   }>({ resolve() {}, reject() {} });
 
@@ -35,8 +36,7 @@ export default forwardRef<Ref>(function (props, ref) {
   const [form] = Form.useForm();
   const [update] = useUpdate();
   const show = useRef({
-    in_show: "",
-    out_show: "",
+    target_show: "",
   });
 
   useImperativeHandle(ref, () => ({
@@ -64,7 +64,7 @@ export default forwardRef<Ref>(function (props, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        return addStockAllot({ ...store, ...show.current });
+        return addStockCheck({ ...store, ...show.current });
       })
       .then((res) => {
         loading.setTrue();
@@ -75,7 +75,7 @@ export default forwardRef<Ref>(function (props, ref) {
       .catch(loading.setFalse);
   }
 
-  const type = form.getFieldValue("type") || 1;
+  const contractType = form.getFieldValue("type") || 1;
 
   return (
     <Modal
@@ -97,160 +97,122 @@ export default forwardRef<Ref>(function (props, ref) {
     >
       <Form
         form={form}
-        initialValues={{ type: 1 }}
         autoComplete="off"
         labelCol={{ span: 6 }}
+        initialValues={{ type: 1 }}
       >
+        <Form.Item name="type" label="类型">
+          <Radio.Group onChange={update}>
+            <Radio value={1}>仓库</Radio>
+            <Radio value={2}>项目</Radio>
+            {/*<Radio value={3}>销售合同</Radio>*/}
+            <Radio value={4}>销售订单</Radio>
+          </Radio.Group>
+        </Form.Item>
+        {contractType === 1 && (
+          <Form.Item
+            label="仓库"
+            name="target_id"
+            rules={[{ required: true, message: "请选择仓库" }]}
+          >
+            <Select
+              options={warehouse.list}
+              placeholder="请选择仓库"
+              filterOption
+              showSearch
+              optionFilterProp="name"
+              fieldNames={{ label: "name", value: "id" }}
+              onChange={(_, value) => {
+                if (value && !(value instanceof Array)) {
+                  show.current.target_show = value.name;
+                }
+              }}
+            />
+          </Form.Item>
+        )}
+        {contractType === 2 && (
+          <Form.Item label="项目" name="target_id">
+            <Select
+              options={project.list}
+              placeholder="请选择项目"
+              fieldNames={{ label: "name", value: "id" }}
+              filterOption
+              showSearch
+              optionFilterProp="name"
+              onChange={(_, value) => {
+                if (value && !(value instanceof Array)) {
+                  show.current.target_show = value.name;
+                }
+              }}
+            />
+          </Form.Item>
+        )}
+        {contractType === 3 && (
+          <Form.Item label="合同" name="target_id">
+            <Select
+              options={salesContract.list}
+              placeholder="选择销售合同"
+              fieldNames={{ label: "name", value: "id" }}
+              filterOption
+              showSearch
+              optionFilterProp="name"
+              onChange={(_, value) => {
+                if (value && !(value instanceof Array)) {
+                  show.current.target_show = value.name;
+                }
+              }}
+            />
+          </Form.Item>
+        )}
+        {contractType === 4 && (
+          <Form.Item label="销售订单" name="target_id">
+            <Select
+              options={salesOrder.list}
+              placeholder="选择销售订单"
+              fieldNames={{ label: "code", value: "id" }}
+              filterOption
+              showSearch
+              optionFilterProp="code"
+              onChange={(_, value) => {
+                if (value && !(value instanceof Array)) {
+                  show.current.target_show = value.code;
+                }
+              }}
+            />
+          </Form.Item>
+        )}
         <Form.Item
-          label="类型"
-          name="type"
-          rules={[{ required: true, message: "请选择" }]}
+          label="计划开始时间"
+          name="plan_start_time"
+          rules={[{ required: true, message: "请选择计划开始盘点时间" }]}
         >
-          <Select
-            placeholder="请选择调拨类型"
-            onChange={() => {
-              update();
-              form.setFieldValue("out_id", undefined);
-              form.setFieldValue("in_id", undefined);
+          <DatePicker
+            format="YYYY-MM-DD HH:mm"
+            allowClear
+            showTime={{
+              format: "HH:mm",
+              minuteStep: 30,
             }}
-            options={[
-              { label: "仓库 -> 仓库", value: 1 },
-              { label: "仓库 -> 项目", value: 5 },
-              { label: "仓库 -> 销售订单", value: 7 },
-              { label: "项目 -> 项目", value: 2 },
-              { label: "项目 -> 仓库", value: 6 },
-              { label: "销售订单 -> 销售订单", value: 4 },
-              { label: "销售订单 -> 仓库", value: 8 },
-            ]}
+            style={{ width: "100%" }}
+            placeholder="请选择计划开始盘点时间"
           />
         </Form.Item>
-        {[1, 5, 7].includes(type) && (
-          <Form.Item
-            label="调出仓库"
-            name="out_id"
-            rules={[{ required: true, message: "请选择" }]}
-          >
-            <Select
-              options={warehouse.list}
-              placeholder="请选择仓库"
-              fieldNames={{ label: "name", value: "id" }}
-              filterOption
-              showSearch
-              optionFilterProp="name"
-              onChange={(_, value) => {
-                if (value && !(value instanceof Array)) {
-                  show.current.out_show = value.name;
-                }
-              }}
-            />
-          </Form.Item>
-        )}
-        {[2, 6].includes(type) && (
-          <Form.Item
-            label="调出项目"
-            name="out_id"
-            rules={[{ required: true, message: "请选择" }]}
-          >
-            <Select
-              options={project.list}
-              placeholder="请选择项目"
-              fieldNames={{ label: "name_show", value: "id" }}
-              filterOption
-              showSearch
-              optionFilterProp="name"
-              onChange={(_, value) => {
-                if (value && !(value instanceof Array)) {
-                  show.current.out_show = value.name_show;
-                }
-              }}
-            />
-          </Form.Item>
-        )}
-        {[4, 8].includes(type) && (
-          <Form.Item
-            label="调出销售订单"
-            name="out_id"
-            rules={[{ required: true, message: "请选择" }]}
-          >
-            <Select
-              options={salesOrder.list}
-              placeholder="请选择销售订单"
-              fieldNames={{ label: "code", value: "id" }}
-              filterOption
-              showSearch
-              optionFilterProp="name"
-              onChange={(_, value) => {
-                if (value && !(value instanceof Array)) {
-                  show.current.out_show = value.code;
-                }
-              }}
-            />
-          </Form.Item>
-        )}
-        {[1, 6, 8].includes(type) && (
-          <Form.Item
-            label="调入仓库"
-            name="in_id"
-            rules={[{ required: true, message: "请选择" }]}
-          >
-            <Select
-              options={warehouse.list}
-              placeholder="请选择仓库"
-              fieldNames={{ label: "name", value: "id" }}
-              filterOption
-              showSearch
-              optionFilterProp="name"
-              onChange={(_, value) => {
-                if (value && !(value instanceof Array)) {
-                  show.current.in_show = value.name;
-                }
-              }}
-            />
-          </Form.Item>
-        )}
-
-        {[2, 5].includes(type) && (
-          <Form.Item
-            label="调入项目"
-            name="in_id"
-            rules={[{ required: true, message: "请选择" }]}
-          >
-            <Select
-              options={project.list}
-              placeholder="请选择项目"
-              fieldNames={{ label: "name_show", value: "id" }}
-              filterOption
-              showSearch
-              optionFilterProp="name"
-              onChange={(_, value) => {
-                if (value && !(value instanceof Array)) {
-                  show.current.in_show = value.name_show;
-                }
-              }}
-            />
-          </Form.Item>
-        )}
-        {[4, 7].includes(type) && (
-          <Form.Item
-            label="调入销售订单"
-            name="in_id"
-            rules={[{ required: true, message: "请选择" }]}
-          >
-            <Select
-              options={salesOrder.list}
-              placeholder="请选择销售订单"
-              fieldNames={{ label: "code", value: "id" }}
-              filterOption
-              showSearch
-              optionFilterProp="name"
-              onChange={(_, value) => {
-                if (value && !(value instanceof Array)) {
-                  show.current.in_show = value.code;
-                }
-              }}
-            />
-          </Form.Item>
-        )}
+        <Form.Item
+          label="计划结束时间"
+          name="plan_finish_time"
+          rules={[{ required: true, message: "请选择计划盘点结束时间" }]}
+        >
+          <DatePicker
+            format="YYYY-MM-DD HH:mm"
+            allowClear
+            showTime={{
+              format: "HH:mm",
+              minuteStep: 30,
+            }}
+            style={{ width: "100%" }}
+            placeholder="请选择计划盘点结束时间"
+          />
+        </Form.Item>
       </Form>
     </Modal>
   );

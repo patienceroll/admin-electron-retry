@@ -71,7 +71,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
     // 初始状态，设置 y 坐标为 0
     from: { y: 0 },
     // 目标状态，设置 y 坐标为 -20（向下跳跃），并且透明度为 1（显示）
-    to: async (next, cancel) => {
+    to: async (next) => {
       // 等待下一次动画开始
       await next({ y: -10 });
       // 模拟跳跃效果，先向上移动再落回
@@ -86,7 +86,7 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
   });
 
   // 当前用户的菜单
-  const [menus, setMenus] = useState(() => window.preload.getLocalUserMenu()!);
+  const [menus] = useState(() => window.preload.getLocalUserMenu()!);
 
   // 当前展示的子菜单
   const [currentMenu, setCurrentMenu] = useState<UserMenu>();
@@ -100,10 +100,14 @@ function Menu(props: StyledWrapComponents<{ darkMode: boolean }>) {
     setConmonlyUsed((t) => {
       let newData: ConmonlyMenu[] = [];
       if (t.find((item) => item.id === params.id)) {
-        const temp = t.map((i) => ({
-          ...i,
-          count: params.id === i.id ? i.count + 1 : 1,
-        }));
+        const temp = t.map((i) => {
+          const newCount = params.id === i.id ? i.count + 1 : i.count;
+
+          return {
+            ...i,
+            count: newCount > 10000000 ? 10000000 : newCount,
+          };
+        });
         newData = temp.sort((a, b) => b.count - a.count);
       } else {
         newData = Array.from(t);
