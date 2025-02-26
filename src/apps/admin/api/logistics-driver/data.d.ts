@@ -7,7 +7,7 @@ type Driver = {
   phone: string;
   age: number;
   driver_age: number;
-  status: number;
+  status: 0|1|2;
   created_id: number;
   deleted_at: string;
   updated_at: string;

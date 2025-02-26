@@ -1,10 +1,9 @@
-import fetch from "@/utils/fetch";
-
+import fetch from "src/util/fetch";
 /**
  * 运输合同-列表
  */
-export function getLogisticsContractList(params: BaseListParam) {
-  return fetch.get<List<LogisticsContract>>(
+export function getLogisticsContractList(params: ListParam) {
+  return fetch.GET<List<LogisticsContract>>(
     fetch.base(`/api/logistics-contract/list`),
     params,
   );
@@ -14,7 +13,7 @@ export function getLogisticsContractList(params: BaseListParam) {
  * 运输合同-详情
  */
 export function getLogisticsContract(params: Pick<LogisticsContract, "id">) {
-  return fetch.get<LogisticsContract>(
+  return fetch.GET<LogisticsContract>(
     fetch.base(`/api/logistics-contract/detail`),
     params,
   );
@@ -24,19 +23,19 @@ export function getLogisticsContract(params: Pick<LogisticsContract, "id">) {
  * 运输合同-添加
  */
 export function addLogisticsContract(params: any) {
-  return fetch.post(fetch.base(`/api/logistics-contract`), params);
+  return fetch.POST(fetch.base(`/api/logistics-contract`), params);
 }
 
 /**
  * 运输合同-编辑
  */
 export function editLogisticsContract(params: any) {
-  return fetch.put(fetch.base(`/api/logistics-contract`), params);
+  return fetch.PUT(fetch.base(`/api/logistics-contract`), params);
 }
 
 /**
  * 运输合同-删除
  */
 export function deleteLogisticsContract(params: Pick<LogisticsContract, "id">) {
-  return fetch.del(fetch.base(`/api/logistics-contract`), params);
+  return fetch.DELETE(fetch.base(`/api/logistics-contract`), params);
 }

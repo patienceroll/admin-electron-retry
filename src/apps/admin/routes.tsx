@@ -177,6 +177,10 @@ const SupplierContact = lazy(() => import("./pages/supplier/supplier-contact"));
 const LogisticsCompany = lazy(
   () => import("./pages/logistics/logistics-company")
 );
+const LogisticsDriver = lazy(() => import("./pages/logistics/logistics-driver"));
+const LogisticsContract = lazy(
+  () => import("./pages/logistics/logistics-contract")
+);
 
 export default function (props: { darkMode: boolean }) {
   const { darkMode } = props;
@@ -379,6 +383,14 @@ export default function (props: { darkMode: boolean }) {
         <Route
           path="/logistics/logistics-company"
           element={<LogisticsCompany />}
+        />
+        <Route
+          path="/logistics/driver"
+          element={<LogisticsDriver />}
+        />
+        <Route
+          path="/logistics/logistics-contract"
+          element={<LogisticsContract />}
         />
 
         <Route path="*" element={<Page404 />} />
