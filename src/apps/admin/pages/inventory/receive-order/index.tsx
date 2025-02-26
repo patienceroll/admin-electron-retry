@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Tabs } from "antd";
+import { Button, Card, Col, FloatButton, Row, Space, Tabs, Typography } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -21,6 +21,7 @@ import styled, { useTheme } from "styled-components";
 //主体接口
 import {
   getReceiveOrderList,
+  receiveOrderExport,
   receiveOrderStatus,
 } from "src/apps/admin/api/receive-order";
 //关联接口
@@ -32,7 +33,11 @@ import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
-
+import contextedMessage from "src/framework/component/contexted-message";
+import openWindow from "src/util/open-window";
+import Permission from "src/util/permission";
+import Icon from "src/framework/component/icon";
+import ExportSvg from "src/assets/svg/导出.svg";
 function ReceiveOrder() {
   const table = useSearchTable(getReceiveOrderList);
   const theme = useTheme();
@@ -50,10 +55,37 @@ function ReceiveOrder() {
 
   const column = table.column([
     {
-      title: "发货单",
+      title: "收货单",
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/inventory/receive-order/detail?id=${record.id}`,
+              "收货单详情 - " + record.code
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesContract["btn_power"]>
+            ) {
+              if (
+                ["is_start", "is_end", "is_cancel_operate"].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
     },
     {
       title: "项目",
@@ -122,43 +154,20 @@ function ReceiveOrder() {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
-      width: 160,
-      // render: action<ReceiveOrder>([
-      //     {
-      //         text: "打印",
-      //         async onClick({ entity }) {
-      //             const action = await saleContractPrint({});
-      //             action.prepareToPrint(entity);
-      //         },
-      //     },
-      //     {
-      //         text: "编辑",
-      //         color: action.green,
-      //         btn_power: "is_edit",
-      //         onClick({ entity }) {
-      //             history.push({
-      //                 pathname: `/sales/sales-deliver/edit/${entity.id}`,
-      //             });
-      //         },
-      //     },
-      //     {
-      //         text: "删除",
-      //         color: action.red,
-      //         btn_power: "is_delete",
-      //         onClick({ entity }) {
-      //             asyncConfirm({
-      //                 title: "删除",
-      //                 content: `确定删除${entity.name}?`,
-      //                 submitting() {
-      //                     return deleteReceiveOrder({ id: entity.id }).then(() => {
-      //                         message.success("删除成功");
-      //                         reload();
-      //                     });
-      //                 },
-      //             });
-      //         },
-      //     },
-      // ]),
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -314,7 +323,10 @@ function ReceiveOrder() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -343,8 +355,28 @@ function ReceiveOrder() {
             }}
           />
         }
-
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            description="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              receiveOrderExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }

@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -33,7 +42,11 @@ import AddressFormSearch from "src/framework/component/adress-form-search";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import contextedMessage from "src/framework/component/contexted-message";
-
+import openWindow from "src/util/open-window";
+import Permission from "src/util/permission";
+import { deliverOrderExport } from "src/apps/admin/api/deliver-order";
+import Icon from "src/framework/component/icon";
+import ExportSvg from "src/assets/svg/导出.svg";
 function SalesDeliver() {
   const table = useSearchTable(getSalesDeliverList);
   const theme = useTheme();
@@ -55,6 +68,33 @@ function SalesDeliver() {
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/inventory/deliver-order/detail?id=${record.id}`,
+              "发货单详情 - " + record.code
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesContract["btn_power"]>
+            ) {
+              if (
+                ["is_start", "is_end", "is_cancel_operate"].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
     },
     {
       title: "项目",
@@ -123,7 +163,6 @@ function SalesDeliver() {
       dataIndex: "action",
       title: "操作",
       fixed: "right",
-      width: 200,
       render(_, row) {
         return (
           <Space>
@@ -141,7 +180,7 @@ function SalesDeliver() {
     },
   ]);
 
-  const columnState = useColumnState("salesDeliverList", column);
+  const columnState = useColumnState("inventoryDeliverOrderList", column);
 
   useEffect(() => {
     table.reload();
@@ -293,7 +332,10 @@ function SalesDeliver() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -323,6 +365,27 @@ function SalesDeliver() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            description="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              deliverOrderExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }

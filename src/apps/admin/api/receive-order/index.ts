@@ -14,10 +14,12 @@ export const receiveOrderStatus = new Map<
 /**
  * 收货单-列表
  */
-export function getReceiveOrderList(params: ListParam) {
+export function getReceiveOrderList(
+  params: ListParam & { status?: ReceiveOrder["status"] }
+) {
   return fetch.GET<List<ReceiveOrder>>(
     fetch.base(`/api/receive-order/list`),
-    params,
+    params
   );
 }
 
@@ -27,7 +29,7 @@ export function getReceiveOrderList(params: ListParam) {
 export function getReceiveOrder(params: Pick<ReceiveOrder, "id">) {
   return fetch.GET<ReceiveOrder>(
     fetch.base(`/api/receive-order/detail`),
-    params,
+    params
   );
 }
 
@@ -64,6 +66,6 @@ export function receiveOrderExport(params: Record<string, any>) {
 export function getOperateRecord(params: Pick<ReceiveOrder, "id">) {
   return fetch.GET<OperateRecord[]>(
     fetch.base(`/api/receive-order/log`),
-    params,
+    params
   );
 }
