@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row } from "antd";
+import { Card, Col, FloatButton, Row } from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -17,11 +17,14 @@ import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
 import useOption from "src/hooks/use-option";
 import styled, { useTheme } from "styled-components";
-
+import Icon from "src/framework/component/icon";
+import ExportSvg from "src/assets/svg/导出.svg";
+import Permission from "src/util/permission";
 //主体接口
 import {
   getWarehouseLogList,
   recordTypeMap,
+  warehouseLogExport,
 } from "src/apps/admin/api/warehouse-log";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
@@ -32,6 +35,7 @@ import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
+import contextedMessage from "src/framework/component/contexted-message";
 
 function SalesDeliver() {
   const table = useSearchTable(getWarehouseLogList);
@@ -166,7 +170,7 @@ function SalesDeliver() {
     },
   ]);
 
-  const columnState = useColumnState("salesDeliverList", column);
+  const columnState = useColumnState("inventory-warehouse-log-list", column);
 
   useEffect(() => {
     table.reload();
@@ -318,7 +322,10 @@ function SalesDeliver() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -329,6 +336,27 @@ function SalesDeliver() {
           },
         }}
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("export") && (
+          <FloatButton
+            icon={<Icon icon={ExportSvg} />}
+            description="导出"
+            onClick={function () {
+              contextedMessage.message?.info("正在导出...");
+              warehouseLogExport(
+                Object.assign(
+                  {},
+                  table.params.current,
+                  table.extraParams.current
+                )
+              ).then((res) => {
+                window.preload.downloadFile(res.data.file_path);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
     </PageWrapper>
   );
 }
