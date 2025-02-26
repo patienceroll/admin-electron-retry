@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 function Detail(props: StyledWrapComponents) {
     return <PageWrapper>
-        调拨单详情
+        调拨库单详情
     </PageWrapper>
 }
 

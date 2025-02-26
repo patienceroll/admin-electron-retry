@@ -1,8 +1,7 @@
 import { Button, Form, Modal, Select, Space } from "antd";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 
-
-import { addInStock } from "src/apps/admin/api/in-stock";
+import { addOutStock } from "src/apps/admin/api/out-stock";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
@@ -11,7 +10,7 @@ import useOption from "src/hooks/use-option";
 import useWather from "src/hooks/use-wather";
 
 type Ref = {
-  create: () => Promise<InStockAddResponse>;
+  create: () => Promise<OutStockAddResponse>;
 };
 
 export function createRef() {
@@ -21,7 +20,7 @@ export function createRef() {
 export default forwardRef<Ref>(function (props, ref) {
   const promiseResolver = useRef<{
     resolve: (
-      value: InStockAddResponse | PromiseLike<InStockAddResponse>
+      value: OutStockAddResponse | PromiseLike<OutStockAddResponse>
     ) => void;
     reject: (reason?: unknown) => void;
   }>({ resolve() {}, reject() {} });
@@ -60,7 +59,7 @@ export default forwardRef<Ref>(function (props, ref) {
       .validateFields()
       .then((store) => {
         loading.setTrue();
-        return addInStock(store);
+        return addOutStock(store);
       })
       .then((res) => {
         loading.setTrue();
@@ -73,7 +72,7 @@ export default forwardRef<Ref>(function (props, ref) {
 
   return (
     <Modal
-      title="新建采购申请"
+      title="新建出库单"
       open={open.whether}
       maskClosable={!loading.whether}
       closeIcon={loading.whether}
@@ -89,12 +88,7 @@ export default forwardRef<Ref>(function (props, ref) {
         </Space>
       }
     >
-      <Form
-        form={form}
-        autoComplete="off"
-        labelCol={{ span: 4 }}
-        initialValues={{ is_urgent: 0 }}
-      >
+      <Form form={form} autoComplete="off" labelCol={{ span: 4 }}>
         <Form.Item label="项目" name="project_id">
           <Select
             options={project.list}
@@ -105,7 +99,7 @@ export default forwardRef<Ref>(function (props, ref) {
             optionFilterProp="name"
           />
         </Form.Item>
-        <Form.Item label="合同" name="sales_contract_id">
+        <Form.Item label="销售合同" name="sales_contract_id">
           <Select
             options={salesContract.list}
             placeholder="选择销售合同"
@@ -117,7 +111,7 @@ export default forwardRef<Ref>(function (props, ref) {
         </Form.Item>
         <Form.Item label="销售订单" name="sales_order_id">
           <Select
-            options={salesOrder.list.filter((i) => [1, 2].includes(i.status))}
+            options={salesOrder.list}
             placeholder="选择销售订单"
             fieldNames={{ label: "code", value: "id" }}
             filterOption
@@ -132,7 +126,7 @@ export default forwardRef<Ref>(function (props, ref) {
         >
           <Select
             options={warehouse.list}
-            placeholder="请选择仓库"
+            placeholder="请选择"
             filterOption
             showSearch
             optionFilterProp="name"

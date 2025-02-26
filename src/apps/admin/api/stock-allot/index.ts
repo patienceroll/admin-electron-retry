@@ -27,7 +27,9 @@ export const stockAllotStatus = new Map<
 /**
  * 调拨单-列表
  */
-export function getStockAllotList(params: ListParam) {
+export function getStockAllotList(params: ListParam & {
+  status?: StockAllot["status"];
+}) {
   return fetch.GET<List<StockAllot>>(
     fetch.base(`/api/stock-allot/list`),
     params,

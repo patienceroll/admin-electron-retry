@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Card, Col, Row, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -20,20 +29,26 @@ import styled, { useTheme } from "styled-components";
 
 //主体接口
 import {
+  deleteStockAllot,
   getStockAllotList,
   stockAllotStatus,
   stockAllotType,
 } from "src/apps/admin/api/stock-allot";
 //关联接口
 import { getClientOption } from "src/apps/admin/api/client";
-import { getAreaOption } from "src/apps/admin/api/sales-territory";
 import { getProjectOption } from "src/apps/admin/api/project";
 import { getSalesContractOption } from "src/apps/admin/api/sales-contract";
 import { getSalesOrderOption } from "src/apps/admin/api/sales-order";
 import AddressFormSearch from "src/framework/component/adress-form-search";
 import useStaffTree from "src/b-hooks/use-staff-tree";
 import usePageTableHeight from "src/hooks/use-page-table-height";
-
+import openWindow from "src/util/open-window";
+import contextedMessage from "src/framework/component/contexted-message";
+import Permission from "src/util/permission";
+import Icon from "src/framework/component/icon";
+import AddSvg from "src/assets/svg/add.svg";
+import * as Create from "./components/create";
+import contextedModal from "src/framework/component/contexted-modal";
 function StockAllot() {
   const table = useSearchTable(getStockAllotList);
   const theme = useTheme();
@@ -42,12 +57,30 @@ function StockAllot() {
     theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
   );
   const { options, treeOptions } = useStaffTree();
+  const create = Create.createRef();
 
-  const [areaOption] = useOption(getAreaOption);
   const [projectOption] = useOption(getProjectOption);
   const [clientOption] = useOption(getClientOption);
   const [salesContractOption] = useOption(getSalesContractOption);
   const [salesOrderOption] = useOption(getSalesOrderOption);
+
+  function Edit(id: InStock["id"]) {
+    const window = openWindow.openCurrentAppWindow(
+      `/inventory/stock-allot/edit?id=${id}`,
+      "编辑调拨单"
+    );
+
+    function listener(event: MessageEvent<"success">) {
+      if (event.data === "success") {
+        table.reload();
+        contextedMessage.message?.success("编辑成功");
+      }
+    }
+
+    if (window) {
+      window.addEventListener("message", listener);
+    }
+  }
 
   const column = table.column([
     {
@@ -55,11 +88,45 @@ function StockAllot() {
       dataIndex: "code",
       copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          copyable
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/inventory/stock-allot/detail?id=${record.id}`,
+              "调拨单详情 - " + record.code
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesContract["btn_power"]>
+            ) {
+              if (
+                [
+                  "is_submit",
+                  "is_approve",
+                  "is_end",
+                  "is_invalid",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
+      width: 260,
     },
     {
       title: "类型",
       dataIndex: "type",
-      customValueEnum: stockAllotType,
+      valueEnum: stockAllotType,
     },
     {
       title: "调出目标",
@@ -80,10 +147,6 @@ function StockAllot() {
       width: 120,
     },
     {
-      title: "备注",
-      dataIndex: "remark",
-    },
-    {
       title: "创建时间",
       dataIndex: "created_at",
     },
@@ -96,43 +159,47 @@ function StockAllot() {
       dataIndex: "id",
       title: "操作",
       fixed: "right",
-      width: 160,
-      // render: action<StockAllot>([
-      //   {
-      //     text: "打印",
-      //     async onClick({ entity }) {
-      //       const action = await stockAllotPrint({});
-      //       action.prepareToPrint(entity);
-      //     },
-      //   },
-      //   {
-      //     text: "编辑",
-      //     color: action.green,
-      //     btn_power: "is_edit",
-      //     onClick({ entity }) {
-      //       history.push({
-      //         pathname: `/inventory/stock-allot/edit/${entity.id}`,
-      //       });
-      //     },
-      //   },
-      //   {
-      //     text: "删除",
-      //     color: action.red,
-      //     btn_power: "is_delete",
-      //     onClick({ entity }) {
-      //       asyncConfirm({
-      //         title: "删除",
-      //         content: `确定删除${entity.code}?`,
-      //         submitting() {
-      //           return deleteStockAllot({ id: entity.id }).then(() => {
-      //             message.success("删除成功");
-      //             reload();
-      //           });
-      //         },
-      //       });
-      //     },
-      //   },
-      // ]),
+      width: 200,
+      render(_, row) {
+        return (
+          <Space>
+            <Button
+              type="text"
+              onClick={() => {
+                contextedMessage.message?.info("正在开发中...");
+              }}
+            >
+              打印
+            </Button>
+            <Button
+              type="text"
+              onClick={function () {
+                Edit(row.id);
+              }}
+            >
+              编辑
+            </Button>
+            <Button
+              type="text"
+              danger
+              onClick={function () {
+                contextedModal.modal?.confirm({
+                  title: "删除",
+                  content: `确定删除${row.code}?`,
+                  onOk() {
+                    return deleteStockAllot({ id: row.id }).then(() => {
+                      contextedMessage.message?.success("删除成功");
+                      table.reload();
+                    });
+                  },
+                });
+              }}
+            >
+              删除
+            </Button>
+          </Space>
+        );
+      },
     },
   ]);
 
@@ -140,7 +207,6 @@ function StockAllot() {
 
   useEffect(() => {
     table.reload();
-    areaOption.loadOption();
     projectOption.loadOption();
     clientOption.loadOption();
     salesContractOption.loadOption();
@@ -253,20 +319,7 @@ function StockAllot() {
                 label="发货日期"
               />
             </Col>
-            <Col flex="280px">
-              <ProFormSelect
-                label="状态"
-                name="statuses"
-                options={Array.from(stockAllotStatus.values())}
-                fieldProps={{
-                  fieldNames: { label: "text", value: "value" },
-                  showSearch: true,
-                  filterOption: true,
-                  optionFilterProp: "name",
-                  mode: "multiple",
-                }}
-              />
-            </Col>
+
             <Col flex="80px">
               <SearchAction
                 loading={table.loading}
@@ -288,7 +341,10 @@ function StockAllot() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -316,6 +372,23 @@ function StockAllot() {
           />
         }
       />
+
+      <FloatButton.Group shape="square">
+        {Permission.getPermission("edit") && (
+          <FloatButton
+            description="新调拨单"
+            icon={<Icon icon={AddSvg} />}
+            onClick={() => {
+              create.current?.create().then((result) => {
+                contextedMessage.message?.success("成功新增");
+                table.reload();
+                Edit(result.id);
+              });
+            }}
+          />
+        )}
+      </FloatButton.Group>
+        <Create.default ref={create} />
     </PageWrapper>
   );
 }
