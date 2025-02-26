@@ -1,36 +1,27 @@
-import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Descriptions,
-  Pagination,
-  Row,
-} from "antd";
+import React, { useEffect } from "react";
+import { Badge, Button, Card, Col, Descriptions, Pagination, Row } from "antd";
 import { ProFormText } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
 import {
-  deleteWarehouse,
-  getWarehouseList,
-  WarehouseStatus,
-} from "src/apps/admin/api/warehouse";
+  deleteLogisticsCompany,
+  getLogisticsCompanyList,
+  LogisticsCompanyStatus,
+} from "src/apps/admin/api/logistics-company";
 import Search from "src/framework/component/search";
 import SearchAction from "src/framework/component/search/search-action";
 import Icon from "src/framework/component/icon";
-
+import * as Modify from "./components/modify";
+import AddSvg from "src/assets/svg/add.svg";
 import EditSvg from "src/assets/svg/eidt.svg";
 import DeleteSvg from "src/assets/svg/delete.svg";
-import AddSvg from "src/assets/svg/add.svg";
-import contextedModal from "src/framework/component/contexted-modal";
 import contextedMessage from "src/framework/component/contexted-message";
-import * as Modify from "./components/modify";
-function Warehouse(props: StyledWrapComponents) {
+import contextedModal from "src/framework/component/contexted-modal";
+function LogisticsCompany(props: StyledWrapComponents) {
   const { className } = props;
-  const table = useSearchTable(getWarehouseList);
+  const table = useSearchTable(getLogisticsCompanyList);
   const theme = useTheme();
 
   const modify = Modify.createRef();
@@ -38,7 +29,6 @@ function Warehouse(props: StyledWrapComponents) {
   useEffect(() => {
     table.reload();
   }, []);
-
   return (
     <PageWrapper className={className}>
       <Card bordered>
@@ -46,9 +36,9 @@ function Warehouse(props: StyledWrapComponents) {
           <Row gutter={[theme.padding, theme.padding]}>
             <Col flex="300px">
               <ProFormText
-                label="仓库名称"
+                label="公司名称"
                 name="keyword"
-                placeholder="搜索仓库名称"
+                placeholder="搜索公司名称"
               />
             </Col>
             <Col flex="80px">
@@ -72,8 +62,8 @@ function Warehouse(props: StyledWrapComponents) {
             title={<span>{item.name}</span>}
             extra={
               <Badge
-                color={WarehouseStatus.get(item.status)!.color}
-                text={WarehouseStatus.get(item.status)!.text}
+                color={LogisticsCompanyStatus.get(item.status)!.color}
+                text={LogisticsCompanyStatus.get(item.status)!.text}
               />
             }
             actions={[
@@ -93,10 +83,12 @@ function Warehouse(props: StyledWrapComponents) {
                     title: "删除",
                     content: `确定删除${item.name}?`,
                     onOk() {
-                      return deleteWarehouse({ id: item.id }).then(() => {
-                        contextedMessage.message?.success("成功删除");
-                        table.reload();
-                      });
+                      return deleteLogisticsCompany({ id: item.id }).then(
+                        () => {
+                          contextedMessage.message?.success("成功删除");
+                          table.reload();
+                        }
+                      );
                     },
                   });
                 }}
@@ -105,13 +97,8 @@ function Warehouse(props: StyledWrapComponents) {
               </div>,
             ]}
           >
-            <Descriptions column={1}>
-              <Descriptions.Item span={2} label="描述">
-                {item.remark}
-              </Descriptions.Item>
-              <Descriptions.Item span={2} label="地址">
-                {item.address}
-              </Descriptions.Item>
+            <Descriptions size="small">
+              <Descriptions.Item>{item.remark}</Descriptions.Item>
             </Descriptions>
           </Card>
         ))}
@@ -147,16 +134,15 @@ function Warehouse(props: StyledWrapComponents) {
             });
           }}
         >
-          新建仓库
+          新建公司
         </Button>
       </div>
-
       <Modify.default ref={modify} />
     </PageWrapper>
   );
 }
 
-export default styled(Warehouse)`
+export default styled(LogisticsCompany)`
   display: flex;
   height: calc(100vh - ${(props) => props.theme.padding * 2}px);
   flex-direction: column;

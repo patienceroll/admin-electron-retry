@@ -128,19 +128,27 @@ const OutStockDetail = lazy(() => import("./pages/inventory/out-stock/detail"));
 const OutStockEdit = lazy(() => import("./pages/inventory/out-stock/edit"));
 //发货单
 const DeliverOrder = lazy(() => import("./pages/inventory/deliver-order"));
-const DeliverOrderDetail = lazy(() => import("./pages/inventory/deliver-order/detail"));
+const DeliverOrderDetail = lazy(
+  () => import("./pages/inventory/deliver-order/detail")
+);
 //收货单
 const ReceiveOrder = lazy(() => import("./pages/inventory/receive-order"));
-const ReceiveOrderDetail = lazy(() => import("./pages/inventory/receive-order/detail"));
+const ReceiveOrderDetail = lazy(
+  () => import("./pages/inventory/receive-order/detail")
+);
 //收货单
 const WarehouseLog = lazy(() => import("./pages/inventory/warehouse-log"));
 //盘点单
 const StockCheck = lazy(() => import("./pages/inventory/stock-check"));
-const StockCheckDetail = lazy(() => import("./pages/inventory/stock-check/detail"));
+const StockCheckDetail = lazy(
+  () => import("./pages/inventory/stock-check/detail")
+);
 const StockCheckEdit = lazy(() => import("./pages/inventory/stock-check/edit"));
 //调拨单
 const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
-const StockAllotDetail = lazy(() => import("./pages/inventory/stock-allot/detail"));
+const StockAllotDetail = lazy(
+  () => import("./pages/inventory/stock-allot/detail")
+);
 const StockAllotEdit = lazy(() => import("./pages/inventory/stock-allot/edit"));
 // 库存仓库
 const InventoryWarehouse = lazy(() => import("./pages/inventory/warehouse"));
@@ -164,6 +172,11 @@ const MaterialEdit = lazy(() => import("./pages/material/material/edit"));
 const Supplier = lazy(() => import("./pages/supplier/supplier"));
 const SupplierEdit = lazy(() => import("./pages/supplier/supplier/edit"));
 const SupplierContact = lazy(() => import("./pages/supplier/supplier-contact"));
+
+// 物流
+const LogisticsCompany = lazy(
+  () => import("./pages/logistics/logistics-company")
+);
 
 export default function (props: { darkMode: boolean }) {
   const { darkMode } = props;
@@ -302,33 +315,47 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/inventory/in-stock" element={<InStock />} />
         <Route path="/inventory/in-stock/edit" element={<InStockEdit />} />
         <Route path="/inventory/in-stock/detail" element={<InStockDetail />} />
-        
+
         <Route path="/inventory/out-stock" element={<OutStock />} />
-        <Route path="/inventory/out-stock/detail" element={<OutStockDetail />} />
+        <Route
+          path="/inventory/out-stock/detail"
+          element={<OutStockDetail />}
+        />
         <Route path="/inventory/out-stock/edit" element={<OutStockEdit />} />
 
-
         <Route path="/inventory/deliver-order" element={<DeliverOrder />} />
-        <Route path="/inventory/deliver-order/detail" element={<DeliverOrderDetail />} />
-        
-        
-        <Route path="/inventory/receive-order" element={<ReceiveOrder />} />
-        <Route path="/inventory/receive-order/detail" element={<ReceiveOrderDetail />} />
+        <Route
+          path="/inventory/deliver-order/detail"
+          element={<DeliverOrderDetail />}
+        />
 
+        <Route path="/inventory/receive-order" element={<ReceiveOrder />} />
+        <Route
+          path="/inventory/receive-order/detail"
+          element={<ReceiveOrderDetail />}
+        />
 
         <Route path="/inventory/warehouse-log" element={<WarehouseLog />} />
-        
+
         <Route path="/inventory/stock-check" element={<StockCheck />} />
-        <Route path="/inventory/stock-check/edit" element={<StockCheckEdit />} />
-        <Route path="/inventory/stock-check/detail" element={<StockCheckDetail />} />
-
-
+        <Route
+          path="/inventory/stock-check/edit"
+          element={<StockCheckEdit />}
+        />
+        <Route
+          path="/inventory/stock-check/detail"
+          element={<StockCheckDetail />}
+        />
 
         <Route path="/inventory/stock-allot" element={<StockAllot />} />
-        <Route path="/inventory/stock-allot/detail" element={<StockAllotDetail />} />
-        <Route path="/inventory/stock-allot/edit" element={<StockAllotEdit />} />
-
-
+        <Route
+          path="/inventory/stock-allot/detail"
+          element={<StockAllotDetail />}
+        />
+        <Route
+          path="/inventory/stock-allot/edit"
+          element={<StockAllotEdit />}
+        />
 
         <Route path="/inventory/warehouse" element={<InventoryWarehouse />} />
 
@@ -347,6 +374,11 @@ export default function (props: { darkMode: boolean }) {
         <Route
           path="/supplier/supplier-contact"
           element={<SupplierContact />}
+        />
+
+        <Route
+          path="/logistics/logistics-company"
+          element={<LogisticsCompany />}
         />
 
         <Route path="*" element={<Page404 />} />
