@@ -134,6 +134,10 @@ export default class Views {
 
   /** 删除一个页面 */
   close(path: string) {
+    const item = this.value.get(path);
+    if(item) {
+      item.view.webContents.close()
+    }
     this.value.delete(path);
   }
 
