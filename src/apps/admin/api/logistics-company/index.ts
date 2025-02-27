@@ -18,6 +18,15 @@ export function getLogisticsCompanyList(params: ListParam) {
     params
   );
 }
+/**
+ * 运输公司-选项
+ */
+export function getLogisticsCompanyOptions(params: ListParam) {
+  return fetch.GET<LogisticsCompany[]>(
+    fetch.base(`/api/logistics-company/list`),
+    params
+  );
+}
 
 /**
  * 运输公司-详情
