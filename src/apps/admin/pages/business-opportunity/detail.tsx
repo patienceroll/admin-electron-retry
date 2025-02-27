@@ -18,6 +18,7 @@ import Title from "src/framework/component/title";
 import {
   approval,
   billInvalid,
+  businessOpportunitySetup,
   BusinessOpportunityStatus,
   cancelOperate,
   getBusinessOpportunity,
@@ -264,7 +265,6 @@ function Detail(props: StyledWrapComponents) {
         附件信息
       </Title>
 
-
       {detail && (
         <div style={{ marginTop: theme.margin }}>
           <BusinessFile
@@ -439,6 +439,26 @@ function Detail(props: StyledWrapComponents) {
                       contextedMessage.message?.success("成功发起立项申请");
                       getDetail();
                       window.parent.postMessage("is_submit");
+                    });
+                  },
+                });
+              }}
+            />
+          )}
+
+          {detail.btn_power.is_enable && (
+            <FloatButton
+              description="启用"
+              icon={<Icon icon={LixiangSvg} />}
+              onClick={() => {
+                contextedModal.modal?.confirm({
+                  title: "启用",
+                  content: "发起启用后，信息将传递给销售人员查看。",
+                  onOk() {
+                    return businessOpportunitySetup({ id }).then(() => {
+                      contextedMessage.message?.success("成功启用");
+                      getDetail();
+                      window.parent.postMessage("is_enable");
                     });
                   },
                 });

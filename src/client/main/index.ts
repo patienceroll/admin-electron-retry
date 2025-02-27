@@ -25,32 +25,6 @@ function createWindow() {
   if (app.isPackaged) {
     new Update().queryUpdate();
   }
-  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-  //   debugger;
-  //   callback({
-  //     responseHeaders: {
-  //       ...details.responseHeaders,
-  //       "Content-Security-Policy": [
-  //         buildCSP({
-  //           defaultSrc: ["'self'"],
-  //           connectSrc: [
-  //             "'self'",
-  //             "http://118.89.67.217:9638",
-  //             "*.qiniu.com",
-  //             "*.amap.com",
-  //           ],
-  //           fontSrc: ["'self'", "data:"],
-  //           imgSrc: ["*", "data:", "blob:"],
-  //           styleSrc: ["'self'", "'unsafe-inline'"],
-  //           workerSrc: ["'self'", "blob:"],
-  //           scriptSrc: app.isPackaged
-  //             ? ["'self'"]
-  //             : ["'self'", "'unsafe-eval'", "'unsafe-inline'", "*.amap.com"],
-  //         }),
-  //       ],
-  //     },
-  //   });
-  // });
   framework = new Framework();
 }
 

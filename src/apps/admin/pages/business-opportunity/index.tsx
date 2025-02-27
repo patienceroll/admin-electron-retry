@@ -80,6 +80,7 @@ function BusinessOpportunity() {
                   "is_submit",
                   "is_invalid",
                   "is_cancel_operate",
+                  "is_enable"
                 ].includes(event.data)
               ) {
                 table.reload();
