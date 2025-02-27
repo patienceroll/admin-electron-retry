@@ -37,7 +37,7 @@ import SaveSvg from "src/assets/svg/保存.svg";
 import dayjs from "dayjs";
 import contextedModal from "src/framework/component/contexted-modal";
 import EditClientList from "./components/edit-client-list";
-import File from "./components/file";
+import BusinessFile from "src/b-components/business-file";
 
 function Edit(props: StyledWrapComponents) {
   const { className } = props;
@@ -313,7 +313,14 @@ function Edit(props: StyledWrapComponents) {
 
       {detail && (
         <Card style={{ marginTop: theme.margin }}>
-          <File id={id} files={detail["file"]["业务机会附件"]} />
+          <BusinessFile
+            id={id}
+            maxCount={1}
+            service="business-opportunity"
+            identify="业务机会附件"
+            isCover={1}
+            files={detail.file["业务机会附件"]}
+          />
         </Card>
       )}
 
