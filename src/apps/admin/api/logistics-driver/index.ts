@@ -16,6 +16,11 @@ export function getDriverList(params: ListParam) {
   return fetch.GET<List<Driver>>(fetch.base(`/api/driver/list`), params);
 }
 
+/** 司机 - 选项 */
+export function getDriverOptions(params: ListParam) {
+  return fetch.GET<Driver[]>(fetch.base(`/api/driver/list`), params);
+}
+
 /**
  * 司机-详情
  */

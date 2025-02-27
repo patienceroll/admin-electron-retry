@@ -23,3 +23,5 @@ type LogisticsContract = {
     name: string;
   };
 };
+
+type LogisticsContractStatus = 0 | 1 | 2;
