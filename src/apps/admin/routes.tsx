@@ -152,6 +152,9 @@ const StockAllotDetail = lazy(
 const StockAllotEdit = lazy(() => import("./pages/inventory/stock-allot/edit"));
 // 库存仓库
 const InventoryWarehouse = lazy(() => import("./pages/inventory/warehouse"));
+const InverntoryDetail = lazy(
+  () => import("./pages/inventory/inventory-detail")
+);
 
 /**
  * 生产管理模块
@@ -177,7 +180,9 @@ const SupplierContact = lazy(() => import("./pages/supplier/supplier-contact"));
 const LogisticsCompany = lazy(
   () => import("./pages/logistics/logistics-company")
 );
-const LogisticsDriver = lazy(() => import("./pages/logistics/logistics-driver"));
+const LogisticsDriver = lazy(
+  () => import("./pages/logistics/logistics-driver")
+);
 const LogisticsContract = lazy(
   () => import("./pages/logistics/logistics-contract")
 );
@@ -362,6 +367,7 @@ export default function (props: { darkMode: boolean }) {
         />
 
         <Route path="/inventory/warehouse" element={<InventoryWarehouse />} />
+        <Route path="/inventory/inventory-detail" element={<InverntoryDetail />} />
 
         <Route path="/produce/produce-receive" element={<ProduceReceive />} />
         <Route path="/produce/produce-return" element={<ProduceReturn />} />
@@ -384,10 +390,7 @@ export default function (props: { darkMode: boolean }) {
           path="/logistics/logistics-company"
           element={<LogisticsCompany />}
         />
-        <Route
-          path="/logistics/driver"
-          element={<LogisticsDriver />}
-        />
+        <Route path="/logistics/driver" element={<LogisticsDriver />} />
         <Route
           path="/logistics/logistics-contract"
           element={<LogisticsContract />}
