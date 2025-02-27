@@ -35,7 +35,6 @@ import {
   getProjectFollowOption,
   projectFollowStatus,
 } from "src/apps/admin/api/project-follow";
-import File from "./components/file";
 import Icon from "src/framework/component/icon";
 import ApprovalSvg from "src/assets/svg/审批.svg";
 import LixiangSvg from "src/assets/svg/立项.svg";
@@ -46,6 +45,7 @@ import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 import OperateRecord from "src/b-components/operate-record";
 import ApprovalRecord from "src/b-components/approval-record";
+import BusinessFile from "src/b-components/business-file";
 
 function Detail(props: StyledWrapComponents) {
   const { className } = props;
@@ -184,11 +184,14 @@ function Detail(props: StyledWrapComponents) {
               </Tag>
             </InfoItem>
           </Col>
-          <Col flex="400px">
-            <InfoItem label="备注"> {detail.remark}</InfoItem>
-          </Col>
+
           <Col flex="400px">
             <InfoItem label="地址"> {detail.address}</InfoItem>
+          </Col>
+          <Col flex="100%">
+            <InfoItem label="备注" contentStyle={{ whiteSpace: "pre-wrap" }}>
+              {detail.remark}
+            </InfoItem>
           </Col>
         </Row>
       )}
@@ -219,7 +222,12 @@ function Detail(props: StyledWrapComponents) {
             </InfoItem>
           </Col>
           <Col flex="100%">
-            <InfoItem label="建设内容">{detail.build_content}</InfoItem>
+            <InfoItem
+              label="建设内容"
+              contentStyle={{ whiteSpace: "pre-wrap" }}
+            >
+              {detail.build_content}
+            </InfoItem>
           </Col>
         </Row>
       )}
@@ -256,9 +264,17 @@ function Detail(props: StyledWrapComponents) {
         附件信息
       </Title>
 
+
       {detail && (
         <div style={{ marginTop: theme.margin }}>
-          <File id={id} files={detail["file"]["业务机会附件"]} />
+          <BusinessFile
+            id={id}
+            maxCount={1}
+            service="business-opportunity"
+            identify="业务机会附件"
+            isCover={1}
+            files={detail.file["业务机会附件"]}
+          />
         </div>
       )}
 
@@ -410,7 +426,7 @@ function Detail(props: StyledWrapComponents) {
             />
           )}
 
-          {detail.btn_power.is_submit  === 1 && (
+          {detail.btn_power.is_submit === 1 && (
             <FloatButton
               description="立项"
               icon={<Icon icon={LixiangSvg} />}
@@ -430,7 +446,7 @@ function Detail(props: StyledWrapComponents) {
             />
           )}
 
-          {detail.btn_power.is_invalid  === 1 && (
+          {detail.btn_power.is_invalid === 1 && (
             <FloatButton
               description="作废"
               icon={<Icon icon={ZuofeiSvg} fill={theme.colorError} />}
@@ -449,7 +465,7 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_cancel_operate  === 1 && (
+          {detail.btn_power.is_cancel_operate === 1 && (
             <FloatButton
               description="撤销"
               icon={<Icon icon={CancelSvg} fill={theme.colorWarning} />}

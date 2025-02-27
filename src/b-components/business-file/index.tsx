@@ -74,7 +74,7 @@ export default function <Id extends string | number = number>(
           .then((res) => {
             return postFile({
               path: res.key,
-              name: res.hash,
+              name: file.name,
               extend: {
                 file_size: file.size,
                 file_type: file.type,
