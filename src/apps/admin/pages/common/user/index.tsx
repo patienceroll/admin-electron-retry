@@ -1,16 +1,23 @@
 import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
-import { Affix, Card } from "antd";
-import { ProFormText, ProTable, QueryFilter } from "@ant-design/pro-components";
+import { Card, Col, Row } from "antd";
+import { ProFormText, ProTable } from "@ant-design/pro-components";
 
 import PageWrapper from "src/framework/component/page-wrapper";
 import useSearchTable from "src/hooks/use-search-table";
 
 import { getUserList, userStatus } from "src/apps/admin/api/login";
+import usePageTableHeight from "src/hooks/use-page-table-height";
+import Search from "src/framework/component/search";
+import SearchAction from "src/framework/component/search/search-action";
 
 function Message() {
   const table = useSearchTable(getUserList);
   const theme = useTheme();
+  const { addAElement, height } = usePageTableHeight(
+    theme.padding * 2 + theme.margin
+  );
+
   const column = table.column([
     {
       title: "类型",
@@ -53,24 +60,31 @@ function Message() {
 
   return (
     <PageWrapper>
-      <Affix offsetTop={theme.padding}>
-        <Card bordered>
-          <QueryFilter
-            defaultCollapsed
-            split
-            style={{ padding: 0, rowGap: 0 }}
-            loading={table.loading}
-            onReset={table.onReset}
-            onFinish={table.onFinish}
-          >
-            <ProFormText
-              name="keyword"
-              label="关键词"
-              placeholder="按名称/账号筛选"
-            />
-          </QueryFilter>
-        </Card>
-      </Affix>
+      <Card
+        bordered
+        ref={(div) => {
+          if (div) addAElement(div);
+        }}
+      >
+        <Search>
+          <Row gutter={[theme.padding, theme.padding]}>
+            <Col flex="280px">
+              <ProFormText
+                name="keyword"
+                label="关键词"
+                placeholder="按名称/账号筛选"
+              />
+            </Col>
+            <Col flex="80px">
+              <SearchAction
+                loading={table.loading}
+                onReset={table.onReset}
+                onFinish={table.onFinish}
+              />
+            </Col>
+          </Row>
+        </Search>
+      </Card>
       <ProTable
         rowKey="id"
         style={{ marginTop: theme.margin }}
@@ -81,7 +95,10 @@ function Message() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={column}
-        scroll={{ x: table.measureColumnWidth(column) }}
+        scroll={{
+          x: table.measureColumnWidth(column),
+          y: height,
+        }}
       />
     </PageWrapper>
   );

@@ -1,6 +1,6 @@
 import { ProTable } from "@ant-design/pro-components";
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Button, FloatButton, Space, Tag } from "antd";
 
 import useWather from "src/hooks/use-wather";
@@ -17,12 +17,18 @@ import * as Permission from "./components/permission";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 import { watherMap } from "src/apps/admin/api/general";
+import useTableInnerHeight from "src/hooks/use-page-table-height/use-table-inner-height";
 
 type Data = Omit<Menu, "child"> & { children?: Data[] };
 
 function Admin() {
   const [loading] = useWather();
   const [dataSource, setDataSource] = useState<Data[]>([]);
+  const theme = useTheme();
+  const tableInnerHeight = useTableInnerHeight({
+    toolbar: false,
+    pagenation: false,
+  });
 
   const ref = Edit.createRef();
   const permission = Permission.createRef();
@@ -163,7 +169,13 @@ function Admin() {
         dataSource={dataSource}
         size="small"
         options={false}
-        scroll={{ x: tableMeasureColumnWidth(column) }}
+        scroll={{
+          x: tableMeasureColumnWidth(column),
+
+          y: `calc(100vh - ${
+            theme.padding * 2 + theme.margin + tableInnerHeight + 38
+          }px)`,
+        }}
         columns={column}
       />
       <Edit.default ref={ref} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Button, Space, Tag } from "antd";
 import { ProTable } from "@ant-design/pro-components";
 
@@ -13,10 +13,17 @@ import {
 import * as Department from "./components/department";
 import contextedMessage from "src/framework/component/contexted-message";
 import * as Staff from "./components/staff";
+import useTableInnerHeight from "src/hooks/use-page-table-height/use-table-inner-height";
 
 type Data = Omit<Menu, "child"> & { children?: Data[] };
 
 const MenuStaff = function () {
+  const theme = useTheme();
+  const tableInnerHeight = useTableInnerHeight({
+    toolbar: false,
+    pagenation: false,
+  });
+
   const [loading] = useWather();
   const departmentRef = Department.createRef();
   const staffRef = Staff.createRef();
@@ -53,7 +60,7 @@ const MenuStaff = function () {
       title: "组织",
 
       render: (_, entity) => {
-        if (entity.level === 1) return '-';
+        if (entity.level === 1) return "-";
         return entity.menu_department?.map((department) => (
           <Tag key={department.id}>{department.department?.name}</Tag>
         ));
@@ -63,7 +70,7 @@ const MenuStaff = function () {
       title: "人员",
 
       render: (_, entity) => {
-        if (entity.level === 1) return '-';
+        if (entity.level === 1) return "-";
         return entity.menu_staff?.map((staff) => (
           <Tag key={staff.id}>{staff.staff?.name}</Tag>
         ));
@@ -74,7 +81,7 @@ const MenuStaff = function () {
       dataIndex: "id",
       width: 250,
       render(_, row) {
-        if (row.level === 1) return '-';
+        if (row.level === 1) return "-";
         return (
           <Space>
             <Button
@@ -115,7 +122,10 @@ const MenuStaff = function () {
         dataSource={dataSource}
         pagination={false}
         columns={column}
-        scroll={{ x: tableMeasureColumnWidth(column) }}
+        scroll={{
+          x: tableMeasureColumnWidth(column),
+          y: `calc(100vh - ${theme.padding * 2 + tableInnerHeight}px)`,
+        }}
       />
       <Department.default ref={departmentRef} />
       <Staff.default ref={staffRef} />
