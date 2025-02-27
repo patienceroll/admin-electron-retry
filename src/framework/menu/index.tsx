@@ -247,7 +247,7 @@ export default styled(Menu)`
   background-repeat: no-repeat;
 
   .nav {
-    max-width: 100%;
+    width: 100%;
     border-radius: ${(props) => props.theme.borderRadius}px;
     box-shadow: ${(props) => props.theme.boxShadow};
     background-color: ${(props) => props.theme.colorBgBlur};
