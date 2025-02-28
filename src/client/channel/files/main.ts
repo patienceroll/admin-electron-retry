@@ -42,7 +42,7 @@ export default function filesMain(options: { framework: Framework }) {
 
   ipcMain.handle("previewFile", async function (event, url: string) {
     try {
-      const { filename, extension } = parseUrlFile(url);
+      const { filename } = parseUrlFile(url);
       const tempPath = path.resolve(app.getPath("temp"), app.getName());
       if (!fs.existsSync(tempPath)) {
         fs.mkdirSync(tempPath);
@@ -76,11 +76,11 @@ export default function filesMain(options: { framework: Framework }) {
 
   ipcMain.handle("downloadFile", async function (event, url: string) {
     try {
-      const { filename, extension } = parseUrlFile(url);
+      const { filename } = parseUrlFile(url);
 
       const { canceled, filePath } = await dialog.showSaveDialog({
         title: "保存文件",
-        defaultPath: decodeURIComponent(filename),
+        defaultPath: filename,
         properties: ["createDirectory"],
       });
 

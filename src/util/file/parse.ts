@@ -20,7 +20,7 @@ export function parseUrlFile(url: string) {
   const extension = dotIndex !== -1 ? filename.substring(dotIndex + 1) : "";
 
   return {
-    filename: filename,
+    filename: decodeURIComponent(filename),
     extension: extension,
   };
 }
