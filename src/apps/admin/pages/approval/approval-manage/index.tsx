@@ -1,23 +1,7 @@
 import styled, { useTheme } from "styled-components";
 import React, { useEffect } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  FloatButton,
-  Row,
-  Space,
-  Tabs,
-  Typography,
-} from "antd";
-import {
-  ProForm,
-  ProFormDateRangePicker,
-  ProFormSelect,
-  ProFormText,
-  ProFormTreeSelect,
-  ProTable,
-} from "@ant-design/pro-components";
+import { Button, Card, Col, FloatButton, Row, Space } from "antd";
+import { ProFormText, ProTable } from "@ant-design/pro-components";
 
 import Search from "src/framework/component/search";
 import PageWrapper from "src/framework/component/page-wrapper";
@@ -25,7 +9,6 @@ import SearchAction from "src/framework/component/search/search-action";
 
 import useSearchTable from "src/hooks/use-search-table";
 import useColumnState from "src/hooks/use-column-state";
-import useOption from "src/hooks/use-option";
 import contextedMessage from "src/framework/component/contexted-message";
 import contextedModal from "src/framework/component/contexted-modal";
 import Icon from "src/framework/component/icon";
@@ -35,7 +18,8 @@ import usePageTableHeight from "src/hooks/use-page-table-height";
 import Permission from "src/util/permission";
 import * as Modify from "./components/modify";
 
-function ApprovalManage() {
+function ApprovalManage(props: StyledWrapComponents) {
+  const { className } = props;
   const table = useSearchTable(getApprovals);
   const theme = useTheme();
   const { addAElement, height } = usePageTableHeight(
@@ -66,7 +50,18 @@ function ApprovalManage() {
     {
       title: "流程",
       dataIndex: "note",
-      renderText: () => 123,
+      renderText: (_, row) => (
+        <div className="note">
+          {row.note?.map((item, index) => (
+            <div key={item.staff_id} className="note-item">
+              <div className="sort">{index + 1}</div>
+
+              <span>{item.staff.name}</span>
+              <div>{item.staff.job.name}</div>
+            </div>
+          ))}
+        </div>
+      ),
     },
     {
       dataIndex: "action",
@@ -117,7 +112,7 @@ function ApprovalManage() {
   }, []);
 
   return (
-    <PageWrapper>
+    <PageWrapper className={className}>
       <Card
         bordered
         ref={(div) => {
@@ -188,4 +183,29 @@ function ApprovalManage() {
   );
 }
 
-export default styled(ApprovalManage)``;
+export default styled(ApprovalManage)`
+  .note {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .note-item {
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding-inline: ${props => props.theme.padding}px;
+
+  }
+
+  .sort {
+    width: 25px;
+    height: 25px;
+    background-color: ${(props) => props.theme.colorPrimary};
+    border-radius: 50%;
+    text-align: center;
+    line-height: 25px;
+    color: ${(props) => props.theme.colorWhite};
+    margin: 0 auto;
+  }
+`;
