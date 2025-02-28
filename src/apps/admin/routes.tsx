@@ -187,6 +187,9 @@ const LogisticsContract = lazy(
   () => import("./pages/logistics/logistics-contract")
 );
 
+// 审批
+const ApprovalManage = lazy(() => import("./pages/approval/approval-manage"));
+
 export default function (props: { darkMode: boolean }) {
   const { darkMode } = props;
   const [isPackaged] = useState(() => window.preload.isPackaged);
@@ -367,7 +370,10 @@ export default function (props: { darkMode: boolean }) {
         />
 
         <Route path="/inventory/warehouse" element={<InventoryWarehouse />} />
-        <Route path="/inventory/inventory-detail" element={<InverntoryDetail />} />
+        <Route
+          path="/inventory/inventory-detail"
+          element={<InverntoryDetail />}
+        />
 
         <Route path="/produce/produce-receive" element={<ProduceReceive />} />
         <Route path="/produce/produce-return" element={<ProduceReturn />} />
@@ -395,6 +401,9 @@ export default function (props: { darkMode: boolean }) {
           path="/logistics/logistics-contract"
           element={<LogisticsContract />}
         />
+
+
+        <Route path="/approval/approval-manage" element={<ApprovalManage />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
