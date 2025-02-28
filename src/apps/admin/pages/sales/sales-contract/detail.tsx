@@ -217,7 +217,7 @@ function Detail(props: StyledWrapComponents) {
           </Row>
         )}
       </Card>
-      <Title style={{ marginTop: theme.margin }} id="产品明细">
+      <Title style={{ marginTop: theme.margin }} id="合同明细">
         合同明细
       </Title>
       <DetailSaleContractDetail
@@ -378,7 +378,7 @@ function Detail(props: StyledWrapComponents) {
         className="anchor"
         replace
         offsetTop={theme.padding}
-        items={["基本信息", "产品明细", "附件信息", "审批记录", "操作记录"].map(
+        items={["基本信息", "合同明细", "附件信息", "审批记录", "操作记录"].map(
           (item) => ({
             key: item,
             title: item,

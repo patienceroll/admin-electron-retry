@@ -6,14 +6,14 @@ const Blank = lazy(() => import("src/framework/blank"));
 const UserInfo = lazy(() => import("./pages/user-info"));
 const OrganizationCompany = lazy(() => import("./pages/organization/company"));
 const OrganizationDepartment = lazy(
-  () => import("./pages/organization/department")
+  () => import("./pages/organization/department"),
 );
 const OrganizationStaff = lazy(() => import("./pages/organization/staff"));
 const OrganizationStaffCreate = lazy(
-  () => import("./pages/organization/staff/create")
+  () => import("./pages/organization/staff/create"),
 );
 const OrganizationStaffEdit = lazy(
-  () => import("./pages/organization/staff/edit")
+  () => import("./pages/organization/staff/edit"),
 );
 const OrganizationJob = lazy(() => import("./pages/organization/job"));
 const Page404 = lazy(() => import("src/framework/404"));
@@ -27,7 +27,7 @@ const CommonRoleEdit = lazy(() => import("./pages/common/role/detail"));
 const CommonMenu = lazy(() => import("./pages/common/menu"));
 const CommonMenuStaff = lazy(() => import("./pages/common/menu-staff"));
 const VisualizationArchitecture = lazy(
-  () => import("./pages/visualization/architecture")
+  () => import("./pages/visualization/architecture"),
 );
 const Client = lazy(() => import("./pages/client/client"));
 const ClientInfo = lazy(() => import("./pages/client/client/detail"));
@@ -36,10 +36,10 @@ const ClientContant = lazy(() => import("./pages/client/client-contact"));
 
 const BusinessOpportunity = lazy(() => import("./pages/business-opportunity"));
 const BusinessOpportunityInfo = lazy(
-  () => import("./pages/business-opportunity/detail")
+  () => import("./pages/business-opportunity/detail"),
 );
 const BusinessOpportunityEdit = lazy(
-  () => import("./pages/business-opportunity/edit")
+  () => import("./pages/business-opportunity/edit"),
 );
 
 /**
@@ -48,10 +48,10 @@ const BusinessOpportunityEdit = lazy(
 //销售合同
 const SalesContract = lazy(() => import("./pages/sales/sales-contract"));
 const SalesContractEdit = lazy(
-  () => import("./pages/sales/sales-contract/edit")
+  () => import("./pages/sales/sales-contract/edit"),
 );
 const SalesContractInfo = lazy(
-  () => import("./pages/sales/sales-contract/detail")
+  () => import("./pages/sales/sales-contract/detail"),
 );
 
 //销售订单
@@ -62,14 +62,12 @@ const SalesOrderInfo = lazy(() => import("./pages/sales/sales-order/detail"));
 const SalesDeliver = lazy(() => import("./pages/sales/sales-deliver"));
 const SalesDeliverEdit = lazy(() => import("./pages/sales/sales-deliver/edit"));
 const SalesDeliverInfo = lazy(
-  () => import("./pages/sales/sales-deliver/detail")
+  () => import("./pages/sales/sales-deliver/detail"),
 );
 //销售退货
 const SalesReturn = lazy(() => import("./pages/sales/sales-return"));
 const SalesReturnEdit = lazy(() => import("./pages/sales/sales-return/edit"));
-// const SalesReturnDetail = lazy(
-//   () => import("./pages/sales/sales-return/detail"),
-// );
+const SalesReturnInfo = lazy(() => import("./pages/sales/sales-return/detail"));
 
 /**
  * 采购管理模块
@@ -77,42 +75,42 @@ const SalesReturnEdit = lazy(() => import("./pages/sales/sales-return/edit"));
 //采购申请
 const PurchaseApply = lazy(() => import("./pages/purchase/purchase-apply"));
 const PurchaseApplyEdit = lazy(
-  () => import("./pages/purchase/purchase-apply/edit")
+  () => import("./pages/purchase/purchase-apply/edit"),
 );
 const PurchaseApplyDetail = lazy(
-  () => import("./pages/purchase/purchase-apply/detail")
+  () => import("./pages/purchase/purchase-apply/detail"),
 );
 //采购合同
 const PurchaseContract = lazy(
-  () => import("./pages/purchase/purchase-contract")
+  () => import("./pages/purchase/purchase-contract"),
 );
 const PurchaseContractEdit = lazy(
-  () => import("./pages/purchase/purchase-contract/edit")
+  () => import("./pages/purchase/purchase-contract/edit"),
 );
 const PurchaseContractDetail = lazy(
-  () => import("./pages/purchase/purchase-contract/detail")
+  () => import("./pages/purchase/purchase-contract/detail"),
 );
 //采购订单
 const PurchaseOrder = lazy(() => import("./pages/purchase/purchase-order"));
 const PurchaseOrderDetail = lazy(
-  () => import("./pages/purchase/purchase-order/detail")
+  () => import("./pages/purchase/purchase-order/detail"),
 );
 const PurchaseOrderEdit = lazy(
-  () => import("./pages/purchase/purchase-order/edit")
+  () => import("./pages/purchase/purchase-order/edit"),
 );
 //采购收货
 const PurchaseReceive = lazy(() => import("./pages/purchase/purchase-receive"));
 const PurchaseReceiveDetail = lazy(
-  () => import("./pages/purchase/purchase-receive/detail")
+  () => import("./pages/purchase/purchase-receive/detail"),
 );
 
 //采购退货
 const PurchaseReturn = lazy(() => import("./pages/purchase/purchase-return"));
 const PurchaseReturnDetail = lazy(
-  () => import("./pages/purchase/purchase-return/detail")
+  () => import("./pages/purchase/purchase-return/detail"),
 );
 const PurchaseReturnEdit = lazy(
-  () => import("./pages/purchase/purchase-return/edit")
+  () => import("./pages/purchase/purchase-return/edit"),
 );
 
 /**
@@ -129,31 +127,31 @@ const OutStockEdit = lazy(() => import("./pages/inventory/out-stock/edit"));
 //发货单
 const DeliverOrder = lazy(() => import("./pages/inventory/deliver-order"));
 const DeliverOrderDetail = lazy(
-  () => import("./pages/inventory/deliver-order/detail")
+  () => import("./pages/inventory/deliver-order/detail"),
 );
 //收货单
 const ReceiveOrder = lazy(() => import("./pages/inventory/receive-order"));
 const ReceiveOrderDetail = lazy(
-  () => import("./pages/inventory/receive-order/detail")
+  () => import("./pages/inventory/receive-order/detail"),
 );
 //收货单
 const WarehouseLog = lazy(() => import("./pages/inventory/warehouse-log"));
 //盘点单
 const StockCheck = lazy(() => import("./pages/inventory/stock-check"));
 const StockCheckDetail = lazy(
-  () => import("./pages/inventory/stock-check/detail")
+  () => import("./pages/inventory/stock-check/detail"),
 );
 const StockCheckEdit = lazy(() => import("./pages/inventory/stock-check/edit"));
 //调拨单
 const StockAllot = lazy(() => import("./pages/inventory/stock-allot"));
 const StockAllotDetail = lazy(
-  () => import("./pages/inventory/stock-allot/detail")
+  () => import("./pages/inventory/stock-allot/detail"),
 );
 const StockAllotEdit = lazy(() => import("./pages/inventory/stock-allot/edit"));
 // 库存仓库
 const InventoryWarehouse = lazy(() => import("./pages/inventory/warehouse"));
-const InverntoryDetail = lazy(
-  () => import("./pages/inventory/inventory-detail")
+const InventoryDetail = lazy(
+  () => import("./pages/inventory/inventory-detail"),
 );
 
 /**
@@ -178,13 +176,13 @@ const SupplierContact = lazy(() => import("./pages/supplier/supplier-contact"));
 
 // 物流
 const LogisticsCompany = lazy(
-  () => import("./pages/logistics/logistics-company")
+  () => import("./pages/logistics/logistics-company"),
 );
 const LogisticsDriver = lazy(
-  () => import("./pages/logistics/logistics-driver")
+  () => import("./pages/logistics/logistics-driver"),
 );
 const LogisticsContract = lazy(
-  () => import("./pages/logistics/logistics-contract")
+  () => import("./pages/logistics/logistics-contract"),
 );
 
 // 审批
@@ -275,6 +273,10 @@ export default function (props: { darkMode: boolean }) {
 
         <Route path="/sales/sales-return" element={<SalesReturn />} />
         <Route path="/sales/sales-return/edit" element={<SalesReturnEdit />} />
+        <Route
+          path="/sales/sales-return/detail"
+          element={<SalesReturnInfo />}
+        />
 
         <Route path="/purchase/purchase-apply" element={<PurchaseApply />} />
         <Route
@@ -372,7 +374,7 @@ export default function (props: { darkMode: boolean }) {
         <Route path="/inventory/warehouse" element={<InventoryWarehouse />} />
         <Route
           path="/inventory/inventory-detail"
-          element={<InverntoryDetail />}
+          element={<InventoryDetail />}
         />
 
         <Route path="/produce/produce-receive" element={<ProduceReceive />} />
@@ -401,7 +403,6 @@ export default function (props: { darkMode: boolean }) {
           path="/logistics/logistics-contract"
           element={<LogisticsContract />}
         />
-
 
         <Route path="/approval/approval-manage" element={<ApprovalManage />} />
 
