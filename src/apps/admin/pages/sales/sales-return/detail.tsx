@@ -15,20 +15,18 @@ import {
 import PageWrapper from "src/framework/component/page-wrapper";
 import {
   approval,
-  billEnd,
   billInvalid,
-  billSuspend,
   cancelOperate,
   getApprovalRecord,
   getOperateRecord,
-  getSalesOrder,
-  salesOrderStatus,
+  getSalesReturn,
+  salesReturnStatus,
   startApproval,
-} from "src/apps/admin/api/sales-order";
+} from "src/apps/admin/api/sales-return";
 import Title from "src/framework/component/title";
 import InfoItem from "src/framework/component/info-item";
 import Money from "src/util/money";
-import DetailSaleOrderDetail from "./components/detail-sale-order-detail";
+import DetailSaleReturnDetail from "./components/detail-sale-return-detail";
 import BusinessFile from "src/b-components/business-file";
 import ApprovalRecord from "src/b-components/approval-record";
 import OperateRecord from "src/b-components/operate-record";
@@ -41,7 +39,7 @@ import StopSvg from "src/assets/svg/终止.svg";
 import FinishSvg from "src/assets/svg/完结.svg";
 import getApproval from "src/b-hooks/get-approval";
 import useRenderNames from "src/b-hooks/use-render-names";
-import { salesOrderDetailRenderConfig } from "src/apps/admin/api/sales-order-detail";
+import { salesReturnDetailRenderConfig } from "src/apps/admin/api/sales-return-detail";
 import ProjectIntroduction from "src/b-components/project-introduction";
 import ClientIntroduction from "src/b-components/client-introduction";
 
@@ -49,14 +47,14 @@ function Detail(props: StyledWrapComponents) {
   const { className } = props;
   const params = useLocation();
   const search = new URLSearchParams(params.search);
-  const id = search.get("id")! as unknown as SalesOrder["id"];
+  const id = search.get("id")! as unknown as SalesReturn["id"];
 
   const theme = useTheme();
 
-  const [detail, setDetail] = useState<SalesOrderDetail>();
+  const [detail, setDetail] = useState<SalesReturnDetail>();
 
   const [{ attrColumn, unitColumn }] = useRenderNames(
-    salesOrderDetailRenderConfig,
+    salesReturnDetailRenderConfig,
     {
       sales_order_id: id,
     },
@@ -64,7 +62,7 @@ function Detail(props: StyledWrapComponents) {
 
   const getDetail = useCallback(
     function () {
-      getSalesOrder({ id }).then((res) => {
+      getSalesReturn({ id }).then((res) => {
         setDetail(res.data);
       });
     },
@@ -86,7 +84,7 @@ function Detail(props: StyledWrapComponents) {
             gutter={[theme.padding, theme.padding]}
           >
             <Col flex="400px">
-              <InfoItem label="订单号">
+              <InfoItem label="退货单">
                 &nbsp;
                 <Typography.Text copyable>{detail.code}</Typography.Text>
               </InfoItem>
@@ -94,8 +92,8 @@ function Detail(props: StyledWrapComponents) {
             <Col flex="400px">
               <InfoItem label="状态">
                 &nbsp;
-                <Tag color={salesOrderStatus.get(detail.status)?.color}>
-                  {salesOrderStatus.get(detail.status)?.text}
+                <Tag color={salesReturnStatus.get(detail.status)?.color}>
+                  {salesReturnStatus.get(detail.status)?.text}
                 </Tag>
                 {detail.is_approve === 1 && <Tag color="#d46b08">审批中</Tag>}
               </InfoItem>
@@ -133,25 +131,36 @@ function Detail(props: StyledWrapComponents) {
                 </Typography.Text>
               </InfoItem>
             </Col>
+            <Col flex="400px">
+              <InfoItem label="订单号">
+                &nbsp;
+                <Typography.Text copyable>
+                  {detail.sales_contract?.code}
+                </Typography.Text>
+              </InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="发货号">
+                &nbsp;
+                <Typography.Text copyable>
+                  {detail.sales_deliver?.code}
+                </Typography.Text>
+              </InfoItem>
+            </Col>
 
             <Col flex="400px">
-              <InfoItem label="税率">{detail.tax_rate}</InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="预付款比例">{detail.advance_ratio}%</InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="质保金比例">{detail.quality_ratio}%</InfoItem>
-            </Col>
-            <Col flex="400px">
-              <InfoItem label="含税合计">
+              <InfoItem label="金额">
                 {new Money(detail.amount).toCNY()}
               </InfoItem>
             </Col>
             <Col flex="400px">
-              <InfoItem label="去税合计">
-                {new Money(detail.no_tax_amount).toCNY()}
-              </InfoItem>
+              <InfoItem label="收货人">{detail.receive_man}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="收货电话">{detail.receive_tel}</InfoItem>
+            </Col>
+            <Col flex="400px">
+              <InfoItem label="收货地址">{detail.receive_address}</InfoItem>
             </Col>
 
             <Col flex="400px">
@@ -178,10 +187,10 @@ function Detail(props: StyledWrapComponents) {
           </Row>
         )}
       </Card>
-      <Title style={{ marginTop: theme.margin }} id="订单明细">
-        订单明细
+      <Title style={{ marginTop: theme.margin }} id="退货明细">
+        退货明细
       </Title>
-      <DetailSaleOrderDetail
+      <DetailSaleReturnDetail
         id={id}
         attrCoumn={attrColumn}
         unitColumn={unitColumn}
@@ -195,9 +204,9 @@ function Detail(props: StyledWrapComponents) {
           <BusinessFile
             id={id}
             service="sales-contract"
-            identify="订单附件"
+            identify="退货附件"
             isCover={0}
-            files={detail.file["订单附件"]}
+            files={detail.file["退货附件"]}
           />
         </div>
       )}
@@ -275,44 +284,6 @@ function Detail(props: StyledWrapComponents) {
               }}
             />
           )}
-          {detail.btn_power.is_suspend === 1 && (
-            <FloatButton
-              description="中止"
-              icon={<Icon icon={StopSvg} fill={theme.colorError} />}
-              onClick={() => {
-                contextedModal.modal?.confirm({
-                  title: "中止",
-                  content: "你确定要中止该订单吗？",
-                  onOk() {
-                    return billSuspend({ id }).then(() => {
-                      getDetail();
-                      window.parent.postMessage("is_suspend");
-                      contextedMessage.message?.success("成功中止");
-                    });
-                  },
-                });
-              }}
-            />
-          )}
-          {detail.btn_power.is_end === 1 && (
-            <FloatButton
-              icon={<Icon icon={FinishSvg} />}
-              onClick={() => {
-                contextedModal.modal?.confirm({
-                  title: "完结",
-                  content: "你确定要完结该订单吗？",
-                  onOk() {
-                    return billEnd({ id }).then(() => {
-                      getDetail();
-                      window.parent.postMessage("is_end");
-                      contextedMessage.message?.success("成功完结");
-                    });
-                  },
-                });
-              }}
-              description="完结"
-            />
-          )}
           {detail.btn_power.is_cancel_operate === 1 && (
             <FloatButton
               description="撤销"
@@ -339,7 +310,7 @@ function Detail(props: StyledWrapComponents) {
         className="anchor"
         replace
         offsetTop={theme.padding}
-        items={["基本信息", "订单明细", "附件信息", "审批记录", "操作记录"].map(
+        items={["基本信息", "退货明细", "附件信息", "审批记录", "操作记录"].map(
           (item) => ({
             key: item,
             title: item,

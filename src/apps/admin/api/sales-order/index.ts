@@ -25,11 +25,11 @@ export function getSalesOrderList(
     client_id?: Client["id"];
     is_show_detail?: 0 | 1;
     project_id?: Project["id"];
-  }
+  },
 ) {
   return fetch.GET<List<SalesOrder>>(
     fetch.base(`/api/sales-order/list`),
-    params
+    params,
   );
 }
 
@@ -61,7 +61,7 @@ export function getSalesOrder(params: Pick<SalesOrder, "id">) {
 export function addSalesOrder(params: any) {
   return fetch.POST<SalesOrderAddResponse>(
     fetch.base(`/api/sales-order`),
-    params
+    params,
   );
 }
 
@@ -83,7 +83,7 @@ export function deleteSalesOrder(params: Pick<SalesOrder, "id">) {
  * 生成合同编号 */
 export const getSalesOrderCode = () => {
   return fetch.GET<{ code: string; prefix: string }>(
-    fetch.base("/api/sales-order/code")
+    fetch.base("/api/sales-order/code"),
   );
 };
 
@@ -93,23 +93,13 @@ export const getSalesOrderMaterialSku = (
   params: ListParam & {
     sales_contract_id?: SalesOrder["sales_contract_id"];
     id?: SalesOrder["id"];
-  }
+  },
 ) => {
   return fetch.GET<List<SalesOrderMaterialSku>>(
     fetch.base("/api/sales-order/superior-detail"),
-    params
+    params,
   );
 };
-
-/** 销售订单的可选择的产品 列渲染 */
-export function salesOrdertMaterialRender(
-  params: Parameters<typeof getSalesOrderMaterialSku>[0]
-) {
-  return fetch.GET<RenderConfig>(
-    fetch.base(`/api/sales-contract/material-sku/render`),
-    params
-  );
-}
 
 /**
  * 物资.弹窗-保存
@@ -159,7 +149,7 @@ export function cancelOperate(params: Pick<SalesOrder, "id">) {
 export function getApprovalRecord(params: Pick<SalesOrder, "id">) {
   return fetch.GET<ApprovalRecord[]>(
     fetch.base(`/api/sales-order/approval-record`),
-    params
+    params,
   );
 }
 
@@ -177,11 +167,11 @@ export function salesOrderExport(params: Record<string, any>) {
 export const getMaterialSku = (
   params: ListParam & {
     id?: SalesOrder["id"];
-  }
+  },
 ) => {
   return fetch.GET<List<SalesOrderMaterialSku>>(
     fetch.base("/api/sales-order/material-sku"),
-    params
+    params,
   );
 };
 
@@ -203,10 +193,10 @@ export function getOperateRecord(params: Pick<SalesOrder, "id">) {
 
 /** 销售合同的可选择的产品 列渲染 */
 export function salesOrderMaterialRender(
-  params: Parameters<typeof getMaterialSku>[0]
+  params: Parameters<typeof getMaterialSku>[0],
 ) {
   return fetch.GET<RenderConfig>(
     fetch.base(`/api/sales-order/material-sku/render`),
-    params
+    params,
   );
 }

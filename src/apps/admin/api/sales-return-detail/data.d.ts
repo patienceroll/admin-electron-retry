@@ -1,0 +1,61 @@
+type SalesReturnDetail = {
+  id: number;
+  company_id: number;
+  client_id: number;
+  project_id: number;
+  sales_contract_id: number;
+  sales_contract_detail_id: number;
+  sales_order_id: number;
+  material_id: number;
+  material_sku_id: number;
+  standard: string;
+
+  num: number;
+  price: string;
+  rate: number;
+  tax: string;
+  amount: string;
+  freight: string;
+  freight_rate: number;
+  freight_tax: string;
+  total_tax: string;
+  total_no_tax_amount: number;
+  total_amount: string;
+  remark: string;
+  status: number;
+  created_id: number;
+  updated_at: string;
+  deleted_at: string;
+  created_at: string;
+  btn_power: BtnPower;
+  created_user: BlockCreateUser;
+  company: BlockCompany;
+  client: BlockClient | null;
+  project: BlockProject | null;
+  sales_order: BlockSalesOrder;
+  material: BlockMaterail | null;
+  material_sku: BlockMaterialSku | null;
+  attr_snapshoot: AttrSnapshoot;
+  sales_contract: BlockSalesContract;
+  sales_deliver: {
+    id: number;
+    code: string;
+    status_show: string;
+  };
+  sales_order: BlockSalesOrder;
+  sales_deliver_detail: {
+    line_unit: LineUnit[];
+    id: number;
+    num: number;
+    price: string;
+  };
+  sales_return: {
+    id: number;
+    code: string;
+    status_show: string;
+    status: BillStatus;
+    staff?: BlockStaff;
+    bill_date?: string;
+  };
+  line_unit: LineUnit[];
+};

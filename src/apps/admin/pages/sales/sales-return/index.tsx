@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Button, Card, Col, FloatButton, Row, Space, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  FloatButton,
+  Row,
+  Space,
+  Tabs,
+  Typography,
+} from "antd";
 import {
   ProForm,
   ProFormDateRangePicker,
@@ -50,7 +59,7 @@ function SalesReturn() {
 
   const isCompact = window.preload.getTheme().layout === "compact";
   const { addAElement, height } = usePageTableHeight(
-    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14)
+    theme.padding * 2 + theme.margin + (isCompact ? 4 : 14),
   );
   const create = Create.createRef();
 
@@ -65,7 +74,7 @@ function SalesReturn() {
   function Edit(id: SalesReturn["id"]) {
     const window = openWindow.openCurrentAppWindow(
       `/sales/sales-return/edit?id=${id}`,
-      "编辑销售退货"
+      "编辑销售退货",
     );
 
     function listener(event: MessageEvent<"success">) {
@@ -82,10 +91,41 @@ function SalesReturn() {
 
   const column = table.column([
     {
-      title: "退货单",
+      title: "退货号",
       dataIndex: "code",
-      copyable: true,
       fixed: "left",
+      render: (_, record) => (
+        <Typography.Link
+          onClick={() => {
+            const window = openWindow.openCurrentAppWindow(
+              `/sales/sales-return/detail?id=${record.id}`,
+              "销售退货详情 - " + record.code,
+            );
+
+            function listener(
+              event: MessageEvent<keyof SalesOrder["btn_power"]>,
+            ) {
+              if (
+                [
+                  "is_approve",
+                  "is_submit",
+                  "is_cancel",
+                  "is_invalid",
+                  "is_cancel_operate",
+                ].includes(event.data)
+              ) {
+                table.reload();
+              }
+            }
+
+            if (window) {
+              window.addEventListener("message", listener);
+            }
+          }}
+        >
+          {record.code}
+        </Typography.Link>
+      ),
     },
     {
       title: "退货日期",
@@ -377,7 +417,10 @@ function SalesReturn() {
         pagination={table.pagination}
         onChange={table.onChange}
         columns={columnState.column}
-        scroll={{ x: table.measureColumnWidth(columnState.widthColumn), y: height }}
+        scroll={{
+          x: table.measureColumnWidth(columnState.widthColumn),
+          y: height,
+        }}
         columnsState={{
           value: columnState.data?.data,
           onChange: columnState.onChange,
@@ -431,8 +474,8 @@ function SalesReturn() {
                 Object.assign(
                   {},
                   table.params.current,
-                  table.extraParams.current
-                )
+                  table.extraParams.current,
+                ),
               ).then((res) => {
                 window.preload.downloadFile(res.data.file_path);
               });
