@@ -189,6 +189,7 @@ const LogisticsContract = lazy(
 
 // 审批
 const ApprovalManage = lazy(() => import("./pages/approval/approval-manage"));
+const Process = lazy(() => import("./pages/approval/process"))
 
 export default function (props: { darkMode: boolean }) {
   const { darkMode } = props;
@@ -404,6 +405,7 @@ export default function (props: { darkMode: boolean }) {
 
 
         <Route path="/approval/approval-manage" element={<ApprovalManage />} />
+        <Route path="/approval/process" element={<Process />} />
 
         <Route path="*" element={<Page404 />} />
       </Routes>
