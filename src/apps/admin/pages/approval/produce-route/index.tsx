@@ -16,3 +16,9 @@ import AddSvg from "src/assets/svg/add.svg";
 import { deleteApproval, getApprovals } from "src/apps/admin/api/approval";
 import usePageTableHeight from "src/hooks/use-page-table-height";
 import Permission from "src/util/permission";
+
+function ProduceRoute() {
+  return <PageWrapper></PageWrapper>;
+}
+
+export default styled(ProduceRoute)``;
